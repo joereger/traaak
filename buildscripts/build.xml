@@ -1,0 +1,265 @@
+
+<project name="FacebookDatablogging" default="QuickBuild" basedir=".">
+  <description>
+        The core build script.
+  </description>
+
+  <!-- Import properties file -->
+  <property file="build.properties"/>
+
+
+  <!-- Create a buildnumber -->
+  <target name="buildnumber" description="Create a build number.">
+     <echo message="Generating build number."/>
+     <buildnumber/>
+  </target>
+
+  <!-- Create a timestamp -->
+  <target name="timestamp" description="Create the dirs" depends="buildnumber">
+  	 <echo message="Generating timestamp."/>
+     <tstamp>
+        <format property="build.time" pattern="yyyy-MM-dd-(hh-mm-ssaa)"/>
+     </tstamp>
+  </target>
+
+  <!-- Import build number file -->
+  <property file="build.number"/>
+
+  <!-- Set internal script properties -->
+  <property name="tomcat.app.name" value="FacebookDatablogging"/>
+  <property name="builddir" value="${builds.directory}"/>
+  <property name="lastbuild" value="${builddir}/lastbuild/${tomcat.app.name}"/>
+  <property name="wardir" value="${builddir}/WARs/${tomcat.app.name}"/>
+  <property name="javasrc" value="${builddir}/lastbuild/${tomcat.app.name}/WEB-INF/classes"/>
+  <property name="sourcedir" value="${source.root.directory}"/>
+
+
+  <path id="lib.classpath">
+      <fileset dir="${sourcedir}/WEB-INF/lib">
+        <include name="**/*.jar" />
+      </fileset>
+      <fileset dir="${tomcat.install.directory}/common/lib">
+        <include name="**/*.jar" />
+      </fileset>
+      <pathelement path="${javasrc}" />
+  </path>
+
+  <!-- Delete any files in the lastbuild folder... start fresh my friend... start fresh. -->
+  <target name="cleanuplastbuild" description="Cleans up the last build" depends="timestamp">
+    <delete dir="${lastbuild}"/>
+  </target>
+
+  <!-- This target takes all files required for the build and puts them into lastbuild which is basically a temp building location -->
+  <!-- This is done so that I can have Vars.java and VarsDev.java, choosing which one to put into the build at buildtime -->
+  <target name="movefilestolastbuild" description="Moves files to the lastbuild directory." depends="cleanuplastbuild">
+      <copy todir="${lastbuild}">
+        <fileset dir="${sourcedir}" excludes="**.*Thumbs.db"/>
+      </copy>
+  </target>
+
+  <!-- Compile the app-->
+   <target name="compile" description="compile the source" depends="movefilestolastbuild">
+  	  <echo message="Compiling Java code."/>
+        <javac srcdir="${javasrc}" includes="**/**" debug="true" deprecation="true">
+            <classpath>
+                <path refid="lib.classpath" />
+            </classpath>
+        </javac>
+   </target>
+
+    <!--
+   <taskdef name="aopc" classname="org.jboss.aop.ant.AopC" classpathref="lib.classpath"/>
+   <target name="aopc" depends="compile" description="Precompile aop classes">
+  	    <aopc compilerclasspathref="lib.classpath" verbose="false">
+            <classpath path="${javasrc}"/>
+            <src path="${javasrc}"/>
+            <include name="**/*.class"/>
+            <aoppath path="${sourcedir}/WEB-INF/jboss-aop.xml"/>
+         </aopc>
+   </target>
+   -->
+
+ 
+
+
+
+   <!-- Create reger.jar package -->
+   <!-- This set of core functions is used in other Reger.com supporting apps. -->
+   <target name="createregerjar" description="Creates the re-usable regercore.jar package" depends="compile">
+        <echo message="Creating regercore.jar."/>
+        <jar jarfile="${builddir}/regercore.jar">
+            <fileset dir="${javasrc}">
+                <include name="reger/core/**"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </jar>
+   </target>
+
+   <target name="package" description="Packages files for the build" depends="compile">
+        <echo message="Packaging ${tomcat.app.name}'s war file."/>
+        <delete>
+            <fileset dir="." includes="*.war"/>
+        </delete>
+        <war destfile="${tomcat.app.name}-(bld${build.number})-${build.time}.war" webxml="${lastbuild}/WEB-INF/web.xml">
+            <fileset dir="${lastbuild}">
+                <exclude name="**/*.java"/>
+                <exclude name="**/web.xml"/>
+            </fileset>
+        </war>
+		<copy file="${tomcat.app.name}-(bld${build.number})-${build.time}.war" todir="${builddir}"/>
+   </target>
+
+   <target name="packagewithsource" description="Backup source files" depends="package">
+        <echo message="Backing up ${tomcat.app.name}'s source."/>
+        <jar jarfile="${builddir}/${tomcat.app.name}-(bld${build.number})-${build.time}-src.jar">
+            <fileset dir="./">
+                <exclude name="builds/**"/>
+            </fileset>
+        </jar>
+   </target>
+
+    <!-- Create javaDoc -->
+    <target name="createJavaDoc" description="Creates javadoc" depends="">
+        <echo message="Creating javaDoc for ${tomcat.app.name}."/>
+        <delete dir="${builddir}/javaDoc"/>
+        <javadoc destdir="${builddir}/javaDoc" author="true" version="true" use="true" windowtitle="Reger.com javaDoc">
+            <packageset dir="${sourcedir}/WEB-INF/classes" defaultexcludes="yes">
+                <include name="reger/**" />
+            </packageset>
+            <doctitle><![CDATA[<h1>Reger.com</h1>]]></doctitle>
+            <bottom><![CDATA[<i>Copyright &#169; 2006 Reger.com. Confidential and proprietary. All Rights Reserved.</i>]]></bottom>
+        </javadoc>
+    </target>
+
+    <target name="QuickBuildWithTomcatRestart" description="Compile the java source and put in Tomcat working directory">
+  	 	<echo message="Running QuickBuildWithTomcatRestart."/>
+  	 	<exec executable="net">
+            <arg value="stop"/>
+            <arg value="${tomcat.service.name}"/>
+        </exec>
+     	<antcall target="QuickBuild"/>
+		<exec executable="net">
+            <arg value="start"/>
+            <arg value="${tomcat.service.name}"/>
+        </exec>
+	</target>
+
+	<target name="QuickBuild" description="Compile the java source and put in Tomcat working directory">
+  	 	<echo message="Running QuickBuild."/>
+     	<copy todir="${lastbuild}" >
+            <fileset dir="${sourcedir}" excludes="**/Thumbs.db"/>
+        </copy>
+        <mkdir dir="${quickbuild.compiled.destination.directory}"/>
+		<javac srcdir="${javasrc}" destdir="${quickbuild.compiled.destination.directory}" includes="**/**" debug="true" deprecation="true">
+            <classpath>
+                <path refid="lib.classpath" />
+            </classpath>
+        </javac>
+        <!--
+        <aopc compilerclasspathref="lib.classpath" verbose="false">
+            <classpath path="${quickbuild.compiled.destination.directory}"/>
+            <src path="${quickbuild.compiled.destination.directory}"/>
+            <include name="**/*.class"/>
+            <aoppath path="${sourcedir}/WEB-INF/jboss-aop.xml"/>
+         </aopc>
+         -->
+		<copy todir="${quickbuild.tomcat.root.directory}">
+			<fileset dir="${lastbuild}">
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="QuickBuildJboss" description="Compile the java source and put in Tomcat working directory">
+  	 	<echo message="Compiling Java code."/>
+     	<exec executable="net">
+            <arg value="stop"/>
+            <arg value="${jboss.service.name}"/>
+        </exec>
+     	<copy todir="${lastbuild}" >
+            <fileset dir="${sourcedir}" excludes="**/Thumbs.db"/>
+        </copy>
+        <mkdir dir="${jboss.quickbuild.compiled.destination.directory}"/>
+		<javac srcdir="${javasrc}" destdir="${jboss.quickbuild.compiled.destination.directory}" includes="**/**" debug="true" deprecation="true">
+            <classpath>
+                <path refid="lib.classpath" />
+            </classpath>
+        </javac>
+        <!--
+        <aopc compilerclasspathref="lib.classpath" verbose="false">
+            <classpath path="${quickbuild.compiled.destination.directory}"/>
+            <src path="${quickbuild.compiled.destination.directory}"/>
+            <include name="**/*.class"/>
+            <aoppath path="${sourcedir}/WEB-INF/jboss-aop.xml"/>
+         </aopc>
+         -->
+		<copy todir="${jboss.quickbuild.tomcat.root.directory}">
+			<fileset dir="${lastbuild}">
+			</fileset>
+		</copy>
+		<exec executable="net">
+            <arg value="start"/>
+            <arg value="${jboss.service.name}"/>
+        </exec>
+	</target>
+	
+	<target name="QuickBuildClean" description="Compile the java source and put in Tomcat working directory">
+        <antcall target="cleanuplastbuild"/>
+        <exec executable="net">
+            <arg value="stop"/>
+            <arg value="${tomcat.service.name}"/>
+        </exec>
+        <delete includeemptydirs="true">
+            <fileset dir="${quickbuild.tomcat.root.directory}" includes="**/*"/>
+        </delete>
+        <antcall target="QuickBuild"/>
+    </target>
+
+    <target name="QuickBuildCleanJboss" description="Compile the java source and put in Tomcat working directory">
+        <antcall target="cleanuplastbuild"/>
+        <exec executable="net">
+            <arg value="stop"/>
+            <arg value="${jboss.service.name}"/>
+        </exec>
+        <mkdir dir="${jboss.quickbuild.tomcat.root.directory}"/>
+        <delete includeemptydirs="true">
+            <fileset dir="${jboss.quickbuild.tomcat.root.directory}" includes="**/*"/>
+        </delete>
+        <antcall target="QuickBuildJboss"/>
+    </target>
+
+
+
+	<target name="buildWar" description="Builds a war file." depends="packagewithsource">
+        <echo message="Creating ROOT.war for ${tomcat.app.name}."/>
+        <copy file="${tomcat.app.name}-(bld${build.number})-${build.time}.war" tofile="${wardir}/ROOT.war" overwrite="true"/>
+		<delete file="${tomcat.app.name}-(bld${build.number})-${build.time}.war"/>
+    </target>
+
+    <target name="buildWarToJbossFarmDir" description="Builds a war file to the Jboss Farm directory." depends="packagewithsource">
+        <echo message="Creating ROOT.war for ${tomcat.app.name}."/>
+        <copy file="${tomcat.app.name}-(bld${build.number})-${build.time}.war" tofile="${jboss.farm.directory}/ROOT.war" overwrite="true"/>
+		<delete file="${tomcat.app.name}-(bld${build.number})-${build.time}.war"/>
+    </target>
+
+
+
+
+
+    <taskdef name="hibernatetool"
+        classname="org.hibernate.tool.ant.HibernateToolTask"
+        classpathref="lib.classpath"/>
+    <target name="hibernategen" description="Generated hibernate stuff">
+        <hibernatetool destdir="${builddir}/hibernategeneratedclasses/">
+            <jdbcconfiguration
+             propertyfile="hibernateforant.properties"
+             packagename="com.dneero.dao"
+             revengfile="${sourcedir}/WEB-INF/classes/hibernate.reveng.xml"
+            />
+            <hbm2java jdk5="true" ejb3="false"/>
+            <hbm2hbmxml/>
+            <hbm2cfgxml/>
+        </hibernatetool>
+    </target>
+
+    
+</project>

@@ -1,0 +1,1 @@
+This is a test email to <$user.firstname$> <$user.lastname$> whose email address is <$user.email$>.

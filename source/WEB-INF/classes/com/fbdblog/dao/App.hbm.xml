@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.fbdblog.dao.App" table="app">
+        <cache usage="transactional"/>
+        <id name="appid" type="int">
+            <column name="appid" />
+            <generator class="native" />
+        </id>
+        <set name="questions" inverse="true" order-by="questionid asc" cascade="all-delete-orphan">
+            <cache usage="transactional"/>
+            <key column="appid"></key>
+            <one-to-many class="com.fbdblog.dao.Question" not-found="ignore"></one-to-many>
+        </set>
+
+        <property name="title" type="text">
+            <column name="title" not-null="true" />
+        </property>
+        <property name="description" type="text">
+            <column name="description" />
+        </property>
+        <property name="facebookappname" type="text">
+            <column name="facebookappname" not-null="true"/>
+        </property>
+        <property name="facebookapikey" type="text">
+            <column name="facebookapikey" not-null="true"/>
+        </property>
+        <property name="facebookapisecret" type="text">
+            <column name="facebookapisecret" not-null="true"/>
+        </property>
+
+    </class>
+</hibernate-mapping>

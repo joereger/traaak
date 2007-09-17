@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.fbdblog.dao.User" table="user">
+        <cache usage="transactional"/>
+        <id name="userid" type="int">
+            <column name="userid" />
+            <generator class="native" />
+        </id>
+
+        <set name="userroles" inverse="true" cascade="all-delete-orphan">
+            <cache usage="transactional"/>
+            <key column="userid"></key>
+            <one-to-many class="com.fbdblog.dao.Userrole" not-found="ignore"></one-to-many>
+        </set>
+
+        <property name="facebookuid" type="string">
+            <column name="facebookuid" not-null="true" />
+        </property>
+        <property name="isenabled" type="boolean">
+            <column name="isenabled" />
+        </property>
+        <property name="firstname" type="string">
+            <column name="firstname" not-null="true" />
+        </property>
+        <property name="lastname" type="string">
+            <column name="lastname" not-null="true" />
+        </property>
+        <property name="createdate" type="timestamp">
+            <column name="createdate" not-null="true" />
+        </property>
+
+    </class>
+</hibernate-mapping>
