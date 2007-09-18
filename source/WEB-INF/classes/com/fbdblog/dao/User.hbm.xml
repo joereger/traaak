@@ -28,6 +28,12 @@
         <property name="lastname" type="string">
             <column name="lastname" not-null="true" />
         </property>
+        <property name="email" type="string">
+            <column name="email" />
+        </property>
+        <property name="password" type="string">
+            <column name="password" />
+        </property>
         <property name="createdate" type="timestamp">
             <column name="createdate" not-null="true" />
         </property>

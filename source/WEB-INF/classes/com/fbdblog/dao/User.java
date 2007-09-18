@@ -26,6 +26,8 @@ public class User extends BasePersistentClass implements java.io.Serializable, R
      private boolean isenabled;
      private String firstname;
      private String lastname;
+     private String email;
+     private String password;
      private Date createdate;
 
 
@@ -135,5 +137,21 @@ public class User extends BasePersistentClass implements java.io.Serializable, R
 
     public void setUserroles(Set<Userrole> userroles) {
         this.userroles = userroles;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

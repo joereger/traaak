@@ -83,7 +83,7 @@ public class UserSession implements Serializable {
 
 
 
-    public boolean isIssysadmin() {
+    public boolean getIssysadmin() {
         return issysadmin;
     }
 
