@@ -51,7 +51,7 @@ public class UserSessionSetup {
                 if (userSession.getApp() != null && userSession.getApp().getAppid() > 0) {
 
                     //I only want to run this stuff when I see a new Facebook session key...
-                    if (request.getParameter("fb_sig_session_key") != null && !request.getParameter("fb_sig_session_key").trim().equals("") && !request.getParameter("fb_sig_session_key").trim().equals(userSession.getFacebooksessionkey().trim())) {
+                    if ( (request.getParameter("fb_sig_session_key")!=null && !request.getParameter("fb_sig_session_key").trim().equals("") && !request.getParameter("fb_sig_session_key").trim().equals(userSession.getFacebooksessionkey().trim())) || (request.getParameter("fb_sig")!=null && !request.getParameter("fb_sig").trim().equals("") && !request.getParameter("fb_sig").trim().equals(userSession.getFacebooksessionkey().trim()))) {
                         logger.debug("Running heavy Facebook user setup stuff because I'm seeing a new fb_sig_session_key");
 
                         //Set the sessionkey to the local session
@@ -108,7 +108,6 @@ public class UserSessionSetup {
                     }
                 } else {
                     logger.debug("app not found for api_key=" + request.getParameter("fb_sig_api_key"));
-                    //@todo redirect to big question mark... we have a verified facebook call but no local app
                 }
             } else {
                 logger.debug("no request.getParameter(\"fb_sig_api_key\") found");

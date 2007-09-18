@@ -3,6 +3,11 @@
 <%@ page import="com.fbdblog.dao.App" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page import="com.fbdblog.util.Num" %>
+<%@ page import="com.fbdblog.dao.Question" %>
+<%@ page import="org.hibernate.criterion.Restrictions" %>
+<%@ page import="com.fbdblog.qtype.def.ComponentTypes" %>
+<%@ page import="com.fbdblog.qtype.def.Component" %>
+<%@ page import="com.fbdblog.qtype.*" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -32,7 +37,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
 
 App Detail: <%=app.getTitle()%>
 <br/><br/>
-<form action="" method="post">
+<form action="appdetail.jsp" method="post">
     <input type="hidden" name="appid" value="<%=app.getAppid()%>">
     <input type="hidden" name="action" value="save">
     <table cellpadding="0" cellspacing="0" border="0">
@@ -87,6 +92,43 @@ App Detail: <%=app.getTitle()%>
     </table>
 </form>
 
+<br/><br/>
+Questions:
+<br/>
+<%
+    List<Question> questions = HibernateUtil.getSession().createCriteria(Question.class)
+            .add(Restrictions.eq("appid", app.getAppid()))
+            .setCacheable(false)
+            .list();
+    for (Iterator<Question> iterator = questions.iterator(); iterator.hasNext();) {
+        Question question = iterator.next();
+        String comptypefilename = "";
+        if (question.getComponenttype() == Textbox.ID) {
+            comptypefilename = "textbox";
+        } else if (question.getComponenttype() == Checkboxes.ID) {
+            comptypefilename = "checkboxes";
+        } else if (question.getComponenttype() == Dropdown.ID) {
+            comptypefilename = "dropdown";
+        } else if (question.getComponenttype() == Essay.ID) {
+            comptypefilename = "essay";
+        } else if (question.getComponenttype() == Matrix.ID) {
+            comptypefilename = "matrix";
+        } else if (question.getComponenttype() == Range.ID) {
+            comptypefilename = "range";
+        }
+        %>
+        <a href="appdetail-question-<%=comptypefilename%>.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>"><%=question.getQuestion()%></a><br/>
+        <%
+    }
+%>
+<br/>
+<br/><a href='appdetail-question-textbox.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Textbox</a>
+<br/><a href='appdetail-question-checkboxes.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Checkboxes</a>
+<br/><a href='appdetail-question-dropdown.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Dropdown</a>
+<br/><a href='appdetail-question-essay.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Essay</a>
+<br/><a href='appdetail-question-matrix.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Matrix</a>
+<br/><a href='appdetail-question-range.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Range</a>
+<br/><br/>
 
 
 
