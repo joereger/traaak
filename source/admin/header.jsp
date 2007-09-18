@@ -21,7 +21,7 @@
     }
 %>
 
-<table cellpadding="0" cellspacing="0" border="0">
+<table cellpadding="10" cellspacing="0" border="0">
     <tr>
         <td valign="top" colspan="2">
             Logged in as: <%=userSession.getUser().getFirstname()%> <%=userSession.getUser().getLastname()%>    
@@ -29,9 +29,7 @@
     </tr>
     <tr>
         <td valign="top" width="150">
-            Apps
-            <br/>
-            SysProps
+            <a href='apps.jsp'>Apps</a><br/>
         </td>
         <td valign="top">
 
