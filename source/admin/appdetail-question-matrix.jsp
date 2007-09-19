@@ -9,6 +9,8 @@
 <%@ page import="com.fbdblog.dao.Questionconfig" %>
 <%@ page import="com.fbdblog.util.UserInputSafe" %>
 <%@ page import="com.fbdblog.qtype.Checkboxes" %>
+<%@ page import="com.fbdblog.qtype.Dropdown" %>
+<%@ page import="com.fbdblog.qtype.Matrix" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -39,7 +41,7 @@
 
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("save")) {
-        question.setComponenttype(Checkboxes.ID);
+        question.setComponenttype(Matrix.ID);
         question.setQuestion(request.getParameter("question"));
         question.setAppid(app.getAppid());
         boolean isrequired = false;
@@ -59,9 +61,21 @@
 
         Questionconfig qc1 = new Questionconfig();
         qc1.setQuestionid(question.getQuestionid());
-        qc1.setName("options");
-        qc1.setValue(UserInputSafe.clean(request.getParameter("options")));
+        qc1.setName("rows");
+        qc1.setValue(UserInputSafe.clean(request.getParameter("rows")));
         question.getQuestionconfigs().add(qc1);
+
+        Questionconfig qc2 = new Questionconfig();
+        qc2.setQuestionid(question.getQuestionid());
+        qc2.setName("cols");
+        qc2.setValue(UserInputSafe.clean(request.getParameter("cols")));
+        question.getQuestionconfigs().add(qc2);
+
+        Questionconfig qc3 = new Questionconfig();
+        qc3.setQuestionid(question.getQuestionid());
+        qc3.setName("respondentcanselectmany");
+        qc3.setValue(UserInputSafe.clean(request.getParameter("respondentcanselectmany")));
+        question.getQuestionconfigs().add(qc3);
 
         try {
             question.save();
@@ -76,7 +90,7 @@
 App: <a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a><br/>
 Question Detail: <%=question.getQuestion()%>
 <br/><br/>
-<form action="appdetail-question-checkboxes.jsp" method="post">
+<form action="appdetail-question-matrix.jsp" method="post">
     <input type="hidden" name="appid" value="<%=app.getAppid()%>">
     <input type="hidden" name="questionid" value="<%=question.getQuestionid()%>">
     <input type="hidden" name="action" value="save">
@@ -105,19 +119,58 @@ Question Detail: <%=question.getQuestion()%>
         </tr>
         <tr>
             <td valign="top">
-                Options
+                Rows
             </td>
             <td valign="top">
                 <%
-                String options = "";
+                String rows = "";
                 for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
                     Questionconfig questionconfig = iterator.next();
-                    if (questionconfig.getName().equals("options")){
-                        options = questionconfig.getValue();
+                    if (questionconfig.getName().equals("rows")){
+                        rows = questionconfig.getValue();
                     }
                 }
                 %>
-                <textarea name="options"><%=options%></textarea>
+                <textarea name="rows"><%=rows%></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                Cols
+            </td>
+            <td valign="top">
+                <%
+                String cols = "";
+                for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
+                    Questionconfig questionconfig = iterator.next();
+                    if (questionconfig.getName().equals("cols")){
+                        cols = questionconfig.getValue();
+                    }
+                }
+                %>
+                <textarea name="cols"><%=cols%></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                Respondent Can Select Many?
+            </td>
+            <td valign="top">
+                <%
+                String respondentcanselectmanySelected = "";
+                for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
+                    Questionconfig questionconfig = iterator.next();
+                    logger.debug("found questionconfig: "+questionconfig.getName());
+                    if (questionconfig.getName().equals("respondentcanselectmany")){
+                        logger.debug("found respondentcanselectmany: "+questionconfig.getValue());
+                        if(questionconfig.getValue().equals("1")){
+                            respondentcanselectmanySelected = " checked";
+                            logger.debug("respondentcanselectmanySelected: "+respondentcanselectmanySelected);
+                        }
+                    }
+                }
+                %>
+                <input type="checkbox" name="respondentcanselectmany" value="1" <%=respondentcanselectmanySelected%>>
             </td>
         </tr>
         <tr>

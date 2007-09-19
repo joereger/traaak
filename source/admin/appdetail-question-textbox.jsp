@@ -53,7 +53,7 @@
         return;
     }
 %>
-
+App: <a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a><br/>
 Question Detail: <%=question.getQuestion()%>
 <br/><br/>
 <form action="appdetail-question-textbox.jsp" method="post">
@@ -77,7 +77,7 @@ Question Detail: <%=question.getQuestion()%>
                 <%
                 String selectedIsrequired = "";
                 if (question.getIsrequired()){
-                    selectedIsrequired = " selected";
+                    selectedIsrequired = " checked";
                 }
                 %>
                 <input type="checkbox" name="isrequired" value="1" <%=selectedIsrequired%>>
