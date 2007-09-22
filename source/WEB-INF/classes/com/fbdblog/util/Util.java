@@ -95,5 +95,39 @@ public class Util {
         return outArr;
     }
 
+    public static int randomInt(int max){
+        return (int)(Math.random()*(max+1));
+    }
+
+    public static int[] addToIntArray(int[] src, int str){
+        //If the source isn't null
+        if (src!=null){
+            int[] outArr = new int[src.length+1];
+            for(int i=0; i < src.length; i++) {
+                outArr[i]=src[i];
+            }
+            outArr[src.length]=str;
+            return outArr;
+        //If the source is null, create an array, append str and return
+        } else {
+            int[] outArr = new int[1];
+            outArr[0]=str;
+            return outArr;
+        }
+    }
+
+    public static boolean arrayContainsValue(int[] array, int value){
+       if (array!=null){
+            for (int i = 0; i < array.length; i++) {
+                if (array[i]==value){
+                    return true;
+                }
+            }
+       }
+       return false;
+    }
+
+    
+
 
 }

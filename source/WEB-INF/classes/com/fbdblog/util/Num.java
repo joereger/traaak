@@ -42,6 +42,8 @@ public class Num {
    public static int randomInt(int max){
         return (int)(Math.random()*(max+1));
     }
+    
+
 
 
 }

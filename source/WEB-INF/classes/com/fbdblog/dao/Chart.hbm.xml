@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.fbdblog.dao.Chart" table="chart">
+        <cache usage="transactional"/>
+        <id name="chartid" type="int">
+            <column name="chartid" />
+            <generator class="native" />
+        </id>
+        <set name="chartyaxes" inverse="true" cascade="all-delete-orphan">
+            <cache usage="transactional"/>
+            <key column="chartid"></key>
+            <one-to-many class="com.fbdblog.dao.Chartyaxis" not-found="ignore"></one-to-many>
+        </set>
+
+        <property name="appid" type="int">
+            <column name="appid" not-null="true" />
+        </property>
+        <property name="name" type="text">
+            <column name="name" not-null="true" />
+        </property>
+        <property name="xquestionid" type="int">
+            <column name="xquestionid" not-null="true" />
+        </property>
+        <property name="yaxiswhattodo" type="int">
+            <column name="yaxiswhattodo" not-null="true" />
+        </property>
+        <property name="charttype" type="int">
+            <column name="charttype" not-null="true" />
+        </property>
+        <property name="daterange" type="int">
+            <column name="daterange" not-null="true" />
+        </property>
+        <property name="lastxdays" type="int">
+            <column name="lastxdays" not-null="true" />
+        </property>
+        <property name="lastxweeks" type="int">
+            <column name="lastxweeks" not-null="true" />
+        </property>
+        <property name="lastxmonths" type="int">
+            <column name="lastxmonths" not-null="true" />
+        </property>
+        <property name="lastxyears" type="int">
+            <column name="lastxyears" not-null="true" />
+        </property>
+        <property name="daterangefromyyyy" type="int">
+            <column name="daterangefromyyyy" not-null="true" />
+        </property>
+        <property name="daterangefrommm" type="int">
+            <column name="daterangefrommm" not-null="true" />
+        </property>
+        <property name="daterangefromdd" type="int">
+            <column name="daterangefromdd" not-null="true" />
+        </property>
+        <property name="daterangetoyyyy" type="int">
+            <column name="daterangetoyyyy" not-null="true" />
+        </property>
+        <property name="daterangetomm" type="int">
+            <column name="daterangetomm" not-null="true" />
+        </property>
+        <property name="daterangetodd" type="int">
+            <column name="daterangetodd" not-null="true" />
+        </property>
+
+    </class>
+</hibernate-mapping>

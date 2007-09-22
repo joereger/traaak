@@ -22,6 +22,15 @@
     }
 %>
 
+<%
+    if (request.getParameter("action") != null && request.getParameter("action").equals("compare")) {
+        //@todo implement compare
+        logger.debug("compare called");
+    }
+%>
+
+
+
 <br/>
 <fb:tabs>
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main' title='Track Stuff' selected='true'/>

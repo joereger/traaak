@@ -4,7 +4,9 @@ package com.fbdblog.qtype;
 import java.util.*;
 
 import org.apache.log4j.Logger;
+import org.hibernate.criterion.Restrictions;
 import com.fbdblog.dao.*;
+import com.fbdblog.dao.hibernate.HibernateUtil;
 import com.fbdblog.qtype.def.Component;
 import com.fbdblog.qtype.def.ComponentException;
 import com.fbdblog.qtype.util.AppPostParser;
@@ -48,6 +50,10 @@ public class Dropdown implements Component {
         }
         out.append("<br/>");
 
+        //Select options
+        out.append("<select name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\">");
+        out.append("<option value=\"\"></option>");
+        //Main options
         String options = "";
         for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
             Questionconfig questionconfig = iterator.next();
@@ -56,15 +62,34 @@ public class Dropdown implements Component {
             }
         }
         String[] optionsSplit = options.split("\\n");
-
-        out.append("<select name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\">");
-        out.append("<option value=\"\"></option>");
         for (int i = 0; i < optionsSplit.length; i++) {
             String s = optionsSplit[i];
-            out.append("<option value=\""+Str.cleanForHtml(s)+"\">" + s + "</option>");
+            out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\">" + s.trim() + "</option>");
         }
+        //User options
+        List<Questionuserconfig> questionuserconfigs = HibernateUtil.getSession().createCriteria(Questionuserconfig.class)
+                                           .add(Restrictions.eq("questionid", question.getQuestionid()))
+                                           .add(Restrictions.eq("userid", user.getUserid()))
+                                           .setCacheable(true)
+                                           .list();
+        String useroptions = "";
+        for (Iterator<Questionuserconfig> iterator = questionuserconfigs.iterator(); iterator.hasNext();) {
+            Questionuserconfig questionuserconfig = iterator.next();
+            if (questionuserconfig.getName().equals("options")){
+                useroptions = questionuserconfig.getValue();
+            }
+        }
+        String[] userOptionsSplit = useroptions.split("\\n");
+        for (int i = 0; i < userOptionsSplit.length; i++) {
+            String s = userOptionsSplit[i];
+            out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\">" + s.trim() + "</option>");
+        }
+        //Close select
         out.append("</select>");
 
+        //User inputs own option
+        out.append("<br/>");
+        out.append("<input type='text' name=\""+AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-newoption\" value=\""+""+"\">");
 
         return out.toString();
     }

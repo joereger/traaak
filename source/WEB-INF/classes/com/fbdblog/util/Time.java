@@ -21,15 +21,15 @@ public class Time {
 
 	    //System.out.println("-----------");
 	    //System.out.println("-----------");
-	    //System.out.println("timezoneid: "+timezoneid+"<br>dateformatfordb(date): " +reger.core.TimeUtils.dateformatfordb(date) + "<br>date.getTimeZone().getID():"+date.getTimeZone().getID());
+	    //System.out.println("timezoneid: "+timezoneid+"<br>dateformatfordb(date): " +Time.dateformatfordb(date) + "<br>date.getTimeZone().getID():"+date.getTimeZone().getID());
 	    Calendar outCal = (Calendar) date.clone();
-	    //System.out.println("timezoneid: "+timezoneid+"<br>dateformatfordb(outCal): " +reger.core.TimeUtils.dateformatfordb(outCal) + "<br>outCal.getTimeZone().getID():"+outCal.getTimeZone().getID());
+	    //System.out.println("timezoneid: "+timezoneid+"<br>dateformatfordb(outCal): " +Time.dateformatfordb(outCal) + "<br>outCal.getTimeZone().getID():"+outCal.getTimeZone().getID());
 	    outCal.setTimeZone(TimeZoneCache.get("GMT"));
-	    //System.out.println("timezoneid: "+timezoneid+"<br>dateformatfordb(outCal): " +reger.core.TimeUtils.dateformatfordb(outCal) + "<br>outCal.getTimeZone().getID():"+outCal.getTimeZone().getID());
+	    //System.out.println("timezoneid: "+timezoneid+"<br>dateformatfordb(outCal): " +Time.dateformatfordb(outCal) + "<br>outCal.getTimeZone().getID():"+outCal.getTimeZone().getID());
 		int offset = TimeZoneCache.get(timezoneid).getOffset(outCal.getTimeInMillis());
 		//System.out.println("timezoneid: "+timezoneid+"<br>offset: " +offset);
 		outCal.add(Calendar.MILLISECOND, (-1)*offset);
-		//System.out.println("timezoneid: "+timezoneid+"<br>dateformatfordb(outCal): " +reger.core.TimeUtils.dateformatfordb(outCal) + "<br>outCal.getTimeZone().getID():"+outCal.getTimeZone().getID());
+		//System.out.println("timezoneid: "+timezoneid+"<br>dateformatfordb(outCal): " +Time.dateformatfordb(outCal) + "<br>outCal.getTimeZone().getID():"+outCal.getTimeZone().getID());
 		return outCal;
 	}
 
@@ -841,7 +841,7 @@ public class Time {
 //        Calendar cal = Calendar.getInstance();
 //        cal.set(Calendar.MILLISECOND, millis);
 //
-//        int weeksago=reger.core.DateDiff.DateDiff("week", now, cal);
+//        int weeksago=DateDiff.DateDiff("week", now, cal);
 //
 //        return weeksago;
 //     }
@@ -988,5 +988,50 @@ public class Time {
         Calendar tmpDate = Time.nowInGmtCalendar();
         return Time.xMinutesAgoStart(tmpDate, Num.randomInt(maxAgeInMinutes));
     }
+
+    /**
+     * Gets the string representation of a day of the week from a number
+     */
+     public static String getDayOfWeek(int dayofweek){
+        if (dayofweek==Calendar.SUNDAY){
+            return "Sunday";
+        } else if (dayofweek==Calendar.MONDAY){
+            return "Monday";
+        } else if (dayofweek==Calendar.TUESDAY){
+            return "Tuesday";
+        } else if (dayofweek==Calendar.WEDNESDAY){
+            return "Wednesday";
+        } else if (dayofweek==Calendar.THURSDAY){
+            return "Thursday";
+        } else if (dayofweek==Calendar.FRIDAY){
+            return "Friday";
+        } else if (dayofweek==Calendar.SATURDAY){
+            return "Saturday";
+        }
+        return "NA";
+     }
+
+     /**
+     * Gets the string representation of a day of the week from a number
+     */
+     public static String getDayOfWeekAbbreviated(int dayofweek){
+        if (dayofweek==Calendar.SUNDAY){
+            return "Sun";
+        } else if (dayofweek==Calendar.MONDAY){
+            return "Mon";
+        } else if (dayofweek==Calendar.TUESDAY){
+            return "Tue";
+        } else if (dayofweek==Calendar.WEDNESDAY){
+            return "Wed";
+        } else if (dayofweek==Calendar.THURSDAY){
+            return "Thu";
+        } else if (dayofweek==Calendar.FRIDAY){
+            return "Fri";
+        } else if (dayofweek==Calendar.SATURDAY){
+            return "Sat";
+        }
+        return "NA";
+     }
+
 
 }

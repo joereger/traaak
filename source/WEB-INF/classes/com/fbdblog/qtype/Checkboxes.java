@@ -5,7 +5,9 @@ package com.fbdblog.qtype;
 import java.util.*;
 
 import org.apache.log4j.Logger;
+import org.hibernate.criterion.Restrictions;
 import com.fbdblog.dao.*;
+import com.fbdblog.dao.hibernate.HibernateUtil;
 import com.fbdblog.qtype.def.Component;
 import com.fbdblog.qtype.def.ComponentException;
 import com.fbdblog.qtype.util.AppPostParser;
@@ -52,6 +54,7 @@ public class Checkboxes implements Component {
         }
         out.append("<br/>");
 
+        //Main options
         String options = "";
         for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
             Questionconfig questionconfig = iterator.next();
@@ -63,11 +66,32 @@ public class Checkboxes implements Component {
         //@todo test checkbox because i don't think that the hashmap holding the values properly handles multiple values for the same name
         for (int i = 0; i < optionsSplit.length; i++) {
             String s = optionsSplit[i];
-            out.append("<input type=\"checkbox\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\" value=\""+Str.cleanForHtml(s)+"\">" + s);
-            if (optionsSplit.length>i+1){
-                out.append("<br/>");
+            out.append("<input type=\"checkbox\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\" value=\""+Str.cleanForHtml(s.trim())+"\">" + s.trim());
+            out.append("<br/>");
+        }
+        //User options
+        List<Questionuserconfig> questionuserconfigs = HibernateUtil.getSession().createCriteria(Questionuserconfig.class)
+                                           .add(Restrictions.eq("questionid", question.getQuestionid()))
+                                           .add(Restrictions.eq("userid", user.getUserid()))
+                                           .setCacheable(true)
+                                           .list();
+        String useroptions = "";
+        for (Iterator<Questionuserconfig> iterator = questionuserconfigs.iterator(); iterator.hasNext();) {
+            Questionuserconfig questionuserconfig = iterator.next();
+            if (questionuserconfig.getName().equals("options")){
+                useroptions = questionuserconfig.getValue();
             }
         }
+        String[] userOptionsSplit = useroptions.split("\\n");
+        for (int i = 0; i < userOptionsSplit.length; i++) {
+            String s = userOptionsSplit[i];
+            out.append("<input type=\"checkbox\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\" value=\""+Str.cleanForHtml(s.trim())+"\">" + s.trim());
+            out.append("<br/>");
+        }
+
+        //User inputs own option
+        out.append("<br/>");
+        out.append("<input type='text' name=\""+AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-newoption\" value=\""+""+"\">");
 
 
         return out.toString();

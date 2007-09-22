@@ -49,7 +49,7 @@ public class Essay implements Component {
         }
         out.append("<br/>");
 
-        out.append("<textarea cols=\"40\" rows=\"3\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\"></textarea>");
+        out.append("<textarea cols=\"30\" rows=\"3\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\"></textarea>");
 
         return out.toString();
     }

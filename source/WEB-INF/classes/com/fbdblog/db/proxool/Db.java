@@ -203,7 +203,7 @@ public class Db {
   */
   public static String[][] RunSQL(String sql, int recordstoreturn) {
     Logger logger = Logger.getLogger("com.fbdblog.db.proxool.Db");
-    //reger.core.Util.logtodb("SQL: " + sql);
+    //Util.logtodb("SQL: " + sql);
     //System.out.println("Fbdblog: RunSql called: " + sql);
 
       Connection conn=null;

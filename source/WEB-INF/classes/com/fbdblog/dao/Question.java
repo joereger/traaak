@@ -23,6 +23,7 @@ public class Question extends BasePersistentClass implements java.io.Serializabl
      private String question;
      private int componenttype;
      private boolean isrequired;
+     private int datatypeid;
      private Set<Questionconfig> questionconfigs = new HashSet<Questionconfig>();
 
     //Validator
@@ -119,5 +120,12 @@ public class Question extends BasePersistentClass implements java.io.Serializabl
         this.questionconfigs = questionconfigs;
     }
 
- 
+
+    public int getDatatypeid() {
+        return datatypeid;
+    }
+
+    public void setDatatypeid(int datatypeid) {
+        this.datatypeid = datatypeid;
+    }
 }

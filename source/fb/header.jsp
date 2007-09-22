@@ -46,3 +46,27 @@
     }
 
 %>
+
+
+<table cellpadding="2" cellspacing="0" border="0" width="100%">
+    <tr>
+        <td valign="top">
+            <font style="font-size: 18px;"><%=userSession.getApp().getTitle()%></font>
+        </td>
+        <td valign="top">
+            <div align="right">
+            <font style="font-size: 18px;"><%=userSession.getFacebookUser().getFirst_name()%> <%=userSession.getFacebookUser().getLast_name()%></font>
+            </div>
+        </td>
+        <td valign="top" width="50">
+            <img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="<%=userSession.getFacebookUser().getFirst_name()%>" align="right">
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" colspan="3" align="right">
+            <div align="right">
+            <form action="index.jsp"><input type="hidden" name="action" value="compare"><fb:friend-selector uid="<%=userSession.getFacebookUser().getUid()%>" name="uid" idname="friend_sel" /><input type="submit" value="Compare" style="font-size: 10px;"></form>
+            </div>
+        </td>
+    </tr>
+</table>

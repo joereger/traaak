@@ -26,7 +26,9 @@
         <property name="isrequired" type="boolean">
             <column name="isrequired" />
         </property>
-
+        <property name="datatypeid" type="int">
+            <column name="datatypeid" not-null="true" />
+        </property>
 
 
     </class>
