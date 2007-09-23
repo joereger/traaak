@@ -88,7 +88,7 @@ public class ChartFieldEntryDayofmonth extends Field implements ChartField{
     /**
      * Returns the Field object that this field is based on.
      * The Field object is the core requirement of a fieldtype.
-     * Generally FieldType implementations extend Field.
+     * Generally question type implementations extend Field.
      */
 //    public Field getField() {
 //        return this;
@@ -104,7 +104,7 @@ public class ChartFieldEntryDayofmonth extends Field implements ChartField{
      * (xAxis, yAxis)
      * (xAxis, yAxis)
      * (xAxis, yAxis)
-     * If FieldType doesn't need to do this, simply return data unchanged.
+     * If question type doesn't need to do this, simply return data unchanged.
      */
     public TreeMap fillEmptyXAxis(TreeMap data) {
         //Day of month is 1-31

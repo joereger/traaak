@@ -84,14 +84,14 @@ public class MegaChartHtmlRenderer {
         }
 
         //xQuestionid=Date/Time and anything other than charttype=Line is selected.  I override with Line chart type.
-        if (megaChart.getXQuestionid()==FieldType.XAXISDATETIME && megaChart.getCharttype()!=MegaConstants.CHARTTYPELINE){
+        if (megaChart.getXQuestionid()==MegaConstants.XAXISDATETIME && megaChart.getCharttype()!=MegaConstants.CHARTTYPELINE){
             mb.append("<tr><td bgcolor=#ffffff>");
             mb.append("Quick note: When you choose Date/Time for the X-Axis you can only choose a Chart Type of Line.  We've automatically adjusted for you.");
             mb.append("</td></tr>");
         }
 
         //xQuestionid=Day of the Week and anything other than charttype=bar, 3dbar, stacked bar, horizontal bar, horizontal3d bar
-        if (megaChart.getXQuestionid()==FieldType.XAXISDAYOFWEEK && !(megaChart.getCharttype()==MegaConstants.CHARTTYPE3DBAR || megaChart.getCharttype()==MegaConstants.CHARTTYPEHORIZONTALBAR || megaChart.getCharttype()==MegaConstants.CHARTTYPEHORIZONTAL3DBAR || megaChart.getCharttype()==MegaConstants.CHARTTYPEBAR  || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART  || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3D || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL)) {
+        if (megaChart.getXQuestionid()==MegaConstants.XAXISDAYOFWEEK && !(megaChart.getCharttype()==MegaConstants.CHARTTYPE3DBAR || megaChart.getCharttype()==MegaConstants.CHARTTYPEHORIZONTALBAR || megaChart.getCharttype()==MegaConstants.CHARTTYPEHORIZONTAL3DBAR || megaChart.getCharttype()==MegaConstants.CHARTTYPEBAR  || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART  || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3D || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL)) {
             mb.append("<tr><td bgcolor=#ffffff>");
             mb.append("Quick note: When you choose Day of the Week for the X-Axis you can only choose one of the Bar chart types.  We've automatically adjusted for you.");
             mb.append("</td></tr>");
@@ -170,43 +170,43 @@ public class MegaChartHtmlRenderer {
 
             mb.append("<font face=arial size=-1>");
             //Derived xAxis types
-            mb.append("<input name=xMegafieldChoice type=radio value='"+FieldType.XAXISDATETIME+"_0_0'");
-            if (megaChart.getXQuestionid()==FieldType.XAXISDATETIME){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISDATETIME+"_0_0'");
+            if (megaChart.getXQuestionid()==MegaConstants.XAXISDATETIME){
                 mb.append(" checked");
             }
             mb.append("> Exact Date/Time<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+FieldType.XAXISCALENDARDAYS+"_0_0'");
-            if (megaChart.getXQuestionid()==FieldType.XAXISCALENDARDAYS){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISCALENDARDAYS+"_0_0'");
+            if (megaChart.getXQuestionid()==MegaConstants.XAXISCALENDARDAYS){
                 mb.append(" checked");
             }
             mb.append("> Days Ago<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+FieldType.XAXISCALENDARWEEKS+"_0_0'");
-            if (megaChart.getXQuestionid()==FieldType.XAXISCALENDARWEEKS){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISCALENDARWEEKS+"_0_0'");
+            if (megaChart.getXQuestionid()==MegaConstants.XAXISCALENDARWEEKS){
                 mb.append(" checked");
             }
             mb.append("> Weeks Ago<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+FieldType.XAXISCALENDARMONTHS+"_0_0'");
-            if (megaChart.getXQuestionid()==FieldType.XAXISCALENDARMONTHS){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISCALENDARMONTHS+"_0_0'");
+            if (megaChart.getXQuestionid()==MegaConstants.XAXISCALENDARMONTHS){
                 mb.append(" checked");
             }
             mb.append("> Months Ago<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+FieldType.XAXISTIMEOFDAY+"_0_0'");
-            if (megaChart.getXQuestionid()==FieldType.XAXISTIMEOFDAY){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISTIMEOFDAY+"_0_0'");
+            if (megaChart.getXQuestionid()==MegaConstants.XAXISTIMEOFDAY){
                 mb.append(" checked");
             }
             mb.append("> Hour of the Day<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+FieldType.XAXISDAYOFWEEK+"_0_0'");
-            if (megaChart.getXQuestionid()==FieldType.XAXISDAYOFWEEK){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISDAYOFWEEK+"_0_0'");
+            if (megaChart.getXQuestionid()==MegaConstants.XAXISDAYOFWEEK){
                 mb.append(" checked");
             }
             mb.append("> Day of the Week<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+FieldType.XAXISDAYOFMONTH+"_0_0'");
-            if (megaChart.getXQuestionid()==FieldType.XAXISDAYOFMONTH){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISDAYOFMONTH+"_0_0'");
+            if (megaChart.getXQuestionid()==MegaConstants.XAXISDAYOFMONTH){
                 mb.append(" checked");
             }
             mb.append("> Day of the Month<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+FieldType.XAXISENTRYORDER+"_0_0'");
-            if (megaChart.getXQuestionid()==FieldType.XAXISENTRYORDER){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISENTRYORDER+"_0_0'");
+            if (megaChart.getXQuestionid()==MegaConstants.XAXISENTRYORDER){
                 mb.append(" checked");
             }
             mb.append("> Entry Order<br>");
@@ -247,9 +247,9 @@ public class MegaChartHtmlRenderer {
 
             mb.append("<td valign=top>");
             mb.append("<font face=arial size=-1>");
-            mb.append("<input name=yMegafieldChoice type=checkbox value='"+FieldType.YAXISCOUNT+"_0_0'");
+            mb.append("<input name=yMegafieldChoice type=checkbox value='"+MegaConstants.YAXISCOUNT+"_0_0'");
             for(int j=0; j<megaChart.getYQuestionid().length; j++){
-                if (megaChart.getYQuestionid()[j]==FieldType.YAXISCOUNT){
+                if (megaChart.getYQuestionid()[j]==MegaConstants.YAXISCOUNT){
                     mb.append(" checked");
                 }
             }

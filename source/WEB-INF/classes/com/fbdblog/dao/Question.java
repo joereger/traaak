@@ -17,6 +17,7 @@ import java.util.HashSet;
 public class Question extends BasePersistentClass implements java.io.Serializable, RegerEntity, AuthControlled {
 
 
+
     // Fields
      private int questionid;
      private int appid;

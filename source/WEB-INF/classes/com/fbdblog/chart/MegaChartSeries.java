@@ -51,15 +51,13 @@ public class MegaChartSeries {
 
 
 
-
-
     public MegaChartSeries(int yQuestionid, int appid, MegaChart megaChart, MegaChartEntryChooser entryChooser){
 
         //Store the incoming data in the correct place
-        this.xQuestionid =megaChart.getXQuestionid();
+        this.xQuestionid =megaChart.getChart().getXquestionid();
         this.yQuestionid =yQuestionid;
         this.appid=appid;
-        this.yaxiswhattodo=megaChart.getYaxiswhattodo();
+        this.yaxiswhattodo=megaChart.getChart().getYaxiswhattodo();
 
         //Break out the fieldtype from the questionid.
         //If the MegaFieldid < 0 then it's actually a fieldtype
@@ -118,13 +116,11 @@ public class MegaChartSeries {
      * What's happening here is this:
      * We're looking at a single field and we want to create an
      * array with array[eventid][questionid.value].
-     * The first step is to find the correct field handler that implements
-     * the interface FieldType
+     * The first step is to find the correct field handler
      */
      public TreeMap getFieldData(int questionid, int fieldtype, ArrayList<Post> posts){
         Logger logger = Logger.getLogger(this.getClass().getName());
         logger.debug("MegaChartNew.java: getFieldData()<br>questionid=" + questionid + "<br>fieldtype=" + fieldtype);
-        //Use FieldTypeFactory
         //Now we pass this to the fieldtype handler
         //Figure out which type of field this is
         ChartField f = ChartFieldFactory.getHandlerByFieldtype(fieldtype);
@@ -307,7 +303,7 @@ public class MegaChartSeries {
         for (Iterator i=tmap.entrySet().iterator(); i.hasNext(); ) {
             Map.Entry e = (Map.Entry) i.next();
             //Move from treemap to cleandata
-            if (xQuestionid !=FieldType.XAXISDATETIME){
+            if (xQuestionid !=MegaConstants.XAXISDATETIME){
                 //As long as it's not a date this will be used
                 cleanData[j][1] = String.valueOf(e.getKey());
             } else {
@@ -403,7 +399,7 @@ public class MegaChartSeries {
 //            //Solution: Use dateSql, defined above when the constructor is called.
 //            //Problem: The xAxis values have already been converted to megaoption (if applicable) so I need to convert back?
 //            //Solution: Two potential sql queries... one using megaoption, one not.  Hmmm... isn't that special?
-//            if (xFieldtype==FieldType.FIELDTYPEDROPDOWN || xFieldtype==FieldType.FIELDTYPEHORIZONTALRADIOS || xFieldtype==FieldType.FIELDTYPEVERTICALRADIOS) {
+//            if (xFieldtype==MegaConstants.FIELDTYPEDROPDOWN || xFieldtype==MegaConstants.FIELDTYPEHORIZONTALRADIOS || xFieldtype==MegaConstants.FIELDTYPEVERTICALRADIOS) {
 //                sql = "SELECT count(*) FROM megavalue, megaoption, event e WHERE e.eventid=megavalue.eventid AND megavalue.megavalue=megaoption.megaoptionid AND megavalue.questionid='"+xQuestionid+"' AND megaoption.optiontext='"+e.getKey()+"' AND e.logid='"+xLogid+"'" + dateSql;
 //            } else {
 //                sql = "SELECT count(*) FROM megavalue, event e WHERE e.eventid=megavalue.eventid AND megavalue.questionid='"+xQuestionid+"' AND megavalue.megavalue='"+e.getKey()+"' AND e.logid='"+xLogid+"'" + dateSql;
@@ -421,25 +417,7 @@ public class MegaChartSeries {
 //        return newTmap;
 //    }
 
-    /**
-     * Goes to the database and gets the fieldtype
-     */
-//    public int getFieldType(int questionid){
-//        //-----------------------------------
-//        //-----------------------------------
-//        String[][] rstFieldtype= Db.RunSQL("SELECT fieldtype FROM megafield WHERE questionid='"+questionid+"'");
-//        //-----------------------------------
-//        //-----------------------------------
-//        if (rstFieldtype!=null && rstFieldtype.length>0){
-//        	for(int i=0; i<rstFieldtype.length; i++){
-//        	    if (Num.isinteger(rstFieldtype[0][0])){
-//                    return Integer.parseInt(rstFieldtype[0][0]);
-//                }
-//        	}
-//        }
-//        //Otherwise return blah
-//        return -1;
-//    }
+
 
     /**
      * Sets the x title and some other properties
@@ -454,38 +432,38 @@ public class MegaChartSeries {
         } else {
             //It's a derived type
             //See Vars class for these values.
-            if (xQuestionid ==FieldType.XAXISENTRYORDER){
+            if (xQuestionid ==MegaConstants.XAXISENTRYORDER){
                 xAxisTitle="Entry Order";
                 xMegadatatype=DataTypeInteger.DATATYPEID;
-                xFieldtype=FieldType.XAXISENTRYORDER;
-            } else if (xQuestionid ==FieldType.XAXISTIMEOFDAY) {
+                xFieldtype=MegaConstants.XAXISENTRYORDER;
+            } else if (xQuestionid ==MegaConstants.XAXISTIMEOFDAY) {
                 xAxisTitle="Hour of the Day";
                 xMegadatatype=DataTypeInteger.DATATYPEID;
-                xFieldtype=FieldType.XAXISTIMEOFDAY;
-            } else if (xQuestionid ==FieldType.XAXISDAYOFWEEK) {
+                xFieldtype=MegaConstants.XAXISTIMEOFDAY;
+            } else if (xQuestionid ==MegaConstants.XAXISDAYOFWEEK) {
                 xAxisTitle="Day of the Week";
                 xMegadatatype=DataTypeString.DATATYPEID;
-                xFieldtype=FieldType.XAXISDAYOFWEEK;
-            } else if (xQuestionid ==FieldType.XAXISDAYOFMONTH) {
+                xFieldtype=MegaConstants.XAXISDAYOFWEEK;
+            } else if (xQuestionid ==MegaConstants.XAXISDAYOFMONTH) {
                 xAxisTitle="Day of the Month";
                 xMegadatatype=DataTypeInteger.DATATYPEID;
-                xFieldtype=FieldType.XAXISDAYOFMONTH;
-            } else if (xQuestionid ==FieldType.XAXISCALENDARDAYS) {
+                xFieldtype=MegaConstants.XAXISDAYOFMONTH;
+            } else if (xQuestionid ==MegaConstants.XAXISCALENDARDAYS) {
                 xAxisTitle="Days Ago";
                 xMegadatatype=DataTypeInteger.DATATYPEID;
-                xFieldtype=FieldType.XAXISCALENDARDAYS;
-            } else if (xQuestionid ==FieldType.XAXISCALENDARWEEKS) {
+                xFieldtype=MegaConstants.XAXISCALENDARDAYS;
+            } else if (xQuestionid ==MegaConstants.XAXISCALENDARWEEKS) {
                 xAxisTitle="Weeks Ago";
                 xMegadatatype=DataTypeInteger.DATATYPEID;
-                xFieldtype=FieldType.XAXISCALENDARWEEKS;
-            } else if (xQuestionid ==FieldType.XAXISCALENDARMONTHS) {
+                xFieldtype=MegaConstants.XAXISCALENDARWEEKS;
+            } else if (xQuestionid ==MegaConstants.XAXISCALENDARMONTHS) {
                 xAxisTitle="Months Ago";
                 xMegadatatype=DataTypeInteger.DATATYPEID;
-                xFieldtype=FieldType.XAXISCALENDARMONTHS;
+                xFieldtype=MegaConstants.XAXISCALENDARMONTHS;
             } else {
                 xAxisTitle="Date";
                 xMegadatatype=DataTypeDatetime.DATATYPEID;
-                xFieldtype=FieldType.XAXISDATETIME;
+                xFieldtype=MegaConstants.XAXISDATETIME;
             }
         }
     }
@@ -501,10 +479,10 @@ public class MegaChartSeries {
         yAxisTitle= Str.truncateString(question.getQuestion(), 25);
         yMegadatatype=question.getDatatypeid();
         yFieldtype=question.getComponenttype();
-        if (yQuestionid ==FieldType.YAXISCOUNT) {
+        if (yQuestionid ==MegaConstants.YAXISCOUNT) {
             yAxisTitle="Number of Posts";
             yMegadatatype=DataTypeInteger.DATATYPEID;
-            yFieldtype=FieldType.FIELDTYPETEXTBOX;
+            yFieldtype=MegaConstants.FIELDTYPETEXTBOX;
         }
     }
 

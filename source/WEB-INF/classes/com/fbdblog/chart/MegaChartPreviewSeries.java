@@ -64,25 +64,25 @@ public class MegaChartPreviewSeries extends MegaChartSeries {
         } else {
             if (!isYaxis){
                 //It's the X axis
-                if (questionid==FieldType.XAXISDAYOFWEEK) {
+                if (questionid==MegaConstants.XAXISDAYOFWEEK) {
                     return previewDataTimeExt(howmanydatapoints, questionid);
-                } else if (questionid==FieldType.XAXISDAYOFMONTH) {
+                } else if (questionid==MegaConstants.XAXISDAYOFMONTH) {
                     return previewDataTimeExt(howmanydatapoints, questionid);
-                } else if (questionid==FieldType.XAXISTIMEOFDAY) {
+                } else if (questionid==MegaConstants.XAXISTIMEOFDAY) {
                     return previewDataTimeExt(howmanydatapoints, questionid);
-                } else if (questionid==FieldType.XAXISENTRYORDER) {
+                } else if (questionid==MegaConstants.XAXISENTRYORDER) {
                     //This one's different
                     return previewDataNumeric(howmanydatapoints);
-                } else if (questionid==FieldType.XAXISCALENDARWEEKS) {
+                } else if (questionid==MegaConstants.XAXISCALENDARWEEKS) {
                     return previewDataTimeExt(howmanydatapoints, questionid);
-                } else if (questionid==FieldType.XAXISCALENDARMONTHS) {
+                } else if (questionid==MegaConstants.XAXISCALENDARMONTHS) {
                     return previewDataTimeExt(howmanydatapoints, questionid);
-                } else if (questionid==FieldType.XAXISDATETIME) {
+                } else if (questionid==MegaConstants.XAXISDATETIME) {
                     return previewDataTimeExt(howmanydatapoints, questionid);
                 }
             } else {
                 //It's a Y Axis
-                if (questionid==FieldType.YAXISCOUNT) {
+                if (questionid==MegaConstants.YAXISCOUNT) {
                     return previewDataCount(howmanydatapoints);
                 }
             }
@@ -133,22 +133,22 @@ public class MegaChartPreviewSeries extends MegaChartSeries {
         //Need to figure out what units we're subtracting from
         int unit = Calendar.DATE;
         int max = 31;
-        if (questionid==FieldType.XAXISDAYOFWEEK) {
+        if (questionid==MegaConstants.XAXISDAYOFWEEK) {
             unit = Calendar.DATE;
             max = 7;
-        } else if (questionid==FieldType.XAXISDAYOFMONTH) {
+        } else if (questionid==MegaConstants.XAXISDAYOFMONTH) {
             unit = Calendar.DATE;
             max = 31;
-        } else if (questionid==FieldType.XAXISTIMEOFDAY) {
+        } else if (questionid==MegaConstants.XAXISTIMEOFDAY) {
             unit = Calendar.HOUR_OF_DAY;
             max = 23;
-        } else if (questionid==FieldType.XAXISCALENDARWEEKS) {
+        } else if (questionid==MegaConstants.XAXISCALENDARWEEKS) {
             unit = Calendar.DATE;
             max = 100;
-        } else if (questionid==FieldType.XAXISCALENDARMONTHS) {
+        } else if (questionid==MegaConstants.XAXISCALENDARMONTHS) {
             unit = Calendar.DATE;
             max = 365;
-        } else if (questionid==FieldType.XAXISDATETIME) {
+        } else if (questionid==MegaConstants.XAXISDATETIME) {
             unit = Calendar.DATE;
             max = 60;
         }

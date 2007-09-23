@@ -57,7 +57,7 @@ public class MegaChartFactory {
         if (megaChart.getCharttype()==MegaConstants.CHARTTYPELINE){
            ct = new MegaChartTypeLine();
         }
-        if (megaChart.getXQuestionid()==FieldType.XAXISDATETIME) {
+        if (megaChart.getXQuestionid()==MegaConstants.XAXISDATETIME) {
             ct = new MegaChartTypeTimeSeries();
         }
 
@@ -75,7 +75,7 @@ public class MegaChartFactory {
 
     public static JFreeChart formatYAxisAsDate(JFreeChart chart, MegaChart megaChart){
          if (megaChart.getMegaChartSeries()!=null && megaChart.getMegaChartSeries().size()>0){
-            if (megaChart.getMegaChartSeries().get(0).yFieldtype==FieldType.FIELDTYPETIME){
+            if (megaChart.getMegaChartSeries().get(0).yFieldtype==MegaConstants.FIELDTYPETIME){
                 //First, create the rangeAxis
                 DateAxis rangeAxis = new DateAxis("");
                 java.text.DateFormat formatter = (java.text.DateFormat)new java.text.SimpleDateFormat("HH:mm:ss");

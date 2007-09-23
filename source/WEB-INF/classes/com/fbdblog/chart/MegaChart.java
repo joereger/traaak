@@ -49,7 +49,7 @@ public class MegaChart {
             chart.setName(request.getParameter("chartname"));
         }
         xQuestionChoice = "";
-        chart.setXquestionid(FieldType.XAXISDATETIME);
+        chart.setXquestionid(MegaConstants.XAXISDATETIME);
         chart.setAppid(0);
         if (request.getParameter("xQuestionChoice")!=null){
             xQuestionChoice =request.getParameter("xQuestionChoice");
@@ -86,7 +86,7 @@ public class MegaChart {
             //reger.core.Debug.logtodb("Done dissecting yQuestionChoice", "MegaChart.java");
         } else {
             yQuestionid = new int[1];
-            yQuestionid[0] = FieldType.YAXISCOUNT;
+            yQuestionid[0] = MegaConstants.YAXISCOUNT;
         }
 
         chart.setDaterange(MegaConstants.DATERANGEALLTIME);
@@ -99,49 +99,49 @@ public class MegaChart {
             chart.setYaxiswhattodo(Integer.parseInt(request.getParameter("yaxiswhattodo")));
         }
 
-        charttype=MegaConstants.CHARTTYPELINE;
+        chart.setCharttype(MegaConstants.CHARTTYPELINE);
         if (request.getParameter("charttype")!=null && Num.isinteger(request.getParameter("charttype"))){
-            charttype=Integer.parseInt(request.getParameter("charttype"));
+            chart.setCharttype(Integer.parseInt(request.getParameter("charttype")));
         }
-        lastxdays=1;
+        chart.setLastxdays(1);
         if (request.getParameter("lastxdays")!=null && Num.isinteger(request.getParameter("lastxdays"))){
-            lastxdays=Integer.parseInt(request.getParameter("lastxdays"));
+            chart.setLastxdays(Integer.parseInt(request.getParameter("lastxdays")));
         }
-        lastxweeks=1;
+        chart.setLastxweeks(1);
         if (request.getParameter("lastxweeks")!=null && Num.isinteger(request.getParameter("lastxweeks"))){
-            lastxweeks=Integer.parseInt(request.getParameter("lastxweeks"));
+            chart.setLastxweeks(Integer.parseInt(request.getParameter("lastxweeks")));
         }
-        lastxmonths=1;
+        chart.setLastxmonths(1);
         if (request.getParameter("lastxmonths")!=null && Num.isinteger(request.getParameter("lastxmonths"))){
-            lastxmonths=Integer.parseInt(request.getParameter("lastxmonths"));
+            chart.setLastxmonths(Integer.parseInt(request.getParameter("lastxmonths")));
         }
-        lastxyears=1;
+        chart.setLastxyears(1);
         if (request.getParameter("lastxyears")!=null && Num.isinteger(request.getParameter("lastxyears"))){
-            lastxyears=Integer.parseInt(request.getParameter("lastxyears"));
+            chart.setLastxyears(Integer.parseInt(request.getParameter("lastxyears")));
         }
-        daterangefromyyyy=Calendar.getInstance().get(Calendar.YEAR)-1;
+        chart.setDaterangefromyyyy(Calendar.getInstance().get(Calendar.YEAR)-1);
         if (request.getParameter("daterangefromyyyy")!=null && Num.isinteger(request.getParameter("daterangefromyyyy"))){
-            daterangefromyyyy=Integer.parseInt(request.getParameter("daterangefromyyyy"));
+            chart.setDaterangefromyyyy(Integer.parseInt(request.getParameter("daterangefromyyyy")));
         }
-        daterangefrommm=Calendar.getInstance().get(Calendar.MONTH)+1;
+        chart.setDaterangefrommm(Calendar.getInstance().get(Calendar.MONTH)+1);
         if (request.getParameter("daterangefrommm")!=null && Num.isinteger(request.getParameter("daterangefrommm"))){
-            daterangefrommm=Integer.parseInt(request.getParameter("daterangefrommm"));
+            chart.setDaterangefrommm(Integer.parseInt(request.getParameter("daterangefrommm")));
         }
-        daterangefromdd=Calendar.getInstance().get(Calendar.DATE);
+        chart.setDaterangefromdd(Calendar.getInstance().get(Calendar.DATE));
         if (request.getParameter("daterangefromdd")!=null && Num.isinteger(request.getParameter("daterangefromdd"))){
-            daterangefromdd=Integer.parseInt(request.getParameter("daterangefromdd"));
+            chart.setDaterangefromdd(Integer.parseInt(request.getParameter("daterangefromdd")));
         }
-        daterangetoyyyy=Calendar.getInstance().get(Calendar.YEAR);
+        chart.setDaterangetoyyyy(Calendar.getInstance().get(Calendar.YEAR));
         if (request.getParameter("daterangetoyyyy")!=null && Num.isinteger(request.getParameter("daterangetoyyyy"))){
-            daterangetoyyyy=Integer.parseInt(request.getParameter("daterangetoyyyy"));
+            chart.setDaterangetoyyyy(Integer.parseInt(request.getParameter("daterangetoyyyy")));
         }
-        daterangetomm=Calendar.getInstance().get(Calendar.MONTH)+1;
+        chart.setDaterangetomm(Calendar.getInstance().get(Calendar.MONTH)+1));
         if (request.getParameter("daterangetomm")!=null && Num.isinteger(request.getParameter("daterangetomm"))){
-            daterangetomm=Integer.parseInt(request.getParameter("daterangetomm"));
+            chart.setDaterangetomm(Integer.parseInt(request.getParameter("daterangetomm")));
         }
-        daterangetodd=Calendar.getInstance().get(Calendar.DATE);
+        chart.setDaterangetodd(Calendar.getInstance().get(Calendar.DATE));
         if (request.getParameter("daterangetodd")!=null && Num.isinteger(request.getParameter("daterangetodd"))){
-            daterangetodd=Integer.parseInt(request.getParameter("daterangetodd"));
+            chart.setDaterangetodd(Integer.parseInt(request.getParameter("daterangetodd")));
         }
     }
 

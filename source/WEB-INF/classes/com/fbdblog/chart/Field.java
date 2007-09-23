@@ -7,23 +7,9 @@ import org.apache.log4j.Logger;
 /**
  *
  */
-@Cacheable
 public class Field implements Cloneable, FieldInterface {
 
-    public static final int FIELDTYPEDROPDOWN = 1;
-    public static final int FIELDTYPEHORIZONTALRADIOS = 2;
-    public static final int FIELDTYPEVERTICALRADIOS = 3;
-    public static final int FIELDTYPETEXTBOX = 5;
-    public static final int FIELDTYPENUMERICRANGE = 7;
-    public static final int FIELDTYPETIMEPERIOD = 8;
 
-    public static final int DIRECTIONUP = 1;
-    public static final int DIRECTIONDOWN = 2;
-    public static final int DIRECTIONLEFT = 3;
-    public static final int DIRECTIONRIGHT = 4;
-
-    public static final int EDITFIELDASUSER = 1;
-    public static final int EDITFIELDASSYSTEM = 2;
 
     //Database values for field
     public int questionid = 0;
@@ -327,41 +313,41 @@ public class Field implements Cloneable, FieldInterface {
     }
 
     public Element getXmlSchemaRepresentationOfField(Element fieldTypeSpecific) {
-        Element elField = new Element("element", reger.MegaLogTypeXmlSchemaRenderer.xsNs);
+        Element elField = new Element("element", AppXmlSchemaRenderer.xsNs);
         elField.setAttribute("name", getFieldnameForApis());
         //Fieldtype/ui-display-type
         //@todo Create a text list of field types (i.e. dropdown, checkboxes, radios, etc.)
-        Element attr = new Element("attribute", reger.MegaLogTypeXmlSchemaRenderer.xsNs);
+        Element attr = new Element("attribute", AppXmlSchemaRenderer.xsNs);
         attr.setAttribute("name","ui-display-type");
         attr.setAttribute("use","optional");
         elField.addContent(attr);
-            Element st = new Element("simpleType", reger.MegaLogTypeXmlSchemaRenderer.xsNs);
+            Element st = new Element("simpleType", AppXmlSchemaRenderer.xsNs);
             attr.addContent(st);
-                Element rest = new Element("restriction", reger.MegaLogTypeXmlSchemaRenderer.xsNs);
+                Element rest = new Element("restriction", AppXmlSchemaRenderer.xsNs);
                 rest.setAttribute("base","xs:string");
                 st.addContent(rest);
-                    Element enum1 = new Element("enumeration", reger.MegaLogTypeXmlSchemaRenderer.xsNs);
+                    Element enum1 = new Element("enumeration", AppXmlSchemaRenderer.xsNs);
                     enum1.setAttribute("name", "dropdown");
                     rest.addContent(enum1);
-                    Element enum2 = new Element("enumeration", reger.MegaLogTypeXmlSchemaRenderer.xsNs);
+                    Element enum2 = new Element("enumeration", AppXmlSchemaRenderer.xsNs);
                     enum2.setAttribute("name", "textbox");
                     rest.addContent(enum2);
-                    Element enum3 = new Element("enumeration", reger.MegaLogTypeXmlSchemaRenderer.xsNs);
+                    Element enum3 = new Element("enumeration", AppXmlSchemaRenderer.xsNs);
                     enum3.setAttribute("name", "radiobuttons");
                     rest.addContent(enum3);
 
         //Requiredness
-        Element attr2 = new Element("attribute", reger.MegaLogTypeXmlSchemaRenderer.xsNs);
+        Element attr2 = new Element("attribute", AppXmlSchemaRenderer.xsNs);
         attr2.setAttribute("name","required");
         attr2.setAttribute("use","optional");
         elField.addContent(attr2);
-            Element st2 = new Element("simpleType", reger.MegaLogTypeXmlSchemaRenderer.xsNs);
+            Element st2 = new Element("simpleType", AppXmlSchemaRenderer.xsNs);
             attr2.addContent(st2);
-                Element rest2 = new Element("restriction", reger.MegaLogTypeXmlSchemaRenderer.xsNs);
+                Element rest2 = new Element("restriction", AppXmlSchemaRenderer.xsNs);
                 rest2.setAttribute("base","xs:boolean");
                 st2.addContent(rest2);
 
-        //Restrictions/datatype, created in FieldType
+        //Restrictions/datatype
         elField.addContent(fieldTypeSpecific);
 
 

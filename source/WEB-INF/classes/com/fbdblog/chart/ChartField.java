@@ -28,7 +28,7 @@ public interface ChartField extends FieldInterface {
      * (xAxis, yAxis)
      * (xAxis, yAxis)
      * (xAxis, yAxis)
-     * If FieldType doesn't need to do this, simply return data unchanged.
+     * If question type doesn't need to do this, simply return data unchanged.
      */
      TreeMap fillEmptyXAxis(TreeMap data);
 
