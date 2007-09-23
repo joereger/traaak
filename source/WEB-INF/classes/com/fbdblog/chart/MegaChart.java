@@ -31,13 +31,30 @@ public class MegaChart {
 
     public MegaChart(int chartid){
         chart = Chart.get(chartid);
+        if (chart.getChartid()<=0){
+            chart.setAppid(0);
+            chart.setName("");
+            chart.setChartid(0);
+            chart.setCharttype(0);
+            chart.setDaterange(0);
+            chart.setDaterangefromdd(0);
+            chart.setDaterangefrommm(0);
+            chart.setDaterangefromyyyy(0);
+            chart.setDaterangetodd(0);
+            chart.setDaterangetomm(0);
+            chart.setDaterangetoyyyy(0);
+            chart.setLastxdays(0);
+            chart.setLastxmonths(0);
+            chart.setLastxweeks(0);
+            chart.setLastxyears(0);
+            chart.setXquestionid(0);
+            chart.setYaxiswhattodo(0);
+        }
     }
 
     public MegaChart(javax.servlet.http.HttpServletRequest request){
         populateFromRequest(request);
     }
-
-
 
 
     public void populateFromRequest(javax.servlet.http.HttpServletRequest request){
@@ -126,23 +143,27 @@ public class MegaChart {
 
     public void loadMegaChartSeriesData(UserSession userSession){
         Logger logger = Logger.getLogger(this.getClass().getName());
-        //Get the list of entries that this chart covers
-        entryChooser = new MegaChartEntryChooser(this, userSession.getApp().getAppid(), userSession.getUser().getUserid());
-        entryChooser.populate();
 
-        int debugCount = 0;
-        megaChartSeries = new ArrayList<MegaChartSeries>();
-        //Iterate yAxis and create a series for each
-        for (int i = 0; i < yquestionid.length; i++) {
-            int yMegaFieldidTmp = yquestionid[i];
-            MegaChartSeries seriesTmp = new MegaChartSeries(yMegaFieldidTmp, userSession.getApp().getAppid(), this, entryChooser);
-            xAxisTitle = seriesTmp.getxAxisTitle();
-            yAxisTitle = seriesTmp.getyAxisTitle();
-            megaChartSeries.add(seriesTmp);
-            logger.debug("MegaChart.java - seriesTmp.cleanData.length="+seriesTmp.cleanData.length);
-            debugCount = debugCount + seriesTmp.cleanData.length;
+        if (userSession.getApp()!=null && userSession.getUser()!=null){
+            //Get the list of entries that this chart covers
+            entryChooser = new MegaChartEntryChooser(this, userSession.getApp().getAppid(), userSession.getUser().getUserid());
+            entryChooser.populate();
+        
+            int debugCount = 0;
+            megaChartSeries = new ArrayList<MegaChartSeries>();
+            //Iterate yAxis and create a series for each
+            for (int i = 0; i < yquestionid.length; i++) {
+                int yMegaFieldidTmp = yquestionid[i];
+                MegaChartSeries seriesTmp = new MegaChartSeries(yMegaFieldidTmp, userSession.getApp().getAppid(), this, entryChooser);
+                xAxisTitle = seriesTmp.getxAxisTitle();
+                yAxisTitle = seriesTmp.getyAxisTitle();
+                megaChartSeries.add(seriesTmp);
+                logger.debug("MegaChart.java - seriesTmp.cleanData.length="+seriesTmp.cleanData.length);
+                debugCount = debugCount + seriesTmp.cleanData.length;
+            }
+            logger.debug("MegaChart.java - items graphed="+debugCount);
+
         }
-        logger.debug("MegaChart.java - items graphed="+debugCount);
     }
 
 

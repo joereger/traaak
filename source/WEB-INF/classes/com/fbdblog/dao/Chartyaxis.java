@@ -71,5 +71,27 @@ public class Chartyaxis extends BasePersistentClass implements java.io.Serializa
     }
 
 
+    public int getChartyaxisid() {
+        return chartyaxisid;
+    }
 
+    public void setChartyaxisid(int chartyaxisid) {
+        this.chartyaxisid = chartyaxisid;
+    }
+
+    public int getChartid() {
+        return chartid;
+    }
+
+    public void setChartid(int chartid) {
+        this.chartid = chartid;
+    }
+
+    public int getYquestionid() {
+        return yquestionid;
+    }
+
+    public void setYquestionid(int yquestionid) {
+        this.yquestionid = yquestionid;
+    }
 }

@@ -6,7 +6,9 @@
 <%@ page import="com.fbdblog.dao.Question" %>
 <%@ page import="com.fbdblog.qtype.def.Component" %>
 <%@ page import="com.fbdblog.qtype.Textbox" %>
-<%@ page import="com.fbdblog.chart.DataTypeString" %>
+<%@ page import="com.fbdblog.dao.Chart" %>
+<%@ page import="com.fbdblog.chart.MegaChartHtmlRenderer" %>
+<%@ page import="com.fbdblog.chart.MegaChart" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -23,68 +25,58 @@
 %>
 
 <%
-    Question question = null;
-    if (request.getParameter("questionid") != null && Num.isinteger(request.getParameter("questionid"))) {
-        question = Question.get(Integer.parseInt(request.getParameter("questionid")));
+    MegaChart megaChart = null;
+    if (request.getParameter("chartid") != null && Num.isinteger(request.getParameter("chartid"))) {
+        megaChart = new MegaChart(Integer.parseInt(request.getParameter("chartid")));
     } else {
         if (request.getParameter("action") == null) {
-            response.sendRedirect("appdetail.jsp?appid="+app.getAppid());
+            response.sendRedirect("appdetail.jsp?appid=" + app.getAppid());
             return;
         }
-        question = new Question();
+        megaChart = new MegaChart(0);
     }
+    
+
+
 %>
 
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("save")) {
-        question.setComponenttype(Textbox.ID);
-        question.setQuestion(request.getParameter("question"));
-        question.setAppid(app.getAppid());
-        boolean isrequired = false;
-        if (request.getParameter("isrequired") != null && request.getParameter("isrequired").equals("1")) {
-            isrequired = true;
-        }
-        question.setIsrequired(isrequired);
-        question.setDatatypeid(DataTypeString.DATATYPEID);
+        megaChart.populateFromRequest(request);
         try {
-            question.save();
+            megaChart.getChart().save();
         } catch (Exception ex) {
             logger.error(ex);
         }
-        response.sendRedirect("appdetail.jsp?appid=" + app.getAppid());
-        return;
+        //response.sendRedirect("appdetail.jsp?appid="+app.getAppid());
+        //return;
     }
 %>
 App: <a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a><br/>
-Question Detail: <%=question.getQuestion()%>
+Chart: <%=megaChart.getChart().getName()%>
 <br/><br/>
-<form action="appdetail-question-textbox.jsp" method="post">
+<form action="appdetail-chart.jsp" method="post">
     <input type="hidden" name="appid" value="<%=app.getAppid()%>">
-    <input type="hidden" name="questionid" value="<%=question.getQuestionid()%>">
+    <input type="hidden" name="chartid" value="<%=megaChart.getChart().getChartid()%>">
     <input type="hidden" name="action" value="save">
     <table cellpadding="0" cellspacing="0" border="0">
         <tr>
             <td valign="top">
-                Question
+                Name
             </td>
             <td valign="top">
-                <input type="text" name="question" value="<%=question.getQuestion()%>" size="25" maxlength="255">
+                <input type="text" name="name" value="<%=megaChart.getChart().getName()%>" size="25" maxlength="255">
             </td>
         </tr>
+
         <tr>
-            <td valign="top">
-                Required?
-            </td>
-            <td valign="top">
+            <td valign="top" colspan="2">
                 <%
-                String selectedIsrequired = "";
-                if (question.getIsrequired()){
-                    selectedIsrequired = " checked";
-                }
+                    out.print(MegaChartHtmlRenderer.getHtml(megaChart, app.getAppid()));
                 %>
-                <input type="checkbox" name="isrequired" value="1" <%=selectedIsrequired%>>
             </td>
         </tr>
+
         <tr>
             <td valign="top">
 

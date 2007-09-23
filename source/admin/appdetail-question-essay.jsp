@@ -7,6 +7,7 @@
 <%@ page import="com.fbdblog.qtype.def.Component" %>
 <%@ page import="com.fbdblog.qtype.Textbox" %>
 <%@ page import="com.fbdblog.qtype.Essay" %>
+<%@ page import="com.fbdblog.chart.DataTypeString" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -45,6 +46,7 @@
             isrequired = true;
         }
         question.setIsrequired(isrequired);
+        question.setDatatypeid(DataTypeString.DATATYPEID);
         try {
             question.save();
         } catch (Exception ex) {

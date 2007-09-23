@@ -8,6 +8,7 @@
 <%@ page import="com.fbdblog.qtype.def.ComponentTypes" %>
 <%@ page import="com.fbdblog.qtype.def.Component" %>
 <%@ page import="com.fbdblog.qtype.*" %>
+<%@ page import="com.fbdblog.dao.Chart" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -128,8 +129,27 @@ Questions:
 <br/><a href='appdetail-question-essay.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Essay</a>
 <br/><a href='appdetail-question-matrix.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Matrix</a>
 <br/><a href='appdetail-question-range.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Range</a>
+<br/><a href='appdetail-question-timeperiod.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Timeperiod</a>
 <br/><br/>
 
+
+<br/><br/>
+Charts:
+<br/>
+<%
+    List<Chart> charts = HibernateUtil.getSession().createCriteria(Chart.class)
+            .add(Restrictions.eq("appid", app.getAppid()))
+            .setCacheable(false)
+            .list();
+    for (Iterator<Chart> iterator = charts.iterator(); iterator.hasNext();) {
+        Chart chart = (Chart)iterator.next();
+        %>
+        <a href="appdetail-chart.jsp?appid=<%=app.getAppid()%>&chartid=<%=chart.getChartid()%>"><%=chart.getName()%></a><br/>
+        <%
+    }
+%>
+<br/>
+<br/><a href="appdetail-chart.jsp?action=newchart&appid=<%=app.getAppid()%>">+ Add Chart</a><br/>
 
 
 <%@ include file="footer.jsp" %>

@@ -10,6 +10,7 @@
 <%@ page import="com.fbdblog.util.UserInputSafe" %>
 <%@ page import="com.fbdblog.qtype.Checkboxes" %>
 <%@ page import="com.fbdblog.qtype.Dropdown" %>
+<%@ page import="com.fbdblog.chart.DataTypeString" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -48,6 +49,7 @@
             isrequired = true;
         }
         question.setIsrequired(isrequired);
+        question.setDatatypeid(DataTypeString.DATATYPEID);
         try {
             question.save();
         } catch (Exception ex) {

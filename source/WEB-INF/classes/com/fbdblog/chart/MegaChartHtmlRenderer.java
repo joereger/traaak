@@ -60,7 +60,7 @@ public class MegaChartHtmlRenderer {
         mb.append("</font><br>");
 
         //Chart image
-        mb.append("<img src='/graph.log?"+urlP+"' border=0>");
+        mb.append("<img src='/fb/graph.jsp?"+urlP+"' border=0>");
         mb.append("</td></tr>");
 
 

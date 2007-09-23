@@ -6,9 +6,7 @@
 <%@ page import="com.fbdblog.dao.Question" %>
 <%@ page import="com.fbdblog.qtype.def.Component" %>
 <%@ page import="com.fbdblog.qtype.Textbox" %>
-<%@ page import="com.fbdblog.dao.Questionconfig" %>
-<%@ page import="com.fbdblog.util.UserInputSafe" %>
-<%@ page import="com.fbdblog.qtype.Checkboxes" %>
+<%@ page import="com.fbdblog.qtype.Timeperiod" %>
 <%@ page import="com.fbdblog.chart.DataTypeString" %>
 <%@ include file="header.jsp" %>
 
@@ -40,7 +38,7 @@
 
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("save")) {
-        question.setComponenttype(Checkboxes.ID);
+        question.setComponenttype(Timeperiod.ID);
         question.setQuestion(request.getParameter("question"));
         question.setAppid(app.getAppid());
         boolean isrequired = false;
@@ -54,23 +52,6 @@
         } catch (Exception ex) {
             logger.error(ex);
         }
-        for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
-            Questionconfig questionconfig = iterator.next();
-            iterator.remove();
-        }
-
-        Questionconfig qc1 = new Questionconfig();
-        qc1.setQuestionid(question.getQuestionid());
-        qc1.setName("options");
-        qc1.setValue(UserInputSafe.clean(request.getParameter("options")));
-        question.getQuestionconfigs().add(qc1);
-
-        try {
-            question.save();
-        } catch (Exception ex) {
-            logger.error(ex);
-        }
-
         response.sendRedirect("appdetail.jsp?appid=" + app.getAppid());
         return;
     }
@@ -78,7 +59,7 @@
 App: <a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a><br/>
 Question Detail: <%=question.getQuestion()%>
 <br/><br/>
-<form action="appdetail-question-checkboxes.jsp" method="post">
+<form action="appdetail-question-timeperiod.jsp" method="post">
     <input type="hidden" name="appid" value="<%=app.getAppid()%>">
     <input type="hidden" name="questionid" value="<%=question.getQuestionid()%>">
     <input type="hidden" name="action" value="save">
@@ -103,23 +84,6 @@ Question Detail: <%=question.getQuestion()%>
                 }
                 %>
                 <input type="checkbox" name="isrequired" value="1" <%=selectedIsrequired%>>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
-                Options
-            </td>
-            <td valign="top">
-                <%
-                String options = "";
-                for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
-                    Questionconfig questionconfig = iterator.next();
-                    if (questionconfig.getName().equals("options")){
-                        options = questionconfig.getValue();
-                    }
-                }
-                %>
-                <textarea name="options"><%=options%></textarea>
             </td>
         </tr>
         <tr>
