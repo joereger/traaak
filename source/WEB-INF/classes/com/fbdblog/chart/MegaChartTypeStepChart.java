@@ -26,7 +26,7 @@ public class MegaChartTypeStepChart implements MegaChartType{
         XYSeriesCollection xyseries = MegaChartConvertToJFreeDataType.xySeriesCollection(megaChart);
 
         //Create the chart
-        return ChartFactory.createXYStepChart(megaChart.getChartname(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), xyseries,PlotOrientation.VERTICAL, true, false, false);
+        return ChartFactory.createXYStepChart(megaChart.getChart().getName(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), xyseries,PlotOrientation.VERTICAL, true, false, false);
     }
 
     public JFreeChart formatChart(JFreeChart chart) {

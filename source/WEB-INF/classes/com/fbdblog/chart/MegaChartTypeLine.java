@@ -31,7 +31,7 @@ public class MegaChartTypeLine implements MegaChartType{
         XYSeriesCollection xyseries = MegaChartConvertToJFreeDataType.xySeriesCollection(megaChart);
 
         //Create the chart
-        return ChartFactory.createXYLineChart(megaChart.getChartname(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), xyseries,PlotOrientation.VERTICAL, true, false, false);
+        return ChartFactory.createXYLineChart(megaChart.getChart().getName(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), xyseries,PlotOrientation.VERTICAL, true, false, false);
     }
 
     public JFreeChart formatChart(JFreeChart chart) {

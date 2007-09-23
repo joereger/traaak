@@ -1,6 +1,5 @@
 package com.fbdblog.chart;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 import com.fbdblog.util.Time;
@@ -9,25 +8,26 @@ import com.fbdblog.dao.Post;
 /**
  * A dropdown field
  */
-public class ChartFieldEntryHourofday extends Field implements ChartField{
+public class ChartFieldEntryHourofday implements ChartField{
 
 
-    //Field data - These properties define the data type for this field
+    public static int ID = -7;
     String value = "";
-    String timezoneid = "GMT";
+    String timezoneid = "EST";
 
 
-    /**
-     * Friendly name
-     */
-    public String getFieldname() {
+    public int getID() {
+        return ChartFieldEntryHourofday.ID;
+    }
+
+    public String getName() {
         return "Entry Hour of Day";
     }
 
     /**
      * Description of this field type
      */
-    public String getFielddescription() {
+    public String getDescription() {
         return "The hour of day of the entry.";
     }
 
@@ -43,7 +43,7 @@ public class ChartFieldEntryHourofday extends Field implements ChartField{
      * Accepts an array of eventid's and returns a set of values for this field
      * corresponding to those eventid's.
      */
-    public TreeMap getChartDataForField(ArrayList<Post> posts) {
+    public TreeMap getChartData(ArrayList<Post> posts) {
        if (posts!=null && posts.size()>0){
             TreeMap data = new TreeMap();
             for (Iterator it = posts.iterator(); it.hasNext(); ) {

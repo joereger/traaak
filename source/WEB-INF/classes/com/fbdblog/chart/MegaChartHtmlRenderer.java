@@ -29,39 +29,31 @@ public class MegaChartHtmlRenderer {
         //The url line is my only interface to the graph object.
         //I create the url line delicately.
         StringBuffer urlP=new StringBuffer();
-
-        //Working
-        //http://bob.reger.com/graph.log?xMegafieldChoice=-7_0_0&yMegafieldChoice=108_2_108&yMegafieldChoice=113_2_113&yMegafieldChoice=101_2_101&yaxiswhattodo=2&chartsize=3&charttype=12&daterange=1&lastxdays=1&lastxweeks=1&lastxmonths=16&lastxyears=1&daterangefromyyyy=2003&daterangefrommm=4&daterangefromdd=8&daterangetoyyyy=2004&daterangetomm=4&daterangetodd=8&daterangesavedsearchid=1&
-        //Broken
-        //http://bob.reger.com/graph.log?xMegafieldChoice=-7_0_16&yMegafieldChoice=113_0_16&yMegafieldChoice=101_0_16&yMegafieldChoice=108_0_16&yaxiswhattodo=2&chartsize=3&charttype=12&daterange=1&lastxdays=1&lastxweeks=1&lastxmonths=16&lastxyears=1&daterangefromyyyy=2003&daterangefrommm=4&daterangefromdd=8&daterangetoyyyy=2004&daterangetomm=4&daterangetodd=8&daterangesavedsearchid=0&
-        urlP.append("xMegafieldChoice="+ megaChart.getXQuestionid()+"_"+appid+"_"+appid +"&");
-        for (int i = 0; i < megaChart.getYQuestionid().length; i++) {
-            int tmp = megaChart.getYQuestionid()[i];
-            urlP.append("yMegafieldChoice="+ tmp+"_"+appid+"_"+appid +"&");
+        urlP.append("xQuestionid="+ megaChart.getChart().getXquestionid()+"&");
+        for (int i = 0; i < megaChart.getYquestionid().length; i++) {
+            urlP.append("yQuestionid="+ megaChart.getYquestionid()[i] +"&");
         }
-        urlP.append("yaxiswhattodo="+ megaChart.getYaxiswhattodo() +"&");
-        urlP.append("chartsize="+ megaChart.getChartsize() +"&");
-        urlP.append("charttype="+ megaChart.getCharttype() +"&");
-        urlP.append("daterange="+ megaChart.getDaterange() +"&");
-        urlP.append("lastxdays="+ megaChart.getLastxdays() +"&");
-        urlP.append("lastxweeks="+ megaChart.getLastxweeks() +"&");
-        urlP.append("lastxmonths="+ megaChart.getLastxmonths() +"&");
-        urlP.append("lastxyears="+ megaChart.getLastxyears() +"&");
-        urlP.append("daterangefromyyyy="+ megaChart.getDaterangefromyyyy() +"&");
-        urlP.append("daterangefrommm="+ megaChart.getDaterangefrommm() +"&");
-        urlP.append("daterangefromdd="+ megaChart.getDaterangefromdd() +"&");
-        urlP.append("daterangetoyyyy="+ megaChart.getDaterangetoyyyy() +"&");
-        urlP.append("daterangetomm="+ megaChart.getDaterangetomm() +"&");
-        urlP.append("daterangetodd="+ megaChart.getDaterangetodd() +"&");
-        urlP.append("daterangesavedsearchid="+ megaChart.getDaterangesavedsearchid() +"&");
+        urlP.append("yaxiswhattodo="+ megaChart.getChart().getYaxiswhattodo() +"&");
+        urlP.append("charttype="+ megaChart.getChart().getCharttype() +"&");
+        urlP.append("daterange="+ megaChart.getChart().getDaterange() +"&");
+        urlP.append("lastxdays="+ megaChart.getChart().getLastxdays() +"&");
+        urlP.append("lastxweeks="+ megaChart.getChart().getLastxweeks() +"&");
+        urlP.append("lastxmonths="+ megaChart.getChart().getLastxmonths() +"&");
+        urlP.append("lastxyears="+ megaChart.getChart().getLastxyears() +"&");
+        urlP.append("daterangefromyyyy="+ megaChart.getChart().getDaterangefromyyyy() +"&");
+        urlP.append("daterangefrommm="+ megaChart.getChart().getDaterangefrommm() +"&");
+        urlP.append("daterangefromdd="+ megaChart.getChart().getDaterangefromdd() +"&");
+        urlP.append("daterangetoyyyy="+ megaChart.getChart().getDaterangetoyyyy() +"&");
+        urlP.append("daterangetomm="+ megaChart.getChart().getDaterangetomm() +"&");
+        urlP.append("daterangetodd="+ megaChart.getChart().getDaterangetodd() +"&");
 
 
 
         mb.append("<tr><td bgcolor=#ffffff align=center valign=top>");
         //Chart title
         mb.append("<font face=arial size=+1 class=bigfont>");
-        if (!megaChart.getChartname().equals("")){
-            mb.append(megaChart.getChartname());
+        if (!megaChart.getChart().getName().equals("")){
+            mb.append(megaChart.getChart().getName());
         } else {
             mb.append("Custom Graph");
         }
@@ -77,28 +69,28 @@ public class MegaChartHtmlRenderer {
         //So I should display a message to that effect.
 
         //charttype=pie or 3dpie and multiple Y-Axis values are chosen.  I only use last Y-Axis.
-        if (megaChart.getYQuestionid().length==1 && megaChart.getYQuestionid()[0]==0){
+        if (megaChart.getYquestionid().length==1 && megaChart.getYquestionid()[0]==0){
             mb.append("<tr><td bgcolor=#ffffff>");
             mb.append("No Y-Axis is selected.  Please choose at least one below.");
             mb.append("</td></tr>");
         }
 
         //xQuestionid=Date/Time and anything other than charttype=Line is selected.  I override with Line chart type.
-        if (megaChart.getXQuestionid()==MegaConstants.XAXISDATETIME && megaChart.getCharttype()!=MegaConstants.CHARTTYPELINE){
+        if (megaChart.getChart().getXquestionid()==ChartFieldEntrydatetime.ID && megaChart.getChart().getCharttype()!=MegaConstants.CHARTTYPELINE){
             mb.append("<tr><td bgcolor=#ffffff>");
             mb.append("Quick note: When you choose Date/Time for the X-Axis you can only choose a Chart Type of Line.  We've automatically adjusted for you.");
             mb.append("</td></tr>");
         }
 
         //xQuestionid=Day of the Week and anything other than charttype=bar, 3dbar, stacked bar, horizontal bar, horizontal3d bar
-        if (megaChart.getXQuestionid()==MegaConstants.XAXISDAYOFWEEK && !(megaChart.getCharttype()==MegaConstants.CHARTTYPE3DBAR || megaChart.getCharttype()==MegaConstants.CHARTTYPEHORIZONTALBAR || megaChart.getCharttype()==MegaConstants.CHARTTYPEHORIZONTAL3DBAR || megaChart.getCharttype()==MegaConstants.CHARTTYPEBAR  || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART  || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3D || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL)) {
+        if (megaChart.getChart().getXquestionid()==ChartFieldEntryDayofweek.ID && !(megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPE3DBAR || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEHORIZONTALBAR || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEHORIZONTAL3DBAR || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEBAR  || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART  || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3D || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL)) {
             mb.append("<tr><td bgcolor=#ffffff>");
             mb.append("Quick note: When you choose Day of the Week for the X-Axis you can only choose one of the Bar chart types.  We've automatically adjusted for you.");
             mb.append("</td></tr>");
         }
 
-        //megaChart.getCharttype()=pie or 3dpie and multiple Y-Axis values are chosen.  I only use last Y-Axis.
-        if ((megaChart.getCharttype()==MegaConstants.CHARTTYPE3DPIE || megaChart.getCharttype()==MegaConstants.CHARTTYPEPIE) && (megaChart.getYQuestionid().length>1)){
+        //megaChart.getChart().getCharttype()=pie or 3dpie and multiple Y-Axis values are chosen.  I only use last Y-Axis.
+        if ((megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPE3DPIE || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEPIE) && (megaChart.getYquestionid().length>1)){
             mb.append("<tr><td bgcolor=#ffffff>");
             mb.append("Quick note: When you choose multiple Y-Axis series and a Chart Type of Pie or 3D Pie only the last Y-Axis selected will be charted.");
             mb.append("</td></tr>");
@@ -127,7 +119,7 @@ public class MegaChartHtmlRenderer {
             mb.append("<input type=checkbox name=savechart value=1>");
             mb.append("<font face=arial size=-1>");
             mb.append("Save this graph and name it:<br>");
-            mb.append("<input type=textbox name=chartname value=\""+ Str.cleanForHtml(megaChart.getChartname())+"\" size=25 maxlength=100>");
+            mb.append("<input type=textbox name=chartname value=\""+ Str.cleanForHtml(megaChart.getChart().getName())+"\" size=25 maxlength=100>");
             mb.append("</font>");
             mb.append("</center>");
             mb.append("</td>");
@@ -159,7 +151,7 @@ public class MegaChartHtmlRenderer {
 
             mb.append("<td valign=top>");
 
-            logger.debug("MegaChartHtmlRenderer.java: xQuestionid="+megaChart.getXQuestionid());
+            logger.debug("MegaChartHtmlRenderer.java: xQuestionid="+megaChart.getChart().getXquestionid());
 
             mb.append("<font face=arial size=-1 class=smallfont>");
             mb.append("<b>");
@@ -170,43 +162,43 @@ public class MegaChartHtmlRenderer {
 
             mb.append("<font face=arial size=-1>");
             //Derived xAxis types
-            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISDATETIME+"_0_0'");
-            if (megaChart.getXQuestionid()==MegaConstants.XAXISDATETIME){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntrydatetime.ID+"_0_0'");
+            if (megaChart.getChart().getXquestionid()==ChartFieldEntrydatetime.ID){
                 mb.append(" checked");
             }
             mb.append("> Exact Date/Time<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISCALENDARDAYS+"_0_0'");
-            if (megaChart.getXQuestionid()==MegaConstants.XAXISCALENDARDAYS){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntryDaysAgo.ID+"_0_0'");
+            if (megaChart.getChart().getXquestionid()==ChartFieldEntryDaysAgo.ID){
                 mb.append(" checked");
             }
             mb.append("> Days Ago<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISCALENDARWEEKS+"_0_0'");
-            if (megaChart.getXQuestionid()==MegaConstants.XAXISCALENDARWEEKS){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntryWeeksAgo.ID+"_0_0'");
+            if (megaChart.getChart().getXquestionid()==ChartFieldEntryWeeksAgo.ID){
                 mb.append(" checked");
             }
             mb.append("> Weeks Ago<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISCALENDARMONTHS+"_0_0'");
-            if (megaChart.getXQuestionid()==MegaConstants.XAXISCALENDARMONTHS){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntryMonthsAgo.ID+"_0_0'");
+            if (megaChart.getChart().getXquestionid()==ChartFieldEntryMonthsAgo.ID){
                 mb.append(" checked");
             }
             mb.append("> Months Ago<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISTIMEOFDAY+"_0_0'");
-            if (megaChart.getXQuestionid()==MegaConstants.XAXISTIMEOFDAY){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntryHourofday.ID+"_0_0'");
+            if (megaChart.getChart().getXquestionid()==ChartFieldEntryHourofday.ID){
                 mb.append(" checked");
             }
             mb.append("> Hour of the Day<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISDAYOFWEEK+"_0_0'");
-            if (megaChart.getXQuestionid()==MegaConstants.XAXISDAYOFWEEK){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntryDayofweek.ID+"_0_0'");
+            if (megaChart.getChart().getXquestionid()==ChartFieldEntryDayofweek.ID){
                 mb.append(" checked");
             }
             mb.append("> Day of the Week<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISDAYOFMONTH+"_0_0'");
-            if (megaChart.getXQuestionid()==MegaConstants.XAXISDAYOFMONTH){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntryDayofmonth.ID+"_0_0'");
+            if (megaChart.getChart().getXquestionid()==ChartFieldEntryDayofmonth.ID){
                 mb.append(" checked");
             }
             mb.append("> Day of the Month<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+MegaConstants.XAXISENTRYORDER+"_0_0'");
-            if (megaChart.getXQuestionid()==MegaConstants.XAXISENTRYORDER){
+            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntryorder.ID+"_0_0'");
+            if (megaChart.getChart().getXquestionid()==ChartFieldEntryorder.ID){
                 mb.append(" checked");
             }
             mb.append("> Entry Order<br>");
@@ -227,7 +219,7 @@ public class MegaChartHtmlRenderer {
                 String xMegaFieldChoiceString = question.getQuestionid()+"_"+0+"_"+appid;
                 mb.append("<font face=arial size=-1 class=smallfont>");
                 mb.append("<input name=xMegafieldChoice type=radio value='"+xMegaFieldChoiceString+"'");
-                if (megaChart.getXQuestionid()==question.getQuestionid()){
+                if (megaChart.getChart().getXquestionid()==question.getQuestionid()){
                     mb.append(" checked");
                 }
                 mb.append("> "+question.getQuestion()+"<br>");
@@ -247,9 +239,9 @@ public class MegaChartHtmlRenderer {
 
             mb.append("<td valign=top>");
             mb.append("<font face=arial size=-1>");
-            mb.append("<input name=yMegafieldChoice type=checkbox value='"+MegaConstants.YAXISCOUNT+"_0_0'");
-            for(int j=0; j<megaChart.getYQuestionid().length; j++){
-                if (megaChart.getYQuestionid()[j]==MegaConstants.YAXISCOUNT){
+            mb.append("<input name=yMegafieldChoice type=checkbox value='"+ChartFieldEntrycount.ID+"_0_0'");
+            for(int j=0; j<megaChart.getYquestionid().length; j++){
+                if (megaChart.getYquestionid()[j]==ChartFieldEntrycount.ID){
                     mb.append(" checked");
                 }
             }
@@ -274,8 +266,8 @@ public class MegaChartHtmlRenderer {
                     String yMegaFieldChoiceString = question.getQuestionid()+"_"+0+"_"+appid;
                     mb.append("<font face=arial size=-1 class=smallfont>");
                     mb.append("<input name=yMegafieldChoice type=checkbox value='"+yMegaFieldChoiceString+"'");
-                    for(int l=0; l<megaChart.getYQuestionid().length; l++){
-                        if (megaChart.getYQuestionid()[l]==question.getQuestionid()){
+                    for(int l=0; l<megaChart.getYquestionid().length; l++){
+                        if (megaChart.getYquestionid()[l]==question.getQuestionid()){
                             mb.append(" checked");
                         }
                     }
@@ -297,50 +289,50 @@ public class MegaChartHtmlRenderer {
             mb.append("<td valign=top nowrap>");
             mb.append("<font face=arial size=-1>");
             mb.append("<input name=daterange type=radio value="+MegaConstants.DATERANGEALLTIME);
-            if (megaChart.getDaterange()==MegaConstants.DATERANGEALLTIME){
+            if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGEALLTIME){
                 mb.append(" checked");
             }
             mb.append("> All Time");
             //
             mb.append("<br><input name=daterange type=radio value="+MegaConstants.DATERANGETHISWEEK);
-            if (megaChart.getDaterange()==MegaConstants.DATERANGETHISWEEK){
+            if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGETHISWEEK){
                 mb.append(" checked");
             }
             mb.append("> This Week");
             //
             mb.append("<br><input name=daterange type=radio value="+MegaConstants.DATERANGETHISMONTH);
-            if (megaChart.getDaterange()==MegaConstants.DATERANGETHISMONTH){
+            if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGETHISMONTH){
                 mb.append(" checked");
             }
             mb.append("> This Month");
             //
             mb.append("<br><input name=daterange type=radio value="+MegaConstants.DATERANGETHISYEAR);
-            if (megaChart.getDaterange()==MegaConstants.DATERANGETHISYEAR){
+            if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGETHISYEAR){
                 mb.append(" checked");
             }
             mb.append("> This Year");
             //
             mb.append("<br><input name=daterange type=radio value="+MegaConstants.DATERANGELASTWEEK);
-            if (megaChart.getDaterange()==MegaConstants.DATERANGELASTWEEK){
+            if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGELASTWEEK){
                 mb.append(" checked");
             }
             mb.append("> Last Week");
             //
             mb.append("<br><input name=daterange type=radio value="+MegaConstants.DATERANGELASTMONTH);
-            if (megaChart.getDaterange()==MegaConstants.DATERANGELASTMONTH){
+            if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGELASTMONTH){
                 mb.append(" checked");
             }
             mb.append("> Last Month");
             //
             mb.append("<br><input name=daterange type=radio value="+MegaConstants.DATERANGELASTXDAYS);
-            if (megaChart.getDaterange()==MegaConstants.DATERANGELASTXDAYS){
+            if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGELASTXDAYS){
                 mb.append(" checked");
             }
             mb.append("> Last ");
             mb.append("<select name=lastxdays "+dropdownstyle+">");
             for(int i=0; i<60; i++){
                mb.append("<option value="+i);
-               if (megaChart.getLastxdays()==i){
+               if (megaChart.getChart().getLastxdays()==i){
                    mb.append(" selected");
                }
                mb.append(">"+i+"</option>");
@@ -349,14 +341,14 @@ public class MegaChartHtmlRenderer {
             mb.append(" Day(s)");
             //
             mb.append("<br><input name=daterange type=radio value="+MegaConstants.DATERANGELASTXWEEKS);
-            if (megaChart.getDaterange()==MegaConstants.DATERANGELASTXWEEKS){
+            if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGELASTXWEEKS){
                 mb.append(" checked");
             }
             mb.append("> Last ");
             mb.append("<select name=lastxweeks "+dropdownstyle+">");
             for(int i=0; i<16; i++){
                mb.append("<option value="+i);
-               if (megaChart.getLastxweeks()==i){
+               if (megaChart.getChart().getLastxweeks()==i){
                    mb.append(" selected");
                }
                mb.append(">"+i+"</option>");
@@ -365,14 +357,14 @@ public class MegaChartHtmlRenderer {
             mb.append(" Week(s)");
             //
             mb.append("<br><input name=daterange type=radio value="+MegaConstants.DATERANGELASTXMONTHS);
-            if (megaChart.getDaterange()==MegaConstants.DATERANGELASTXMONTHS){
+            if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGELASTXMONTHS){
                 mb.append(" checked");
             }
             mb.append("> Last ");
             mb.append("<select name=lastxmonths "+dropdownstyle+">");
             for(int i=0; i<24; i++){
                mb.append("<option value="+i);
-               if (megaChart.getLastxmonths()==i){
+               if (megaChart.getChart().getLastxmonths()==i){
                    mb.append(" selected");
                }
                mb.append(">"+i+"</option>");
@@ -381,14 +373,14 @@ public class MegaChartHtmlRenderer {
             mb.append(" Month(s)");
             //
             mb.append("<br><input name=daterange type=radio value="+MegaConstants.DATERANGELASTXYEARS);
-            if (megaChart.getDaterange()==MegaConstants.DATERANGELASTXYEARS){
+            if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGELASTXYEARS){
                 mb.append(" checked");
             }
             mb.append("> Last ");
             mb.append("<select name=lastxyears "+dropdownstyle+">");
             for(int i=0; i<100; i++){
                mb.append("<option value="+i);
-               if (megaChart.getLastxyears()==i){
+               if (megaChart.getChart().getLastxyears()==i){
                    mb.append(" selected");
                }
                mb.append(">"+i+"</option>");
@@ -397,7 +389,7 @@ public class MegaChartHtmlRenderer {
             mb.append(" Year(s)");
             //
             mb.append("<br><input name=daterange type=radio value="+MegaConstants.DATERANGESPECIFIED);
-            if (megaChart.getDaterange()==MegaConstants.DATERANGESPECIFIED){
+            if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGESPECIFIED){
                 mb.append(" checked");
             }
             mb.append("> Date Range:");
@@ -406,7 +398,7 @@ public class MegaChartHtmlRenderer {
             mb.append("<select name=daterangefromyyyy "+dropdownstyle+">");
             for(int i=1900; i<=2010; i++){
                mb.append("<option value="+i);
-               if (megaChart.getDaterangefromyyyy()==i){
+               if (megaChart.getChart().getDaterangefromyyyy()==i){
                    mb.append(" selected");
                }
                mb.append(">"+i+"</option>");
@@ -416,7 +408,7 @@ public class MegaChartHtmlRenderer {
             mb.append("<select name=daterangefrommm "+dropdownstyle+">");
             for(int i=1; i<=12; i++){
                mb.append("<option value="+i);
-               if (megaChart.getDaterangefrommm()==i){
+               if (megaChart.getChart().getDaterangefrommm()==i){
                    mb.append(" selected");
                }
                mb.append(">"+i+"</option>");
@@ -426,7 +418,7 @@ public class MegaChartHtmlRenderer {
             mb.append("<select name=daterangefromdd "+dropdownstyle+">");
             for(int i=0; i<=31; i++){
                mb.append("<option value="+i);
-               if (megaChart.getDaterangefromdd()==i){
+               if (megaChart.getChart().getDaterangefromdd()==i){
                    mb.append(" selected");
                }
                mb.append(">"+i+"</option>");
@@ -437,7 +429,7 @@ public class MegaChartHtmlRenderer {
             mb.append("<select name=daterangetoyyyy "+dropdownstyle+">");
             for(int i=1900; i<=2010; i++){
                mb.append("<option value="+i);
-               if (megaChart.getDaterangetoyyyy()==i){
+               if (megaChart.getChart().getDaterangetoyyyy()==i){
                    mb.append(" selected");
                }
                mb.append(">"+i+"</option>");
@@ -447,7 +439,7 @@ public class MegaChartHtmlRenderer {
             mb.append("<select name=daterangetomm "+dropdownstyle+">");
             for(int i=1; i<=12; i++){
                mb.append("<option value="+i);
-               if (megaChart.getDaterangetomm()==i){
+               if (megaChart.getChart().getDaterangetomm()==i){
                    mb.append(" selected");
                }
                mb.append(">"+i+"</option>");
@@ -457,7 +449,7 @@ public class MegaChartHtmlRenderer {
             mb.append("<select name=daterangetodd "+dropdownstyle+">");
             for(int i=1; i<=31; i++){
                mb.append("<option value="+i);
-               if (megaChart.getDaterangetodd()==i){
+               if (megaChart.getChart().getDaterangetodd()==i){
                    mb.append(" selected");
                }
                mb.append(">"+i+"</option>");
@@ -497,77 +489,77 @@ public class MegaChartHtmlRenderer {
             mb.append("<td valign=top>");
             mb.append("<font face=arial size=-1>");
             mb.append("<input name=charttype type=radio value="+MegaConstants.CHARTTYPELINE);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPELINE){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPELINE){
                 mb.append(" checked");
             }
             mb.append("> Line");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPEBAR);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPEBAR){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEBAR){
                 mb.append(" checked");
             }
             mb.append("> Bar");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPE3DBAR);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPE3DBAR){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPE3DBAR){
                 mb.append(" checked");
             }
             mb.append("> 3D Bar");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESTACKEDBARCHART);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART){
                 mb.append(" checked");
             }
             mb.append("> Stacked Bar");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESTACKEDBARCHART3D);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3D){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3D){
                 mb.append(" checked");
             }
             mb.append("> Stacked 3D Bar");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPEHORIZONTALBAR);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPEHORIZONTALBAR){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEHORIZONTALBAR){
                 mb.append(" checked");
             }
             mb.append("> Horizontal Bar");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPEHORIZONTAL3DBAR);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPEHORIZONTAL3DBAR){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEHORIZONTAL3DBAR){
                 mb.append(" checked");
             }
             mb.append("> Horizontal 3D Bar");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL){
                 mb.append(" checked");
             }
             mb.append("> Stacked Horiz Bar");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL){
                 mb.append(" checked");
             }
             mb.append("> Stacked Horiz 3D Bar");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPEPIE);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPEPIE){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEPIE){
                 mb.append(" checked");
             }
             mb.append("> Pie Chart");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPE3DPIE);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPE3DPIE){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPE3DPIE){
                 mb.append(" checked");
             }
             mb.append("> 3D Pie Chart");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESCATTERPLOT);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPESCATTERPLOT){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESCATTERPLOT){
                 mb.append(" checked");
             }
             mb.append("> Scatter Plot");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESTEPCHART);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPESTEPCHART){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTEPCHART){
                 mb.append(" checked");
             }
             mb.append("> Step Chart");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPEAREACHART);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPEAREACHART){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEAREACHART){
                 mb.append(" checked");
             }
             mb.append("> Area Chart");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESTACKEDAREA);
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDAREA){
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDAREA){
                 mb.append(" checked");
             }
             mb.append("> Stacked Area Chart");
@@ -576,48 +568,21 @@ public class MegaChartHtmlRenderer {
 
 
             mb.append("<td valign=top>");
-            mb.append("<font face=arial size=-1>");
-            mb.append("<input name=chartsize type=radio value="+MegaConstants.CHARTSIZEMINISCULE);
-            if (megaChart.getChartsize()==MegaConstants.CHARTSIZEMINISCULE){
-                mb.append(" checked");
-            }
-            mb.append("> Miniscule");
-            mb.append("<br><input name=chartsize type=radio value="+MegaConstants.CHARTSIZESMALL);
-            if (megaChart.getChartsize()==MegaConstants.CHARTSIZESMALL){
-                mb.append(" checked");
-            }
-            mb.append("> Small");
-            mb.append("<br><input name=chartsize type=radio value="+MegaConstants.CHARTSIZEMEDIUM);
-            if (megaChart.getChartsize()==MegaConstants.CHARTSIZEMEDIUM){
-                mb.append(" checked");
-            }
-            mb.append("> Medium");
-            mb.append("<br><input name=chartsize type=radio value="+MegaConstants.CHARTSIZELARGE);
-            if (megaChart.getChartsize()==MegaConstants.CHARTSIZELARGE){
-                mb.append(" checked");
-            }
-            mb.append("> Large");
-            mb.append("<br><input name=chartsize type=radio value="+MegaConstants.CHARTSIZEMASSIVE);
-            if (megaChart.getChartsize()==MegaConstants.CHARTSIZEMASSIVE){
-                mb.append(" checked");
-            }
-            mb.append("> Massive");
-            mb.append("</font>");
+                mb.append("<font face=arial size=-1>Chart size not configurable</font>");
             mb.append("</td>");
 
             mb.append("<td valign=top>");
             mb.append("<font face=arial size=-1>");
             mb.append("<input name=yaxiswhattodo type=radio value="+MegaConstants.YAXISWHATTODOAVG);
-            if (megaChart.getYaxiswhattodo()==MegaConstants.YAXISWHATTODOAVG){
+            if (megaChart.getChart().getYaxiswhattodo()==MegaConstants.YAXISWHATTODOAVG){
                 mb.append(" checked");
             }
             mb.append("> Averaging Them");
             mb.append("<br><input name=yaxiswhattodo type=radio value="+MegaConstants.YAXISWHATTODOSUM);
-            if (megaChart.getYaxiswhattodo()==MegaConstants.YAXISWHATTODOSUM){
+            if (megaChart.getChart().getYaxiswhattodo()==MegaConstants.YAXISWHATTODOSUM){
                 mb.append(" checked");
             }
             mb.append("> Adding Them Together");
-            //@todo Consider allowing the user to return percentages of total.
             mb.append("</font>");
             mb.append("</td>");
 
@@ -638,21 +603,21 @@ public class MegaChartHtmlRenderer {
 
 
         //Raw Data Output
-        //int megaChart.getXQuestionid()=-1;
-        //if (request.getParameter("megaChart.getXQuestionid()")!=null && Num.isinteger(request.getParameter("megaChart.getXQuestionid()"))){
-        //    megaChart.getXQuestionid()=Integer.parseInt(request.getParameter("megaChart.getXQuestionid()"));
+        //int megaChart.getChart().getXquestionid()=-1;
+        //if (request.getParameter("megaChart.getChart().getXquestionid()")!=null && Num.isinteger(request.getParameter("megaChart.getChart().getXquestionid()"))){
+        //    megaChart.getChart().getXquestionid()=Integer.parseInt(request.getParameter("megaChart.getChart().getXquestionid()"));
         //}
-        //int[] megaChart.getYQuestionid() = new int[1];
-        //if (request.getParameter("megaChart.getYQuestionid()")!=null && Num.isinteger(request.getParameter("megaChart.getYQuestionid()"))){
-        //    megaChart.getYQuestionid()[0]=Integer.parseInt(request.getParameter("megaChart.getYQuestionid()"));
+        //int[] megaChart.getYquestionid() = new int[1];
+        //if (request.getParameter("megaChart.getYquestionid()")!=null && Num.isinteger(request.getParameter("megaChart.getYquestionid()"))){
+        //    megaChart.getYquestionid()[0]=Integer.parseInt(request.getParameter("megaChart.getYquestionid()"));
         //}
         //int yaxiswhattodo=-1;
         //if (request.getParameter("yaxiswhattodo")!=null && Num.isinteger(request.getParameter("yaxiswhattodo"))){
         //    yaxiswhattodo=Integer.parseInt(request.getParameter("yaxiswhattodo"));
         //}
-        //int megaChart.getChartsize()=-1;
-        //if (request.getParameter("megaChart.getChartsize()")!=null && Num.isinteger(request.getParameter("megaChart.getChartsize()"))){
-        //    megaChart.getChartsize()=Integer.parseInt(request.getParameter("megaChart.getChartsize()"));
+        //int megaChart.getChart().getChartsize()=-1;
+        //if (request.getParameter("megaChart.getChart().getChartsize()")!=null && Num.isinteger(request.getParameter("megaChart.getChart().getChartsize()"))){
+        //    megaChart.getChart().getChartsize()=Integer.parseInt(request.getParameter("megaChart.getChart().getChartsize()"));
         //}
         //Create a reger chart object
 //            if (1==2){
@@ -664,9 +629,9 @@ public class MegaChartHtmlRenderer {
 //                //Go get the entries that relate to this graph
 //                MegaChartEntryChooser entryChooser = new MegaChartEntryChooser(userSession, xLogid, yLogid, daterange, daterangesavedsearchid, lastxdays, lastxweeks, lastxmonths, lastxyears, daterangetoyyyy, daterangetomm, daterangetodd, daterangefromyyyy, daterangefrommm, daterangefromdd);
 //                entryChooser.populate();
-//                for(int j=0; j<megaChart.getYQuestionid().length; j++){
+//                for(int j=0; j<megaChart.getYquestionid().length; j++){
 //                    //Create the chart object
-//                    MegaChartSeries megaChartSeries=new MegaChartSeries(userSession, megaChart.getXQuestionid(), megaChart.getAppid(), megaChart.getYQuestionid()[j], megaChart.getyLogid()[j], megaChart.getYaxiswhattodo(), megaChart.getChartsize(), megaChart.getDaterange(), megaChart.getLastxdays(), megaChart.getLastxweeks(), megaChart.getLastxmonths(), megaChart.getLastxyears(), megaChart.getDaterangefromyyyy(), megaChart.getDaterangefrommm(), megaChart.getDaterangefromdd(), megaChart.getDaterangetoyyyy(), megaChart.getDaterangetomm(), megaChart.getDaterangetodd(), megaChart.getDaterangesavedsearchid());
+//                    MegaChartSeries megaChartSeries=new MegaChartSeries(userSession, megaChart.getChart().getXquestionid(), megaChart.getChart().getAppid(), megaChart.getYquestionid()[j], megaChart.getChart().getyLogid()[j], megaChart.getChart().getYaxiswhattodo(), megaChart.getChart().getChartsize(), megaChart.getChart().getDaterange(), megaChart.getChart().getLastxdays(), megaChart.getChart().getLastxweeks(), megaChart.getChart().getLastxmonths(), megaChart.getChart().getLastxyears(), megaChart.getChart().getDaterangefromyyyy(), megaChart.getChart().getDaterangefrommm(), megaChart.getChart().getDaterangefromdd(), megaChart.getChart().getDaterangetoyyyy(), megaChart.getChart().getDaterangetomm(), megaChart.getChart().getDaterangetodd(), megaChart.getChart().getDaterangesavedsearchid());
 //                    //Output the data to the screen
 //                    mb.append("<tr><td bgcolor=#ffffff align=left valign=top>");
 //                    //@todo Figure out how to display the chart series name here.  Probably create another array along with rawChartData that holds the names and is indexed by the same number.

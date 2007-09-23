@@ -8,6 +8,7 @@ import com.fbdblog.util.Time;
 import com.fbdblog.util.Str;
 import com.fbdblog.dao.Post;
 import com.fbdblog.dao.Question;
+import com.fbdblog.qtype.Textbox;
 
 /**
  * Retrieves, formats and prepares data from the megavalue table for charting operations.
@@ -66,15 +67,14 @@ public class MegaChartSeries {
             xFieldtype = xQuestionid;
             //Gotta create a field handler to get name
             ChartField f = ChartFieldFactory.getHandlerByFieldtype(xFieldtype);
-            f.populateFromMegafieldid(xQuestionid);
-            xAxisTitle = f.getFieldname();
-            xMegadatatype = f.getMegadatatypeid();
+            xAxisTitle = f.getName();
+            xMegadatatype = f.getID();
         } else {
             //Gotta go to the DB
-            Field xField = new Field(xQuestionid);
-            xFieldtype = xField.fieldtype;
-            xAxisTitle = xField.fieldname;
-            xMegadatatype = xField.megadatatypeid;
+            Question question = Question.get(xQuestionid);
+            xFieldtype = question.getComponenttype();
+            xAxisTitle = Str.truncateString(question.getQuestion(), 25);
+            xMegadatatype = question.getDatatypeid();
         }
 
         //yField
@@ -83,16 +83,15 @@ public class MegaChartSeries {
             //Gotta create a field handler to get name
             ChartField f = ChartFieldFactory.getHandlerByFieldtype(yFieldtype);
             if(f!=null){
-                f.populateFromMegafieldid(yQuestionid);
-                yAxisTitle = f.getFieldname();
-                yMegadatatype = f.getMegadatatypeid();
+                yAxisTitle = f.getName();
+                yMegadatatype = f.getID();
             }
         } else {
             //Gotta go to the DB
-            Field yField = new Field(yQuestionid);
-            yFieldtype = yField.fieldtype;
-            yAxisTitle = yField.fieldname;
-            yMegadatatype = yField.megadatatypeid;
+            Question question = Question.get(yQuestionid);
+            yFieldtype = question.getComponenttype();
+            yAxisTitle = Str.truncateString(question.getQuestion(),25);
+            yMegadatatype = question.getDatatypeid();
         }
 
         //Get the data for x Axis
@@ -125,10 +124,10 @@ public class MegaChartSeries {
         //Figure out which type of field this is
         ChartField f = ChartFieldFactory.getHandlerByFieldtype(fieldtype);
         //Populate the field with title, description and all that good stuff in the database
-        f.populateFromMegafieldid(questionid);
+        //f.populateFromQuestionid(questionid);
         //Call the function that gets a set of chart data
         //Result[eventid][value]
-        TreeMap AxisRawData = f.getChartDataForField(posts);
+        TreeMap AxisRawData = f.getChartData(posts);
         //Util.logTreeMapToDb("AxisRawData questionid=" + questionid + " fieldtype=" + fieldtype, AxisRawData);
         return AxisRawData;
      }
@@ -303,7 +302,7 @@ public class MegaChartSeries {
         for (Iterator i=tmap.entrySet().iterator(); i.hasNext(); ) {
             Map.Entry e = (Map.Entry) i.next();
             //Move from treemap to cleandata
-            if (xQuestionid !=MegaConstants.XAXISDATETIME){
+            if (xQuestionid !=ChartFieldEntrydatetime.ID){
                 //As long as it's not a date this will be used
                 cleanData[j][1] = String.valueOf(e.getKey());
             } else {
@@ -432,38 +431,38 @@ public class MegaChartSeries {
         } else {
             //It's a derived type
             //See Vars class for these values.
-            if (xQuestionid ==MegaConstants.XAXISENTRYORDER){
+            if (xQuestionid ==ChartFieldEntryorder.ID){
                 xAxisTitle="Entry Order";
                 xMegadatatype=DataTypeInteger.DATATYPEID;
-                xFieldtype=MegaConstants.XAXISENTRYORDER;
-            } else if (xQuestionid ==MegaConstants.XAXISTIMEOFDAY) {
+                xFieldtype=ChartFieldEntryorder.ID;
+            } else if (xQuestionid ==ChartFieldEntryHourofday.ID) {
                 xAxisTitle="Hour of the Day";
                 xMegadatatype=DataTypeInteger.DATATYPEID;
-                xFieldtype=MegaConstants.XAXISTIMEOFDAY;
-            } else if (xQuestionid ==MegaConstants.XAXISDAYOFWEEK) {
+                xFieldtype=ChartFieldEntryHourofday.ID;
+            } else if (xQuestionid ==ChartFieldEntryDayofweek.ID) {
                 xAxisTitle="Day of the Week";
                 xMegadatatype=DataTypeString.DATATYPEID;
-                xFieldtype=MegaConstants.XAXISDAYOFWEEK;
-            } else if (xQuestionid ==MegaConstants.XAXISDAYOFMONTH) {
+                xFieldtype=ChartFieldEntryDayofweek.ID;
+            } else if (xQuestionid ==ChartFieldEntryDayofmonth.ID) {
                 xAxisTitle="Day of the Month";
                 xMegadatatype=DataTypeInteger.DATATYPEID;
-                xFieldtype=MegaConstants.XAXISDAYOFMONTH;
-            } else if (xQuestionid ==MegaConstants.XAXISCALENDARDAYS) {
+                xFieldtype=ChartFieldEntryDayofmonth.ID;
+            } else if (xQuestionid ==ChartFieldEntryDaysAgo.ID) {
                 xAxisTitle="Days Ago";
                 xMegadatatype=DataTypeInteger.DATATYPEID;
-                xFieldtype=MegaConstants.XAXISCALENDARDAYS;
-            } else if (xQuestionid ==MegaConstants.XAXISCALENDARWEEKS) {
+                xFieldtype=ChartFieldEntryDaysAgo.ID;
+            } else if (xQuestionid ==ChartFieldEntryWeeksAgo.ID) {
                 xAxisTitle="Weeks Ago";
                 xMegadatatype=DataTypeInteger.DATATYPEID;
-                xFieldtype=MegaConstants.XAXISCALENDARWEEKS;
-            } else if (xQuestionid ==MegaConstants.XAXISCALENDARMONTHS) {
+                xFieldtype=ChartFieldEntryWeeksAgo.ID;
+            } else if (xQuestionid ==ChartFieldEntryMonthsAgo.ID) {
                 xAxisTitle="Months Ago";
                 xMegadatatype=DataTypeInteger.DATATYPEID;
-                xFieldtype=MegaConstants.XAXISCALENDARMONTHS;
+                xFieldtype=ChartFieldEntryMonthsAgo.ID;
             } else {
                 xAxisTitle="Date";
                 xMegadatatype=DataTypeDatetime.DATATYPEID;
-                xFieldtype=MegaConstants.XAXISDATETIME;
+                xFieldtype=ChartFieldEntrydatetime.ID;
             }
         }
     }
@@ -479,10 +478,10 @@ public class MegaChartSeries {
         yAxisTitle= Str.truncateString(question.getQuestion(), 25);
         yMegadatatype=question.getDatatypeid();
         yFieldtype=question.getComponenttype();
-        if (yQuestionid ==MegaConstants.YAXISCOUNT) {
+        if (yQuestionid ==ChartFieldEntrycount.ID) {
             yAxisTitle="Number of Posts";
             yMegadatatype=DataTypeInteger.DATATYPEID;
-            yFieldtype=MegaConstants.FIELDTYPETEXTBOX;
+            yFieldtype= Textbox.ID;
         }
     }
 

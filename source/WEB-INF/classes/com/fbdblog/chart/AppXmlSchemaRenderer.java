@@ -10,6 +10,7 @@ import java.util.Iterator;
 
 import com.fbdblog.dao.App;
 import com.fbdblog.dao.Question;
+import com.fbdblog.util.Util;
 
 
 /**
@@ -144,7 +145,8 @@ public class AppXmlSchemaRenderer {
                         //Individual fields
                         for (Iterator<Question> iterator = app.getQuestions().iterator(); iterator.hasNext();) {
                             Question question = iterator.next();
-                            extendedData.addContent(question.getXmlSchemaRepresentationOfFieldType());
+                            //@todo fix AppXmlSchemaRenderer by implementing the line below
+                            //extendedData.addContent(question.getXmlSchemaRepresentationOfFieldType());
                         }
 
             XMLOutputter outp = new XMLOutputter();
@@ -154,6 +156,56 @@ public class AppXmlSchemaRenderer {
             logger.error(e);
         }
         return "General Failure.  Many apologies.";
+    }
+
+    public Element getXmlSchemaRepresentationOfField(Element fieldTypeSpecific) {
+        Element elField = new Element("element", AppXmlSchemaRenderer.xsNs);
+        //@todo fix AppXmlSchemaRenderer by implementing the line below
+        //elField.setAttribute("name", getFieldnameForApis());
+        //Fieldtype/ui-display-type
+        //@todo Create a text list of field types (i.e. dropdown, checkboxes, radios, etc.)
+        Element attr = new Element("attribute", AppXmlSchemaRenderer.xsNs);
+        attr.setAttribute("name","ui-display-type");
+        attr.setAttribute("use","optional");
+        elField.addContent(attr);
+            Element st = new Element("simpleType", AppXmlSchemaRenderer.xsNs);
+            attr.addContent(st);
+                Element rest = new Element("restriction", AppXmlSchemaRenderer.xsNs);
+                rest.setAttribute("base","xs:string");
+                st.addContent(rest);
+                    Element enum1 = new Element("enumeration", AppXmlSchemaRenderer.xsNs);
+                    enum1.setAttribute("name", "dropdown");
+                    rest.addContent(enum1);
+                    Element enum2 = new Element("enumeration", AppXmlSchemaRenderer.xsNs);
+                    enum2.setAttribute("name", "textbox");
+                    rest.addContent(enum2);
+                    Element enum3 = new Element("enumeration", AppXmlSchemaRenderer.xsNs);
+                    enum3.setAttribute("name", "radiobuttons");
+                    rest.addContent(enum3);
+
+        //Requiredness
+        Element attr2 = new Element("attribute", AppXmlSchemaRenderer.xsNs);
+        attr2.setAttribute("name","required");
+        attr2.setAttribute("use","optional");
+        elField.addContent(attr2);
+            Element st2 = new Element("simpleType", AppXmlSchemaRenderer.xsNs);
+            attr2.addContent(st2);
+                Element rest2 = new Element("restriction", AppXmlSchemaRenderer.xsNs);
+                rest2.setAttribute("base","xs:boolean");
+                st2.addContent(rest2);
+
+        //Restrictions/datatype
+        elField.addContent(fieldTypeSpecific);
+
+
+        return elField;
+    }
+
+    public String getFieldnameForApis(String str) {
+        if (str!=null){
+            return Util.xmlFieldNameClean(str);
+        }
+        return "";
     }
 
 

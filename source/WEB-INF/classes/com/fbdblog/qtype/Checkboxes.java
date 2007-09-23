@@ -12,13 +12,15 @@ import com.fbdblog.qtype.def.Component;
 import com.fbdblog.qtype.def.ComponentException;
 import com.fbdblog.qtype.util.AppPostParser;
 import com.fbdblog.util.Str;
+import com.fbdblog.util.Time;
+import com.fbdblog.chart.ChartField;
 
 /**
  * User: Joe Reger Jr
  * Date: Jul 6, 2006
  * Time: 1:01:00 PM
  */
-public class Checkboxes implements Component {
+public class Checkboxes implements Component, ChartField {
 
     public static int ID = 4;
     public static String NAME = "Checkboxes (Choose Multiple)";
@@ -112,6 +114,7 @@ public class Checkboxes implements Component {
     }
 
     public void processAnswer(AppPostParser srp, Post post) throws ComponentException {
+        //@todo process Checkboxes user option to DB
         String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
         if (requestParams!=null && requestParams.length>0){
             for (int i = 0; i < requestParams.length; i++) {
@@ -129,5 +132,65 @@ public class Checkboxes implements Component {
     }
 
 
+    /**
+     * Description of this Field.
+     * For example: Running distance is the .
+     * This is dynamic from the database and generally uses this.fielddescription from the extended Field class.
+     */
+    public String getDescription() {
+        return NAME;
+    }
 
+    /**
+     * Add empty xAxis values to fill out set.
+     * In the case of something like DaysOfTheWeek, often
+     * the data will only have data on Mon, Fri.  But
+     * the final data set should represent explicitly that
+     * Sun, Tue, Wed, Thu and Sat have a value of 0.
+     * Incoming is a treemap with
+     * (xAxis, yAxis)
+     * (xAxis, yAxis)
+     * (xAxis, yAxis)
+     * If question type doesn't need to do this, simply return data unchanged.
+     */
+    public TreeMap fillEmptyXAxis(TreeMap data) {
+        return data;
+    }
+
+    /**
+     * Accepts an array of eventid's and returns a set of values for this field
+     * corresponding to those eventid's.
+     * Result[eventid][value]
+     */
+    public TreeMap getChartData(ArrayList<Post> posts) {
+        if (posts!=null && posts.size()>0){
+            TreeMap data = new TreeMap();
+            for (Iterator it = posts.iterator(); it.hasNext(); ) {
+                Post post = (Post)it.next();
+                for (Iterator<Postanswer> iterator = post.getPostanswers().iterator(); iterator.hasNext();) {
+                    Postanswer postanswer =  (Postanswer)iterator.next();
+                    if(postanswer.getName().equals("response")){
+                        data.put(post.getPostid(), postanswer.getValue());
+                    }
+                }
+            }
+            return data;
+       } else {
+           return new TreeMap();
+       }
+    }
+
+    /**
+     * Set timezoneid of display.   If this fieldtype doesn't use timezoneid then the body of this method can be empty.
+    */
+    public void setTimezoneid(String timezoneid) {
+
+    }
+
+    /**
+     * Get timezoneid of display. If this fieldtype doesn't use timezoneid then this can return "".
+     */
+    public String getTimezoneid() {
+        return "EST";
+    }
 }

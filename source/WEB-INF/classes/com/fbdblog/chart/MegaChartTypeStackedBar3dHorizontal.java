@@ -22,7 +22,7 @@ public class MegaChartTypeStackedBar3dHorizontal implements MegaChartType{
         DefaultCategoryDataset dataset = MegaChartConvertToJFreeDataType.defaultCategoryDataset(megaChart);
 
         //Create the chart
-        return ChartFactory.createStackedBarChart3D(megaChart.getChartname(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), dataset, PlotOrientation.HORIZONTAL, true, false, false);
+        return ChartFactory.createStackedBarChart3D(megaChart.getChart().getName(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), dataset, PlotOrientation.HORIZONTAL, true, false, false);
     }
 
     public JFreeChart formatChart(JFreeChart chart) {

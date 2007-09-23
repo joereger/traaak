@@ -22,7 +22,7 @@ public class MegaChartTypePie implements MegaChartType{
         DefaultPieDataset piedata = MegaChartConvertToJFreeDataType.defaultPieDataset(megaChart);
 
         //Create the chart
-        return ChartFactory.createPieChart(megaChart.getChartname(), piedata, true, false, false);
+        return ChartFactory.createPieChart(megaChart.getChart().getName(), piedata, true, false, false);
     }
 
     public JFreeChart formatChart(JFreeChart chart) {

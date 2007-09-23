@@ -8,15 +8,18 @@ import java.util.ArrayList;
 /**
  * This is the interface that is used in the MegaChart infrastructure to define field types.
  */
-public interface ChartField extends FieldInterface {
+public interface ChartField {
+
+
+    public String getName();
+    public int getID();
 
     /**
      * Description of this Field.
      * For example: Running distance is the .
      * This is dynamic from the database and generally uses this.fielddescription from the extended Field class.
      */
-    String getFielddescription();
-
+    String getDescription();
 
     /**
      * Add empty xAxis values to fill out set.
@@ -37,7 +40,7 @@ public interface ChartField extends FieldInterface {
      * corresponding to those eventid's.
      * Result[eventid][value]
      */
-     TreeMap getChartDataForField(ArrayList<Post> posts);
+     TreeMap getChartData(ArrayList<Post> posts);
 
      /**
      * Set timezoneid of display.   If this fieldtype doesn't use timezoneid then the body of this method can be empty.

@@ -10,27 +10,26 @@ import java.util.Iterator;
 /**
  * A dropdown field
  */
-public class ChartFieldEntrycount extends Field implements ChartField{
+public class ChartFieldEntrycount implements ChartField {
 
 
-    //Field data - These properties define the data type for this field
+    public static int ID = -2;
     String value = "";
-    String timezoneid = "GMT";
+    String timezoneid = "EST";
 
 
+    public int getID() {
+        return ChartFieldEntrycount.ID;
+    }
 
-
-    /**
-     * Friendly name
-     */
-    public String getFieldname() {
+    public String getName() {
         return "Number of Entries";
     }
 
     /**
      * Description of this field type
      */
-    public String getFielddescription() {
+    public String getDescription() {
         return "The number of entries that have the value on the xAxis.";
     }
 
@@ -46,7 +45,7 @@ public class ChartFieldEntrycount extends Field implements ChartField{
      * Accepts an array of eventid's and returns a set of values for this field
      * corresponding to those eventid's.
      */
-    public TreeMap getChartDataForField(ArrayList<Post> posts) {
+    public TreeMap getChartData(ArrayList<Post> posts) {
        if (posts!=null && posts.size()>0){
             TreeMap data = new TreeMap();
             for (Iterator it = posts.iterator(); it.hasNext(); ) {
@@ -102,6 +101,7 @@ public class ChartFieldEntrycount extends Field implements ChartField{
         //Return the data
         return data;
     }
+
 
 
 

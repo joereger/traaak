@@ -26,7 +26,7 @@ public class MegaChartTypeAreaChart implements MegaChartType{
         XYSeriesCollection xyseries = MegaChartConvertToJFreeDataType.xySeriesCollection(megaChart);
 
         //Create the chart
-        return ChartFactory.createXYAreaChart(megaChart.getChartname(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), xyseries,PlotOrientation.VERTICAL, true, false, false);
+        return ChartFactory.createXYAreaChart(megaChart.getChart().getName(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), xyseries,PlotOrientation.VERTICAL, true, false, false);
     }
 
     public JFreeChart formatChart(JFreeChart chart) {

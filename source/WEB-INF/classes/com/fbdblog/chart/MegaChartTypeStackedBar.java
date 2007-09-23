@@ -22,7 +22,7 @@ public class MegaChartTypeStackedBar implements MegaChartType{
         DefaultCategoryDataset dataset = MegaChartConvertToJFreeDataType.defaultCategoryDataset(megaChart);
 
         //Create the chart
-        return ChartFactory.createStackedBarChart(megaChart.getChartname(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), dataset, PlotOrientation.VERTICAL, true, false, false);
+        return ChartFactory.createStackedBarChart(megaChart.getChart().getName(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), dataset, PlotOrientation.VERTICAL, true, false, false);
     }
 
     public JFreeChart formatChart(JFreeChart chart) {

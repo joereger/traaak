@@ -26,7 +26,7 @@ public class MegaChartTypeScatterPlot implements MegaChartType{
         XYSeriesCollection xyseries = MegaChartConvertToJFreeDataType.xySeriesCollection(megaChart);
 
         //Create the chart
-        return ChartFactory.createScatterPlot(megaChart.getChartname(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), xyseries,PlotOrientation.VERTICAL, true, false, false);
+        return ChartFactory.createScatterPlot(megaChart.getChart().getName(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), xyseries,PlotOrientation.VERTICAL, true, false, false);
     }
 
     public JFreeChart formatChart(JFreeChart chart) {

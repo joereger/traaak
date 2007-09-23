@@ -24,7 +24,7 @@ public class Time {
 	    //System.out.println("timezoneid: "+timezoneid+"<br>dateformatfordb(date): " +Time.dateformatfordb(date) + "<br>date.getTimeZone().getID():"+date.getTimeZone().getID());
 	    Calendar outCal = (Calendar) date.clone();
 	    //System.out.println("timezoneid: "+timezoneid+"<br>dateformatfordb(outCal): " +Time.dateformatfordb(outCal) + "<br>outCal.getTimeZone().getID():"+outCal.getTimeZone().getID());
-	    outCal.setTimeZone(TimeZoneCache.get("GMT"));
+	    outCal.setTimeZone(TimeZoneCache.get("EST"));
 	    //System.out.println("timezoneid: "+timezoneid+"<br>dateformatfordb(outCal): " +Time.dateformatfordb(outCal) + "<br>outCal.getTimeZone().getID():"+outCal.getTimeZone().getID());
 		int offset = TimeZoneCache.get(timezoneid).getOffset(outCal.getTimeInMillis());
 		//System.out.println("timezoneid: "+timezoneid+"<br>offset: " +offset);
@@ -48,7 +48,7 @@ public class Time {
             if (timezoneid != null && !timezoneid.equals("")) {
                 outCal.setTimeZone(TimeZoneCache.get(timezoneid));
             } else {
-                outCal.setTimeZone(TimeZoneCache.get("GMT"));
+                outCal.setTimeZone(TimeZoneCache.get("EST"));
             }
             int offset = TimeZoneCache.get(timezoneid).getOffset(outCal.getTimeInMillis());
             outCal.add(Calendar.MILLISECOND, (1)*offset);
@@ -357,7 +357,7 @@ public class Time {
         //Get time on the physical server (probably in Atlanta)
         Calendar now = Calendar.getInstance();
         //Convert from server (not GMT... server in Atlanta) time to gmt timezone.
-        now = Time.convertFromOneTimeZoneToAnother(now, now.getTimeZone().getID(), "GMT");
+        now = Time.convertFromOneTimeZoneToAnother(now, now.getTimeZone().getID(), "EST");
 
 		
 		//Calculate datediff at various units
@@ -976,11 +976,11 @@ public class Time {
     }
 
     public static String nowInGmtString(){
-        return dateformatfordb(nowInUserTimezone("GMT"));
+        return dateformatfordb(nowInUserTimezone("EST"));
     }
 
     public static Calendar nowInGmtCalendar(){
-        return nowInUserTimezone("GMT");
+        return nowInUserTimezone("EST");
     }
 
     public static Calendar getRandomDateInPast(int maxAgeInDays){

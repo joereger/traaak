@@ -2,6 +2,8 @@ package com.fbdblog.util;
 
 import javax.servlet.http.Cookie;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  * User: Joe Reger Jr
@@ -127,7 +129,46 @@ public class Util {
        return false;
     }
 
-    
+    /**
+         * Cleans a string for proper xml presentation
+         */
+        public static String xmlclean(String instring){
+            String xmlclean="";
+            if (instring!=null) {
+                if (!instring.equals("")) {
+
+                    instring=instring.replaceAll("<", "&lt;");
+                    instring=instring.replaceAll(">", "&gt;");
+                    instring=instring.replaceAll("&nbsp;", " ");
+                    instring=instring.replaceAll("&", "&amp;");
+                    instring=instring.replaceAll("’", "'");
+
+
+
+                    xmlclean=instring;
+                } else {
+                    xmlclean=" ";
+                }
+            } else {
+                xmlclean=" ";
+            }
+            return xmlclean;
+        }
+
+        /**
+         * Cleans a string to make it work as an xml <fieldname></fieldname>.
+         * Removes spaces and any non-alphanumeric chars
+         */
+        public static String xmlFieldNameClean(String in) {
+            String out="";
+
+            Pattern p = Pattern.compile("\\W");
+            Matcher m = p.matcher(in);
+            out = m.replaceAll("");
+
+            return out;
+        }
+
 
 
 }

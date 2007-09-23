@@ -11,6 +11,8 @@ import org.jfree.data.time.Millisecond;
 import org.apache.log4j.Logger;
 import com.fbdblog.util.Num;
 
+import java.util.Iterator;
+
 /**
  * Converts data for a megachart into a jFree type
  */
@@ -23,8 +25,8 @@ public class MegaChartConvertToJFreeDataType {
         //Dataset to hold data
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         //Loop on the series of the megaChart
-        for (int j = 0; j < megaChart.getMegaChartSeries().length; j++) {
-            MegaChartSeries megaChartSeries = megaChart.getMegaChartSeries()[j];
+        for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+            MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
             if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
                 for(int i=0; i<megaChartSeries.cleanData.length; i++){
                     //Y data must always be numeric
@@ -52,8 +54,8 @@ public class MegaChartConvertToJFreeDataType {
         XYSeries xydataset = null;
         XYSeriesCollection xyseries = new XYSeriesCollection();
         //Loop on the series of the megaChart
-        for (int j = 0; j < megaChart.getMegaChartSeries().length; j++) {
-            MegaChartSeries megaChartSeries = megaChart.getMegaChartSeries()[j];
+        for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+            MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
             if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
                 xydataset = new XYSeries(megaChartSeries.yAxisTitle, false, false);
                 for(int i=0; i<megaChartSeries.cleanData.length; i++){
@@ -84,8 +86,8 @@ public class MegaChartConvertToJFreeDataType {
         //Dataset to hold data
         DefaultPieDataset piedata = null;
         //Loop on the series of the megaChart
-        for (int j = 0; j < megaChart.getMegaChartSeries().length; j++) {
-            MegaChartSeries megaChartSeries = megaChart.getMegaChartSeries()[j];
+        for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+            MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
             if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
                 piedata = new DefaultPieDataset();
                 for(int i=0; i<megaChartSeries.cleanData.length; i++){
@@ -115,8 +117,8 @@ public class MegaChartConvertToJFreeDataType {
         TimeSeries timedata = null;
         TimeSeriesCollection timedataseries = new TimeSeriesCollection();
         //Loop on the series of the megaChart
-        for (int j = 0; j < megaChart.getMegaChartSeries().length; j++) {
-            MegaChartSeries megaChartSeries = megaChart.getMegaChartSeries()[j];
+        for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+            MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
             if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
                 timedata = new TimeSeries(megaChartSeries.yAxisTitle, Millisecond.class);
                 for(int i=0; i<megaChartSeries.cleanData.length; i++){
@@ -155,8 +157,8 @@ public class MegaChartConvertToJFreeDataType {
         XYSeries xydataset = null;
         DefaultTableXYDataset stackedareadata = new DefaultTableXYDataset();
         //Loop on the series of the megaChart
-        for (int j = 0; j < megaChart.getMegaChartSeries().length; j++) {
-            MegaChartSeries megaChartSeries = megaChart.getMegaChartSeries()[j];
+        for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+            MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
             if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
                 xydataset = new XYSeries(megaChartSeries.yAxisTitle, false, false);
                 for(int i=0; i<megaChartSeries.cleanData.length; i++){

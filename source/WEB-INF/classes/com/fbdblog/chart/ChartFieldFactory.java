@@ -9,35 +9,23 @@ public class ChartFieldFactory {
      */
     public static ChartField getHandlerByFieldtype(int fieldtype){
         Logger logger = Logger.getLogger(ChartFieldFactory.class);
-        if (fieldtype==MegaConstants.FIELDTYPEDROPDOWN){
-            return new FieldTypeDropdown();
-        } else if (fieldtype==MegaConstants.FIELDTYPEHORIZONTALRADIOS){
-            return new FieldTypeHorizontalradios();
-        } else if (fieldtype==MegaConstants.FIELDTYPENUMERICRANGE){
-            return new FieldTypeNumericrange();
-        } else if (fieldtype==MegaConstants.FIELDTYPETEXTBOX){
-            return new FieldTypeTextbox();
-        } else if (fieldtype==MegaConstants.FIELDTYPETIME){
-            return new FieldTypeTimeperiod();
-        } else if (fieldtype==MegaConstants.FIELDTYPEVERTICALRADIOS){
-            return new FieldTypeVerticalradios();
-        } else if (fieldtype==MegaConstants.XAXISENTRYORDER){
+        if (fieldtype==ChartFieldEntryorder.ID){
             return new ChartFieldEntryorder();
-        } else if (fieldtype==MegaConstants.XAXISTIMEOFDAY) {
+        } else if (fieldtype==ChartFieldEntryHourofday.ID) {
             return new ChartFieldEntryHourofday();
-        } else if (fieldtype==MegaConstants.XAXISDAYOFWEEK) {
+        } else if (fieldtype==ChartFieldEntryDayofweek.ID) {
             return new ChartFieldEntryDayofweek();
-        } else if (fieldtype==MegaConstants.XAXISDAYOFMONTH) {
+        } else if (fieldtype==ChartFieldEntryDayofmonth.ID) {
             return new ChartFieldEntryDayofmonth();
-        } else if (fieldtype==MegaConstants.XAXISCALENDARDAYS) {
+        } else if (fieldtype==ChartFieldEntryDaysAgo.ID) {
             return new ChartFieldEntryDaysAgo();
-        } else if (fieldtype==MegaConstants.XAXISCALENDARWEEKS) {
+        } else if (fieldtype==ChartFieldEntryWeeksAgo.ID) {
             return new ChartFieldEntryWeeksAgo();
-        } else if (fieldtype==MegaConstants.XAXISCALENDARMONTHS) {
+        } else if (fieldtype==ChartFieldEntryMonthsAgo.ID) {
             return new ChartFieldEntryMonthsAgo();
-        } else if (fieldtype==MegaConstants.XAXISDATETIME) {
+        } else if (fieldtype==ChartFieldEntrydatetime.ID) {
             return new ChartFieldEntrydatetime();
-        } else if (fieldtype==MegaConstants.YAXISCOUNT) {
+        } else if (fieldtype==ChartFieldEntrycount.ID) {
             return new ChartFieldEntrycount();
         } else {
             logger.debug("No handler found: ChartFieldFactory.getHandlerByFieldtype - incoming fieldtype=" + fieldtype);

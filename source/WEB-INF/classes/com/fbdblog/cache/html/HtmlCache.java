@@ -89,7 +89,7 @@ public class HtmlCache {
         }
         //Store in GMT
         Calendar calTmp = Calendar.getInstance();
-        calTmp = Time.convertFromOneTimeZoneToAnother(calTmp, calTmp.getTimeZone().getID(), "GMT");
+        calTmp = Time.convertFromOneTimeZoneToAnother(calTmp, calTmp.getTimeZone().getID(), "EST");
         synchronized(lastUpdated){
             lastUpdated.put(cachekey, calTmp);
         }

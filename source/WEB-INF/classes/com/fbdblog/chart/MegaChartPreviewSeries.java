@@ -64,25 +64,25 @@ public class MegaChartPreviewSeries extends MegaChartSeries {
         } else {
             if (!isYaxis){
                 //It's the X axis
-                if (questionid==MegaConstants.XAXISDAYOFWEEK) {
+                if (questionid==ChartFieldEntryDayofweek.ID) {
                     return previewDataTimeExt(howmanydatapoints, questionid);
-                } else if (questionid==MegaConstants.XAXISDAYOFMONTH) {
+                } else if (questionid==ChartFieldEntryDayofmonth.ID) {
                     return previewDataTimeExt(howmanydatapoints, questionid);
-                } else if (questionid==MegaConstants.XAXISTIMEOFDAY) {
+                } else if (questionid==ChartFieldEntryHourofday.ID) {
                     return previewDataTimeExt(howmanydatapoints, questionid);
-                } else if (questionid==MegaConstants.XAXISENTRYORDER) {
+                } else if (questionid==ChartFieldEntryorder.ID) {
                     //This one's different
                     return previewDataNumeric(howmanydatapoints);
-                } else if (questionid==MegaConstants.XAXISCALENDARWEEKS) {
+                } else if (questionid==ChartFieldEntryWeeksAgo.ID) {
                     return previewDataTimeExt(howmanydatapoints, questionid);
-                } else if (questionid==MegaConstants.XAXISCALENDARMONTHS) {
+                } else if (questionid==ChartFieldEntryMonthsAgo.ID) {
                     return previewDataTimeExt(howmanydatapoints, questionid);
-                } else if (questionid==MegaConstants.XAXISDATETIME) {
+                } else if (questionid==ChartFieldEntrydatetime.ID) {
                     return previewDataTimeExt(howmanydatapoints, questionid);
                 }
             } else {
                 //It's a Y Axis
-                if (questionid==MegaConstants.YAXISCOUNT) {
+                if (questionid==ChartFieldEntrycount.ID) {
                     return previewDataCount(howmanydatapoints);
                 }
             }
@@ -133,22 +133,22 @@ public class MegaChartPreviewSeries extends MegaChartSeries {
         //Need to figure out what units we're subtracting from
         int unit = Calendar.DATE;
         int max = 31;
-        if (questionid==MegaConstants.XAXISDAYOFWEEK) {
+        if (questionid==ChartFieldEntryDayofweek.ID) {
             unit = Calendar.DATE;
             max = 7;
-        } else if (questionid==MegaConstants.XAXISDAYOFMONTH) {
+        } else if (questionid==ChartFieldEntryDayofmonth.ID) {
             unit = Calendar.DATE;
             max = 31;
-        } else if (questionid==MegaConstants.XAXISTIMEOFDAY) {
+        } else if (questionid==ChartFieldEntryHourofday.ID) {
             unit = Calendar.HOUR_OF_DAY;
             max = 23;
-        } else if (questionid==MegaConstants.XAXISCALENDARWEEKS) {
+        } else if (questionid==ChartFieldEntryWeeksAgo.ID) {
             unit = Calendar.DATE;
             max = 100;
-        } else if (questionid==MegaConstants.XAXISCALENDARMONTHS) {
+        } else if (questionid==ChartFieldEntryMonthsAgo.ID) {
             unit = Calendar.DATE;
             max = 365;
-        } else if (questionid==MegaConstants.XAXISDATETIME) {
+        } else if (questionid==ChartFieldEntrydatetime.ID) {
             unit = Calendar.DATE;
             max = 60;
         }

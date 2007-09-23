@@ -22,7 +22,7 @@ public class MegaChartTypeHorizontalBar implements MegaChartType{
         DefaultCategoryDataset dataset = MegaChartConvertToJFreeDataType.defaultCategoryDataset(megaChart);
 
         //Create the chart
-        return ChartFactory.createBarChart(megaChart.getChartname(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), dataset, PlotOrientation.HORIZONTAL, true, false, false);
+        return ChartFactory.createBarChart(megaChart.getChart().getName(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), dataset, PlotOrientation.HORIZONTAL, true, false, false);
     }
 
     public JFreeChart formatChart(JFreeChart chart) {

@@ -11,25 +11,26 @@ import com.fbdblog.dao.Post;
 /**
  * A dropdown field
  */
-public class ChartFieldEntryDayofweek extends Field implements ChartField{
+public class ChartFieldEntryDayofweek implements ChartField{
 
 
-    //Field data - These properties define the data type for this field
+    public static int ID = -5;
     String value = "";
-    String timezoneid = "GMT";
+    String timezoneid = "EST";
 
 
-    /**
-     * Friendly name
-     */
-    public String getFieldname() {
+    public int getID() {
+        return ChartFieldEntryDayofweek.ID;
+    }
+
+    public String getName() {
         return "Entry Day of Week";
     }
 
     /**
      * Description of this field type
      */
-    public String getFielddescription() {
+    public String getDescription() {
         return "The day of the week of the entry.";
     }
 
@@ -44,7 +45,7 @@ public class ChartFieldEntryDayofweek extends Field implements ChartField{
      * Accepts an array of eventid's and returns a set of values for this field
      * corresponding to those eventid's.
      */
-    public TreeMap getChartDataForField(ArrayList<Post> posts) {
+    public TreeMap getChartData(ArrayList<Post> posts) {
        if (posts!=null && posts.size()>0){
             TreeMap data = new TreeMap();
             for (Iterator it = posts.iterator(); it.hasNext(); ) {

@@ -33,7 +33,7 @@ public class TimeZoneCache {
                 admin.cancelUpdate(id);
                 logger.error("", ex);
                 logger.debug("In id: "+id+" - REFRESHING - Returning the default GMT.");
-                return TimeZone.getTimeZone("GMT");
+                return TimeZone.getTimeZone("EST");
             }
         }
     }

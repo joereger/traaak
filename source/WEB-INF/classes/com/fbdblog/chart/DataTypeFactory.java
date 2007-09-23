@@ -16,7 +16,6 @@ public class DataTypeFactory {
         } else if (DATATYPEID==DataTypeInteger.DATATYPEID){
             return new DataTypeInteger();
         }
-
         return null;
     }
 

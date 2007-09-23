@@ -15,7 +15,7 @@ public class MegaChartTypeTimeSeries implements MegaChartType{
         TimeSeriesCollection timedataseries = MegaChartConvertToJFreeDataType.timeSeriesCollection(megaChart);
 
         //Create the chart
-        return ChartFactory.createTimeSeriesChart(megaChart.getChartname(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), timedataseries, true, false, false);
+        return ChartFactory.createTimeSeriesChart(megaChart.getChart().getName(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), timedataseries, true, false, false);
     }
 
     public JFreeChart formatChart(JFreeChart chart) {

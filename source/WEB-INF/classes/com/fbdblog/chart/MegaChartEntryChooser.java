@@ -53,69 +53,69 @@ public class MegaChartEntryChooser {
         Calendar dateHigh=null;
         String dateStrLow="";
         String dateStrHigh="";
-        if (megaChart.getDaterange()==MegaConstants.DATERANGETHISWEEK){
+        if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGETHISWEEK){
             dateLow=Time.xWeeksAgoStart(Calendar.getInstance(), 0);
             dateHigh=Time.xWeeksAgoEnd(Calendar.getInstance(), 0);
             dateStrLow = Time.dateformatfordb(dateLow);
             dateStrHigh = Time.dateformatfordb(dateHigh);
             dateSql = " AND event.date>'" + dateStrLow + "' AND event.date<'" + dateStrHigh + "'";
-        } else if (megaChart.getDaterange()==MegaConstants.DATERANGETHISMONTH) {
+        } else if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGETHISMONTH) {
             dateLow=Time.xMonthsAgoStart(Calendar.getInstance(), 0);
             dateHigh=Time.xMonthsAgoEnd(Calendar.getInstance(), 0);
             dateStrLow = Time.dateformatfordb(dateLow);
             dateStrHigh = Time.dateformatfordb(dateHigh);
             dateSql = " AND event.date>'" + dateStrLow + "' AND event.date<'" + dateStrHigh + "'";
-        } else if (megaChart.getDaterange()==MegaConstants.DATERANGETHISYEAR) {
+        } else if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGETHISYEAR) {
             dateLow=Time.xYearsAgoStart(Calendar.getInstance(), 0);
             dateHigh=Time.xYearsAgoEnd(Calendar.getInstance(), 0);
             dateStrLow = Time.dateformatfordb(dateLow);
             dateStrHigh = Time.dateformatfordb(dateHigh);
             dateSql = " AND event.date>'" + dateStrLow + "' AND event.date<'" + dateStrHigh + "'";
-        } else if (megaChart.getDaterange()==MegaConstants.DATERANGELASTWEEK){
+        } else if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGELASTWEEK){
             dateLow=Time.xWeeksAgoStart(Calendar.getInstance(), 1);
             dateHigh=Time.xWeeksAgoEnd(Calendar.getInstance(), 1);
             dateStrLow = Time.dateformatfordb(dateLow);
             dateStrHigh = Time.dateformatfordb(dateHigh);
             dateSql = " AND event.date>'" + dateStrLow + "' AND event.date<'" + dateStrHigh + "'";
-        } else if (megaChart.getDaterange()==MegaConstants.DATERANGELASTMONTH) {
+        } else if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGELASTMONTH) {
             dateLow=Time.xMonthsAgoStart(Calendar.getInstance(), 1);
             dateHigh=Time.xMonthsAgoEnd(Calendar.getInstance(), 1);
             dateStrLow = Time.dateformatfordb(dateLow);
             dateStrHigh = Time.dateformatfordb(dateHigh);
             dateSql = " AND event.date>'" + dateStrLow + "' AND event.date<'" + dateStrHigh + "'";
-        } else if (megaChart.getDaterange()==MegaConstants.DATERANGELASTYEAR) {
+        } else if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGELASTYEAR) {
             dateLow=Time.xYearsAgoStart(Calendar.getInstance(), 1);
             dateHigh=Time.xMonthsAgoEnd(Calendar.getInstance(), 1);
             dateStrLow = Time.dateformatfordb(dateLow);
             dateStrHigh = Time.dateformatfordb(dateHigh);
             dateSql = " AND event.date>'" + dateStrLow + "' AND event.date<'" + dateStrHigh + "'";
-        } else if (megaChart.getDaterange()==MegaConstants.DATERANGELASTXDAYS) {
-            dateLow=Time.xDaysAgoStart(Calendar.getInstance(), megaChart.getLastxdays());
+        } else if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGELASTXDAYS) {
+            dateLow=Time.xDaysAgoStart(Calendar.getInstance(), megaChart.getChart().getLastxdays());
             dateHigh=Time.maxTime(Calendar.getInstance());
             dateStrLow = Time.dateformatfordb(dateLow);
             dateStrHigh = Time.dateformatfordb(dateHigh);
             dateSql = " AND event.date>'" + dateStrLow + "' AND event.date<'" + dateStrHigh + "'";
-        } else if (megaChart.getDaterange()==MegaConstants.DATERANGELASTXWEEKS) {
-            dateLow=Time.xWeeksAgoStart(Calendar.getInstance(), megaChart.getLastxweeks());
+        } else if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGELASTXWEEKS) {
+            dateLow=Time.xWeeksAgoStart(Calendar.getInstance(), megaChart.getChart().getLastxweeks());
             dateHigh=Time.maxTime(Calendar.getInstance());
             dateStrLow = Time.dateformatfordb(dateLow);
             dateStrHigh = Time.dateformatfordb(dateHigh);
             dateSql = " AND event.date>'" + dateStrLow + "' AND event.date<'" + dateStrHigh + "'";
-        } else if (megaChart.getDaterange()==MegaConstants.DATERANGELASTXMONTHS) {
-            dateLow=Time.xMonthsAgoStart(Calendar.getInstance(), megaChart.getLastxmonths());
+        } else if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGELASTXMONTHS) {
+            dateLow=Time.xMonthsAgoStart(Calendar.getInstance(), megaChart.getChart().getLastxmonths());
             dateHigh=Time.maxTime(Calendar.getInstance());
             dateStrLow = Time.dateformatfordb(dateLow);
             dateStrHigh = Time.dateformatfordb(dateHigh);
             dateSql = " AND event.date>'" + dateStrLow + "' AND event.date<'" + dateStrHigh + "'";
-        } else if (megaChart.getDaterange()==MegaConstants.DATERANGELASTXYEARS) {
-            dateLow=Time.xYearsAgoStart(Calendar.getInstance(), megaChart.getLastxyears());
+        } else if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGELASTXYEARS) {
+            dateLow=Time.xYearsAgoStart(Calendar.getInstance(), megaChart.getChart().getLastxyears());
             dateHigh=Time.maxTime(Calendar.getInstance());
             dateStrLow = Time.dateformatfordb(dateLow);
             dateStrHigh = Time.dateformatfordb(dateHigh);
             dateSql = " AND event.date>'" + dateStrLow + "' AND event.date<'" + dateStrHigh + "'";
-        } else if (megaChart.getDaterange()==MegaConstants.DATERANGESPECIFIED) {
-            dateLow=Time.dbstringtocalendar(megaChart.getDaterangefromyyyy()+"-"+megaChart.getDaterangefrommm() +"-"+megaChart.getDaterangefromdd()+" 00:00:00");
-            dateHigh=Time.dbstringtocalendar(megaChart.getDaterangetoyyyy()+"-"+megaChart.getDaterangetomm() +"-"+megaChart.getDaterangetodd()+" 23:59:59");
+        } else if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGESPECIFIED) {
+            dateLow=Time.dbstringtocalendar(megaChart.getChart().getDaterangefromyyyy()+"-"+megaChart.getChart().getDaterangefrommm() +"-"+megaChart.getChart().getDaterangefromdd()+" 00:00:00");
+            dateHigh=Time.dbstringtocalendar(megaChart.getChart().getDaterangetoyyyy()+"-"+megaChart.getChart().getDaterangetomm() +"-"+megaChart.getChart().getDaterangetodd()+" 23:59:59");
             dateStrLow = Time.dateformatfordb(dateLow);
             dateStrHigh = Time.dateformatfordb(dateHigh);
             dateSql = " AND event.date>'"+dateStrLow+"' AND event.date<'"+dateStrHigh+"'";

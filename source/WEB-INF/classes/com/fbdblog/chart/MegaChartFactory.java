@@ -5,6 +5,7 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.ContourPlot;
 import org.jfree.chart.axis.DateAxis;
+import com.fbdblog.qtype.Timeperiod;
 
 
 /**
@@ -17,47 +18,47 @@ public class MegaChartFactory {
         MegaChartType ct = new MegaChartTypeLine();
 
         //Figure out which type the user wants
-        if (megaChart.getxMegadatatype()==DataTypeString.DATATYPEID || megaChart.getCharttype()==MegaConstants.CHARTTYPE3DBAR || megaChart.getCharttype()==MegaConstants.CHARTTYPEHORIZONTALBAR || megaChart.getCharttype()==MegaConstants.CHARTTYPEHORIZONTAL3DBAR || megaChart.getCharttype()==MegaConstants.CHARTTYPEBAR  || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART  || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3D || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL || megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL) {
-            if (megaChart.getCharttype()==MegaConstants.CHARTTYPE3DBAR) {
+        if (megaChart.getxMegadatatype()==DataTypeString.DATATYPEID || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPE3DBAR || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEHORIZONTALBAR || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEHORIZONTAL3DBAR || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEBAR  || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART  || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3D || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL) {
+            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPE3DBAR) {
                 ct = new MegaChartType3DBar();
-            } else if (megaChart.getCharttype()==MegaConstants.CHARTTYPEHORIZONTALBAR) {
+            } else if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEHORIZONTALBAR) {
                 ct = new MegaChartTypeHorizontalBar();
-            } else if (megaChart.getCharttype()==MegaConstants.CHARTTYPEHORIZONTAL3DBAR) {
+            } else if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEHORIZONTAL3DBAR) {
                 ct = new MegaChartTypeHorizontal3dBar();
-            } else if (megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART) {
+            } else if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART) {
                 ct = new MegaChartTypeStackedBar();
-            } else if (megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3D) {
+            } else if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3D) {
                 ct = new MegaChartTypeStackedBar3d();
-            } else if (megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL) {
+            } else if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL) {
                 ct = new MegaChartTypeStackedBarHorizontal();
-            } else if (megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL) {
+            } else if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL) {
                 ct = new MegaChartTypeStackedBar3dHorizontal();
             } else {
                 ct = new MegaChartTypeBar();
             }
         }
-        if (megaChart.getCharttype()==MegaConstants.CHARTTYPEPIE){
+        if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEPIE){
            ct = new MegaChartTypePie();
         }
-        if (megaChart.getCharttype()==MegaConstants.CHARTTYPE3DPIE){
+        if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPE3DPIE){
            ct = new MegaChartTypePie3d();
         }
-        if (megaChart.getCharttype()==MegaConstants.CHARTTYPESCATTERPLOT){
+        if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESCATTERPLOT){
            ct = new MegaChartTypeScatterPlot();
         }
-        if (megaChart.getCharttype()==MegaConstants.CHARTTYPESTEPCHART){
+        if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTEPCHART){
            ct = new MegaChartTypeStepChart();
         }
-        if (megaChart.getCharttype()==MegaConstants.CHARTTYPEAREACHART){
+        if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEAREACHART){
            ct = new MegaChartTypeAreaChart();
         }
-        if (megaChart.getCharttype()==MegaConstants.CHARTTYPESTACKEDAREA){
+        if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDAREA){
            ct = new MegaChartTypeStackedAreaChart();
         }
-        if (megaChart.getCharttype()==MegaConstants.CHARTTYPELINE){
+        if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPELINE){
            ct = new MegaChartTypeLine();
         }
-        if (megaChart.getXQuestionid()==MegaConstants.XAXISDATETIME) {
+        if (megaChart.getChart().getXquestionid()==ChartFieldEntrydatetime.ID) {
             ct = new MegaChartTypeTimeSeries();
         }
 
@@ -75,11 +76,11 @@ public class MegaChartFactory {
 
     public static JFreeChart formatYAxisAsDate(JFreeChart chart, MegaChart megaChart){
          if (megaChart.getMegaChartSeries()!=null && megaChart.getMegaChartSeries().size()>0){
-            if (megaChart.getMegaChartSeries().get(0).yFieldtype==MegaConstants.FIELDTYPETIME){
+            if (megaChart.getMegaChartSeries().get(0).yFieldtype== Timeperiod.ID){
                 //First, create the rangeAxis
                 DateAxis rangeAxis = new DateAxis("");
                 java.text.DateFormat formatter = (java.text.DateFormat)new java.text.SimpleDateFormat("HH:mm:ss");
-                formatter.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
+                formatter.setTimeZone(java.util.TimeZone.getTimeZone("EST"));
                 rangeAxis.setDateFormatOverride(formatter);
 
                 //Next, apply that rangeAxis to as many types of plots as possible

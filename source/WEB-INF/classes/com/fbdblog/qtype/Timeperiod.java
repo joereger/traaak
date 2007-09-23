@@ -1,16 +1,15 @@
 package com.fbdblog.qtype;
 
-
-
-import org.apache.log4j.Logger;
+import com.fbdblog.qtype.def.Component;
+import com.fbdblog.qtype.def.ComponentException;
+import com.fbdblog.qtype.Textbox;
+import com.fbdblog.qtype.util.AppPostParser;
+import com.fbdblog.chart.ChartField;
 import com.fbdblog.dao.Question;
 import com.fbdblog.dao.User;
 import com.fbdblog.dao.Post;
 import com.fbdblog.dao.Postanswer;
-import com.fbdblog.qtype.def.Component;
-import com.fbdblog.qtype.def.ComponentException;
-import com.fbdblog.qtype.util.AppPostParser;
-import com.fbdblog.chart.ChartField;
+import org.apache.log4j.Logger;
 
 import java.util.TreeMap;
 import java.util.ArrayList;
@@ -21,17 +20,17 @@ import java.util.Iterator;
  * Date: Jul 6, 2006
  * Time: 1:01:00 PM
  */
-public class Textbox implements Component, ChartField {
+public class Timeperiod implements Component, ChartField {
 
-    public static int ID = 1;
-    public static String NAME = "Textbox (Short Text)";
+    public static int ID = 7;
+    public static String NAME = "Time Period";
     private Question question;
     private User user;
     private Post post;
 
     Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public Textbox(User user, Post post, Question question){
+    public Timeperiod(User user, Post post, Question question){
         this.question = question;
         this.user = user;
         this.post = post;
@@ -54,7 +53,21 @@ public class Textbox implements Component, ChartField {
         }
         out.append("<br/>");
 
-        out.append("<input type=\"text\" size=\"20\" maxlength=\"255\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\">");
+        out.append("<table cellpadding='0' cellspacing='0' border='0'>");
+        out.append("<tr>");
+        out.append("<td valign='top'>");
+            out.append("<input type=\"text\" size=\"2\" maxlength=\"5\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-hours\">");
+        out.append("</td>");
+        out.append("<td valign='top'>");
+            out.append("<input type=\"text\" size=\"2\" maxlength=\"5\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-minutes\">");
+        out.append("</td>");
+        out.append("<td valign='top'>");
+            out.append("<input type=\"text\" size=\"2\" maxlength=\"5\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-seconds\">");
+        out.append("</td>");
+        out.append("</tr>");
+        out.append("</table>");
+
+
 
         return out.toString();
     }
@@ -68,12 +81,13 @@ public class Textbox implements Component, ChartField {
                 throw new ComponentException(question.getQuestion()+" is required.");
             }
             if (requestParams[0]==null || requestParams[0].equals("")){
-                throw new ComponentException(question.getQuestion()+" is required.");        
+                throw new ComponentException(question.getQuestion()+" is required.");
             }
         }
     }
 
     public void processAnswer(AppPostParser srp, Post post) throws ComponentException {
+        //@todo process Timeperiod to DB
         String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
         if (requestParams!=null && requestParams.length>0){
             for (int i = 0; i < requestParams.length; i++) {

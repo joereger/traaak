@@ -7,25 +7,6 @@ package com.fbdblog.chart;
  */
 public class MegaConstants {
 
-    //Megafieldtype. The name is the field type.  The value is the megafieldtypeid in the megafieldtype table in the database.
-    public static final int FIELDTYPEDROPDOWN = 1;
-    public static final int FIELDTYPEHORIZONTALRADIOS = 2;
-    public static final int FIELDTYPEVERTICALRADIOS = 3;
-    public static final int FIELDTYPETEXTBOX = 5;
-    public static final int FIELDTYPENUMERICRANGE = 7;
-    public static final int FIELDTYPETIME = 8;
-    public static final int FIELDTYPECONTAINER = 9;
-    //Charting x Axis derived xQuestionid values.  These must be negative
-    public static final int XAXISDATETIME = -2;
-    public static final int XAXISTIMEOFDAY = -3;
-    public static final int XAXISENTRYORDER = -4;
-    public static final int XAXISDAYOFWEEK = -5;
-    public static final int XAXISDAYOFMONTH = -6;
-    public static final int XAXISCALENDARWEEKS = -7;
-    public static final int XAXISCALENDARMONTHS = -8;
-    public static final int XAXISCALENDARDAYS = -9;
-    //yAxis Default to all
-    public static final int YAXISCOUNT = -10;
 
     //Custom chart math constants
     public static final int CUSTOMMATHADD = 1;

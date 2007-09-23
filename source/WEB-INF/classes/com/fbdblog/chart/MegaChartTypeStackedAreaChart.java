@@ -26,7 +26,7 @@ public class MegaChartTypeStackedAreaChart implements MegaChartType{
         DefaultTableXYDataset stackedareadata = MegaChartConvertToJFreeDataType.defaultTableXYDataset(megaChart);
 
         //Create the chart
-        return ChartFactory.createStackedXYAreaChart(megaChart.getChartname(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), stackedareadata,PlotOrientation.VERTICAL, true, false, false);
+        return ChartFactory.createStackedXYAreaChart(megaChart.getChart().getName(), megaChart.getxAxisTitle(), megaChart.getyAxisTitle(), stackedareadata,PlotOrientation.VERTICAL, true, false, false);
     }
 
     public JFreeChart formatChart(JFreeChart chart) {

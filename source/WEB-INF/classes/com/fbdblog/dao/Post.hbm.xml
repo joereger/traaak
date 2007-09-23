@@ -9,7 +9,11 @@
             <column name="postid" />
             <generator class="native" />
         </id>
-
+        <set name="postanswers" inverse="true" cascade="all-delete-orphan">
+            <cache usage="transactional"/>
+            <key column="postid"></key>
+            <one-to-many class="com.fbdblog.dao.Postanswer" not-found="ignore"></one-to-many>
+        </set>
         <property name="appid" type="int">
             <column name="appid" not-null="true" />
         </property>

@@ -1,35 +1,34 @@
 package com.fbdblog.chart;
 
 import com.fbdblog.dao.Post;
-import com.fbdblog.util.Time;
 
 import java.util.TreeMap;
 import java.util.Iterator;
-import java.util.Calendar;
 import java.util.ArrayList;
 
 /**
  * A dropdown field
  */
-public class ChartFieldEntryorder extends Field implements ChartField{
+public class ChartFieldEntryorder implements ChartField{
 
 
-    //Field data - These properties define the data type for this field
+    public static int ID = -9;
     String value = "";
-    String timezoneid = "GMT";
+    String timezoneid = "EST";
 
 
-    /**
-     * Friendly name
-     */
-    public String getFieldname() {
+    public int getID() {
+        return ChartFieldEntryorder.ID;
+    }
+
+    public String getName() {
         return "Individual Entry Order";
     }
 
     /**
      * Description of this field type
      */
-    public String getFielddescription() {
+    public String getDescription() {
         return "The order of individual entries.";
     }
 
@@ -45,7 +44,7 @@ public class ChartFieldEntryorder extends Field implements ChartField{
      * Accepts an array of eventid's and returns a set of values for this field
      * corresponding to those eventid's.
      */
-    public TreeMap getChartDataForField(ArrayList<Post> posts) {
+    public TreeMap getChartData(ArrayList<Post> posts) {
        if (posts!=null && posts.size()>0){
             TreeMap data = new TreeMap();
             int count = 0;
@@ -78,14 +77,7 @@ public class ChartFieldEntryorder extends Field implements ChartField{
         return this.timezoneid;
     }
 
-    /**
-     * Returns the Field object that this field is based on.
-     * The Field object is the core requirement of a fieldtype.
-     * Generally question type implementations extend Field.
-     */
-//    public Field getField() {
-//        return this;
-//    }
+ 
 
     /**
      * Add empty xAxis values to fill out set.

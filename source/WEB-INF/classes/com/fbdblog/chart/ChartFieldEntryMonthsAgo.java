@@ -14,25 +14,26 @@ import org.apache.log4j.Logger;
 /**
  * A dropdown field
  */
-public class ChartFieldEntryMonthsAgo extends Field implements ChartField{
+public class ChartFieldEntryMonthsAgo implements ChartField{
 
 
-    //Field data - These properties define the data type for this field
+    public static int ID = -8;
     String value = "";
-    String timezoneid = "GMT";
+    String timezoneid = "EST";
 
 
-    /**
-     * Friendly name
-     */
-    public String getFieldname() {
+    public int getID() {
+        return ChartFieldEntryMonthsAgo.ID;
+    }
+
+    public String getName() {
         return "Months Ago";
     }
 
     /**
      * Description of this field type
      */
-    public String getFielddescription() {
+    public String getDescription() {
         return "The number of months ago for this entry.";
     }
 
@@ -48,7 +49,7 @@ public class ChartFieldEntryMonthsAgo extends Field implements ChartField{
      * Accepts an array of eventid's and returns a set of values for this field
      * corresponding to those eventid's.
      */
-    public TreeMap getChartDataForField(ArrayList<Post> posts) {
+    public TreeMap getChartData(ArrayList<Post> posts) {
        if (posts!=null && posts.size()>0){
             TreeMap data = new TreeMap();
 

@@ -23,7 +23,7 @@ public class MegaChartTypePie3d implements MegaChartType{
 
 
         //Create the chart
-        return ChartFactory.createPieChart3D(megaChart.getChartname(), piedata, true, false, false);
+        return ChartFactory.createPieChart3D(megaChart.getChart().getName(), piedata, true, false, false);
     }
 
     public JFreeChart formatChart(JFreeChart chart) {
