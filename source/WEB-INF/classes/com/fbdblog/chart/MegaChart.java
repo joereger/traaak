@@ -35,8 +35,8 @@ public class MegaChart {
             chart.setAppid(0);
             chart.setName("");
             chart.setChartid(0);
-            chart.setCharttype(0);
-            chart.setDaterange(0);
+            chart.setCharttype(MegaConstants.CHARTTYPELINE);
+            chart.setDaterange(MegaConstants.DATERANGEALLTIME);
             chart.setDaterangefromdd(0);
             chart.setDaterangefrommm(0);
             chart.setDaterangefromyyyy(0);
@@ -47,8 +47,8 @@ public class MegaChart {
             chart.setLastxmonths(0);
             chart.setLastxweeks(0);
             chart.setLastxyears(0);
-            chart.setXquestionid(0);
-            chart.setYaxiswhattodo(0);
+            chart.setXquestionid(ChartFieldEntrydatetime.ID);
+            chart.setYaxiswhattodo(MegaConstants.YAXISWHATTODOSUM);
         }
     }
 
@@ -68,8 +68,8 @@ public class MegaChart {
         chart.setAppid(0);
 
         chart.setXquestionid(ChartFieldEntrydatetime.ID);
-        if (request.getParameter("xQuestionid")!=null && Num.isinteger(request.getParameter("xQuestionid"))){
-            chart.setXquestionid(Integer.parseInt(request.getParameter("xQuestionid")));
+        if (request.getParameter("xquestionid")!=null && Num.isinteger(request.getParameter("xquestionid"))){
+            chart.setXquestionid(Integer.parseInt(request.getParameter("xquestionid")));
         }
 
         yquestionid = new int[0];

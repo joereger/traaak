@@ -9,7 +9,7 @@
 <%@ page import="com.fbdblog.dao.Questionconfig" %>
 <%@ page import="com.fbdblog.util.UserInputSafe" %>
 <%@ page import="com.fbdblog.qtype.Checkboxes" %>
-<%@ page import="com.fbdblog.chart.DataTypeString" %>
+<%@ page import="com.fbdblog.chart.*" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -48,7 +48,11 @@
             isrequired = true;
         }
         question.setIsrequired(isrequired);
-        question.setDatatypeid(DataTypeString.DATATYPEID);
+        int datatypeid = DataTypeString.DATATYPEID;
+        if (request.getParameter("datatypeid") != null && Num.isinteger(request.getParameter("datatypeid"))) {
+            datatypeid = Integer.parseInt(request.getParameter("datatypeid"));
+        }
+        question.setDatatypeid(datatypeid);
         try {
             question.save();
         } catch (Exception ex) {
@@ -89,6 +93,30 @@ Question Detail: <%=question.getQuestion()%>
             </td>
             <td valign="top">
                 <input type="text" name="question" value="<%=question.getQuestion()%>" size="25" maxlength="255">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                Data Type
+            </td>
+            <td valign="top">
+                <select name="datatypeid">
+                    <%String stringSelected = "";
+                    if (question.getDatatypeid()==DataTypeString.DATATYPEID){stringSelected=" selected";}%>
+                    <option value="<%=DataTypeString.DATATYPEID%>" <%=stringSelected%>>String</option>
+
+                    <%String datetimeSelected = "";
+                    if (question.getDatatypeid()==DataTypeDatetime.DATATYPEID){datetimeSelected=" selected";}%>
+                    <option value="<%=DataTypeDatetime.DATATYPEID%>" <%=datetimeSelected%>>Date/Time</option>
+
+                    <%String numericSelected = "";
+                    if (question.getDatatypeid()==DataTypeDecimal.DATATYPEID){numericSelected=" selected";}%>
+                    <option value="<%=DataTypeDecimal.DATATYPEID%>" <%=numericSelected%>>Numeric/Decimal</option>
+
+                    <%String integerSelected = "";
+                    if (question.getDatatypeid()==DataTypeInteger.DATATYPEID){integerSelected=" selected";}%>
+                    <option value="<%=DataTypeInteger.DATATYPEID%>" <%=integerSelected%>>Integer</option>
+                </select>
             </td>
         </tr>
         <tr>

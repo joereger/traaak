@@ -43,6 +43,7 @@
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("save")) {
         megaChart.populateFromRequest(request);
+        megaChart.getChart().setAppid(app.getAppid());
         try {
             megaChart.getChart().save();
         } catch (Exception ex) {
@@ -53,38 +54,22 @@
     }
 %>
 App: <a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a><br/>
-Chart: <%=megaChart.getChart().getName()%>
+Chartid:<%=megaChart.getChart().getChartid()%>: <%=megaChart.getChart().getName()%>
 <br/><br/>
 <form action="appdetail-chart.jsp" method="post">
     <input type="hidden" name="appid" value="<%=app.getAppid()%>">
     <input type="hidden" name="chartid" value="<%=megaChart.getChart().getChartid()%>">
     <input type="hidden" name="action" value="save">
     <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-            <td valign="top">
-                Name
-            </td>
-            <td valign="top">
-                <input type="text" name="name" value="<%=megaChart.getChart().getName()%>" size="25" maxlength="255">
-            </td>
-        </tr>
-
+        
         <tr>
             <td valign="top" colspan="2">
                 <%
-                    out.print(MegaChartHtmlRenderer.getHtml(megaChart, app.getAppid()));
+                out.print(MegaChartHtmlRenderer.getHtml(megaChart, app.getAppid()));
                 %>
             </td>
         </tr>
 
-        <tr>
-            <td valign="top">
-
-            </td>
-            <td valign="top">
-                <input type="submit" value="Save">
-            </td>
-        </tr>
     </table>
 </form>
 

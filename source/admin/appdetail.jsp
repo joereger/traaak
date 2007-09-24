@@ -144,7 +144,7 @@ Charts:
     for (Iterator<Chart> iterator = charts.iterator(); iterator.hasNext();) {
         Chart chart = (Chart)iterator.next();
         %>
-        <a href="appdetail-chart.jsp?appid=<%=app.getAppid()%>&chartid=<%=chart.getChartid()%>"><%=chart.getName()%></a><br/>
+        <a href="appdetail-chart.jsp?appid=<%=app.getAppid()%>&chartid=<%=chart.getChartid()%>"><%=chart.getChartid()%>: <%=chart.getName()%></a><br/>
         <%
     }
 %>

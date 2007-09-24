@@ -103,23 +103,20 @@ public class MegaChartHtmlRenderer {
         //Create the chart-customizing form
         mb.append("<tr><td bgcolor=#ffffff>");
 
-            mb.append("<form action=graphs-detail.log method=get>");
-            mb.append("<center><input type=submit value='Redraw Graph'></center>");
+
 
 
             mb.append("<table cellpadding=8 width=100% cellspacing=1 border=0>");
-
-
 
 
             //Save chart?
             mb.append("<tr>");
             mb.append("<td valign=top bgcolor=#ffffff colspan=3>");
             mb.append("<center>");
-            mb.append("<input type=checkbox name=savechart value=1>");
             mb.append("<font face=arial size=-1>");
-            mb.append("Save this graph and name it:<br>");
+            mb.append("Chart Name: ");
             mb.append("<input type=textbox name=chartname value=\""+ Str.cleanForHtml(megaChart.getChart().getName())+"\" size=25 maxlength=100>");
+            mb.append("<input type=submit value='Save'>");
             mb.append("</font>");
             mb.append("</center>");
             mb.append("</td>");
@@ -151,7 +148,7 @@ public class MegaChartHtmlRenderer {
 
             mb.append("<td valign=top>");
 
-            logger.debug("MegaChartHtmlRenderer.java: xQuestionid="+megaChart.getChart().getXquestionid());
+            logger.debug("MegaChartHtmlRenderer.java: xquestionid="+megaChart.getChart().getXquestionid());
 
             mb.append("<font face=arial size=-1 class=smallfont>");
             mb.append("<b>");
@@ -162,42 +159,42 @@ public class MegaChartHtmlRenderer {
 
             mb.append("<font face=arial size=-1>");
             //Derived xAxis types
-            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntrydatetime.ID+"_0_0'");
+            mb.append("<input name=xquestionid type=radio value='"+ChartFieldEntrydatetime.ID+"'");
             if (megaChart.getChart().getXquestionid()==ChartFieldEntrydatetime.ID){
                 mb.append(" checked");
             }
             mb.append("> Exact Date/Time<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntryDaysAgo.ID+"_0_0'");
+            mb.append("<input name=xquestionid type=radio value='"+ChartFieldEntryDaysAgo.ID+"'");
             if (megaChart.getChart().getXquestionid()==ChartFieldEntryDaysAgo.ID){
                 mb.append(" checked");
             }
             mb.append("> Days Ago<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntryWeeksAgo.ID+"_0_0'");
+            mb.append("<input name=xquestionid type=radio value='"+ChartFieldEntryWeeksAgo.ID+"'");
             if (megaChart.getChart().getXquestionid()==ChartFieldEntryWeeksAgo.ID){
                 mb.append(" checked");
             }
             mb.append("> Weeks Ago<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntryMonthsAgo.ID+"_0_0'");
+            mb.append("<input name=xquestionid type=radio value='"+ChartFieldEntryMonthsAgo.ID+"'");
             if (megaChart.getChart().getXquestionid()==ChartFieldEntryMonthsAgo.ID){
                 mb.append(" checked");
             }
             mb.append("> Months Ago<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntryHourofday.ID+"_0_0'");
+            mb.append("<input name=xquestionid type=radio value='"+ChartFieldEntryHourofday.ID+"'");
             if (megaChart.getChart().getXquestionid()==ChartFieldEntryHourofday.ID){
                 mb.append(" checked");
             }
             mb.append("> Hour of the Day<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntryDayofweek.ID+"_0_0'");
+            mb.append("<input name=xquestionid type=radio value='"+ChartFieldEntryDayofweek.ID+"'");
             if (megaChart.getChart().getXquestionid()==ChartFieldEntryDayofweek.ID){
                 mb.append(" checked");
             }
             mb.append("> Day of the Week<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntryDayofmonth.ID+"_0_0'");
+            mb.append("<input name=xquestionid type=radio value='"+ChartFieldEntryDayofmonth.ID+"'");
             if (megaChart.getChart().getXquestionid()==ChartFieldEntryDayofmonth.ID){
                 mb.append(" checked");
             }
             mb.append("> Day of the Month<br>");
-            mb.append("<input name=xMegafieldChoice type=radio value='"+ChartFieldEntryorder.ID+"_0_0'");
+            mb.append("<input name=xquestionid type=radio value='"+ChartFieldEntryorder.ID+"'");
             if (megaChart.getChart().getXquestionid()==ChartFieldEntryorder.ID){
                 mb.append(" checked");
             }
@@ -216,9 +213,8 @@ public class MegaChartHtmlRenderer {
             for (Iterator iterator = app.getQuestions().iterator(); iterator.hasNext();) {
                 Question question =  (Question)iterator.next();
                 foundAtLeastOneField = true;
-                String xMegaFieldChoiceString = question.getQuestionid()+"_"+0+"_"+appid;
                 mb.append("<font face=arial size=-1 class=smallfont>");
-                mb.append("<input name=xMegafieldChoice type=radio value='"+xMegaFieldChoiceString+"'");
+                mb.append("<input name=xquestionid type=radio value='"+question.getQuestionid()+"'");
                 if (megaChart.getChart().getXquestionid()==question.getQuestionid()){
                     mb.append(" checked");
                 }
@@ -231,15 +227,12 @@ public class MegaChartHtmlRenderer {
                 mb.append("</font>");
             }
 
-
-
-
             mb.append("</font>");
             mb.append("</td>");
 
             mb.append("<td valign=top>");
             mb.append("<font face=arial size=-1>");
-            mb.append("<input name=yMegafieldChoice type=checkbox value='"+ChartFieldEntrycount.ID+"_0_0'");
+            mb.append("<input name=yquestionid type=checkbox value='"+ChartFieldEntrycount.ID+"'");
             for(int j=0; j<megaChart.getYquestionid().length; j++){
                 if (megaChart.getYquestionid()[j]==ChartFieldEntrycount.ID){
                     mb.append(" checked");
@@ -263,9 +256,8 @@ public class MegaChartHtmlRenderer {
                 Question question =  (Question)iterator.next();
                 if (question.getDatatypeid()!=DataTypeString.DATATYPEID){
                     foundAtLeastOneField=true;
-                    String yMegaFieldChoiceString = question.getQuestionid()+"_"+0+"_"+appid;
                     mb.append("<font face=arial size=-1 class=smallfont>");
-                    mb.append("<input name=yMegafieldChoice type=checkbox value='"+yMegaFieldChoiceString+"'");
+                    mb.append("<input name=yquestionid type=checkbox value='"+question.getQuestionid()+"'");
                     for(int l=0; l<megaChart.getYquestionid().length; l++){
                         if (megaChart.getYquestionid()[l]==question.getQuestionid()){
                             mb.append(" checked");
@@ -594,7 +586,6 @@ public class MegaChartHtmlRenderer {
 
             mb.append("</table>");
 
-            mb.append("</form>");
 
         mb.append("</td></tr>");
 

@@ -26,7 +26,6 @@ page import="com.fbdblog.session.UserSession" %><%
     //Create our output stream to the browser
     OutputStream outStream = response.getOutputStream();
 
-
     //try {
 
         //Determine whether or not this is a preview of a chart.
