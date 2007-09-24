@@ -32,7 +32,7 @@ public class SystemProperty {
         if (props==null){
             props = new HashMap<String, String>();
         }
-        props.put(PROP_BASEURL,"www.fbdblog.com");
+        props.put(PROP_BASEURL,"joereger.yi.org");
         props.put(PROP_SENDXMPP, "0");
         props.put(PROP_SMTPOUTBOUNDSERVER, "localhost");
         props.put(PROP_ISSSLON, "0");

@@ -7,6 +7,7 @@
 <%@ page import="com.fbdblog.dao.hibernate.HibernateUtil" %>
 <%@ page import="com.fbdblog.dao.Chart" %>
 <%@ page import="java.util.Iterator" %>
+<%@ page import="com.fbdblog.systemprops.BaseUrl" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -15,7 +16,7 @@
         try {
             SavePost.save(userSession.getApp(), userSession.getUser(), appPostParser);
             out.print("<fb:success>\n" +
-            "     <fb:message>Success!  Your info has been tracked!</fb:message>\n" +
+            "     <fb:message>Success!  Data tracked!</fb:message>\n" +
             "     We've also updated your profile so that others can check you out.\n" +
             "</fb:success>");
         } catch (ComponentException cex) {
@@ -73,7 +74,7 @@
             </form>
         </td>
         <td valign="top" width="400">
-            <img src="http://joereger.yi.org/fb/graph.jsp?chartid=<%=chartid%>&userid=<%=userSession.getUser().getUserid()%>&size=small&comparetouserid=0" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
+            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chartid%>&userid=<%=userSession.getUser().getUserid()%>&size=small&comparetouserid=0" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
             <br/>
             <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts&chartid=<%=chartid%>'>Zoom</a>
             <br/>

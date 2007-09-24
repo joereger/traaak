@@ -52,7 +52,7 @@ public class Checkboxes implements Component, ChartField {
         out.append("<font class=\"formfieldnamefont\">"+question.getQuestion()+"</font>");
         if (question.getIsrequired()){
             out.append(" ");
-            out.append("<font class=\"formfieldnamefont\" style=\"color: #ff0000;\">(Required)</font>");
+            out.append("<font class=\"formfieldnamefont\" style=\"color: #ff0000;\">*</font>");
         }
         out.append("<br/>");
 
