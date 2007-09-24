@@ -49,10 +49,10 @@ public class Checkboxes implements Component, ChartField {
 
     public String getHtmlForInput() {
         StringBuffer out = new StringBuffer();
-        out.append("<font class=\"formfieldnamefont\">"+question.getQuestion()+"</font>");
+        out.append("<font class=\"questionfont\">"+question.getQuestion()+"</font>");
         if (question.getIsrequired()){
             out.append(" ");
-            out.append("<font class=\"formfieldnamefont\" style=\"color: #ff0000;\">*</font>");
+            out.append("<font class=\"questionfont\" style=\"color: #ff0000;\">*</font>");
         }
         out.append("<br/>");
 
@@ -65,7 +65,7 @@ public class Checkboxes implements Component, ChartField {
             }
         }
         String[] optionsSplit = options.split("\\n");
-        //@todo test checkbox because i don't think that the hashmap holding the values properly handles multiple values for the same name
+        //@todo Test checkbox because i don't think that the hashmap holding the values properly handles multiple values for the same name
         for (int i = 0; i < optionsSplit.length; i++) {
             String s = optionsSplit[i];
             out.append("<input type=\"checkbox\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\" value=\""+Str.cleanForHtml(s.trim())+"\">" + s.trim());
@@ -87,13 +87,16 @@ public class Checkboxes implements Component, ChartField {
         String[] userOptionsSplit = useroptions.split("\\n");
         for (int i = 0; i < userOptionsSplit.length; i++) {
             String s = userOptionsSplit[i];
-            out.append("<input type=\"checkbox\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\" value=\""+Str.cleanForHtml(s.trim())+"\">" + s.trim());
-            out.append("<br/>");
+            if (s.trim().length()>0){
+                out.append("<input type=\"checkbox\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\" value=\""+Str.cleanForHtml(s.trim())+"\">" + s.trim());
+                out.append("<br/>");
+            }
         }
 
         //User inputs own option
+        out.append("<font size=-2>Or, enter your own:</font>");
         out.append("<br/>");
-        out.append("<input type='text' name=\""+AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-newoption\" value=\""+""+"\">");
+        out.append("<input type='text' name=\""+AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-newoption\" value=\""+""+"\" size=\"20\" maxlength=\"255\" style=\"font-size: 7px;\">");
 
 
         return out.toString();
@@ -114,21 +117,81 @@ public class Checkboxes implements Component, ChartField {
     }
 
     public void processAnswer(AppPostParser srp, Post post) throws ComponentException {
-        //@todo process Checkboxes user option to DB
+        logger.debug("start processanswer");
+        //Save the answers
         String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
         if (requestParams!=null && requestParams.length>0){
             for (int i = 0; i < requestParams.length; i++) {
                 String requestParam = requestParams[i];
-                Postanswer postanswer = new Postanswer();
-                postanswer.setQuestionid(question.getQuestionid());
-                postanswer.setUserid(user.getUserid());
-                postanswer.setName("response");
-                postanswer.setValue(requestParam);
-                postanswer.setPostid(post.getPostid());
-                try{postanswer.save();}catch(Exception ex){logger.error(ex);}
+                logger.debug("handling requestParam["+i+"]="+requestParam+" as an answer");
+                //Create a new Postanswer
+                logger.debug("creating new Postanswer()");
+                if (requestParam!=null && requestParam.trim().length()>0){
+                    Postanswer postanswer = new Postanswer();
+                    postanswer.setQuestionid(question.getQuestionid());
+                    postanswer.setUserid(user.getUserid());
+                    postanswer.setName("response");
+                    postanswer.setValue(requestParam.trim());
+                    postanswer.setPostid(post.getPostid());
+                    try{postanswer.save();}catch(Exception ex){logger.error(ex);}
+                }
             }
-            
         }
+        //Handle new user options
+        String[] newOptionRequestParams = srp.getNewoptionParamsForQuestion(question.getQuestionid());
+        if (newOptionRequestParams!=null && newOptionRequestParams.length>0){
+            for (int i = 0; i < newOptionRequestParams.length; i++) {
+                String requestParam = newOptionRequestParams[i];
+                if (requestParam!=null && requestParam.trim().length()>0){
+                    //Handle new useroptions
+                    logger.debug("handling requestParam["+i+"]="+requestParam+" as a new option");
+                    boolean useroptionalreadyexisted = false;
+                    List<Questionuserconfig> questionuserconfigs = HibernateUtil.getSession().createCriteria(Questionuserconfig.class)
+                                           .add(Restrictions.eq("questionid", question.getQuestionid()))
+                                           .add(Restrictions.eq("userid", user.getUserid()))
+                                           .setCacheable(false)
+                                           .list();
+                    for (Iterator<Questionuserconfig> iterator = questionuserconfigs.iterator(); iterator.hasNext();) {
+                        Questionuserconfig questionuserconfig = iterator.next();
+                        if (questionuserconfig.getName().equals("options")){
+                            //We already have a useroptions entry for this question... need to append to it
+                            logger.debug("found a pre-existing questionuserconfig entry: questionuserconfig.getQuestionuserconfigid()="+questionuserconfig.getQuestionuserconfigid()+" (requestParam="+requestParam+")");
+                            useroptionalreadyexisted = true;
+                            String useroptions = questionuserconfig.getValue();
+                            String[] userOptionsSplit = useroptions.split("\\n");
+                            boolean exactoptionalreadyexisted = false;
+                            for (int j = 0; j < userOptionsSplit.length; j++) {
+                                String s = userOptionsSplit[j];
+                                //Determine whether this exact option exists
+                                logger.debug("s.trim()="+s.trim());
+                                logger.debug("s.trim().indexOf(requestParam.trim())="+s.trim().indexOf(requestParam.trim()));
+                                if (s.trim().indexOf(requestParam.trim())>-1){
+                                    logger.debug("an exact option ("+requestParam.trim()+") already exists in a Questionuserconfig");
+                                    exactoptionalreadyexisted = true;
+                                }
+                            }
+                            if (!exactoptionalreadyexisted){
+                                //Append the new option to the existing Questionuserconfig
+                                logger.debug("appending the new option ("+requestParam.trim()+")");
+                                questionuserconfig.setValue(questionuserconfig.getValue()+"\n"+requestParam);
+                                try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+                            }
+                        }
+                    }
+                    //Create a new Questionuserconfig
+                    if (!useroptionalreadyexisted){
+                        logger.debug("!useroptionalreadyexisted so creating new one");
+                        Questionuserconfig questionuserconfig = new Questionuserconfig();
+                        questionuserconfig.setName("options");
+                        questionuserconfig.setQuestionid(question.getQuestionid());
+                        questionuserconfig.setUserid(user.getUserid());
+                        questionuserconfig.setValue(requestParam);
+                        try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+                    }
+                }
+            }
+        }
+        logger.debug("end processanswer");
     }
 
 

@@ -55,6 +55,7 @@ public class SavePost {
                 //facebookApiWrapper.updateFacebookProfile(user);
             }
         } catch (Exception ex){
+            ex.printStackTrace();
             logger.error(ex);
             allCex.addValidationError(ex.getMessage());
         }

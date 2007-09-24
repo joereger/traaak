@@ -47,6 +47,10 @@
 
 %>
 
+<style type="text/css">
+.questionfont{font-weight: bold;}
+</style>
+
 
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
     <tr>

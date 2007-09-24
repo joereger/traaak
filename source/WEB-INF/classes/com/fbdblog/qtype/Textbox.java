@@ -47,10 +47,10 @@ public class Textbox implements Component, ChartField {
 
     public String getHtmlForInput() {
         StringBuffer out = new StringBuffer();
-        out.append("<font class=\"formfieldnamefont\">"+question.getQuestion()+"</font>");
+        out.append("<font class=\"questionfont\">"+question.getQuestion()+"</font>");
         if (question.getIsrequired()){
             out.append(" ");
-            out.append("<font class=\"formfieldnamefont\" style=\"color: #ff0000;\">*</font>");
+            out.append("<font class=\"questionfont\" style=\"color: #ff0000;\">*</font>");
         }
         out.append("<br/>");
 
@@ -78,13 +78,15 @@ public class Textbox implements Component, ChartField {
         if (requestParams!=null && requestParams.length>0){
             for (int i = 0; i < requestParams.length; i++) {
                 String requestParam = requestParams[i];
-                Postanswer postanswer = new Postanswer();
-                postanswer.setQuestionid(question.getQuestionid());
-                postanswer.setUserid(user.getUserid());
-                postanswer.setName("response");
-                postanswer.setValue(requestParam.trim());
-                postanswer.setPostid(post.getPostid());
-                try{postanswer.save();}catch(Exception ex){logger.error(ex);}
+                if (requestParam!=null && requestParam.trim().length()>0){
+                    Postanswer postanswer = new Postanswer();
+                    postanswer.setQuestionid(question.getQuestionid());
+                    postanswer.setUserid(user.getUserid());
+                    postanswer.setName("response");
+                    postanswer.setValue(requestParam.trim());
+                    postanswer.setPostid(post.getPostid());
+                    try{postanswer.save();}catch(Exception ex){logger.error(ex);}
+                }
             }
         }
     }
