@@ -21,6 +21,7 @@ public class MegaChart {
     private Chart chart;
     private ArrayList<MegaChartSeries> megaChartSeries = null;
     private MegaChartEntryChooser entryChooser = null;
+    private MegaChartEntryChooser entryChooserCompareto = null;
     private String xAxisTitle = "";
     private String yAxisTitle = "";
     private int[] yquestionid = new int[0];
@@ -141,23 +142,32 @@ public class MegaChart {
         }
     }
 
-    public void loadMegaChartSeriesData(UserSession userSession){
+    public void loadMegaChartSeriesData(int appid, int userid, int comparetouserid){
         Logger logger = Logger.getLogger(this.getClass().getName());
 
-        if (userSession.getApp()!=null && userSession.getUser()!=null){
+        if (appid>0 && userid>0){
             //Get the list of entries that this chart covers
-            entryChooser = new MegaChartEntryChooser(this, userSession.getApp().getAppid(), userSession.getUser().getUserid());
+            entryChooser = new MegaChartEntryChooser(this, appid, userid);
             entryChooser.populate();
+
+            if (comparetouserid>0){
+                entryChooserCompareto = new MegaChartEntryChooser(this, appid, userid);
+                entryChooserCompareto.populate();
+            }
         
             int debugCount = 0;
             megaChartSeries = new ArrayList<MegaChartSeries>();
             //Iterate yAxis and create a series for each
             for (int i = 0; i < yquestionid.length; i++) {
-                int yMegaFieldidTmp = yquestionid[i];
-                MegaChartSeries seriesTmp = new MegaChartSeries(yMegaFieldidTmp, userSession.getApp().getAppid(), this, entryChooser);
+                int tmp = yquestionid[i];
+                MegaChartSeries seriesTmp = new MegaChartSeries(yquestionid[i], appid, this, entryChooser);
                 xAxisTitle = seriesTmp.getxAxisTitle();
                 yAxisTitle = seriesTmp.getyAxisTitle();
                 megaChartSeries.add(seriesTmp);
+                //Compare to
+                MegaChartSeries seriesCompare = new MegaChartSeries(yquestionid[i], appid, this, entryChooserCompareto);
+                megaChartSeries.add(seriesCompare);
+                //Debug
                 logger.debug("MegaChart.java - seriesTmp.cleanData.length="+seriesTmp.cleanData.length);
                 debugCount = debugCount + seriesTmp.cleanData.length;
             }
@@ -180,9 +190,6 @@ public class MegaChart {
         }
     }
 
-    public MegaChartEntryChooser getEntryChooser() {
-        return entryChooser;
-    }
 
 
     public int getxMegadatatype(){

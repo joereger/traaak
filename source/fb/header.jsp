@@ -51,7 +51,7 @@
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
     <tr>
         <td valign="top">
-            <font style="font-size: 18px;"><%=userSession.getApp().getTitle()%></font>
+            <font style="font-size: 24px; font-weight: bold;"><%=userSession.getApp().getTitle()%></font>
         </td>
         <td valign="top">
             <div align="right">

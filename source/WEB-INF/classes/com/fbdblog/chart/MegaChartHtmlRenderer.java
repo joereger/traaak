@@ -28,24 +28,24 @@ public class MegaChartHtmlRenderer {
         //Output the img tag that calls the chart.
         //The url line is my only interface to the graph object.
         //I create the url line delicately.
-        StringBuffer urlP=new StringBuffer();
-        urlP.append("xQuestionid="+ megaChart.getChart().getXquestionid()+"&");
-        for (int i = 0; i < megaChart.getYquestionid().length; i++) {
-            urlP.append("yQuestionid="+ megaChart.getYquestionid()[i] +"&");
-        }
-        urlP.append("yaxiswhattodo="+ megaChart.getChart().getYaxiswhattodo() +"&");
-        urlP.append("charttype="+ megaChart.getChart().getCharttype() +"&");
-        urlP.append("daterange="+ megaChart.getChart().getDaterange() +"&");
-        urlP.append("lastxdays="+ megaChart.getChart().getLastxdays() +"&");
-        urlP.append("lastxweeks="+ megaChart.getChart().getLastxweeks() +"&");
-        urlP.append("lastxmonths="+ megaChart.getChart().getLastxmonths() +"&");
-        urlP.append("lastxyears="+ megaChart.getChart().getLastxyears() +"&");
-        urlP.append("daterangefromyyyy="+ megaChart.getChart().getDaterangefromyyyy() +"&");
-        urlP.append("daterangefrommm="+ megaChart.getChart().getDaterangefrommm() +"&");
-        urlP.append("daterangefromdd="+ megaChart.getChart().getDaterangefromdd() +"&");
-        urlP.append("daterangetoyyyy="+ megaChart.getChart().getDaterangetoyyyy() +"&");
-        urlP.append("daterangetomm="+ megaChart.getChart().getDaterangetomm() +"&");
-        urlP.append("daterangetodd="+ megaChart.getChart().getDaterangetodd() +"&");
+//        StringBuffer urlP=new StringBuffer();
+//        urlP.append("xQuestionid="+ megaChart.getChart().getXquestionid()+"&");
+//        for (int i = 0; i < megaChart.getYquestionid().length; i++) {
+//            urlP.append("yQuestionid="+ megaChart.getYquestionid()[i] +"&");
+//        }
+//        urlP.append("yaxiswhattodo="+ megaChart.getChart().getYaxiswhattodo() +"&");
+//        urlP.append("charttype="+ megaChart.getChart().getCharttype() +"&");
+//        urlP.append("daterange="+ megaChart.getChart().getDaterange() +"&");
+//        urlP.append("lastxdays="+ megaChart.getChart().getLastxdays() +"&");
+//        urlP.append("lastxweeks="+ megaChart.getChart().getLastxweeks() +"&");
+//        urlP.append("lastxmonths="+ megaChart.getChart().getLastxmonths() +"&");
+//        urlP.append("lastxyears="+ megaChart.getChart().getLastxyears() +"&");
+//        urlP.append("daterangefromyyyy="+ megaChart.getChart().getDaterangefromyyyy() +"&");
+//        urlP.append("daterangefrommm="+ megaChart.getChart().getDaterangefrommm() +"&");
+//        urlP.append("daterangefromdd="+ megaChart.getChart().getDaterangefromdd() +"&");
+//        urlP.append("daterangetoyyyy="+ megaChart.getChart().getDaterangetoyyyy() +"&");
+//        urlP.append("daterangetomm="+ megaChart.getChart().getDaterangetomm() +"&");
+//        urlP.append("daterangetodd="+ megaChart.getChart().getDaterangetodd() +"&");
 
 
 
@@ -59,8 +59,11 @@ public class MegaChartHtmlRenderer {
         }
         mb.append("</font><br>");
 
-        //Chart image
-        mb.append("<img src='/fb/graph.jsp?"+urlP+"' border=0>");
+        //Chart image only if we have a chartid to look at
+        if (megaChart.getChart()!=null && megaChart.getChart().getChartid()>0){
+            mb.append("<img src='/fb/graph.jsp??chartid="+megaChart.getChart().getChartid()+"&userid=0&size=medium&comparetouserid=0' border=0>");
+        }
+
         mb.append("</td></tr>");
 
 

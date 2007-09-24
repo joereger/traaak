@@ -58,7 +58,7 @@ public class AppTemplateProcessor {
         } catch (Exception e){
             //Do nothing... just null pointer
         }
-        return "<div style=\"background : #ffffff; border: 0px solid #ffffff; padding : 5px; width : 425px; overflow : auto;\">"+out.toString()+"</div>";
+        return "<div style=\"background : #ffffff; border: 0px solid #ffffff; padding : 5px; width : 220px; overflow : auto;\">"+out.toString()+"</div>";
     }
 
 
