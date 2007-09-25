@@ -8,20 +8,30 @@
 <%@ page import="com.fbdblog.dao.Chart" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
+<%@ page import="com.fbdblog.dao.Post" %>
+<%@ page import="com.fbdblog.util.Num" %>
 <%@ include file="header.jsp" %>
+
+<%
+    //Load the post requested
+    Post post=null;
+    if (request.getParameter("postid") != null && Num.isinteger(request.getParameter("postid"))) {
+        post=Post.get(Integer.parseInt(request.getParameter("postid")));
+    }
+%>
 
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("trackit")) {
         AppPostParser appPostParser = new AppPostParser(request);
         try {
-            SavePost.save(userSession.getApp(), userSession.getUser(), appPostParser);
+            SavePost.save(userSession.getApp(), userSession.getUser(), post, appPostParser);
             out.print("<fb:success>\n" +
             "     <fb:message>Success!  Data tracked!</fb:message>\n" +
             "     We've also updated your profile so that others can check you out.\n" +
             "</fb:success>");
         } catch (ComponentException cex) {
             out.print(" <fb:error>\n" +
-            "      <fb:message>Oops, there was an error:</fb:message>\n" +
+            "      <fb:message>Houston, we have a problem.</fb:message>\n" +
             "      "+cex.getErrorsAsSingleString()+"\n" +
             " </fb:error>");
         }
@@ -67,9 +77,18 @@
                 <input type="hidden" name="action" value="trackit" />
 
                 <%
-                AppTemplateProcessor atp = new AppTemplateProcessor(userSession.getApp(), userSession.getUser(), null);
+                if (post!=null && post.getPostid()>0){
+                    %>
+                    <input type="hidden" name="postid" value="<%=post.getPostid()%>"/>
+                    <%
+                }
+                %>
+
+                <%
+                AppTemplateProcessor atp = new AppTemplateProcessor(userSession.getApp(), userSession.getUser(), post);
                 out.print(atp.getHtmlForInput(false));
                 %>
+
                 <div style="background : #ffffff; border: 0px solid #ffffff; padding : 5px; width : 220px; overflow : auto;">
                     <font class="questionfont">Notes:</font>
                     <br/>

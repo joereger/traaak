@@ -2,6 +2,7 @@ package com.fbdblog.chart;
 
 import org.jdom.Element;
 import com.fbdblog.util.ValidationException;
+import com.fbdblog.qtype.def.ComponentException;
 
 /**
  * Defines a DataType, not a field type.
@@ -13,7 +14,7 @@ public interface DataType {
 
     public int getDataTypeId();
 
-    public boolean validataData(String in) throws ValidationException;
+    public boolean validataData(String in) throws ComponentException;
 
     public Element getXmlSchemaRepresentationOfType();
 

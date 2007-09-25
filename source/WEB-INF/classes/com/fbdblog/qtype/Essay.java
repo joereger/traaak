@@ -11,6 +11,8 @@ import com.fbdblog.qtype.def.Component;
 import com.fbdblog.qtype.def.ComponentException;
 import com.fbdblog.qtype.util.AppPostParser;
 import com.fbdblog.chart.ChartField;
+import com.fbdblog.chart.DataType;
+import com.fbdblog.chart.DataTypeFactory;
 
 import java.util.TreeMap;
 import java.util.ArrayList;
@@ -54,7 +56,22 @@ public class Essay implements Component, ChartField {
         }
         out.append("<br/>");
 
-        out.append("<textarea cols=\"30\" rows=\"3\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\"></textarea>");
+        String value = "";
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    if (postanswer.getName().equals("response")){
+                        value=postanswer.getValue();
+                        break;
+                    }
+                }
+            }
+        }
+
+        out.append("<textarea cols=\"30\" rows=\"3\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\">");
+        out.append(value);
+        out.append("</textarea>");
 
         return out.toString();
     }
@@ -62,14 +79,36 @@ public class Essay implements Component, ChartField {
 
 
     public void validateAnswer(AppPostParser srp) throws ComponentException {
+        ComponentException allCex = new ComponentException();
+        //Requiredness validation
         if (question.getIsrequired()){
             String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
-            if (requestParams==null || requestParams.length<1){
-                throw new ComponentException(question.getQuestion()+" is required.");
+            if (requestParams==null || requestParams.length<1 || requestParams[0]==null || requestParams[0].trim().equals("")){
+                allCex.addErrorsFromAnotherGeneralException(new ComponentException("'"+question.getQuestion()+"' is required."), "");
             }
-            if (requestParams[0]==null || requestParams[0].equals("")){
-                throw new ComponentException(question.getQuestion()+" is required.");
+        }
+        //Datatype validation
+        DataType dt = DataTypeFactory.get(question.getDatatypeid());
+        try{
+            String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
+            if (requestParams!=null && requestParams.length>0){
+                for (int i = 0; i < requestParams.length; i++) {
+                    String requestParam = requestParams[i];
+                    if (requestParam!=null && requestParam.trim().length()>0){
+                        dt.validataData(requestParam);
+                    }
+                }
             }
+        } catch (ComponentException cex){
+            allCex.addErrorsFromAnotherGeneralException(cex, "'"+question.getQuestion()+"' ");
+        } catch (Exception ex){
+            ex.printStackTrace();
+            logger.error(ex);
+            allCex.addValidationError(ex.getMessage());
+        }
+        //Throw if necessary
+        if(allCex.getErrors().length>0){
+            throw allCex;
         }
     }
 

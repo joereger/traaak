@@ -2,6 +2,7 @@ package com.fbdblog.chart;
 
 import org.jdom.Element;
 import com.fbdblog.util.ValidationException;
+import com.fbdblog.qtype.def.ComponentException;
 
 /**
  * A Data Type.
@@ -19,7 +20,7 @@ public class DataTypeString implements DataType{
         return DATATYPEID;
     }
 
-    public boolean validataData (String in) throws ValidationException {
+    public boolean validataData (String in) throws ComponentException {
         return true;
     }
 

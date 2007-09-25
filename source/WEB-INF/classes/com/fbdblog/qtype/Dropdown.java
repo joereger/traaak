@@ -12,6 +12,8 @@ import com.fbdblog.qtype.def.ComponentException;
 import com.fbdblog.qtype.util.AppPostParser;
 import com.fbdblog.util.Str;
 import com.fbdblog.chart.ChartField;
+import com.fbdblog.chart.DataType;
+import com.fbdblog.chart.DataTypeFactory;
 
 /**
  * User: Joe Reger Jr
@@ -65,7 +67,11 @@ public class Dropdown implements Component, ChartField {
         String[] optionsSplit = options.split("\\n");
         for (int i = 0; i < optionsSplit.length; i++) {
             String s = optionsSplit[i];
-            out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\">" + s.trim() + "</option>");
+            String selected = "";
+            if (isThisOptionSelected(s)){
+                selected = " selected";
+            }
+            out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\" "+selected+">" + s.trim() + "</option>");
         }
         //User options
         List<Questionuserconfig> questionuserconfigs = HibernateUtil.getSession().createCriteria(Questionuserconfig.class)
@@ -84,10 +90,14 @@ public class Dropdown implements Component, ChartField {
         for (int i = 0; i < userOptionsSplit.length; i++) {
             String s = userOptionsSplit[i];
             if (s.trim().length()>0){
-                out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\">" + s.trim() + "</option>");
+                String selected = "";
+                if (isThisOptionSelected(s)){
+                    selected = " selected";
+                }
+                out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\" "+selected+">" + s.trim() + "</option>");
             }
         }
-        //Close select
+        //Close select tag
         out.append("</select>");
 
         //User inputs own option
@@ -99,17 +109,55 @@ public class Dropdown implements Component, ChartField {
         return out.toString();
     }
 
+    private boolean isThisOptionSelected(String option){
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    if (postanswer.getName().equals("response")){
+                        if (postanswer.getValue().trim().equals(option.trim())){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 
 
     public void validateAnswer(AppPostParser srp) throws ComponentException {
+        ComponentException allCex = new ComponentException();
+        //Requiredness validation
         if (question.getIsrequired()){
             String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
-            if (requestParams==null || requestParams.length<1){
-                throw new ComponentException(question.getQuestion()+" is required.");
+            if (requestParams==null || requestParams.length<1 || requestParams[0]==null || requestParams[0].trim().equals("")){
+                allCex.addErrorsFromAnotherGeneralException(new ComponentException("'"+question.getQuestion()+"' is required."), "");
             }
-            if (requestParams[0]==null || requestParams[0].equals("")){
-                throw new ComponentException(question.getQuestion()+" is required.");
+        }
+        //Datatype validation
+        DataType dt = DataTypeFactory.get(question.getDatatypeid());
+        try{
+            String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
+            if (requestParams!=null && requestParams.length>0){
+                for (int i = 0; i < requestParams.length; i++) {
+                    String requestParam = requestParams[i];
+                    if (requestParam!=null && requestParam.trim().length()>0){
+                        dt.validataData(requestParam);
+                    }
+                }
             }
+        } catch (ComponentException cex){
+            allCex.addErrorsFromAnotherGeneralException(cex, "'"+question.getQuestion()+"' ");
+        } catch (Exception ex){
+            ex.printStackTrace();
+            logger.error(ex);
+            allCex.addValidationError(ex.getMessage());
+        }
+        //Throw if necessary
+        if(allCex.getErrors().length>0){
+            throw allCex;
         }
     }
 

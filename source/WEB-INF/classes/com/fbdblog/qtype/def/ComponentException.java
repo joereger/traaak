@@ -27,9 +27,9 @@ public class ComponentException extends Exception {
         return mb.toString();
     }
 
-    public void addErrorsFromAnotherGeneralException(ComponentException errors){
+    public void addErrorsFromAnotherGeneralException(ComponentException errors, String prependtoeacherror){
         for (int i = 0; i < errors.getErrors().length; i++) {
-            addValidationError(errors.getErrors()[i]);
+            addValidationError(prependtoeacherror+errors.getErrors()[i]);
         }
     }
 

@@ -3,6 +3,7 @@ package com.fbdblog.chart;
 import org.jdom.Element;
 import com.fbdblog.util.ValidationException;
 import com.fbdblog.util.Num;
+import com.fbdblog.qtype.def.ComponentException;
 
 /**
  * A Data Type.
@@ -21,12 +22,12 @@ public class DataTypeDecimal implements DataType{
 
 
 
-    public boolean validataData(String in) throws ValidationException {
-        if (Num.isdouble(in)){
+    public boolean validataData(String in) throws ComponentException {
+        if (Num.isdouble(in.trim())){
             return true;
         } else {
-            ValidationException ex = new ValidationException();
-            ex.addValidationError("Not a number.");
+            ComponentException ex = new ComponentException();
+            ex.addValidationError("should be a number.");
             throw ex;
         }
     }

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.fbdblog.util.ValidationException;
+import com.fbdblog.qtype.def.ComponentException;
 
 /**
  * A Data Type.
@@ -22,15 +23,15 @@ public class DataTypeDatetime implements DataType{
         return DATATYPEID;
     }
 
-    public boolean validataData(String in) throws ValidationException{
+    public boolean validataData(String in) throws ComponentException {
         try{
 			DateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(myDateFormat.parse(in));
 			return true;
 		} catch(Exception e) {
-            ValidationException ex = new ValidationException();
-            ex.addValidationError("Not a date of the form yyyy-MM-dd HH:mm:ss.");
+            ComponentException ex = new ComponentException();
+            ex.addValidationError("should be a date of the form yyyy-MM-dd HH:mm:ss.");
             throw ex;
 		}
 
