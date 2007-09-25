@@ -9,6 +9,7 @@ import com.fbdblog.dao.Question;
 import com.fbdblog.dao.User;
 import com.fbdblog.dao.Post;
 import com.fbdblog.dao.Postanswer;
+import com.fbdblog.util.Num;
 import org.apache.log4j.Logger;
 
 import java.util.TreeMap;
@@ -56,19 +57,27 @@ public class Timeperiod implements Component, ChartField {
         out.append("<table cellpadding='0' cellspacing='0' border='0'>");
         out.append("<tr>");
         out.append("<td valign='top'>");
-            out.append("<input type=\"text\" size=\"2\" maxlength=\"5\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-hours\">");
+            out.append("<input type=\"text\" size=\"2\" maxlength=\"5\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-hours\"> : ");
         out.append("</td>");
         out.append("<td valign='top'>");
-            out.append("<input type=\"text\" size=\"2\" maxlength=\"5\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-minutes\">");
+            out.append("<input type=\"text\" size=\"2\" maxlength=\"5\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-minutes\"> : ");
         out.append("</td>");
         out.append("<td valign='top'>");
             out.append("<input type=\"text\" size=\"2\" maxlength=\"5\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-seconds\">");
         out.append("</td>");
         out.append("</tr>");
+        out.append("<tr>");
+        out.append("<td valign='top'>");
+            out.append("<font size=-2>hrs</font>");
+        out.append("</td>");
+        out.append("<td valign='top'>");
+            out.append("<font size=-2>min</font>");
+        out.append("</td>");
+        out.append("<td valign='top'>");
+            out.append("<font size=-2>sec</font>");
+        out.append("</td>");
+        out.append("</tr>");
         out.append("</table>");
-
-
-
         return out.toString();
     }
 
@@ -87,21 +96,32 @@ public class Timeperiod implements Component, ChartField {
     }
 
     public void processAnswer(AppPostParser srp, Post post) throws ComponentException {
-        //@todo process Timeperiod to DB
-        String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
-        if (requestParams!=null && requestParams.length>0){
-            for (int i = 0; i < requestParams.length; i++) {
-                String requestParam = requestParams[i];
-                if (requestParam!=null && requestParam.trim().length()>0){
-                    Postanswer postanswer = new Postanswer();
-                    postanswer.setQuestionid(question.getQuestionid());
-                    postanswer.setUserid(user.getUserid());
-                    postanswer.setName("response");
-                    postanswer.setValue(requestParam.trim());
-                    postanswer.setPostid(post.getPostid());
-                    try{postanswer.save();}catch(Exception ex){logger.error(ex);}
-                }
-            }
+        String[] requestParamsHours = srp.getParamsWithCertainStringForQuestion(question.getQuestionid(), "-hours");
+        String[] requestParamsMinutes = srp.getParamsWithCertainStringForQuestion(question.getQuestionid(), "-minutes");
+        String[] requestParamsSeconds = srp.getParamsWithCertainStringForQuestion(question.getQuestionid(), "-seconds");
+
+        int hours = 0;
+        if (requestParamsHours!=null && Num.isinteger(requestParamsHours[0])){
+            hours = Integer.parseInt(requestParamsHours[0]);
+        }
+        int minutes = 0;
+        if (requestParamsMinutes!=null && Num.isinteger(requestParamsMinutes[0])){
+            minutes = Integer.parseInt(requestParamsMinutes[0]);
+        }
+        int seconds = 0;
+        if (requestParamsSeconds!=null && Num.isinteger(requestParamsSeconds[0])){
+            seconds = Integer.parseInt(requestParamsSeconds[0]);   
+        }
+        int totalseconds = (hours*3600)+(minutes*60)+seconds;
+
+        if (totalseconds>0){
+            Postanswer postanswer = new Postanswer();
+            postanswer.setQuestionid(question.getQuestionid());
+            postanswer.setUserid(user.getUserid());
+            postanswer.setName("response");
+            postanswer.setValue(String.valueOf(totalseconds));
+            postanswer.setPostid(post.getPostid());
+            try{postanswer.save();}catch(Exception ex){logger.error(ex);}
         }
     }
 

@@ -35,9 +35,6 @@
         }
         megaChart = new MegaChart(0);
     }
-    
-
-
 %>
 
 <%

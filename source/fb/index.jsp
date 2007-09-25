@@ -37,6 +37,7 @@
 
 <%
     //Load a chart
+    //@todo Define a chart as the primary chart for the app
     int chartid = 0;
     List<Chart> charts=HibernateUtil.getSession().createCriteria(Chart.class)
             .add(Restrictions.eq("appid", userSession.getApp().getAppid()))

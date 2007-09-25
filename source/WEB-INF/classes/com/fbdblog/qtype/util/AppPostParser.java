@@ -125,14 +125,14 @@ public class AppPostParser {
         return out;
     }
 
-    public String[] getNewoptionParamsForQuestion(int questionid){
+    public String[] getParamsWithCertainStringForQuestion(int questionid, String str){
         String[] out = new String[0];
         Iterator keyValuePairs = nameValuePairs.entrySet().iterator();
         for (int i = 0; i < nameValuePairs.size(); i++){
             Map.Entry mapentry = (Map.Entry) keyValuePairs.next();
             String name = (String)mapentry.getKey();
             String[] values = (String[])mapentry.getValue();
-            if (name.indexOf("questionid_"+questionid)>-1 && name.indexOf("-newoption")>-1){
+            if (name.indexOf("questionid_"+questionid)>-1 && name.indexOf(str)>-1){
                 //Trim all values and hold in valuesTmp
                 String[] valuesTmp = new String[values.length];
                 for (int j = 0; j < values.length; j++) {

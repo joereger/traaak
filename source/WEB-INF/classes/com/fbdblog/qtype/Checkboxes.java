@@ -138,7 +138,7 @@ public class Checkboxes implements Component, ChartField {
             }
         }
         //Handle new user options
-        String[] newOptionRequestParams = srp.getNewoptionParamsForQuestion(question.getQuestionid());
+        String[] newOptionRequestParams = srp.getParamsWithCertainStringForQuestion(question.getQuestionid(), "-newoption");
         if (newOptionRequestParams!=null && newOptionRequestParams.length>0){
             for (int i = 0; i < newOptionRequestParams.length; i++) {
                 String requestParam = newOptionRequestParams[i];

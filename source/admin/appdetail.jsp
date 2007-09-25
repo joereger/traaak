@@ -116,6 +116,8 @@ Questions:
             comptypefilename = "matrix";
         } else if (question.getComponenttype() == Range.ID) {
             comptypefilename = "range";
+        } else if (question.getComponenttype() == Timeperiod.ID) {
+            comptypefilename = "timeperiod";
         }
         %>
         <a href="appdetail-question-<%=comptypefilename%>.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>"><%=question.getQuestion()%></a><br/>

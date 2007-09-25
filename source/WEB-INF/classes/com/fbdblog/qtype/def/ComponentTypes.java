@@ -43,6 +43,9 @@ public class ComponentTypes {
         if (ID== Matrix.ID){
             return new Matrix(user, post, question);
         }
+        if (ID== Timeperiod.ID){
+            return new Timeperiod(user, post, question);
+        }
         return null;
     }
 
@@ -55,6 +58,7 @@ public class ComponentTypes {
             typesaslinkedhashmap.put(Checkboxes.NAME, Checkboxes.ID);
             typesaslinkedhashmap.put(Range.NAME, Range.ID);
             typesaslinkedhashmap.put(Matrix.NAME, Matrix.ID);
+            typesaslinkedhashmap.put(Timeperiod.NAME, Timeperiod.ID);
         }
         return typesaslinkedhashmap;
     }
