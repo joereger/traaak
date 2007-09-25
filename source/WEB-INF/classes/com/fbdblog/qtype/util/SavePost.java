@@ -33,6 +33,14 @@ public class SavePost {
             post.setUserid(user.getUserid());
             post.setPostdate(new Date());
             post.setAppid(app.getAppid());
+            String notes = "";
+            String[] notesParams = appPostParser.getParamsWithCertainString("notes");
+            if (notesParams!=null && notesParams.length>0){
+                if (notesParams[0]!=null){
+                    notes = notesParams[0];
+                }
+            }
+            post.setNotes(notes);
             try{
                 post.save();
             } catch (Exception ex){

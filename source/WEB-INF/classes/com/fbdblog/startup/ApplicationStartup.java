@@ -80,7 +80,7 @@ public class ApplicationStartup implements ServletContextListener {
         } catch (Exception ex){logger.error(ex);}
         //Report to log and XMPP
         logger.info("WebAppRootDir = " + WebAppRootDir.getWebAppRootPath());
-        logger.info("Fbdblog Application Started!  Let's make some dinero!");
+        logger.info("Fbdblog Application Started!  Let's track some stuff!");
         SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_SYSADMINS, "Fbdblog Application started! ("+WebAppRootDir.getUniqueContextId()+")");
         xmpp.send();
     }

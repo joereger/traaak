@@ -70,8 +70,13 @@
                 AppTemplateProcessor atp = new AppTemplateProcessor(userSession.getApp(), userSession.getUser(), null);
                 out.print(atp.getHtmlForInput(false));
                 %>
-
-                <input id="sendbutton" type="submit" value="Track It" />
+                <div style="background : #ffffff; border: 0px solid #ffffff; padding : 5px; width : 220px; overflow : auto;">
+                    <font class="questionfont">Notes:</font>
+                    <br/>
+                    <textarea cols="30" rows="3" name="<%=AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER%>notes"></textarea>
+                    <br/>
+                    <input id="sendbutton" type="submit" value="Track It" />
+                </div>
             </form>
         </td>
         <td valign="top" width="400">

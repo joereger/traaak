@@ -148,4 +148,28 @@ public class AppPostParser {
         return out;
     }
 
+    public String[] getParamsWithCertainString(String str){
+        String[] out = new String[0];
+        Iterator keyValuePairs = nameValuePairs.entrySet().iterator();
+        for (int i = 0; i < nameValuePairs.size(); i++){
+            Map.Entry mapentry = (Map.Entry) keyValuePairs.next();
+            String name = (String)mapentry.getKey();
+            String[] values = (String[])mapentry.getValue();
+            if (name.indexOf(str)>-1){
+                //Trim all values and hold in valuesTmp
+                String[] valuesTmp = new String[values.length];
+                for (int j = 0; j < values.length; j++) {
+                    String s = values[j];
+                    if (s.trim().length()>0){
+                        valuesTmp[j] = s.trim();
+                    }
+                }
+                //Add valuesTmp
+                out = Util.appendToEndOfStringArray(out, valuesTmp);
+            }
+        }
+        return out;
+    }
+
+
 }

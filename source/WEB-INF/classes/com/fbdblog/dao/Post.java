@@ -23,6 +23,7 @@ public class Post extends BasePersistentClass implements java.io.Serializable, R
      private int appid;
      private int userid;
      private Date postdate;
+     private String notes;
      private Set<Postanswer> postanswers = new HashSet<Postanswer>();
 
     //Validator
@@ -111,5 +112,14 @@ public class Post extends BasePersistentClass implements java.io.Serializable, R
 
     public void setPostanswers(Set<Postanswer> postanswers) {
         this.postanswers = postanswers;
+    }
+
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes=notes;
     }
 }

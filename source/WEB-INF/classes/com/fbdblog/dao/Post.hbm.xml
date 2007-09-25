@@ -23,7 +23,9 @@
         <property name="postdate" type="timestamp">
             <column name="postdate" not-null="true" />
         </property>
-
+        <property name="notes" type="text">
+            <column name="notes" not-null="true" />
+        </property>
 
     </class>
 </hibernate-mapping>
