@@ -73,22 +73,13 @@ public class Matrix implements Component, ChartField {
         }
         String[] rows = rowsStr.split("\\n");
         String[] cols = colsStr.split("\\n");
+
         boolean respondentcanselectmany = false;
         if (respondentcanselectmanyStr.equals("1")){
             respondentcanselectmany = true;
         }
 
-        //@todo implement matrix edit display capability
-        if (post!=null && post.getPostanswers()!=null){
-            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
-                Postanswer postanswer=iterator.next();
-                if (postanswer.getQuestionid()==question.getQuestionid()){
-                    if (postanswer.getName().equals("response")){
-                        //Do something
-                    }
-                }
-            }
-        }
+
 
         //Display
         out.append("<table cellpadding=\"3\" cellspacing=\"1\" border=\"0\">");
@@ -116,10 +107,14 @@ public class Matrix implements Component, ChartField {
             for (int j = 0; j < cols.length; j++) {
                 String col = cols[j].trim();
                 out.append("<td align=\"center\" valign=\"top\">");
+                String checked = "";
+                if (isThisOptionSelected(row, col)){
+                    checked = " checked='true'";
+                }
                 if (respondentcanselectmany){
-                    out.append("<input type=\"checkbox\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_row_"+Str.cleanForHtml(row)+"\" value=\""+Str.cleanForHtml(row+DELIM+col)+"\">");
+                    out.append("<input type=\"checkbox\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_row_"+Str.cleanForHtml(row)+"\" value=\""+Str.cleanForHtml(row+DELIM+col)+"\" "+checked+">");
                 } else {
-                    out.append("<input type=\"radio\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_row_"+Str.cleanForHtml(row)+"\" value=\""+Str.cleanForHtml(row+DELIM+col)+"\">");
+                    out.append("<input type=\"radio\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_row_"+Str.cleanForHtml(row)+"\" value=\""+Str.cleanForHtml(row+DELIM+col)+"\" "+checked+">");
                 }
                 out.append("</td>");
             }
@@ -130,6 +125,22 @@ public class Matrix implements Component, ChartField {
 
 
         return out.toString();
+    }
+
+    private boolean isThisOptionSelected(String row, String col){
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    if (postanswer.getName().equals("response")){
+                        if (postanswer.getValue().trim().equals(row+DELIM+col)){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 
@@ -171,6 +182,16 @@ public class Matrix implements Component, ChartField {
 
 
     public void processAnswer(AppPostParser srp, Post post) throws ComponentException {
+        //Delete any existing postanswers for this questionid
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    try{iterator.remove();}catch(Exception ex){logger.error(ex);}
+                }
+            }
+        }
+        //Now save the latest stuff
         logger.debug("made it to processAnswer");
         String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
         if (requestParams!=null && requestParams.length>0){

@@ -109,7 +109,7 @@ public class AppPostParser {
             Map.Entry mapentry = (Map.Entry) keyValuePairs.next();
             String name = (String)mapentry.getKey();
             String[] values = (String[])mapentry.getValue();
-            if (name.indexOf("questionid_"+questionid)>-1){
+            if (name.indexOf("questionid_"+questionid+"_")>-1){
                 //Trim all values and hold in valuesTmp
                 String[] valuesTmp = new String[values.length];
                 for (int j = 0; j < values.length; j++) {
@@ -132,7 +132,7 @@ public class AppPostParser {
             Map.Entry mapentry = (Map.Entry) keyValuePairs.next();
             String name = (String)mapentry.getKey();
             String[] values = (String[])mapentry.getValue();
-            if (name.indexOf("questionid_"+questionid)>-1 && name.indexOf(str)>-1){
+            if (name.indexOf("questionid_"+questionid+"_")>-1 && name.indexOf(str)>-1){
                 //Trim all values and hold in valuesTmp
                 String[] valuesTmp = new String[values.length];
                 for (int j = 0; j < values.length; j++) {

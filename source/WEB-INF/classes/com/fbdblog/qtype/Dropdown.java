@@ -54,7 +54,7 @@ public class Dropdown implements Component, ChartField {
         out.append("<br/>");
 
         //Select options
-        out.append("<select name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\">");
+        out.append("<select name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_\">");
         out.append("<option value=\"\"></option>");
         //Main options
         String options = "";
@@ -69,7 +69,7 @@ public class Dropdown implements Component, ChartField {
             String s = optionsSplit[i];
             String selected = "";
             if (isThisOptionSelected(s)){
-                selected = " selected";
+                selected = " selected='true'";
             }
             out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\" "+selected+">" + s.trim() + "</option>");
         }
@@ -92,7 +92,7 @@ public class Dropdown implements Component, ChartField {
             if (s.trim().length()>0){
                 String selected = "";
                 if (isThisOptionSelected(s)){
-                    selected = " selected";
+                    selected = " selected='true'";
                 }
                 out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\" "+selected+">" + s.trim() + "</option>");
             }
@@ -104,7 +104,7 @@ public class Dropdown implements Component, ChartField {
         out.append("<br/>");
         out.append("<font size=-2>Or, enter your own:</font>");
         out.append("<br/>");
-        out.append("<input type='text' name=\""+AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-newoption\" value=\""+""+"\" size=\"20\" maxlength=\"255\" style=\"font-size: 7px;\">");
+        out.append("<input type='text' name=\""+AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_-newoption\" value=\""+""+"\" size=\"20\" maxlength=\"255\" style=\"font-size: 7px;\">");
 
         return out.toString();
     }
@@ -162,6 +162,16 @@ public class Dropdown implements Component, ChartField {
     }
 
     public void processAnswer(AppPostParser srp, Post post) throws ComponentException {
+        //Delete any existing postanswers for this questionid
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    try{iterator.remove();}catch(Exception ex){logger.error(ex);}
+                }
+            }
+        }
+        //Now save the latest stuff
         logger.debug("start processanswer");
         //Save the answers
         String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());

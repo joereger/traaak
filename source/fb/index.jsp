@@ -10,6 +10,7 @@
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
 <%@ page import="com.fbdblog.dao.Post" %>
 <%@ page import="com.fbdblog.util.Num" %>
+<%@ page import="com.fbdblog.util.Time" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -73,6 +74,17 @@
 <table>
     <tr>
         <td valign="top" width="220">
+            <%
+            if (post!=null && post.getPostid()>0){
+                %>
+                <font size=-2>
+                Editing data from <%=Time.dateformatcompactwithtime(Time.getCalFromDate(post.getPostdate()))%>.
+                <br/><a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main'>Start new?</a>
+                </font>
+                <br/>
+                <%
+            }
+            %>
             <form action="">
                 <input type="hidden" name="action" value="trackit" />
 
@@ -92,7 +104,13 @@
                 <div style="background : #ffffff; border: 0px solid #ffffff; padding : 5px; width : 220px; overflow : auto;">
                     <font class="questionfont">Notes:</font>
                     <br/>
-                    <textarea cols="30" rows="3" name="<%=AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER%>notes"></textarea>
+                    <%
+                    String notes = "";
+                    if (post!=null && post.getPostid()>0){
+                        notes = post.getNotes();
+                    }
+                    %>
+                    <textarea cols="30" rows="3" name="<%=AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER%>notes"><%=notes%></textarea>
                     <br/>
                     <input id="sendbutton" type="submit" value="Track It" />
                 </div>

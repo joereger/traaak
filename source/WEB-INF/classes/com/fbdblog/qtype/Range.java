@@ -95,15 +95,23 @@ public class Range implements Component, ChartField {
             if (i==max){
                 createdExactlyMaxRadio = true;
             }
+            String checked = "";
+            if (isThisOptionSelected(String.valueOf(i))){
+                checked = " checked";
+            }
             out.append("<td align=\"center\" valign=\"top\">");
-            out.append("<input type=\"radio\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\" value=\""+i+"\">");
+            out.append("<input type=\"radio\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_\" value=\""+i+"\" "+checked+">");
             out.append("<br>");
             out.append(i);
             out.append("</td>");
         }
         if (!createdExactlyMaxRadio){
+            String checked = "";
+            if (isThisOptionSelected(String.valueOf(max))){
+                checked = " checked";
+            }
             out.append("<td align=\"center\" valign=\"top\">");
-            out.append("<input type=\"radio\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\" value=\""+max+"\">");
+            out.append("<input type=\"radio\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_\" value=\""+max+"\" "+checked+">");
             out.append("<br>");
             out.append(max);
             out.append("</td>");
@@ -116,6 +124,22 @@ public class Range implements Component, ChartField {
         
 
         return out.toString();
+    }
+
+    private boolean isThisOptionSelected(String option){
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    if (postanswer.getName().equals("response")){
+                        if (postanswer.getValue().trim().equals(option)){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 
@@ -155,6 +179,16 @@ public class Range implements Component, ChartField {
     }
 
     public void processAnswer(AppPostParser srp, Post post) throws ComponentException {
+        //Delete any existing postanswers for this questionid
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    try{iterator.remove();}catch(Exception ex){logger.error(ex);}
+                }
+            }
+        }
+        //Now save the latest stuff
         String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
         if (requestParams!=null && requestParams.length>0){
             for (int i = 0; i < requestParams.length; i++) {

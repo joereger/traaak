@@ -69,7 +69,7 @@ public class Essay implements Component, ChartField {
             }
         }
 
-        out.append("<textarea cols=\"30\" rows=\"3\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\">");
+        out.append("<textarea cols=\"30\" rows=\"3\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_\">");
         out.append(value);
         out.append("</textarea>");
 
@@ -113,6 +113,16 @@ public class Essay implements Component, ChartField {
     }
 
     public void processAnswer(AppPostParser srp, Post post) throws ComponentException {
+        //Delete any existing postanswers for this questionid
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    try{iterator.remove();}catch(Exception ex){logger.error(ex);}
+                }
+            }
+        }
+        //Now save the latest stuff
         String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
         if (requestParams!=null && requestParams.length>0){
             for (int i = 0; i < requestParams.length; i++) {

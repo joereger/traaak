@@ -84,6 +84,8 @@ public class SavePost {
                     //facebookApiWrapper.postSurveyToFacebookMiniFeed(survey, post);
                     //facebookApiWrapper.updateFacebookProfile(user);
                 }
+                //Refresh the post
+                try{post.save();} catch (Exception ex){logger.error(ex);}
             } catch (Exception ex){
                 ex.printStackTrace();
                 logger.error(ex);

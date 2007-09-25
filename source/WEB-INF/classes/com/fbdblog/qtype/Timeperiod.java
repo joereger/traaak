@@ -11,6 +11,7 @@ import com.fbdblog.dao.User;
 import com.fbdblog.dao.Post;
 import com.fbdblog.dao.Postanswer;
 import com.fbdblog.util.Num;
+import com.fbdblog.util.HoursMinutesSeconds;
 import org.apache.log4j.Logger;
 
 import java.util.TreeMap;
@@ -55,31 +56,40 @@ public class Timeperiod implements Component, ChartField {
         }
         out.append("<br/>");
 
-        String value = "";
+        int baseseconds = 0;
+        int hrs = 0;
+        int min = 0;
+        int sec = 0;
         if (post!=null && post.getPostanswers()!=null){
             for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
                 Postanswer postanswer=iterator.next();
                 if (postanswer.getQuestionid()==question.getQuestionid()){
                     if (postanswer.getName().equals("response")){
-                        value=postanswer.getValue();
-                        break;
+                        if (Num.isinteger(postanswer.getValue())){
+                            baseseconds = Integer.parseInt(postanswer.getValue());
+                            break;
+                        }
                     }
                 }
             }
+            HoursMinutesSeconds hms = new HoursMinutesSeconds(baseseconds);
+            hrs = hms.getHours();
+            min = hms.getMinutes();
+            sec = hms.getSeconds();
         }
 
-        //@todo convert seconds to h:m:s... I think I have some utility code to do this already
+
 
         out.append("<table cellpadding='0' cellspacing='0' border='0'>");
         out.append("<tr>");
         out.append("<td valign='top'>");
-            out.append("<input type=\"text\" size=\"2\" maxlength=\"5\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-hours\"> : ");
+            out.append("<input type=\"text\" size=\"2\" maxlength=\"5\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_-hours\" value=\""+hrs+"\"> : ");
         out.append("</td>");
         out.append("<td valign='top'>");
-            out.append("<input type=\"text\" size=\"2\" maxlength=\"5\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-minutes\"> : ");
+            out.append("<input type=\"text\" size=\"2\" maxlength=\"5\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_-minutes\" value=\""+min+"\"> : ");
         out.append("</td>");
         out.append("<td valign='top'>");
-            out.append("<input type=\"text\" size=\"2\" maxlength=\"5\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"-seconds\">");
+            out.append("<input type=\"text\" size=\"2\" maxlength=\"5\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_-seconds\" value=\""+sec+"\">");
         out.append("</td>");
         out.append("</tr>");
         out.append("<tr>");
@@ -134,6 +144,16 @@ public class Timeperiod implements Component, ChartField {
     }
 
     public void processAnswer(AppPostParser srp, Post post) throws ComponentException {
+        //Delete any existing postanswers for this questionid
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    try{iterator.remove();}catch(Exception ex){logger.error(ex);}
+                }
+            }
+        }
+        //Now save the latest stuff
         String[] requestParamsHours = srp.getParamsWithCertainStringForQuestion(question.getQuestionid(), "-hours");
         String[] requestParamsMinutes = srp.getParamsWithCertainStringForQuestion(question.getQuestionid(), "-minutes");
         String[] requestParamsSeconds = srp.getParamsWithCertainStringForQuestion(question.getQuestionid(), "-seconds");
@@ -150,7 +170,9 @@ public class Timeperiod implements Component, ChartField {
         if (requestParamsSeconds!=null && Num.isinteger(requestParamsSeconds[0])){
             seconds = Integer.parseInt(requestParamsSeconds[0]);   
         }
-        int totalseconds = (hours*3600)+(minutes*60)+seconds;
+
+        HoursMinutesSeconds hms = new HoursMinutesSeconds(hours, minutes, seconds);
+        int totalseconds = hms.getbaseSeconds();
 
         if (totalseconds>0){
             Postanswer postanswer = new Postanswer();

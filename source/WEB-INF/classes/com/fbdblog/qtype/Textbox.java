@@ -70,7 +70,7 @@ public class Textbox implements Component, ChartField {
             }
         }
 
-        out.append("<input type=\"text\" size=\"20\" maxlength=\"255\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"\" value=\""+ Str.cleanForHtml(value) +"\">");
+        out.append("<input type=\"text\" size=\"20\" maxlength=\"255\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_\" value=\""+ Str.cleanForHtml(value) +"\">");
 
         return out.toString();
     }
@@ -94,6 +94,7 @@ public class Textbox implements Component, ChartField {
                 for (int i = 0; i < requestParams.length; i++) {
                     String requestParam = requestParams[i];
                     if (requestParam!=null && requestParam.trim().length()>0){
+                        logger.debug("calling datatype validator for requestParam="+requestParam+" on question='"+question.getQuestion()+"'");
                         dt.validataData(requestParam);
                     }
                 }
@@ -112,6 +113,16 @@ public class Textbox implements Component, ChartField {
     }
 
     public void processAnswer(AppPostParser srp, Post post) throws ComponentException {
+        //Delete any existing postanswers for this questionid
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    try{iterator.remove();}catch(Exception ex){logger.error(ex);}
+                }
+            }
+        }
+        //Now save the latest stuff
         String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
         if (requestParams!=null && requestParams.length>0){
             for (int i = 0; i < requestParams.length; i++) {
