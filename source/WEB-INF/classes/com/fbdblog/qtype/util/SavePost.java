@@ -9,6 +9,7 @@ import com.fbdblog.qtype.def.ComponentTypes;
 import com.fbdblog.qtype.def.Component;
 import com.fbdblog.facebook.FacebookApiWrapper;
 import com.fbdblog.xmpp.SendXMPPMessage;
+import com.fbdblog.chart.chartcache.ClearCache;
 
 
 import java.util.Date;
@@ -86,6 +87,8 @@ public class SavePost {
                 }
                 //Refresh the post
                 try{post.save();} catch (Exception ex){logger.error(ex);}
+                //Clear the chart image cache
+                ClearCache.clearCacheForUser(user.getUserid(), app.getAppid());
             } catch (Exception ex){
                 ex.printStackTrace();
                 logger.error(ex);

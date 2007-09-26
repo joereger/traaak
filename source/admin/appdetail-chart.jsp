@@ -9,6 +9,7 @@
 <%@ page import="com.fbdblog.dao.Chart" %>
 <%@ page import="com.fbdblog.chart.MegaChartHtmlRenderer" %>
 <%@ page import="com.fbdblog.chart.MegaChart" %>
+<%@ page import="com.fbdblog.chart.chartcache.ClearCache" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -46,6 +47,8 @@
         } catch (Exception ex) {
             logger.error(ex);
         }
+        //Clear the chart image cache
+        ClearCache.clearCacheForChart(app.getAppid(), megaChart.getChart().getChartid());
         //response.sendRedirect("appdetail.jsp?appid="+app.getAppid());
         //return;
     }

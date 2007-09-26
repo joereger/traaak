@@ -30,7 +30,11 @@ public class GetChart {
 
         //Build the filename
         String sep="/";
-        String filename= InstanceProperties.getAbsolutepathtochartfiles() + sep + "appid-" + megaChart.getChart().getAppid() + sep + "userid-" + userid + sep + "chartid-" + chartid + sep + "chart-" + size + ".png";
+        String compareto = "";
+        if (comparetouserid>0){
+            compareto = "comparetouserid-"+comparetouserid+sep;
+        }
+        String filename= InstanceProperties.getAbsolutepathtochartfiles() + sep + "appid-" + megaChart.getChart().getAppid() + sep + "userid-" + userid + sep + "chartid-" + chartid + sep + compareto + "chart-" + size + ".png";
         filename = FilenameUtils.separatorsToSystem(filename);
         logger.debug("filename="+filename);
 

@@ -244,18 +244,20 @@ public class MegaChart {
     }
 
     public void truncateDataToCertainNumberOfPoints(int maxNumberOfPoints){
-        //For each series in the chart
-        for (Iterator it = megaChartSeries.iterator(); it.hasNext(); ) {
-            MegaChartSeries series = (MegaChartSeries)it.next();
-            //If the data is bigger than the maxNumberOfPoints
-            if (series.cleanData!=null && series.cleanData.length>maxNumberOfPoints){
-                String[][] tmpData = new String[maxNumberOfPoints][];
-                //Dump the first maxNumberOfPoints data points into tmpData
-                for(int i=0; i<maxNumberOfPoints; i++){
-                    tmpData[i] = series.cleanData[i];
+        if (megaChartSeries!=null){
+            //For each series in the chart
+            for (Iterator it = megaChartSeries.iterator(); it.hasNext(); ) {
+                MegaChartSeries series = (MegaChartSeries)it.next();
+                //If the data is bigger than the maxNumberOfPoints
+                if (series.cleanData!=null && series.cleanData.length>maxNumberOfPoints){
+                    String[][] tmpData = new String[maxNumberOfPoints][];
+                    //Dump the first maxNumberOfPoints data points into tmpData
+                    for(int i=0; i<maxNumberOfPoints; i++){
+                        tmpData[i] = series.cleanData[i];
+                    }
+                    //Set the series data to the tmpData
+                    series.cleanData = tmpData;
                 }
-                //Set the series data to the tmpData
-                series.cleanData = tmpData;
             }
         }
     }
