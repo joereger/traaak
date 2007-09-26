@@ -285,15 +285,30 @@ public class Checkboxes implements Component, ChartField {
      * corresponding to those eventid's.
      * Result[eventid][value]
      */
-    public TreeMap getChartData(ArrayList<Post> posts) {
+    public TreeMap getChartData(ArrayList<Post> posts, int questionid) {
         if (posts!=null && posts.size()>0){
             TreeMap data = new TreeMap();
             for (Iterator it = posts.iterator(); it.hasNext(); ) {
                 Post post = (Post)it.next();
+//                List<Postanswer> postanswers = HibernateUtil.getSession().createCriteria(Postanswer.class)
+//                                                   .add(Restrictions.eq("postid", post.getPostid()))
+//                                                   .setCacheable(false)
+//                                                   .list();
+//
+//                for (Iterator<Postanswer> iterator=postanswers.iterator(); iterator.hasNext();) {
+//                    Postanswer postanswer=iterator.next();
+//                    if (postanswer.getQuestionid()==questionid){
+//                        if(postanswer.getName().equals("response")){
+//                            data.put(post.getPostid(), postanswer.getValue().trim());
+//                        }
+//                    }
+//                }
                 for (Iterator<Postanswer> iterator = post.getPostanswers().iterator(); iterator.hasNext();) {
                     Postanswer postanswer =  (Postanswer)iterator.next();
-                    if(postanswer.getName().equals("response")){
-                        data.put(post.getPostid(), postanswer.getValue());
+                    if (postanswer.getQuestionid()==questionid){
+                        if(postanswer.getName().equals("response")){
+                            data.put(post.getPostid(), postanswer.getValue().trim());
+                        }
                     }
                 }
             }

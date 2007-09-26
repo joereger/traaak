@@ -51,7 +51,7 @@ public class MegaChartConvertToJFreeDataType {
     public static XYSeriesCollection xySeriesCollection(MegaChart megaChart){
         Logger logger = Logger.getLogger(MegaChartConvertToJFreeDataType.class);
         //Dataset to hold data
-        XYSeries xydataset = null;
+        XYSeries xydataset = new XYSeries("");
         XYSeriesCollection xyseries = new XYSeriesCollection();
         //Loop on the series of the megaChart
         for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
@@ -84,7 +84,7 @@ public class MegaChartConvertToJFreeDataType {
     public static DefaultPieDataset defaultPieDataset(MegaChart megaChart){
         Logger logger = Logger.getLogger(MegaChartConvertToJFreeDataType.class);
         //Dataset to hold data
-        DefaultPieDataset piedata = null;
+        DefaultPieDataset piedata = new DefaultPieDataset();
         //Loop on the series of the megaChart
         for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
             MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
@@ -115,7 +115,7 @@ public class MegaChartConvertToJFreeDataType {
         Logger logger = Logger.getLogger(MegaChartConvertToJFreeDataType.class);
         logger.debug("starting timeSeriesCollection()");
         //Dataset to hold data
-        TimeSeries timedata = null;
+        TimeSeries timedata = new TimeSeries("");
         TimeSeriesCollection timedataseries = new TimeSeriesCollection();
         //Loop on the series of the megaChart
         for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
@@ -157,7 +157,7 @@ public class MegaChartConvertToJFreeDataType {
     public static DefaultTableXYDataset defaultTableXYDataset(MegaChart megaChart){
         Logger logger = Logger.getLogger(MegaChartConvertToJFreeDataType.class);
         //Dataset to hold data
-        XYSeries xydataset = null;
+        XYSeries xydataset = new XYSeries("");
         DefaultTableXYDataset stackedareadata = new DefaultTableXYDataset();
         //Loop on the series of the megaChart
         for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {

@@ -47,7 +47,7 @@ public class ChartFieldEntrydatetime implements ChartField {
      * Accepts an array of eventid's and returns a set of values for this field
      * corresponding to those eventid's.
      */
-    public java.util.TreeMap getChartData(ArrayList<Post> posts) {
+    public java.util.TreeMap getChartData(ArrayList<Post> posts, int questionid) {
        if (posts!=null && posts.size()>0){
             TreeMap data = new TreeMap();
             for (Iterator it = posts.iterator(); it.hasNext(); ) {

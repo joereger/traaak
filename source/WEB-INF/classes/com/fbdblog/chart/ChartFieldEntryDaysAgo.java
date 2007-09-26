@@ -52,7 +52,7 @@ public class ChartFieldEntryDaysAgo implements ChartField{
      * Accepts an array of eventid's and returns a set of values for this field
      * corresponding to those eventid's.
      */
-    public TreeMap getChartData(ArrayList<Post> posts) {
+    public TreeMap getChartData(ArrayList<Post> posts, int questionid) {
        if (posts!=null && posts.size()>0){
             TreeMap data = new TreeMap();
 

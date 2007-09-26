@@ -6,6 +6,8 @@ import java.util.Iterator;
 import com.fbdblog.util.Str;
 import com.fbdblog.dao.App;
 import com.fbdblog.dao.Question;
+import com.fbdblog.qtype.Checkboxes;
+import com.fbdblog.qtype.Matrix;
 import org.apache.log4j.Logger;
 
 /**
@@ -23,7 +25,7 @@ public class MegaChartHtmlRenderer {
         //Table-creation html joy.
 
         mb.append("<table cellpadding=0 cellspacing=0 border=0 width=100% bgcolor=#666666><tr><td>");
-        mb.append("<table cellpadding=5 cellspacing=1 width=100% border=0>");
+        mb.append("<table cellpadding=5 cellspacing=0 width=100% border=0>");
 
         //Output the img tag that calls the chart.
         //The url line is my only interface to the graph object.
@@ -50,15 +52,7 @@ public class MegaChartHtmlRenderer {
 
 
         mb.append("<tr><td bgcolor=#ffffff align=center valign=top>");
-        //Chart title
-        mb.append("<font face=arial size=+1 class=bigfont>");
-        if (!megaChart.getChart().getName().equals("")){
-            mb.append(megaChart.getChart().getName());
-        } else {
-            mb.append("Custom Graph");
-        }
-        mb.append("</font><br>");
-
+        
         //Chart image only if we have a chartid to look at
         if (megaChart.getChart()!=null && megaChart.getChart().getChartid()>0){
             mb.append("<img src='/fb/graph.jsp?chartid="+megaChart.getChart().getChartid()+"&userid=0&size=medium&comparetouserid=0' border=0>");
@@ -215,14 +209,17 @@ public class MegaChartHtmlRenderer {
             boolean foundAtLeastOneField = false;
             for (Iterator iterator = app.getQuestions().iterator(); iterator.hasNext();) {
                 Question question =  (Question)iterator.next();
-                foundAtLeastOneField = true;
-                mb.append("<font face=arial size=-1 class=smallfont>");
-                mb.append("<input name=xquestionid type=radio value='"+question.getQuestionid()+"'");
-                if (megaChart.getChart().getXquestionid()==question.getQuestionid()){
-                    mb.append(" checked");
+                //Don't allow yaxis graphing on checkboxes or matrix
+                if (question.getComponenttype()!=Checkboxes.ID && question.getComponenttype()!=Matrix.ID){
+                    foundAtLeastOneField = true;
+                    mb.append("<font face=arial size=-1 class=smallfont>");
+                    mb.append("<input name=xquestionid type=radio value='"+question.getQuestionid()+"'");
+                    if (megaChart.getChart().getXquestionid()==question.getQuestionid()){
+                        mb.append(" checked");
+                    }
+                    mb.append("> "+question.getQuestion()+"<br>");
+                    mb.append("</font>");
                 }
-                mb.append("> "+question.getQuestion()+"<br>");
-                mb.append("</font>");
             }
             if (!foundAtLeastOneField) {
                 mb.append("<font face=arial size=-2 class=tinyfont>");
@@ -257,17 +254,21 @@ public class MegaChartHtmlRenderer {
             foundAtLeastOneField = false;
             for (Iterator iterator = app.getQuestions().iterator(); iterator.hasNext();) {
                 Question question =  (Question)iterator.next();
-                if (question.getDatatypeid()!=DataTypeString.DATATYPEID){
-                    foundAtLeastOneField=true;
-                    mb.append("<font face=arial size=-1 class=smallfont>");
-                    mb.append("<input name=yquestionid type=checkbox value='"+question.getQuestionid()+"'");
-                    for(int l=0; l<megaChart.getYquestionid().length; l++){
-                        if (megaChart.getYquestionid()[l]==question.getQuestionid()){
-                            mb.append(" checked");
+                //Don't allow yaxis graphing on checkboxes or matrix
+                if (question.getComponenttype()!=Checkboxes.ID && question.getComponenttype()!=Matrix.ID){
+                    //Don't allow yaxis graphing on string datatypes
+                    if (question.getDatatypeid()!=DataTypeString.DATATYPEID){
+                        foundAtLeastOneField=true;
+                        mb.append("<font face=arial size=-1 class=smallfont>");
+                        mb.append("<input name=yquestionid type=checkbox value='"+question.getQuestionid()+"'");
+                        for(int l=0; l<megaChart.getYquestionid().length; l++){
+                            if (megaChart.getYquestionid()[l]==question.getQuestionid()){
+                                mb.append(" checked");
+                            }
                         }
+                        mb.append("> "+question.getQuestion());
+                        mb.append("</font><br>");
                     }
-                    mb.append("> "+question.getQuestion());
-                    mb.append("</font><br>");
                 }
             }
             if (!foundAtLeastOneField) {

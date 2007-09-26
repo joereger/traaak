@@ -182,4 +182,19 @@ public class Str {
         }
     }
 
+    public static String booleanAsSQLText(boolean bool){
+        if (bool){
+            return "1";
+        } else {
+            return "0";
+        }
+    }
+
+    public static boolean booleanFromSQLText(String text){
+        if (text!=null && text.equals("1")){
+            return true;
+        }
+        return false;
+    }
+
 }

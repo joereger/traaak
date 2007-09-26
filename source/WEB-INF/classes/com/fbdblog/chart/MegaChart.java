@@ -3,7 +3,6 @@ package com.fbdblog.chart;
 
 import com.fbdblog.util.Util;
 import com.fbdblog.util.Num;
-import com.fbdblog.session.UserSession;
 import com.fbdblog.dao.Chart;
 import com.fbdblog.dao.Chartyaxis;
 
@@ -177,13 +176,13 @@ public class MegaChart {
             //Iterate yAxis and create a series for each
             for (int i = 0; i < yquestionid.length; i++) {
                 int tmp = yquestionid[i];
-                MegaChartSeries seriesTmp = new MegaChartSeries(yquestionid[i], appid, this, entryChooser);
+                MegaChartSeries seriesTmp = new MegaChartSeries(yquestionid[i], appid, entryChooser, chart);
                 xAxisTitle = seriesTmp.getxAxisTitle();
                 yAxisTitle = seriesTmp.getyAxisTitle();
                 megaChartSeries.add(seriesTmp);
                 //Compare to
                 if (comparetouserid>0){
-                    MegaChartSeries seriesCompare = new MegaChartSeries(yquestionid[i], appid, this, entryChooserCompareto);
+                    MegaChartSeries seriesCompare = new MegaChartSeries(yquestionid[i], appid, entryChooserCompareto, chart);
                     megaChartSeries.add(seriesCompare);
                 }
                 //Debug

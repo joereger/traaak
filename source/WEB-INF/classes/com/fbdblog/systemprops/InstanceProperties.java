@@ -29,8 +29,7 @@ public class InstanceProperties {
     private static String dbDriverName;
     private static String runScheduledTasksOnThisInstance;
     private static String instancename;
-
-
+    private static String absolutepathtochartfiles;
 
 
     private static String passPhrase = "pupper";
@@ -93,6 +92,7 @@ public class InstanceProperties {
             dbDriverName = properties.getProperty("dbDriverName", "com.mysql.jdbc.Driver");
             runScheduledTasksOnThisInstance = properties.getProperty("runScheduledTasksOnThisInstance", "0");
             instancename = properties.getProperty("instancename", "InstanceNotNamed");
+            absolutepathtochartfiles = properties.getProperty("absolutepathtochartfiles", "c:\\SuperFly\\fdblog-chartcache\\");
 
             haveAttemptedToLoadDefaultPropsFile = true;
             haveNewConfigToTest = true;
@@ -144,6 +144,9 @@ public class InstanceProperties {
                 }
                 if (instancename!=null){
                     properties.setProperty("instancename", instancename);
+                }
+                if (absolutepathtochartfiles!=null){
+                    properties.setProperty("absolutepathtochartfiles", absolutepathtochartfiles);
                 }
 
                 if (testConfig()){
@@ -332,5 +335,15 @@ public class InstanceProperties {
 
     public static void setInstancename(String instancename) {
         InstanceProperties.instancename = instancename;
+    }
+
+
+    public static String getAbsolutepathtochartfiles() {
+        load();
+        return absolutepathtochartfiles;
+    }
+
+    public static void setAbsolutepathtochartfiles(String absolutepathtochartfiles) {
+        InstanceProperties.absolutepathtochartfiles=absolutepathtochartfiles;
     }
 }

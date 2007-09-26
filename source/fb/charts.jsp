@@ -71,7 +71,7 @@
                     }
                     %>
                 </select>
-                <input type="submit" value="Show Chart">
+                <input type="submit" value="Gimme">
             </form>
             <br/>
         </td>

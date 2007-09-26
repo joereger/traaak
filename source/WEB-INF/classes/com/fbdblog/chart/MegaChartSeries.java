@@ -8,6 +8,7 @@ import com.fbdblog.util.Time;
 import com.fbdblog.util.Str;
 import com.fbdblog.dao.Post;
 import com.fbdblog.dao.Question;
+import com.fbdblog.dao.Chart;
 import com.fbdblog.qtype.Textbox;
 
 /**
@@ -52,13 +53,13 @@ public class MegaChartSeries {
 
 
 
-    public MegaChartSeries(int yQuestionid, int appid, MegaChart megaChart, MegaChartEntryChooser entryChooser){
+    public MegaChartSeries(int yQuestionid, int appid, MegaChartEntryChooser entryChooser, Chart chart){
 
         //Store the incoming data in the correct place
-        this.xQuestionid =megaChart.getChart().getXquestionid();
+        this.xQuestionid =chart.getXquestionid();
         this.yQuestionid =yQuestionid;
         this.appid=appid;
-        this.yaxiswhattodo=megaChart.getChart().getYaxiswhattodo();
+        this.yaxiswhattodo=chart.getYaxiswhattodo();
 
         //Break out the fieldtype from the questionid.
         //If the MegaFieldid < 0 then it's actually a fieldtype
@@ -127,7 +128,7 @@ public class MegaChartSeries {
         //f.populateFromQuestionid(questionid);
         //Call the function that gets a set of chart data
         //Result[eventid][value]
-        TreeMap AxisRawData = f.getChartData(posts);
+        TreeMap AxisRawData = f.getChartData(posts, questionid);
         //Util.logTreeMapToDb("AxisRawData questionid=" + questionid + " fieldtype=" + fieldtype, AxisRawData);
         return AxisRawData;
      }
@@ -375,49 +376,6 @@ public class MegaChartSeries {
     }
 
 
-
-
-
-
-
-
-
-//    /**
-//     * Create the count of events that an element of the x-axis appears in.
-//     */
-//    public TreeMap doCountEntriesValues(TreeMap tmap){
-//        TreeMap newTmap = new TreeMap();
-//
-//        //This for loop actually calculates the counts.  Ugly database calls.  Can optimize later.
-//        String sql="";
-//        for (Iterator i=tmap.entrySet().iterator(); i.hasNext(); ) {
-//            Map.Entry e = (Map.Entry) i.next();
-//
-//            //Query the database for a count of the xAxis value based on the megavalue
-//            //Problem: Need to limit the view again to a particular sql query.
-//            //Solution: Use dateSql, defined above when the constructor is called.
-//            //Problem: The xAxis values have already been converted to megaoption (if applicable) so I need to convert back?
-//            //Solution: Two potential sql queries... one using megaoption, one not.  Hmmm... isn't that special?
-//            if (xFieldtype==MegaConstants.FIELDTYPEDROPDOWN || xFieldtype==MegaConstants.FIELDTYPEHORIZONTALRADIOS || xFieldtype==MegaConstants.FIELDTYPEVERTICALRADIOS) {
-//                sql = "SELECT count(*) FROM megavalue, megaoption, event e WHERE e.eventid=megavalue.eventid AND megavalue.megavalue=megaoption.megaoptionid AND megavalue.questionid='"+xQuestionid+"' AND megaoption.optiontext='"+e.getKey()+"' AND e.logid='"+xLogid+"'" + dateSql;
-//            } else {
-//                sql = "SELECT count(*) FROM megavalue, event e WHERE e.eventid=megavalue.eventid AND megavalue.questionid='"+xQuestionid+"' AND megavalue.megavalue='"+e.getKey()+"' AND e.logid='"+xLogid+"'" + dateSql;
-//            }
-//            //-----------------------------------
-//            //-----------------------------------
-//            String[][] getCount= Db.RunSQL(sql);
-//            //-----------------------------------
-//            //-----------------------------------
-//
-//            //Add the results to newTmap. Results held in getCount[0][0]
-//            newTmap.put(e.getKey(), getCount[0][0]);
-//        }
-//
-//        return newTmap;
-//    }
-
-
-
     /**
      * Sets the x title and some other properties
      */
@@ -432,7 +390,7 @@ public class MegaChartSeries {
             //It's a derived type
             //See Vars class for these values.
             if (xQuestionid ==ChartFieldEntryorder.ID){
-                xAxisTitle="Entry Order";
+                xAxisTitle="Order";
                 xMegadatatype=DataTypeInteger.DATATYPEID;
                 xFieldtype=ChartFieldEntryorder.ID;
             } else if (xQuestionid ==ChartFieldEntryHourofday.ID) {
