@@ -30,6 +30,10 @@ public class Range implements Component, ChartField {
 
     Logger logger = Logger.getLogger(this.getClass().getName());
 
+    public Range(){
+        
+    }
+
     public Range(User user, Post post, Question question){
         this.question = question;
         this.user = user;

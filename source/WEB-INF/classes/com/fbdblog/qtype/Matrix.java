@@ -27,9 +27,13 @@ public class Matrix implements Component, ChartField {
     private User user;
     private Post post;
 
-    private String DELIM = "_X_X_----_X_X_";
+    private String DELIM = "|||";
 
     Logger logger = Logger.getLogger(this.getClass().getName());
+
+    public Matrix(){
+        
+    }
 
     public Matrix(User user, Post post, Question question){
         this.question = question;

@@ -36,7 +36,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
 }
 %>
 
-App Detail: <%=app.getTitle()%>
+App Detail
 <br/><br/>
 <form action="appdetail.jsp" method="post">
     <input type="hidden" name="appid" value="<%=app.getAppid()%>">
@@ -94,64 +94,78 @@ App Detail: <%=app.getTitle()%>
 </form>
 
 <br/><br/>
-Questions:
-<br/>
-<%
-    List<Question> questions = HibernateUtil.getSession().createCriteria(Question.class)
-            .add(Restrictions.eq("appid", app.getAppid()))
-            .setCacheable(false)
-            .list();
-    for (Iterator<Question> iterator = questions.iterator(); iterator.hasNext();) {
-        Question question = iterator.next();
-        String comptypefilename = "";
-        if (question.getComponenttype() == Textbox.ID) {
-            comptypefilename = "textbox";
-        } else if (question.getComponenttype() == Checkboxes.ID) {
-            comptypefilename = "checkboxes";
-        } else if (question.getComponenttype() == Dropdown.ID) {
-            comptypefilename = "dropdown";
-        } else if (question.getComponenttype() == Essay.ID) {
-            comptypefilename = "essay";
-        } else if (question.getComponenttype() == Matrix.ID) {
-            comptypefilename = "matrix";
-        } else if (question.getComponenttype() == Range.ID) {
-            comptypefilename = "range";
-        } else if (question.getComponenttype() == Timeperiod.ID) {
-            comptypefilename = "timeperiod";
-        }
-        %>
-        <a href="appdetail-question-<%=comptypefilename%>.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>"><%=question.getQuestion()%></a><br/>
-        <%
-    }
-%>
-<br/>
-<br/><a href='appdetail-question-textbox.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Textbox</a>
-<br/><a href='appdetail-question-checkboxes.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Checkboxes</a>
-<br/><a href='appdetail-question-dropdown.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Dropdown</a>
-<br/><a href='appdetail-question-essay.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Essay</a>
-<br/><a href='appdetail-question-matrix.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Matrix</a>
-<br/><a href='appdetail-question-range.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Range</a>
-<br/><a href='appdetail-question-timeperiod.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Timeperiod</a>
-<br/><br/>
+<table cellpadding="5" cellspacing="0" border="0">
+    <tr>
+        <td valign="top" width="50%">
 
 
-<br/><br/>
-Charts:
-<br/>
-<%
-    List<Chart> charts = HibernateUtil.getSession().createCriteria(Chart.class)
-            .add(Restrictions.eq("appid", app.getAppid()))
-            .setCacheable(false)
-            .list();
-    for (Iterator<Chart> iterator = charts.iterator(); iterator.hasNext();) {
-        Chart chart = (Chart)iterator.next();
-        %>
-        <a href="appdetail-chart.jsp?appid=<%=app.getAppid()%>&chartid=<%=chart.getChartid()%>"><%=chart.getChartid()%>: <%=chart.getName()%></a><br/>
-        <%
-    }
-%>
-<br/>
-<br/><a href="appdetail-chart.jsp?action=newchart&appid=<%=app.getAppid()%>">+ Add Chart</a><br/>
+            Questions:
+            <br/>
+            <%
+                List<Question> questions = HibernateUtil.getSession().createCriteria(Question.class)
+                        .add(Restrictions.eq("appid", app.getAppid()))
+                        .setCacheable(false)
+                        .list();
+                for (Iterator<Question> iterator = questions.iterator(); iterator.hasNext();) {
+                    Question question = iterator.next();
+                    String comptypefilename = "";
+                    if (question.getComponenttype() == Textbox.ID) {
+                        comptypefilename = "textbox";
+                    } else if (question.getComponenttype() == Checkboxes.ID) {
+                        comptypefilename = "checkboxes";
+                    } else if (question.getComponenttype() == Dropdown.ID) {
+                        comptypefilename = "dropdown";
+                    } else if (question.getComponenttype() == Essay.ID) {
+                        comptypefilename = "essay";
+                    } else if (question.getComponenttype() == Matrix.ID) {
+                        comptypefilename = "matrix";
+                    } else if (question.getComponenttype() == Range.ID) {
+                        comptypefilename = "range";
+                    } else if (question.getComponenttype() == Timeperiod.ID) {
+                        comptypefilename = "timeperiod";
+                    }
+                    String req = "";
+                    if (question.getIsrequired()){
+                        req = "*";
+                    }
+                    %>
+                    <a href="appdetail-question-<%=comptypefilename%>.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>"><%=question.getQuestion()%></a><%=req%><br/>
+                    <%
+                }
+            %>
+            <br/>
+            <br/><a href='appdetail-question-textbox.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Textbox</a>
+            <br/><a href='appdetail-question-checkboxes.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Checkboxes</a>
+            <br/><a href='appdetail-question-dropdown.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Dropdown</a>
+            <br/><a href='appdetail-question-essay.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Essay</a>
+            <br/><a href='appdetail-question-matrix.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Matrix</a>
+            <br/><a href='appdetail-question-range.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Range</a>
+            <br/><a href='appdetail-question-timeperiod.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Timeperiod</a>
+            <br/><br/>
+
+        </td>
+        <td valign="top">
+
+            Charts:
+            <br/>
+            <%
+                List<Chart> charts = HibernateUtil.getSession().createCriteria(Chart.class)
+                        .add(Restrictions.eq("appid", app.getAppid()))
+                        .setCacheable(false)
+                        .list();
+                for (Iterator<Chart> iterator = charts.iterator(); iterator.hasNext();) {
+                    Chart chart = (Chart)iterator.next();
+                    %>
+                    <a href="appdetail-chart.jsp?appid=<%=app.getAppid()%>&chartid=<%=chart.getChartid()%>"><%=chart.getChartid()%>: <%=chart.getName()%></a><br/>
+                    <%
+                }
+            %>
+            <br/>
+            <br/><a href="appdetail-chart.jsp?action=newchart&appid=<%=app.getAppid()%>">+ Add Chart</a><br/>
+
+        </td>
+    </tr>
+</table>
 
 
 <%@ include file="footer.jsp" %>

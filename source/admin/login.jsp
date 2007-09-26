@@ -43,9 +43,44 @@
 
 <form action="login.jsp" method="post">
     <input type="hidden" name="action" value="login">
-    Email:  <input type="text" name="email" value="" size="25" maxlength="255">
-    <br/>
-    Password: <input type="password" name="password" value="" size="25" maxlength="255">
-    <br/>
-    <input type="submit" value="Log In">  
+    <table cellpadding="2" cellspacing="0" border="0">
+        <tr>
+            <td valign="top">
+                <img src="/images/cake.jpg" alt="Mmmm, cake"> 
+            </td>
+            <td valign="top">
+                <table cellpadding="3" cellspacing="0" border="0">
+                    <tr>
+                        <td valign="top" colspan="2">
+                            <font style="font-family: impact; font-size: 25px; color: #cccccc;">Please Log In for Cake</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            Email:
+                        </td>
+                        <td valign="top">
+                            <input type="text" name="email" value="" size="25" maxlength="255">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            Password:
+                        </td>
+                        <td valign="top">
+                            <input type="password" name="password" value="" size="25" maxlength="255">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+
+                        </td>
+                        <td valign="top">
+                            <input type="submit" value="Log In">
+                        </td>
+                    </tr>
+                 </table>
+             </td>
+        </tr>
+    </table>  
 </form>

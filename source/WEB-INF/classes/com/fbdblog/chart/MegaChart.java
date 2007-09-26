@@ -5,6 +5,7 @@ import com.fbdblog.util.Util;
 import com.fbdblog.util.Num;
 import com.fbdblog.session.UserSession;
 import com.fbdblog.dao.Chart;
+import com.fbdblog.dao.Chartyaxis;
 
 import java.util.Calendar;
 import java.util.ArrayList;
@@ -32,7 +33,16 @@ public class MegaChart {
 
     public MegaChart(int chartid){
         chart = Chart.get(chartid);
-        if (chart.getChartid()<=0){
+        if (chart.getChartid()>0){
+            //Load yaxis
+            yquestionid = new int[0];
+            if (chart.getChartyaxes()!=null){
+                for (Iterator<Chartyaxis> iterator=chart.getChartyaxes().iterator(); iterator.hasNext();) {
+                    Chartyaxis chartyaxis=iterator.next();
+                    yquestionid = Util.addToIntArray(yquestionid, chartyaxis.getYquestionid());
+                }
+            }
+        } else {
             chart.setAppid(0);
             chart.setName("");
             chart.setChartid(0);
@@ -50,6 +60,7 @@ public class MegaChart {
             chart.setLastxyears(0);
             chart.setXquestionid(ChartFieldEntrydatetime.ID);
             chart.setYaxiswhattodo(MegaConstants.YAXISWHATTODOSUM);
+
         }
     }
 
@@ -144,11 +155,16 @@ public class MegaChart {
 
     public void loadMegaChartSeriesData(int appid, int userid, int comparetouserid){
         Logger logger = Logger.getLogger(this.getClass().getName());
-
+        logger.debug("appid="+appid+" userid="+userid);
         if (appid>0 && userid>0){
             //Get the list of entries that this chart covers
             entryChooser = new MegaChartEntryChooser(this, appid, userid);
             entryChooser.populate();
+            if (entryChooser.getPosts()!=null){
+                logger.debug("entryChooser.getPosts().size()="+entryChooser.getPosts().size());
+            } else {
+                logger.debug("entryChooser.getPosts() is null");
+            }
 
             if (comparetouserid>0){
                 entryChooserCompareto = new MegaChartEntryChooser(this, appid, userid);
@@ -157,6 +173,7 @@ public class MegaChart {
         
             int debugCount = 0;
             megaChartSeries = new ArrayList<MegaChartSeries>();
+            logger.debug("yquestionid.length="+yquestionid.length);
             //Iterate yAxis and create a series for each
             for (int i = 0; i < yquestionid.length; i++) {
                 int tmp = yquestionid[i];
@@ -165,8 +182,10 @@ public class MegaChart {
                 yAxisTitle = seriesTmp.getyAxisTitle();
                 megaChartSeries.add(seriesTmp);
                 //Compare to
-                MegaChartSeries seriesCompare = new MegaChartSeries(yquestionid[i], appid, this, entryChooserCompareto);
-                megaChartSeries.add(seriesCompare);
+                if (comparetouserid>0){
+                    MegaChartSeries seriesCompare = new MegaChartSeries(yquestionid[i], appid, this, entryChooserCompareto);
+                    megaChartSeries.add(seriesCompare);
+                }
                 //Debug
                 logger.debug("MegaChart.java - seriesTmp.cleanData.length="+seriesTmp.cleanData.length);
                 debugCount = debugCount + seriesTmp.cleanData.length;
@@ -174,6 +193,31 @@ public class MegaChart {
             logger.debug("MegaChart.java - items graphed="+debugCount);
 
         }
+    }
+
+    public void save(){
+        Logger logger = Logger.getLogger(this.getClass().getName());
+        if (chart!=null){
+            try{chart.save();}catch(Exception ex){logger.error(ex);}
+        }
+        //Save yaxis, first delete all existing entries
+        if (chart.getChartyaxes()!=null){
+            for (Iterator<Chartyaxis> iterator=chart.getChartyaxes().iterator(); iterator.hasNext();) {
+                Chartyaxis chartyaxis=iterator.next();
+                try{iterator.remove();}catch(Exception ex){logger.error(ex);}
+            }
+        }
+        if (yquestionid!=null && yquestionid.length>0){
+            for (int i=0; i<yquestionid.length; i++) {
+                int yqid=yquestionid[i];
+                Chartyaxis chartyaxis = new Chartyaxis();
+                chartyaxis.setChartid(chart.getChartid());
+                chartyaxis.setYquestionid(yqid);
+                try{chartyaxis.save();}catch(Exception ex){logger.error(ex);}
+            }
+        }
+        //Refresh chart
+        try{chart.save();}catch(Exception ex){logger.error(ex);}
     }
 
 

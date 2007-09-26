@@ -31,6 +31,9 @@ public class Checkboxes implements Component, ChartField {
     
     Logger logger = Logger.getLogger(this.getClass().getName());
 
+    public Checkboxes(){
+        
+    }
 
     public Checkboxes(User user, Post post, Question question){
         this.question = question;

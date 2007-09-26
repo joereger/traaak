@@ -33,6 +33,10 @@ public class Timeperiod implements Component, ChartField {
 
     Logger logger = Logger.getLogger(this.getClass().getName());
 
+    public Timeperiod(){
+        
+    }
+
     public Timeperiod(User user, Post post, Question question){
         this.question = question;
         this.user = user;

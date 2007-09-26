@@ -113,12 +113,14 @@ public class MegaChartConvertToJFreeDataType {
 
     public static TimeSeriesCollection timeSeriesCollection(MegaChart megaChart){
         Logger logger = Logger.getLogger(MegaChartConvertToJFreeDataType.class);
+        logger.debug("starting timeSeriesCollection()");
         //Dataset to hold data
         TimeSeries timedata = null;
         TimeSeriesCollection timedataseries = new TimeSeriesCollection();
         //Loop on the series of the megaChart
         for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
             MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
+            logger.debug("found a megaChartSeries appid="+megaChartSeries.appid+" xquestionid="+megaChartSeries.xQuestionid+" yquestionid="+megaChartSeries.yQuestionid);
             if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
                 timedata = new TimeSeries(megaChartSeries.yAxisTitle, Millisecond.class);
                 for(int i=0; i<megaChartSeries.cleanData.length; i++){
@@ -126,6 +128,7 @@ public class MegaChartConvertToJFreeDataType {
                     if (Num.isdouble(megaChartSeries.cleanData[i][2])) {
                         try{
                             try{
+                                logger.debug("adding data: date="+megaChartSeries.cleanData[i][1]+" data="+megaChartSeries.cleanData[i][2]);
                                 java.util.Date tmpDate = new java.util.Date(Long.parseLong(megaChartSeries.cleanData[i][1]));
                                 timedata.add(new Millisecond(tmpDate), Double.parseDouble(megaChartSeries.cleanData[i][2]));
                             } catch (Exception e){

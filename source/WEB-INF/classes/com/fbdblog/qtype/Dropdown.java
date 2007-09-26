@@ -30,6 +30,10 @@ public class Dropdown implements Component, ChartField {
 
     Logger logger = Logger.getLogger(this.getClass().getName());
 
+    public Dropdown(){
+        
+    }
+
     public Dropdown(User user, Post post, Question question){
         this.question = question;
         this.user = user;

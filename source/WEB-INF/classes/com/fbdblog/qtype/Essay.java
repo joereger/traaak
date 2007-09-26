@@ -33,6 +33,10 @@ public class Essay implements Component, ChartField {
 
     Logger logger = Logger.getLogger(this.getClass().getName());
 
+    public Essay(){
+        
+    }
+
     public Essay(User user, Post post, Question question){
         this.question = question;
         this.user = user;

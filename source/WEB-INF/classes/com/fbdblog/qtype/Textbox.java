@@ -34,6 +34,10 @@ public class Textbox implements Component, ChartField {
 
     Logger logger = Logger.getLogger(this.getClass().getName());
 
+    public Textbox(){
+        
+    }
+
     public Textbox(User user, Post post, Question question){
         this.question = question;
         this.user = user;

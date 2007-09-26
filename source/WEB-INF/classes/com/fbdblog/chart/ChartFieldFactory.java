@@ -3,6 +3,9 @@ package com.fbdblog.chart;
 import org.apache.log4j.Logger;
 
 
+import com.fbdblog.qtype.*;
+
+
 public class ChartFieldFactory {
     /**
      * Accepts a fieldtype and returns a question type handler object.
@@ -27,6 +30,20 @@ public class ChartFieldFactory {
             return new ChartFieldEntrydatetime();
         } else if (fieldtype==ChartFieldEntrycount.ID) {
             return new ChartFieldEntrycount();
+        } else if (fieldtype== Checkboxes.ID) {
+            return new Checkboxes();
+        } else if (fieldtype== Dropdown.ID) {
+            return new Dropdown();
+        } else if (fieldtype== Essay.ID) {
+            return new Essay();
+        } else if (fieldtype== Matrix.ID) {
+            return new Matrix();
+        } else if (fieldtype== Range.ID) {
+            return new Range();
+        } else if (fieldtype== Textbox.ID) {
+            return new Textbox();
+        } else if (fieldtype== Timeperiod.ID) {
+            return new Timeperiod();
         } else {
             logger.debug("No handler found: ChartFieldFactory.getHandlerByFieldtype - incoming fieldtype=" + fieldtype);
             return null;

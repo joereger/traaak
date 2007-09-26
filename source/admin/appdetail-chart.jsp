@@ -42,7 +42,7 @@
         megaChart.populateFromRequest(request);
         megaChart.getChart().setAppid(app.getAppid());
         try {
-            megaChart.getChart().save();
+            megaChart.save();
         } catch (Exception ex) {
             logger.error(ex);
         }

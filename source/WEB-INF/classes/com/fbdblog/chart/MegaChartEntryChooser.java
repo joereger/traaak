@@ -2,6 +2,7 @@ package com.fbdblog.chart;
 
 import java.util.Calendar;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.fbdblog.util.Time;
 import com.fbdblog.dao.Post;
@@ -49,10 +50,10 @@ public class MegaChartEntryChooser {
         //Start Build the date-limiting SQL - The goal of the next chunk is to build a SQL statement
         //that returns a three column resultset (eventid, xaxis, yaxis)
         String dateSql="";
-        Calendar dateLow=null;
-        Calendar dateHigh=null;
-        String dateStrLow="";
-        String dateStrHigh="";
+        Calendar dateLow=Time.dbstringtocalendar("2000-01-01 00:00:00");
+        Calendar dateHigh=Time.dbstringtocalendar("2020-01-01 00:00:00");
+        String dateStrLow="2000-01-01 00:00:00";
+        String dateStrHigh="2020-01-01 00:00:00";
         if (megaChart.getChart().getDaterange()==MegaConstants.DATERANGETHISWEEK){
             dateLow=Time.xWeeksAgoStart(Calendar.getInstance(), 0);
             dateHigh=Time.xWeeksAgoEnd(Calendar.getInstance(), 0);
@@ -122,7 +123,7 @@ public class MegaChartEntryChooser {
         }
 
         //This query generates a list of eventids that are relevant to this chart.  That's it.
-        posts = (ArrayList<Post>)HibernateUtil.getSession().createCriteria(Post.class)
+        List postsTmp = HibernateUtil.getSession().createCriteria(Post.class)
                                            .add(Restrictions.ge("postdate", dateLow.getTime()))
                                            .add(Restrictions.le("postdate", dateHigh.getTime()))
                                            .add(Restrictions.eq("userid", userid))
@@ -130,6 +131,12 @@ public class MegaChartEntryChooser {
                                            .addOrder( Order.desc("postdate") )
                                            .setCacheable(true)
                                            .list();
+        if (postsTmp!=null && postsTmp.size()>0){
+            logger.debug("posts.size()="+postsTmp.size());
+            posts = (ArrayList)postsTmp;
+        } else {
+            logger.debug("posts is empty or null");
+        }
 
     }
 

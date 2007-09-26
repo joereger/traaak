@@ -30,6 +30,9 @@
     <tr>
         <td valign="top" width="150">
             <a href='apps.jsp'>Apps</a><br/>
+            <a href='users.jsp'>Users</a><br/>
+            <a href='sysprops.jsp'>SysProps</a><br/>
+            <a href='instanceprops.jsp'>InstanceProps</a><br/>
         </td>
         <td valign="top">
 
