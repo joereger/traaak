@@ -14,6 +14,8 @@ import com.fbdblog.xmpp.SendXMPPMessage;
 import com.fbdblog.dao.User;
 import com.fbdblog.dao.App;
 import com.fbdblog.util.Num;
+import com.fbdblog.cache.providers.CacheProvider;
+import com.fbdblog.cache.providers.CacheFactory;
 import com.facebook.api.FacebookRestClient;
 import com.facebook.api.FacebookException;
 
@@ -61,9 +63,7 @@ public class UserSessionSetup {
                 //@todo how to handle unknown api_key?  list all apps with links to an add page?
             }
 
-
             //Need a session key
-            String initialFacebooksessionkey = userSession.getFacebooksessionkey();
             //auth_token should immediately be traded in for a valid fb_sig_session_key
             if ((request.getParameter("auth_token")!=null && !request.getParameter("auth_token").trim().equals(""))){
                 logger.debug("auth_token found in request... will try to convert to session_key");
@@ -84,9 +84,25 @@ public class UserSessionSetup {
                 }
             }
 
+            //Track app adds
+            if (request.getParameter("postaddappid")!=null && Num.isinteger(request.getParameter("postaddappid"))) {
+                //@todo track app add and/or set var in session so that I can call a banner add thing
+            }
+
+            //Pull userSession from cache
+            boolean foundSessionInCache = false;
+            Object obj = CacheFactory.getCacheProvider().get(userSession.getFacebooksessionkey(), "userSession");
+            if (obj!=null && (obj instanceof UserSession)){
+                logger.debug("found a userSession in the cache");
+                userSession = (UserSession)obj;
+                foundSessionInCache = true;
+            } else {
+                logger.debug("no userSession in cache");
+            }
+
             //In general try not to handle request vars below this line
             //I only want to run this stuff when I see a new Facebook session key...
-            if (!userSession.getFacebooksessionkey().equals(initialFacebooksessionkey)) {
+            if (!foundSessionInCache) {
                 logger.debug("running heavy Facebook user setup with api calls due to new facebooksessionkey");
 
                 //Go get some details on this facebookuser
@@ -132,6 +148,8 @@ public class UserSessionSetup {
                     logger.debug("userSession.getFacebookUser() is empty after calling facebook api");
                     //@todo how to handle facebook call to populate user is empty?
                 }
+                //Save UserSession in Cache
+                CacheFactory.getCacheProvider().put(userSession.getFacebooksessionkey(), "userSession", userSession);
             } else {
                 logger.debug("didn't find a new facebooksessionkey so didn't make api call to load facebook user");
             }
@@ -142,6 +160,7 @@ public class UserSessionSetup {
 
         //Save in session
         request.getSession().setAttribute("userSession", userSession);
+
     }
 
 }
