@@ -123,6 +123,7 @@ InstanceProps
                 </td>
                 <td valign="top">
                     <input type="textbox" name="absolutepathtochartfiles" value="<%=Str.cleanForHtml(InstanceProperties.getAbsolutepathtochartfiles())%>">
+                    <br/><font style="font-size: 8px;">Make sure service that Tomcat is running as has access</font>
                 </td>
             </tr>
 

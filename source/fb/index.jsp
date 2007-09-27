@@ -11,6 +11,7 @@
 <%@ page import="com.fbdblog.dao.Post" %>
 <%@ page import="com.fbdblog.util.Num" %>
 <%@ page import="com.fbdblog.util.Time" %>
+<%@ page import="com.fbdblog.chart.chartcache.ClearCache" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -25,10 +26,10 @@
     if (request.getParameter("action") != null && request.getParameter("action").equals("trackit")) {
         AppPostParser appPostParser = new AppPostParser(request);
         try {
-            SavePost.save(userSession.getApp(), userSession.getUser(), post, appPostParser);
+            SavePost.save(userSession.getApp(), userSession.getUser(), post, appPostParser, userSession);
             out.print("<fb:success>\n" +
-            "     <fb:message>Success!  Data tracked!</fb:message>\n" +
-            "     We've also updated your profile so that others can check you out.\n" +
+            "     <fb:message>Good trackin'.  Now track some more.</fb:message>\n" +
+            "     We've updated your profile so that others can check out your data.\n" +
             "</fb:success>");
         } catch (ComponentException cex) {
             out.print(" <fb:error>\n" +
@@ -47,20 +48,31 @@
 %>
 
 <%
-    //Load a chart
-    //@todo Define a chart as the primary chart for the app
-    int chartid = 0;
-    List<Chart> charts=HibernateUtil.getSession().createCriteria(Chart.class)
-            .add(Restrictions.eq("appid", userSession.getApp().getAppid()))
-            .setCacheable(true)
-            .list();
-    for (Iterator<Chart> iterator=charts.iterator(); iterator.hasNext();) {
-        Chart chart= iterator.next();
-        chartid = chart.getChartid();
+    if (request.getParameter("action") != null && request.getParameter("action").equals("deletepost")) {
+        if (request.getParameter("postid") != null && Num.isinteger(request.getParameter("postid"))) {
+            Post postToDel=Post.get(Integer.parseInt(request.getParameter("postid")));
+            if (postToDel.getUserid() == userSession.getUser().getUserid()) {
+                try {
+                    postToDel.delete();
+                } catch (Exception ex) {
+                    logger.error(ex);
+                }
+                post=null;
+                out.print("<fb:success>\n" +
+                        "     <fb:message>As ordered, thy data hath been deleted.</fb:message>\n" +
+                        "     Now add some more so this app doesn't get an inferiority complex.  It's lonely.  It needs data.\n" +
+                        "</fb:success>");
+                //Clear the chart image cache
+                ClearCache.clearCacheForUser(userSession.getUser().getUserid(), userSession.getApp().getAppid());
+            } else {
+                out.print(" <fb:error>\n" +
+                        "      <fb:message>Seriously? You don't even own that post.</fb:message>\n" +
+                        "      " + "Am. Uh. Toor." + "\n" +
+                        " </fb:error>");
+            }
+        }
     }
-
 %>
-
 
 
 <br/>
@@ -79,7 +91,8 @@
                 %>
                 <font size=-2>
                 Editing data from <%=Time.dateformatcompactwithtime(Time.getCalFromDate(post.getPostdate()))%>.
-                <br/><a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main'>Start new?</a>
+                <br/><a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>&action=deletepost'>Delete it?</a>
+                <br/><a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main'>Start a new one?</a>
                 </font>
                 <br/>
                 <%
@@ -117,9 +130,9 @@
             </form>
         </td>
         <td valign="top" width="400">
-            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chartid%>&userid=<%=userSession.getUser().getUserid()%>&size=small&comparetouserid=0" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
+            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=userSession.getApp().getPrimarychartid()%>&userid=<%=userSession.getUser().getUserid()%>&size=small&comparetouserid=0" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
             <br/>
-            <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts&chartid=<%=chartid%>'>Zoom</a>
+            <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts&chartid=<%=userSession.getApp().getPrimarychartid()%>'>+Zoom</a>
             <br/>
         </td>
     </tr>

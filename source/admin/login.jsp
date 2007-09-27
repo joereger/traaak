@@ -52,7 +52,7 @@
                 <table cellpadding="3" cellspacing="0" border="0">
                     <tr>
                         <td valign="top" colspan="2">
-                            <font style="font-family: impact; font-size: 25px; color: #cccccc;">Please Log In for Cake</font>
+                            <font style="font-family: impact; font-size: 42px; color: #cccccc;">Log In for Cake</font>
                         </td>
                     </tr>
                     <tr>

@@ -30,6 +30,12 @@
         <property name="facebookapisecret" type="text">
             <column name="facebookapisecret" not-null="true"/>
         </property>
+        <property name="primarychartid" type="int">
+            <column name="primarychartid" not-null="true" />
+        </property>
+        <property name="minifeedtemplate" type="text">
+            <column name="minifeedtemplate" not-null="true"/>
+        </property>
 
     </class>
 </hibernate-mapping>

@@ -9,6 +9,8 @@
 <%@ page import="com.fbdblog.qtype.def.Component" %>
 <%@ page import="com.fbdblog.qtype.*" %>
 <%@ page import="com.fbdblog.dao.Chart" %>
+<%@ page import="com.fbdblog.chart.chartcache.ClearCache" %>
+<%@ page import="com.fbdblog.util.Str" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -21,6 +23,8 @@
             return;
         }
         app = new App();
+        app.setPrimarychartid(0);
+        app.setMinifeedtemplate("");
     }
 %>
 
@@ -28,12 +32,48 @@
 if (request.getParameter("action")!=null && request.getParameter("action").equals("save")){
     app.setTitle(request.getParameter("title"));
     app.setDescription(request.getParameter("description"));
+    app.setMinifeedtemplate(request.getParameter("minifeedtemplate"));
     app.setFacebookappname(request.getParameter("facebookappname"));
     app.setFacebookapikey(request.getParameter("facebookapikey"));
     app.setFacebookapisecret(request.getParameter("facebookapisecret"));
     try{app.save();}catch(Exception ex){logger.error(ex);}
     out.print("Saved.<br/>");
 }
+%>
+
+<%
+if (request.getParameter("action")!=null && request.getParameter("action").equals("deletequestion")){
+    if (request.getParameter("questionid") != null && Num.isinteger(request.getParameter("questionid"))) {
+        Question question = Question.get(Integer.parseInt(request.getParameter("questionid")));
+        try{question.delete();}catch(Exception ex){logger.error(ex);}
+        out.print("Deleted question.<br/>");
+    }
+}
+%>
+
+<%
+    if (request.getParameter("action") != null && request.getParameter("action").equals("clearchartcache")) {
+        try {
+            ClearCache.clearCacheForApp(app.getAppid());
+        } catch (Exception ex) {
+            logger.error(ex);
+        }
+        out.print("App chart cache cleared.<br/>");
+    }
+%>
+
+<%
+    if (request.getParameter("action") != null && request.getParameter("action").equals("setprimarychartid")) {
+        if (request.getParameter("primarychartid") != null && Num.isinteger(request.getParameter("primarychartid"))) {
+            try {
+                app.setPrimarychartid(Integer.parseInt(request.getParameter("primarychartid")));
+                app.save();
+            } catch (Exception ex) {
+                logger.error(ex);
+            }
+        }
+        out.print("Primary chart has been set.<br/>");
+    }
 %>
 
 App Detail
@@ -56,6 +96,29 @@ App Detail
             </td>
             <td valign="top">
                 <textarea name="description"><%=app.getDescription()%></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                MiniFeed Template
+            </td>
+            <td valign="top">
+                <textarea name="minifeedtemplate"><%=app.getMinifeedtemplate()%></textarea><br/>
+                <font style="font-size: 9px; font-family: arial;">
+                &lt;$url$><br/>
+                <%
+                    List<Question> minifeedquestions = HibernateUtil.getSession().createCriteria(Question.class)
+                            .add(Restrictions.eq("appid", app.getAppid()))
+                            .setCacheable(false)
+                            .list();
+                    for (Iterator<Question> iterator = minifeedquestions.iterator(); iterator.hasNext();) {
+                        Question question = iterator.next();
+                        %>
+                        &lt;$questionid.<%=question.getQuestionid()%>$> <%=Str.truncateString(question.getQuestion(), 25)%> <br/>
+                        <%
+                    }
+                %>
+                </font>
             </td>
         </tr>
         <tr>
@@ -129,7 +192,7 @@ App Detail
                         req = "*";
                     }
                     %>
-                    <a href="appdetail-question-<%=comptypefilename%>.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>"><%=question.getQuestion()%></a><%=req%><br/>
+                    <a href="appdetail-question-<%=comptypefilename%>.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>"><%=question.getQuestion()%></a><%=req%> (<a href='appdetail.jsp?action=deletequestion&appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>'>del</a>)<br/>
                     <%
                 }
             %>
@@ -156,13 +219,25 @@ App Detail
                 for (Iterator<Chart> iterator = charts.iterator(); iterator.hasNext();) {
                     Chart chart = (Chart)iterator.next();
                     %>
-                    <a href="appdetail-chart.jsp?appid=<%=app.getAppid()%>&chartid=<%=chart.getChartid()%>"><%=chart.getChartid()%>: <%=chart.getName()%></a><br/>
+                    <a href="appdetail-chart.jsp?appid=<%=app.getAppid()%>&chartid=<%=chart.getChartid()%>"><%=chart.getChartid()%>: <%=chart.getName()%></a>
+                    <%
+                    if (chart.getChartid()==app.getPrimarychartid()){
+                        %>
+                        (primary)    
+                        <%
+                    } else {
+                        %>
+                        (<a href='appdetail.jsp?action=setprimarychartid&appid=<%=app.getAppid()%>&primarychartid=<%=chart.getChartid()%>'>make primary</a>)
+                        <%
+                    }
+                    %>
+                    <br/>
                     <%
                 }
             %>
             <br/>
-            <br/><a href="appdetail-chart.jsp?action=newchart&appid=<%=app.getAppid()%>">+ Add Chart</a><br/>
-
+            <br/><a href="appdetail-chart.jsp?action=newchart&appid=<%=app.getAppid()%>">+ Add Chart</a>
+            <br/><a href='appdetail.jsp?action=clearchartcache&appid=<%=app.getAppid()%>'>- Clear Chart Cache For App</a>
         </td>
     </tr>
 </table>

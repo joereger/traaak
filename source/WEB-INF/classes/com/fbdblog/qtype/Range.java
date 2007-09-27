@@ -130,6 +130,20 @@ public class Range implements Component, ChartField {
         return out.toString();
     }
 
+    public String getValueForDisplay() {
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    if (postanswer.getName().equals("response")){
+                        return postanswer.getValue();
+                    }
+                }
+            }
+        }
+        return "";
+    }
+
     private boolean isThisOptionSelected(String option){
         if (post!=null && post.getPostanswers()!=null){
             for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {

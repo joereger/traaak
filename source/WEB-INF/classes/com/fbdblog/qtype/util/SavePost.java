@@ -10,6 +10,7 @@ import com.fbdblog.qtype.def.Component;
 import com.fbdblog.facebook.FacebookApiWrapper;
 import com.fbdblog.xmpp.SendXMPPMessage;
 import com.fbdblog.chart.chartcache.ClearCache;
+import com.fbdblog.session.UserSession;
 
 
 import java.util.Date;
@@ -24,7 +25,7 @@ import org.apache.log4j.Logger;
  */
 public class SavePost {
 
-    public static void save(App app, User user, Post post, AppPostParser appPostParser)  throws ComponentException {
+    public static void save(App app, User user, Post post, AppPostParser appPostParser, UserSession userSession)  throws ComponentException {
         Logger logger = Logger.getLogger(SavePost.class.getName());
         ComponentException allCex = new ComponentException();
 
@@ -81,14 +82,17 @@ public class SavePost {
                     //Refresh user
                     try{user.save();} catch (Exception ex){logger.error(ex);};
                     //Update Facebook
-                    FacebookApiWrapper facebookApiWrapper = new FacebookApiWrapper();
-                    //facebookApiWrapper.postSurveyToFacebookMiniFeed(survey, post);
+                    //@todo before going to production remove limitation of not updating mini feed for userid=1
+                    if (user.getUserid()>0){
+                        FacebookApiWrapper facebookApiWrapper = new FacebookApiWrapper(userSession);
+                        facebookApiWrapper.postSurveyToFacebookMiniFeed(post);
+                    }
                     //facebookApiWrapper.updateFacebookProfile(user);
+                    //Refresh the post
+                    try{post.save();} catch (Exception ex){logger.error(ex);}
+                    //Clear the chart image cache
+                    ClearCache.clearCacheForUser(user.getUserid(), app.getAppid());
                 }
-                //Refresh the post
-                try{post.save();} catch (Exception ex){logger.error(ex);}
-                //Clear the chart image cache
-                ClearCache.clearCacheForUser(user.getUserid(), app.getAppid());
             } catch (Exception ex){
                 ex.printStackTrace();
                 logger.error(ex);

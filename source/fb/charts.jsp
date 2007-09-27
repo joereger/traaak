@@ -20,17 +20,9 @@
         chart=Chart.get(Integer.parseInt(request.getParameter("chartid")));
     }
 
-    //If no chart requested, choose a default
+    //If no chart requested, choose the primary for this app
     if (chart==null || chart.getChartid()<=0){
-        //@todo Define a chart as the primary chart for the app
-        List<Chart> charts=HibernateUtil.getSession().createCriteria(Chart.class)
-                .add(Restrictions.eq("appid", userSession.getApp().getAppid()))
-                .setCacheable(true)
-                .list();
-        for (Iterator<Chart> iterator=charts.iterator(); iterator.hasNext();) {
-            chart = iterator.next();
-            break;
-        }
+        chart=Chart.get(userSession.getApp().getPrimarychartid());
     }
 %>
 

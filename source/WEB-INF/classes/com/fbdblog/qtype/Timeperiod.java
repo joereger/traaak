@@ -111,6 +111,23 @@ public class Timeperiod implements Component, ChartField {
         return out.toString();
     }
 
+    public String getValueForDisplay() {
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    if (postanswer.getName().equals("response")){
+                        if (Num.isinteger(postanswer.getValue())){
+                            HoursMinutesSeconds hms = new HoursMinutesSeconds(Integer.parseInt(postanswer.getValue()));
+                            return hms.getHours()+"hrs:"+hms.getMinutes()+"min:"+hms.getSeconds()+"sec";
+                        }
+                    }
+                }
+            }
+        }
+        return "";
+    }
+
 
 
     public void validateAnswer(AppPostParser srp) throws ComponentException {

@@ -114,6 +114,24 @@ public class Checkboxes implements Component, ChartField {
         return out.toString();
     }
 
+    public String getValueForDisplay() {
+        StringBuffer out = new StringBuffer();
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    if (postanswer.getName().equals("response")){
+                        if (out.length()>0){
+                            out.append(", ");   
+                        }
+                        out.append(postanswer.getValue());
+                    }
+                }
+            }
+        }
+        return out.toString();
+    }
+
     private boolean isThisOptionSelected(String option){
         if (post!=null && post.getPostanswers()!=null){
             for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {

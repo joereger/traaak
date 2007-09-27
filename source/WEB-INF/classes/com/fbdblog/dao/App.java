@@ -28,6 +28,8 @@ public class App extends BasePersistentClass implements java.io.Serializable, Re
      private String facebookappname;
      private String facebookapikey;
      private String facebookapisecret;
+     private int primarychartid;
+     private String minifeedtemplate;
 
      private Set<Question> questions = new HashSet<Question>();
 
@@ -140,5 +142,23 @@ public class App extends BasePersistentClass implements java.io.Serializable, Re
 
     public void setFacebookapisecret(String facebookapisecret) {
         this.facebookapisecret = facebookapisecret;
+    }
+
+
+    public int getPrimarychartid() {
+        return primarychartid;
+    }
+
+    public void setPrimarychartid(int primarychartid) {
+        this.primarychartid=primarychartid;
+    }
+
+
+    public String getMinifeedtemplate() {
+        return minifeedtemplate;
+    }
+
+    public void setMinifeedtemplate(String minifeedtemplate) {
+        this.minifeedtemplate=minifeedtemplate;
     }
 }

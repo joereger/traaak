@@ -181,6 +181,7 @@ public class GetChart {
             fileOut.write(bytes);
             fileOut.close();
         } catch (Exception ex){
+            ex.printStackTrace();
             logger.error(ex);
         }
     }

@@ -131,6 +131,28 @@ public class Matrix implements Component, ChartField {
         return out.toString();
     }
 
+    public String getValueForDisplay() {
+        StringBuffer out = new StringBuffer();
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    if (postanswer.getName().equals("response")){
+                        String[] split = postanswer.getValue().split(DELIM);
+                        if (split.length>=2){
+                            if (out.length()>0){
+                                out.append(", ");
+                            }
+                            out.append("("+split[0]+", "+split[1]+")");
+                        }
+                        return postanswer.getValue();
+                    }
+                }
+            }
+        }
+        return out.toString();
+    }
+
     private boolean isThisOptionSelected(String row, String col){
         if (post!=null && post.getPostanswers()!=null){
             for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {

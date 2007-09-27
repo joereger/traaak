@@ -85,18 +85,6 @@ Question Detail: <%=question.getQuestion()%>
             </td>
             <td valign="top">
                 <select name="datatypeid">
-                    <%String stringSelected = "";
-                    if (question.getDatatypeid()==DataTypeString.DATATYPEID){stringSelected=" selected";}%>
-                    <option value="<%=DataTypeString.DATATYPEID%>" <%=stringSelected%>>String</option>
-
-                    <%String datetimeSelected = "";
-                    if (question.getDatatypeid()==DataTypeDatetime.DATATYPEID){datetimeSelected=" selected";}%>
-                    <option value="<%=DataTypeDatetime.DATATYPEID%>" <%=datetimeSelected%>>Date/Time</option>
-
-                    <%String numericSelected = "";
-                    if (question.getDatatypeid()==DataTypeDecimal.DATATYPEID){numericSelected=" selected";}%>
-                    <option value="<%=DataTypeDecimal.DATATYPEID%>" <%=numericSelected%>>Numeric/Decimal</option>
-
                     <%String integerSelected = "";
                     if (question.getDatatypeid()==DataTypeInteger.DATATYPEID){integerSelected=" selected";}%>
                     <option value="<%=DataTypeInteger.DATATYPEID%>" <%=integerSelected%>>Integer</option>
