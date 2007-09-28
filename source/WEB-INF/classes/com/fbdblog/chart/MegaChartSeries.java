@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import com.fbdblog.util.Num;
 import com.fbdblog.util.Time;
 import com.fbdblog.util.Str;
+import com.fbdblog.util.Util;
 import com.fbdblog.dao.Post;
 import com.fbdblog.dao.Question;
 import com.fbdblog.dao.Chart;
@@ -134,6 +135,7 @@ public class MegaChartSeries {
      }
 
      public String[][] combineTwoTreeMapsIntoDataArray(TreeMap xAxis, TreeMap yAxis, ArrayList<Post> posts){
+        Logger logger = Logger.getLogger(this.getClass().getName());
         //The final format is an array of [eventid][xAxisData][yAxisData]
         String[][] outData = new String[0][3];
         if (posts!=null){
@@ -159,15 +161,20 @@ public class MegaChartSeries {
                 yData = " ";
             }
 
-            //Only add if
-                //Create triple array
-                String[] tmpArr = new String[3];
-                tmpArr[0] = String.valueOf(post.getPostid());
-                tmpArr[1] = xData.toString();
-                tmpArr[2] = yData.toString();
-                //Add this tmpArray to the main data array
-                outData[count] = tmpArr;
-                count = count + 1;
+            //Only add if both x and y have something to contribute
+            //if (xData!=null && !xData.equals("null") && !xData.equals(" ") && !xData.equals("") && !xData.equals("0")){
+                //if (yData!=null && !yData.equals("null") && !yData.equals(" ") && !yData.equals("") && !yData.equals("0")){
+                    logger.debug("adding to outData["+count+"]: post.getPostid()="+String.valueOf(post.getPostid())+" xData.toString()="+xData.toString()+" yData.toString()="+yData.toString());
+                    //Create triple array
+                    String[] tmpArr = new String[3];
+                    tmpArr[0] = String.valueOf(post.getPostid());
+                    tmpArr[1] = xData.toString();
+                    tmpArr[2] = yData.toString();
+                    //Add this tmpArray to the main data array
+                    outData[count] = tmpArr;
+                    count = count + 1;
+                //}
+            //}
         }
         //Return the data
         return outData;
@@ -177,7 +184,7 @@ public class MegaChartSeries {
      * Clean up the data and get it ready to be thrown at a chart object.
      */
     public void massageData(){
-
+        Logger logger = Logger.getLogger(this.getClass().getName());
         //Sort
         //Create TreeMap
         TreeMap tmap = new TreeMap();
@@ -196,7 +203,10 @@ public class MegaChartSeries {
         boolean ydupeFlag=false;
         if (tmpChartData!=null && tmpChartData.length>0){
         	for(int i=0; i<tmpChartData.length; i++){
-
+                logger.debug("tmpChartData["+i+"][0]="+tmpChartData[i][0]+" tmpChartData.length="+tmpChartData.length);
+        	    if (tmpChartData[i][0]==null){
+                    logger.debug("it's really null... tmpChartData[i][0]==null");    
+                }
         	    //Create a properly typed eventid
         	    Object eventid = new Integer(tmpChartData[i][0]);
 

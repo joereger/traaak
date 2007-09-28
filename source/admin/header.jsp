@@ -33,6 +33,7 @@
             <a href='users.jsp'>Users</a><br/>
             <a href='sysprops.jsp'>SysProps</a><br/>
             <a href='instanceprops.jsp'>InstanceProps</a><br/>
+            <a href='financialmodel.jsp'>Financial Model</a><br/>
         </td>
         <td valign="top">
 

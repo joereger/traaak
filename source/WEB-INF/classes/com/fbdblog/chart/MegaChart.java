@@ -190,7 +190,6 @@ public class MegaChart {
                 debugCount = debugCount + seriesTmp.cleanData.length;
             }
             logger.debug("MegaChart.java - items graphed="+debugCount);
-
         }
     }
 
