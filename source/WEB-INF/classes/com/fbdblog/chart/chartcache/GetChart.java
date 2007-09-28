@@ -69,6 +69,12 @@ public class GetChart {
         if (size.equals("tiny")) {
             chartwidth=200;
             chartheight=125;
+        } else if (size.equals("profilenarrow")) {
+            chartwidth=180;
+            chartheight=100;
+        } else if (size.equals("profilewide")) {
+            chartwidth=380;
+            chartheight=200;
         } else if (size.equals("small")) {
             chartwidth=400;
             chartheight=250;

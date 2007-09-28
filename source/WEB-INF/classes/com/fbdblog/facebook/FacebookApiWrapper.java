@@ -3,6 +3,7 @@ package com.fbdblog.facebook;
 import com.facebook.api.FacebookRestClient;
 import com.fbdblog.session.UserSession;
 import com.fbdblog.systemprops.SystemProperty;
+import com.fbdblog.systemprops.BaseUrl;
 import com.fbdblog.dao.Post;
 import com.fbdblog.dao.User;
 import com.fbdblog.dao.App;
@@ -36,12 +37,12 @@ public class FacebookApiWrapper {
         Logger logger = Logger.getLogger(this.getClass().getName());
         this.userSession = userSession;
         if (userSession.getFacebooksessionkey()!=null && !userSession.getFacebooksessionkey().trim().equals("")){
-
             try{
                 FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
                 if (userSession.getUser()!=null && userSession.getUser().getUserid()>0){
                     if (userSession.getUser().getFacebookuid()!=null){
-                        if (userSession.getUser().getFacebookuid().equals(facebookRestClient.users_getLoggedInUser())){
+                        logger.debug("userSession.getUser().getFacebookuid()="+userSession.getUser().getFacebookuid()+" facebookRestClient.users_getLoggedInUser()="+facebookRestClient.users_getLoggedInUser());
+                        if (userSession.getUser().getFacebookuid().trim().equals(String.valueOf(facebookRestClient.users_getLoggedInUser()))){
                             issessionok = true;
                         } else {
                             logger.debug("userSession.getUser().getFacebookuserid()!=facebookRestClient.users_getLoggedInUser()");
@@ -80,10 +81,17 @@ public class FacebookApiWrapper {
         logger.debug("Starting to create FBML for profile");
         if (issessionok){
             try{
+                String imgUrl = BaseUrl.get(false)+"fb/graph.jsp?chartid="+userSession.getApp().getPrimarychartid()+"&userid="+user.getUserid()+"&size=profilewide&comparetouserid=0";
+
                 StringBuffer fbml = new StringBuffer();
-                double totalearnings = 0;
-                int count = 0;
-                fbml.append("");
+                fbml.append("<center>");
+                fbml.append("<a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/'>");
+                fbml.append("<img src=\""+imgUrl+"\" alt=\"\" width=\"380\" height=\"200\"/>");
+                fbml.append("<br/>");
+                fbml.append("<font size='-2'>Chart by "+userSession.getApp().getTitle()+"</font>");
+                fbml.append("</a>");
+                fbml.append("</center>");
+
                 CharSequence cs = fbml.subSequence(0, fbml.length());
                 FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
                 boolean success = facebookRestClient.profile_setFBML(cs, Integer.parseInt(user.getFacebookuid()));
@@ -91,6 +99,12 @@ public class FacebookApiWrapper {
                     logger.debug("Apparently the setFBML was successful.");
                 } else {
                     logger.debug("Apparently the setFBML was not successful.");
+                }
+                boolean successrefreshimage = facebookRestClient.fbml_refreshImgSrc(imgUrl);
+                if (successrefreshimage){
+                    logger.debug("Apparently refresh fb image was successful.");
+                } else {
+                    logger.debug("Apparently refresh fb image was not successful.");
                 }
             } catch (Exception ex){logger.error(ex);}
         } else {logger.debug("Can't execute because issessionok = false");}

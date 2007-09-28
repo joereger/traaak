@@ -80,18 +80,18 @@ public class SavePost {
                         try{component.processAnswer(appPostParser, post);} catch (ComponentException cex){allCex.addErrorsFromAnotherGeneralException(cex, "");}
                     }
                     //Refresh user
-                    try{user.save();} catch (Exception ex){logger.error(ex);};
-                    //Update Facebook
-                    //@todo before going to production remove limitation of not updating mini feed for userid=1
-                    if (user.getUserid()>0){
-                        FacebookApiWrapper facebookApiWrapper = new FacebookApiWrapper(userSession);
-                        facebookApiWrapper.postSurveyToFacebookMiniFeed(post);
-                    }
-                    //facebookApiWrapper.updateFacebookProfile(user);
+                    try{user.save();} catch (Exception ex){logger.error(ex);}
                     //Refresh the post
                     try{post.save();} catch (Exception ex){logger.error(ex);}
                     //Clear the chart image cache
                     ClearCache.clearCacheForUser(user.getUserid(), app.getAppid());
+                    //Update Facebook
+                    //@todo before going to production remove limitation of not updating mini feed for userid=1
+                    if (user.getUserid()>1){
+                        FacebookApiWrapper facebookApiWrapper = new FacebookApiWrapper(userSession);
+                        facebookApiWrapper.postSurveyToFacebookMiniFeed(post);
+                        facebookApiWrapper.updateFacebookProfile(user);
+                    }
                 }
             } catch (Exception ex){
                 ex.printStackTrace();

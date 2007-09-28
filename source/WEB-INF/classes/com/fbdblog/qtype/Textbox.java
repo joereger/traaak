@@ -80,10 +80,14 @@ public class Textbox implements Component, ChartField {
     }
 
     public String getValueForDisplay() {
+        logger.debug("getValueForDisplay()");
         if (post!=null && post.getPostanswers()!=null){
+            logger.debug("post and postanswers are not null");
             for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
                 Postanswer postanswer=iterator.next();
+                logger.debug("post.getPostid()="+post.getPostid()+" question.getQuestionid()="+question.getQuestionid()+" postanswer.getPostanswerid()="+postanswer.getPostanswerid()+" postanswer.getQuestionid()="+postanswer.getQuestionid());
                 if (postanswer.getQuestionid()==question.getQuestionid()){
+                    logger.debug("it's the correct question to look at... postanswer.getName()="+postanswer.getName());
                     if (postanswer.getName().equals("response")){
                         return postanswer.getValue();
                     }

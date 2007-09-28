@@ -52,7 +52,7 @@ public class MinifeedTemplateProcessor {
 
         if (tag.equals("<$url$>")){
             if (app!=null){
-                return "http://apps.facebook.com/"+app.getFacebookappname()+"/";
+                return "http://apps.facebook.com/"+app.getFacebookappname()+"/?comparetouserid="+user.getUserid();
             } else {
                 return "";
             }
@@ -62,7 +62,7 @@ public class MinifeedTemplateProcessor {
         //<$questionid.1$> <$questionid.2$> <$questionid.3$>
         logger.debug("didn't find a normal tag");
         if (tag.indexOf("questionid")>-1){
-            logger.debug("found an args tag");
+            logger.debug("found a questionid tag");
             String tagStripped = tag.substring(2, tag.length()-2);
             logger.debug("tagStripped="+tagStripped);
             String[] tagSplit = tagStripped.split("\\.");
