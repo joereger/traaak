@@ -9,6 +9,7 @@
         <mapping resource="com/fbdblog/dao/App.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Chart.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Chartyaxis.hbm.xml" />
+        <mapping resource="com/fbdblog/dao/Impression.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Post.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Postanswer.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Question.hbm.xml" />
@@ -16,6 +17,7 @@
         <mapping resource="com/fbdblog/dao/Questionuserconfig.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Systemprop.hbm.xml" />
         <mapping resource="com/fbdblog/dao/User.hbm.xml" />
+        <mapping resource="com/fbdblog/dao/Userappactivity.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Userpersistentlogin.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Userrole.hbm.xml" />
 

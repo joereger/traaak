@@ -155,6 +155,19 @@ public class Str {
         }
     }
 
+    public static String formatWithXDecimalPlaces(double in, int xdecimalplaces){
+        Logger logger = Logger.getLogger(Str.class);
+        try{
+            NumberFormat formatter = DecimalFormat.getInstance();
+            formatter.setMinimumFractionDigits(xdecimalplaces);
+            formatter.setMaximumFractionDigits(xdecimalplaces);
+            return formatter.format(in);
+        } catch (Exception ex){
+            logger.error(ex);
+            return "";
+        }
+    }
+
     public static String formatForFinancialTransactionsNoCommas(double in){
         Logger logger = Logger.getLogger(Str.class);
         try{

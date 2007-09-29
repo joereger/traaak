@@ -49,6 +49,7 @@
                 <img src="/images/cake.jpg" alt="Mmmm, cake"> 
             </td>
             <td valign="top">
+                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                 <table cellpadding="3" cellspacing="0" border="0">
                     <tr>
                         <td valign="top" colspan="2">

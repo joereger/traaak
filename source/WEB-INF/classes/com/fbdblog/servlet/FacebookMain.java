@@ -39,6 +39,11 @@ public class FacebookMain extends HttpServlet {
             request.getRequestDispatcher("/fb/charts.jsp").forward(request, response);
             return;
         }
+
+        if (request.getParameter("fb_sig_uninstall")!=null && request.getParameter("fb_sig_uninstall").equals("1")){
+            request.getRequestDispatcher("/fb/uninstall.jsp").forward(request, response);
+            return;
+        }
         
         request.getRequestDispatcher("/fb/index.jsp").forward(request, response);
     }

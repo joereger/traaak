@@ -41,6 +41,15 @@
 %>
 
 <%
+if (userSession.getIsnewappforthisuser()){
+    out.print("<fb:success>\n" +
+            "     <fb:message>Howdy!</fb:message>\n" +
+            "     Glad you've added "+userSession.getApp().getTitle()+".  Track some stuff and get some charts.  Just realize that everything you track is public.\n" +
+            "</fb:success>");    
+}
+%>
+
+<%
     if (request.getParameter("action") != null && request.getParameter("action").equals("compare")) {
         //@todo implement compare
         logger.debug("compare called");

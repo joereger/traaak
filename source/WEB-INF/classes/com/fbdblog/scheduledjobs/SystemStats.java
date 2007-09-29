@@ -16,9 +16,7 @@ public class SystemStats implements Job {
 
 
 
-    //BE SURE TO SYNC CODE HERE WITH MAIN SystemStats in formbeans (which jsf uses)
-
-
+  
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         Logger logger = Logger.getLogger(this.getClass().getName());
         if (InstanceProperties.getRunScheduledTasksOnThisInstance()){

@@ -10,7 +10,7 @@
     <job>
         <job-detail>
           <name>systemStats</name>
-          <group>surveyJobs</group>
+          <group>myJobs</group>
           <job-class>com.fbdblog.scheduledjobs.SystemStats</job-class>
           <volatility>false</volatility>
           <durability>false</durability>
@@ -20,11 +20,34 @@
           <!-- Sample cron triggers: http://www.opensymphony.com/quartz/wikidocs/TutorialLesson6.html -->
           <cron>
             <name>systemStatsTrigger</name>
-            <group>surveyTriggers</group>
+            <group>myTriggers</group>
             <job-name>systemStats</job-name>
-            <job-group>surveyJobs</job-group>
+            <job-group>myJobs</job-group>
             <!-- every x minutes -->
             <cron-expression>0 0/15 * * * ?</cron-expression>
+          </cron>
+        </trigger>
+    </job>
+
+
+    <job>
+        <job-detail>
+          <name>impressionCache</name>
+          <group>myJobs</group>
+          <job-class>com.fbdblog.scheduledjobs.ImpressionCache</job-class>
+          <volatility>false</volatility>
+          <durability>false</durability>
+          <recover>false</recover>
+        </job-detail>
+        <trigger>
+          <!-- Sample cron triggers: http://www.opensymphony.com/quartz/wikidocs/TutorialLesson6.html -->
+          <cron>
+            <name>impressionCacheTrigger</name>
+            <group>myTriggers</group>
+            <job-name>impressionCache</job-name>
+            <job-group>myJobs</job-group>
+            <!-- every x minutes -->
+            <cron-expression>0 0/2 * * * ?</cron-expression>
           </cron>
         </trigger>
     </job>

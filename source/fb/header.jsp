@@ -10,38 +10,55 @@
 <%@ page import="com.fbdblog.dao.App" %>
 <%@ page import="com.fbdblog.facebook.FindAppFromApiKey" %>
 <%@ page import="com.fbdblog.session.UrlSplitter" %>
+<%@ page import="java.util.Calendar" %>
+<%@ page import="com.fbdblog.dao.Impression" %>
+<%@ page import="com.fbdblog.impressions.ImpressionActivityObject" %>
+<%@ page import="com.fbdblog.scheduledjobs.ImpressionCache" %>
 <%
     //Logger
-    Logger logger = Logger.getLogger(this.getClass());
+    Logger logger=Logger.getLogger(this.getClass());
 
     //Make sure we have a userSession to work with
-    UserSession userSession = null;
-    Object ustmp = request.getSession().getAttribute("userSession");
+    UserSession userSession=null;
+    Object ustmp=request.getSession().getAttribute("userSession");
     if (ustmp != null) {
-        userSession = (UserSession) ustmp;
+        userSession=(UserSession) ustmp;
     } else {
-        userSession = new UserSession();
+        userSession=new UserSession();
         request.getSession().setAttribute("userSession", userSession);
     }
 
     //If user hasn't added app yet redir to the app add page
-    if (userSession.getFacebookUser()==null || !userSession.getFacebookUser().getHas_added_app()) {
+    if (userSession.getFacebookUser() == null || !userSession.getFacebookUser().getHas_added_app()) {
         logger.debug("Redirecting this user to facebook add app page");
         //If we have a known app
-        if (userSession.getApp()!=null){
-            if (userSession.getFacebookUser()!=null && userSession.getFacebookUser().getUid().length()>0){
+        if (userSession.getApp() != null) {
+            if (userSession.getFacebookUser() != null && userSession.getFacebookUser().getUid().length()>0) {
                 //Notify via XMPP
-                SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "Redirecting " + userSession.getFacebookUser().getFirst_name() + " " + userSession.getFacebookUser().getLast_name() + " to add app page. " + "(facebook.uid=" + userSession.getFacebookUser().getUid() + ")");
+                SendXMPPMessage xmpp=new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "Redirecting " + userSession.getFacebookUser().getFirst_name() + " " + userSession.getFacebookUser().getLast_name() + " to add app page. " + "(facebook.uid=" + userSession.getFacebookUser().getUid() + ")");
                 xmpp.send();
             } else {
-                SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "Redirecting an unknown facebook user to add app page.");
+                SendXMPPMessage xmpp=new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "Redirecting an unknown facebook user to add app page.");
                 xmpp.send();
             }
             //Redirect to app add page with fbml
-            out.print("<fb:redirect url=\"http://www.facebook.com/add.php?api_key="+userSession.getApp().getFacebookapikey()+"\" />");
+            out.print("<fb:redirect url=\"http://www.facebook.com/add.php?api_key=" + userSession.getApp().getFacebookapikey() + "\" />");
             return;
         } else {
             //@todo what to do with unknown app?
+        }
+    }
+
+    //Record Impression
+    if (userSession != null && userSession.getUser() != null && userSession.getApp() != null) {
+        if (userSession.getUser().getUserid()>0 && userSession.getApp().getAppid()>0) {
+            Calendar cal=Calendar.getInstance();
+            ImpressionActivityObject iao=new ImpressionActivityObject();
+            iao.setUserid(userSession.getUser().getUserid());
+            iao.setAppid(userSession.getApp().getAppid());
+            iao.setYear(cal.get(Calendar.YEAR));
+            iao.setMonth(cal.get(Calendar.MONTH)+1);
+            ImpressionCache.addIao(iao);
         }
     }
 

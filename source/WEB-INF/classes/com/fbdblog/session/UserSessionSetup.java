@@ -1,6 +1,7 @@
 package com.fbdblog.session;
 
 import org.apache.log4j.Logger;
+import org.hibernate.criterion.Restrictions;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletOutputStream;
@@ -13,6 +14,8 @@ import com.fbdblog.facebook.FindUserFromFacebookUid;
 import com.fbdblog.xmpp.SendXMPPMessage;
 import com.fbdblog.dao.User;
 import com.fbdblog.dao.App;
+import com.fbdblog.dao.Userappactivity;
+import com.fbdblog.dao.hibernate.HibernateUtil;
 import com.fbdblog.util.Num;
 import com.fbdblog.cache.providers.CacheProvider;
 import com.fbdblog.cache.providers.CacheFactory;
@@ -20,6 +23,9 @@ import com.facebook.api.FacebookRestClient;
 import com.facebook.api.FacebookException;
 
 import java.util.Date;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Iterator;
 
 /**
  * User: Joe Reger Jr
@@ -43,6 +49,16 @@ public class UserSessionSetup {
         } else {
             userSession = new UserSession();
         }
+
+
+        //Track app uninstalls
+        if (request.getParameter("fb_sig_uninstall")!=null && request.getParameter("fb_sig_uninstall").equals("1")){
+            //try{request.getRequestDispatcher("/fb/uninstall.jsp").forward(request, response);}catch(Exception ex){logger.error(ex);}
+            return;
+        }
+
+        //Reset the app add flag
+        userSession.setIsnewappforthisuser(false);
 
         //Facebook
         try {
@@ -84,10 +100,7 @@ public class UserSessionSetup {
                 }
             }
 
-            //Track app adds
-            if (request.getParameter("postaddappid")!=null && Num.isinteger(request.getParameter("postaddappid"))) {
-                //@todo track app add and/or set var in session so that I can call a banner add thing
-            }
+
 
             //Pull userSession from cache
             boolean foundSessionInCache = false;
@@ -99,6 +112,9 @@ public class UserSessionSetup {
             } else {
                 logger.debug("no userSession in cache");
             }
+
+            //Reset the app add flag
+            userSession.setIsnewappforthisuser(false);
 
             //In general try not to handle request vars below this line
             //I only want to run this stuff when I see a new Facebook session key...
@@ -148,8 +164,6 @@ public class UserSessionSetup {
                     logger.debug("userSession.getFacebookUser() is empty after calling facebook api");
                     //@todo how to handle facebook call to populate user is empty?
                 }
-                //Save UserSession in Cache
-                CacheFactory.getCacheProvider().put(userSession.getFacebooksessionkey(), "userSession", userSession);
             } else {
                 logger.debug("didn't find a new facebooksessionkey so didn't make api call to load facebook user");
             }
@@ -157,6 +171,41 @@ public class UserSessionSetup {
             ex.printStackTrace();
             logger.error(ex);
         }
+
+        //Track app adds
+        if (request.getParameter("postaddappid")!=null && Num.isinteger(request.getParameter("postaddappid"))) {
+            //@todo set var in session so that I can call a banner add thing
+            if (userSession.getUser()!=null && userSession.getUser().getUserid()>0 && userSession.getApp()!=null && userSession.getApp().getAppid()>0) {
+                //Is this a new app for this user?
+                List<Userappactivity> uaas = HibernateUtil.getSession().createCriteria(Userappactivity.class)
+                                               .add(Restrictions.eq("userid", userSession.getUser().getUserid()))
+                                               .add(Restrictions.eq("appid", userSession.getApp().getAppid()))
+                                               .setCacheable(false)
+                                               .list();
+                if (uaas!=null && uaas.size()>0){
+                    userSession.setIsnewappforthisuser(false);
+                } else {
+                    userSession.setIsnewappforthisuser(true);
+                }
+                //Now record the app add
+                Calendar cal = Calendar.getInstance();
+                Userappactivity userappactivity=new Userappactivity();
+                userappactivity.setAppid(userSession.getApp().getAppid());
+                userappactivity.setUserid(userSession.getUser().getUserid());
+                userappactivity.setDate(new Date());
+                userappactivity.setYear(cal.get(Calendar.YEAR));
+                userappactivity.setMonth(cal.get(Calendar.MONTH)+1);
+                userappactivity.setIsinstall(true);
+                userappactivity.setIsuninstall(false);
+                try {userappactivity.save();} catch (Exception ex) {logger.error(ex);}
+
+            }
+
+
+        }
+
+        //Save UserSession in Cache
+        CacheFactory.getCacheProvider().put(userSession.getFacebooksessionkey(), "userSession", userSession);
 
         //Save in session
         request.getSession().setAttribute("userSession", userSession);

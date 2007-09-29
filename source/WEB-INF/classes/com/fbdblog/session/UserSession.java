@@ -27,6 +27,7 @@ public class UserSession implements Serializable {
     private boolean issysadmin = false;
     private String facebooksessionkey = "";
     private FacebookUser facebookUser = null;
+    private boolean isnewappforthisuser = false;
   
     public UserSession(){
         Logger logger = Logger.getLogger(this.getClass().getName());
@@ -105,5 +106,13 @@ public class UserSession implements Serializable {
 
     public void setFacebookUser(FacebookUser facebookUser) {
         this.facebookUser = facebookUser;
+    }
+
+    public boolean getIsnewappforthisuser() {
+        return isnewappforthisuser;
+    }
+
+    public void setIsnewappforthisuser(boolean isnewappforthisuser) {
+        this.isnewappforthisuser=isnewappforthisuser;
     }
 }

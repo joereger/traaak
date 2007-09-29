@@ -8,13 +8,13 @@ Financial Model
 
 <%
 
-
 double monthlyinvestment = 1000;
 double costtoattractanewuser = .25;
 double monthlyuninstallpercentage = 30;
 double monthlyearningsperuser = .1;
 double percentofprofittoreinvesteachmonth = 90;
-double numerofusersittakestogetorganicnewuser = 3;
+double avgimpressionssperuser = 30;
+double cpmtoestimatewith = .45;
 
 %>
 
@@ -35,8 +35,11 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
     if (request.getParameter("percentofprofittoreinvesteachmonth")!=null && Num.isdouble(request.getParameter("percentofprofittoreinvesteachmonth"))) {
         percentofprofittoreinvesteachmonth = Double.parseDouble(request.getParameter("percentofprofittoreinvesteachmonth"));
     }
-    if (request.getParameter("numerofusersittakestogetorganicnewuser")!=null && Num.isdouble(request.getParameter("numerofusersittakestogetorganicnewuser"))) {
-        numerofusersittakestogetorganicnewuser = Double.parseDouble(request.getParameter("numerofusersittakestogetorganicnewuser"));
+    if (request.getParameter("avgimpressionssperuser")!=null && Num.isdouble(request.getParameter("avgimpressionssperuser"))) {
+        avgimpressionssperuser = Double.parseDouble(request.getParameter("avgimpressionssperuser"));
+    }
+    if (request.getParameter("cpmtoestimatewith")!=null && Num.isdouble(request.getParameter("cpmtoestimatewith"))) {
+        cpmtoestimatewith = Double.parseDouble(request.getParameter("cpmtoestimatewith"));
     }
 }
 %>
@@ -65,8 +68,12 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
     <td valign="top"><input type="text" name="percentofprofittoreinvesteachmonth" value="<%=percentofprofittoreinvesteachmonth%>"></td>
 </tr>
 <tr>
-    <td valign="top"><font style="font-family: arial; font-size: 12px;">numerofusersittakestogetorganicnewuser</font></td>
-    <td valign="top"><input type="text" name="numerofusersittakestogetorganicnewuser" value="<%=numerofusersittakestogetorganicnewuser%>"></td>
+    <td valign="top"><font style="font-family: arial; font-size: 12px;">avgimpressionssperuser</font></td>
+    <td valign="top"><input type="text" name="avgimpressionssperuser" value="<%=avgimpressionssperuser%>"></td>
+</tr>
+<tr>
+    <td valign="top"><font style="font-family: arial; font-size: 12px;">cpmtoestimatewith</font></td>
+    <td valign="top"><input type="text" name="cpmtoestimatewith" value="<%=cpmtoestimatewith%>"></td>
 </tr>
 <tr>
     <td valign="top"><font style="font-family: arial; font-size: 12px;"></font></td>
@@ -79,6 +86,8 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
 <table cellpadding="3" cellspacing="0" border="0">
 <tr>
     <td valign="top"><font style="font-family: arial; font-size: 12px;">Month</font></td>
+    <td valign="top"><font style="font-family: arial; font-size: 12px;">Est Imp</font></td>
+    <td valign="top"><font style="font-family: arial; font-size: 12px;">Est Imp Rev</font></td>
     <td valign="top"><font style="font-family: arial; font-size: 12px;">This Mo New Users</font></td>
     <td valign="top"><font style="font-family: arial; font-size: 12px;">This Mo Investment</font></td>
     <td valign="top"><font style="font-family: arial; font-size: 12px;">This Mo Cash</font></td>
@@ -90,6 +99,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
     <td valign="top"><font style="font-family: arial; font-size: 12px;">Tot Cash</font></td>
     <td valign="top"><font style="font-family: arial; font-size: 12px;">Tot Revenue</font></td>
     <td valign="top"><font style="font-family: arial; font-size: 12px;">Tot Profit</font></td>
+    <td valign="top"><font style="font-family: arial; font-size: 12px;">Balance</font></td>
 </tr>
 <%
 double totalusers = 0;
@@ -99,6 +109,7 @@ double totalprofit = 0;
 double previousmonthrevenue = 0;
 double previousmonthprofit = 0;
 double totalcashoutofpocket = 0;
+double balance = 0;
 for(int i=0; i<12; i++){
 
     //Investment/reinvestment
@@ -117,11 +128,13 @@ for(int i=0; i<12; i++){
 
     //Users
     double newusersboughtthismonth = thismonthinvestment/costtoattractanewuser;
-    double viralnewusersthismonth = newusersboughtthismonth/numerofusersittakestogetorganicnewuser;
-    double newusersthismonth = newusersboughtthismonth + viralnewusersthismonth;
+    double newusersthismonth = newusersboughtthismonth;
     double userslostthismonth = totalusers*(monthlyuninstallpercentage/100);
     totalusers = (totalusers-userslostthismonth) + newusersthismonth;
 
+    //Impressions
+    double estimpressions = totalusers * avgimpressionssperuser;
+    double estimpressionrevenue = (estimpressions/1000) * cpmtoestimatewith;
 
     //Revenue/profit
     double thismonthrevenue = (totalusers*monthlyearningsperuser);
@@ -131,10 +144,15 @@ for(int i=0; i<12; i++){
     totalrevenue = totalrevenue + thismonthrevenue;
     totalprofit = totalrevenue - totalinvestment;
 
+    //Balance
+    balance = balance + totalprofit;
+
 
     %>
         <tr>
             <td valign="top"><font style="font-family: arial; font-size: 12px;"><%=i+1%></font></td>
+            <td valign="top"><font style="font-family: arial; font-size: 12px;"><%=Str.formatForMoney(estimpressions)%></font></td>
+            <td valign="top"><font style="font-family: arial; font-size: 12px;">$<%=Str.formatForMoney(estimpressionrevenue)%></font></td>
             <td valign="top"><font style="font-family: arial; font-size: 12px;"><%=Str.formatForMoney(newusersthismonth)%></font></td>
             <td valign="top"><font style="font-family: arial; font-size: 12px;">$<%=Str.formatForMoney(thismonthinvestment)%></font></td>
             <td valign="top"><font style="font-family: arial; font-size: 12px;">$<%=Str.formatForMoney(thismonthcashoutofpocket)%></font></td>
@@ -146,6 +164,7 @@ for(int i=0; i<12; i++){
             <td valign="top"><font style="font-family: arial; font-size: 12px;">$<%=Str.formatForMoney(totalcashoutofpocket)%></font></td>
             <td valign="top"><font style="font-family: arial; font-size: 12px;">$<%=Str.formatForMoney(totalrevenue)%></font></td>
             <td valign="top"><font style="font-family: arial; font-size: 12px;">$<%=Str.formatForMoney(totalprofit)%></font></td>
+            <td valign="top"><font style="font-family: arial; font-size: 12px;">$<%=Str.formatForMoney(balance)%></font></td>
         </tr>
     <%
 }

@@ -8,6 +8,7 @@ import java.util.Iterator;
 
 import com.fbdblog.dao.User;
 import com.fbdblog.dao.hibernate.HibernateUtil;
+import com.fbdblog.util.UserInputSafe;
 
 /**
  * User: Joe Reger Jr

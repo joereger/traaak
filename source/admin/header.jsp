@@ -34,6 +34,8 @@
             <a href='sysprops.jsp'>SysProps</a><br/>
             <a href='instanceprops.jsp'>InstanceProps</a><br/>
             <a href='financialmodel.jsp'>Financial Model</a><br/>
+            <a href='iaocache.jsp'>Iao Cache</a><br/>
+            <a href='impressions.jsp'>Impressions</a><br/>
         </td>
         <td valign="top">
 
