@@ -21,14 +21,27 @@
     }
 %>
 
-<table cellpadding="10" cellspacing="0" border="0">
+<style type="text/css">
+    body, td {font-family: sans-serif;}
+</style>
+
+<body>
+
+<table cellpadding="3" cellspacing="0" border="0" width="100%">
     <tr>
-        <td valign="top" colspan="2">
-            Logged in as: <%=userSession.getUser().getFirstname()%> <%=userSession.getUser().getLastname()%>    
+        <td valign="top" align="left">
+            <font style="font-family: impact; font-size: 42px; color: #cccccc;">Track It SysAdmin</font>       
+        </td>
+        <td valign="top" align="right">
+            Logged in as: <%=userSession.getUser().getFirstname()%> <%=userSession.getUser().getLastname()%>
         </td>
     </tr>
+</table>
+
+<table cellpadding="10" cellspacing="0" border="0" width="100%">
     <tr>
         <td valign="top" width="150">
+            <a href='index.jsp'>Index</a><br/>
             <a href='apps.jsp'>Apps</a><br/>
             <a href='users.jsp'>Users</a><br/>
             <a href='sysprops.jsp'>SysProps</a><br/>
