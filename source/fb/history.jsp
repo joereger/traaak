@@ -56,3 +56,4 @@
 </table>
 
 <br/><br/>
+<%@ include file="footer.jsp" %>

@@ -1,0 +1,1 @@
+<fb:google-analytics uacct="UA-208946-6" page="<%=userSession.getApp().getTitle()%>(<%=userSession.getApp().getAppid()%>)" />

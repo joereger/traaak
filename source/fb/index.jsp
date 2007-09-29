@@ -148,3 +148,4 @@ if (userSession.getIsnewappforthisuser()){
 </table>
 
 <br/><br/>
+<%@ include file="footer.jsp" %>
