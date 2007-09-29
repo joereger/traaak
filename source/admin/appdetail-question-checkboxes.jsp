@@ -71,9 +71,12 @@
 
         try {
             question.save();
+            app.save();
         } catch (Exception ex) {
             logger.error(ex);
         }
+
+
 
         response.sendRedirect("appdetail.jsp?appid=" + app.getAppid());
         return;

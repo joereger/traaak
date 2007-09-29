@@ -75,6 +75,7 @@
 
         try {
             question.save();
+            app.save();
         } catch (Exception ex) {
             logger.error(ex);
         }
