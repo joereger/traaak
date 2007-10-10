@@ -67,10 +67,16 @@ public class UserSessionSetup {
                 userSession.setApp(FindAppFromApiKey.find(request.getParameter("fb_sig_api_key")));
             }
             if (userSession.getApp()==null || userSession.getApp().getAppid()<=0) {
-                logger.debug("no api_key found so looking to request.getParameter(\"postaddappid\")="+request.getParameter("postaddappid"));
-                if (request.getParameter("postaddappid")!=null && Num.isinteger(request.getParameter("postaddappid"))) {
-                    App app = App.get(Integer.parseInt(request.getParameter("postaddappid")));
-                    userSession.setApp(app);
+                logger.debug("no api_key found so looking to request.getParameter(\"postaddappname\")="+request.getParameter("postaddappname"));
+                if (request.getParameter("postaddappname")!=null) {
+                    List<App> apps = HibernateUtil.getSession().createCriteria(App.class)
+                                                       .add(Restrictions.eq("facebookappname", request.getParameter("postaddappname")))
+                                                       .setCacheable(true)
+                                                       .list();
+                    for (Iterator<App> iterator=apps.iterator(); iterator.hasNext();) {
+                        App app=iterator.next();
+                        userSession.setApp(app);
+                    }
                 }
             }
             if (userSession.getApp()==null || userSession.getApp().getAppid()<=0) {
@@ -173,7 +179,7 @@ public class UserSessionSetup {
         }
 
         //Track app adds
-        if (request.getParameter("postaddappid")!=null && Num.isinteger(request.getParameter("postaddappid"))) {
+        if (request.getParameter("postaddappname")!=null) {
             //@todo set var in session so that I can call a banner add thing
             if (userSession.getUser()!=null && userSession.getUser().getUserid()>0 && userSession.getApp()!=null && userSession.getApp().getAppid()>0) {
                 //Is this a new app for this user?
@@ -198,7 +204,6 @@ public class UserSessionSetup {
                 userappactivity.setIsinstall(true);
                 userappactivity.setIsuninstall(false);
                 try {userappactivity.save();} catch (Exception ex) {logger.error(ex);}
-
             }
 
 
