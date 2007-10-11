@@ -83,6 +83,7 @@
             <img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="<%=userSession.getFacebookUser().getFirst_name()%>" align="right">
         </td>
     </tr>
+    <!--
     <tr>
         <td valign="top" colspan="3" align="right">
             <div align="right">
@@ -90,4 +91,5 @@
             </div>
         </td>
     </tr>
+    -->
 </table>

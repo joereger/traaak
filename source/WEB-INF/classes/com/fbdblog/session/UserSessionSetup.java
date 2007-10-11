@@ -180,7 +180,7 @@ public class UserSessionSetup {
 
         //Track app adds
         if (request.getParameter("postaddappname")!=null) {
-            //@todo set var in session so that I can call a banner add thing
+            //Set var in session so that I can call a banner add thing
             if (userSession.getUser()!=null && userSession.getUser().getUserid()>0 && userSession.getApp()!=null && userSession.getApp().getAppid()>0) {
                 //Is this a new app for this user?
                 List<Userappactivity> uaas = HibernateUtil.getSession().createCriteria(Userappactivity.class)

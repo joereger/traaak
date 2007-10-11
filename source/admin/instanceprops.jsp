@@ -105,7 +105,7 @@ InstanceProps
                     <br/><font style="font-size: 8px;">0 or 1</font>
                 </td>
                 <td valign="top">
-                    <input type="textbox" name="dbDriverName" value="<%=Str.cleanForHtml(Str.booleanAsSQLText(InstanceProperties.getRunScheduledTasksOnThisInstance()))%>">
+                    <input type="textbox" name="runScheduledTasksOnThisInstance" value="<%=Str.cleanForHtml(Str.booleanAsSQLText(InstanceProperties.getRunScheduledTasksOnThisInstance()))%>">
                 </td>
             </tr>
             <tr>
