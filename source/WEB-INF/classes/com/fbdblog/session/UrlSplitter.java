@@ -65,6 +65,7 @@ public class UrlSplitter {
         //Pathinfo
         servletPath = request.getServletPath();
         logger.debug("servletPath=" + servletPath);
+       
 
         logger.debug(">>UrlSplitter End<<");
     }

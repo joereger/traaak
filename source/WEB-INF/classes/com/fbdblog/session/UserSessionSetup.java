@@ -4,11 +4,10 @@ import org.apache.log4j.Logger;
 import org.hibernate.criterion.Restrictions;
 
 import javax.servlet.ServletResponse;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fbdblog.facebook.FindAppFromApiKey;
+import com.fbdblog.facebook.FindApp;
 import com.fbdblog.facebook.FacebookUser;
 import com.fbdblog.facebook.FindUserFromFacebookUid;
 import com.fbdblog.xmpp.SendXMPPMessage;
@@ -16,8 +15,6 @@ import com.fbdblog.dao.User;
 import com.fbdblog.dao.App;
 import com.fbdblog.dao.Userappactivity;
 import com.fbdblog.dao.hibernate.HibernateUtil;
-import com.fbdblog.util.Num;
-import com.fbdblog.cache.providers.CacheProvider;
 import com.fbdblog.cache.providers.CacheFactory;
 import com.facebook.api.FacebookRestClient;
 import com.facebook.api.FacebookException;
@@ -62,34 +59,21 @@ public class UserSessionSetup {
 
         //Facebook
         try {
-            //Need an api key to determine which app this is
-            if (request.getParameter("fb_sig_api_key") != null && !request.getParameter("fb_sig_api_key").equals("")) {
-                userSession.setApp(FindAppFromApiKey.find(request.getParameter("fb_sig_api_key")));
-            }
+            //Need to identify which app this is
+            userSession.setApp(FindApp.findFromRequest(request));
+            //If there's no app
             if (userSession.getApp()==null || userSession.getApp().getAppid()<=0) {
-                logger.debug("no api_key found so looking to request.getParameter(\"postaddappname\")="+request.getParameter("postaddappname"));
-                if (request.getParameter("postaddappname")!=null) {
-                    List<App> apps = HibernateUtil.getSession().createCriteria(App.class)
-                                                       .add(Restrictions.eq("facebookappname", request.getParameter("postaddappname")))
-                                                       .setCacheable(true)
-                                                       .list();
-                    for (Iterator<App> iterator=apps.iterator(); iterator.hasNext();) {
-                        App app=iterator.next();
-                        userSession.setApp(app);
-                    }
-                }
-            }
-            if (userSession.getApp()==null || userSession.getApp().getAppid()<=0) {
-                logger.debug("no valid app found");
+                logger.debug("no valid app found so aborting UserSessionSetup");
                 return;
-                //@todo how to handle unknown api_key?  list all apps with links to an add page?
+                //@todo how to handle unknown app?  list all apps with links to an add page?
             }
 
             //Need a session key
             //auth_token should immediately be traded in for a valid fb_sig_session_key
-            if ((request.getParameter("auth_token")!=null && !request.getParameter("auth_token").trim().equals(""))){
+            //Can only convert auth_token to session key when I know which app this is
+            if (request.getParameter("auth_token")!=null && !request.getParameter("auth_token").trim().equals("") && userSession.getApp()!=null && userSession.getApp().getAppid()>0){
                 logger.debug("auth_token found in request... will try to convert to session_key");
-                FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
+                FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret());
                 String facebooksessionkey = facebookRestClient.auth_getSession(request.getParameter("auth_token").trim());
                 userSession.setFacebooksessionkey(facebooksessionkey);
             } else {

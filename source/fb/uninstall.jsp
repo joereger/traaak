@@ -4,7 +4,7 @@
 <%@ page import="java.util.Iterator" %>
 <%@ page import="com.fbdblog.util.Num" %>
 <%@ page import="com.fbdblog.dao.App" %>
-<%@ page import="com.fbdblog.facebook.FindAppFromApiKey" %>
+<%@ page import="com.fbdblog.facebook.FindApp" %>
 <%@ page import="com.fbdblog.xmpp.SendXMPPMessage" %>
 <%@ page import="com.fbdblog.dao.User" %>
 <%@ page import="org.apache.log4j.Logger" %>
@@ -20,9 +20,7 @@
     if (request.getParameter("fb_sig_user") != null && Num.isinteger(request.getParameter("fb_sig_user"))) {
         //Figure out which app is being uninstalled
         App app=null;
-        if (request.getParameter("fb_sig_api_key") != null && !request.getParameter("fb_sig_api_key").equals("")) {
-            app=FindAppFromApiKey.find(request.getParameter("fb_sig_api_key"));
-        }
+        app=FindApp.findFromRequest(request);
         //If we have an app
         if (app != null && app.getAppid()>0) {
             List users=HibernateUtil.getSession().createCriteria(User.class)
@@ -32,14 +30,14 @@
             for (Iterator iterator=users.iterator(); iterator.hasNext();) {
                 User user=(User) iterator.next();
 
-                Calendar cal = Calendar.getInstance();
+                Calendar cal=Calendar.getInstance();
 
                 Userappactivity userappactivity=new Userappactivity();
                 userappactivity.setAppid(app.getAppid());
                 userappactivity.setUserid(user.getUserid());
                 userappactivity.setDate(new Date());
                 userappactivity.setYear(cal.get(Calendar.YEAR));
-                userappactivity.setMonth(cal.get(Calendar.MONTH)+1);
+                userappactivity.setMonth(cal.get(Calendar.MONTH) + 1);
                 userappactivity.setIsinstall(false);
                 userappactivity.setIsuninstall(true);
 

@@ -67,11 +67,13 @@ public class FacebookApiWrapper {
         Logger logger = Logger.getLogger(this.getClass().getName());
         if (issessionok){
             try{
-                //@todo need to limit the length to 60 chars... not counting tags... just the displayed chars
-                StringBuffer mf = new StringBuffer();
-                mf.append(MinifeedTemplateProcessor.processTemplate(userSession.getApp().getMinifeedtemplate(), userSession.getUser(), post));
-                FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
-                facebookRestClient.feed_publishActionOfUser(mf.toString(), "");
+                if (userSession!=null && userSession.getApp()!=null && !userSession.getApp().getMinifeedtemplate().equals("")){
+                    //@todo need to limit the length to 60 chars... not counting tags... just the displayed chars
+                    StringBuffer mf = new StringBuffer();
+                    mf.append(MinifeedTemplateProcessor.processTemplate(userSession.getApp().getMinifeedtemplate(), userSession.getUser(), post));
+                    FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
+                    facebookRestClient.feed_publishActionOfUser(mf.toString(), "");
+                }
             } catch (Exception ex){logger.error(ex);}
         } else {logger.debug("Can't execute because issessionok = false");}
     }

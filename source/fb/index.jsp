@@ -101,7 +101,7 @@ if (userSession.getIsnewappforthisuser()){
                 <font size=-2>
                 Editing data from <%=Time.dateformatcompactwithtime(Time.getCalFromDate(post.getPostdate()))%>.
                 <br/><a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>&action=deletepost'>Delete it?</a>
-                <br/><a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main'>Start a new one?</a>
+                <br/><a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main'>Start new?</a>
                 </font>
                 <br/>
                 <%
@@ -142,7 +142,37 @@ if (userSession.getIsnewappforthisuser()){
             <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=userSession.getApp().getPrimarychartid()%>&userid=<%=userSession.getUser().getUserid()%>&size=small&comparetouserid=0" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
             <br/>
             <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts&chartid=<%=userSession.getApp().getPrimarychartid()%>'>+Zoom</a>
-            <br/>
+            <br/><br/><br/><br/>
+
+            <div style="border: 3px solid #e6e6e6;">
+                <center><font style="font-size: 18px; color: #cccccc;">Track Other Stuff</font></center>
+                <table cellpadding="3" cellspacing="1" border="0" width="100%" bgcolor="#efefef">
+                <%
+                    int col = 0;
+                    List<App> apps=HibernateUtil.getSession().createCriteria(App.class)
+                            .setCacheable(true)
+                            .list();
+                    for (Iterator<App> iterator=apps.iterator(); iterator.hasNext();) {
+                        App app= iterator.next();
+                        if (app.getAppid()!=userSession.getApp().getAppid()){
+                            col = col + 1;
+                            if (col==1){
+                                %><tr><%
+                            }
+                                %><td valign="top"><%
+                                %>
+                                <a href="http://www.facebook.com/add.php?api_key=<%=app.getFacebookapikey()%>"><%=app.getTitle()%></a>
+                                <%
+                                %></td><%
+                            if (col==3){
+                                col = 0;
+                                %></tr><%
+                            }
+                        }
+                    }
+                %>
+                </table>
+            </div>
         </td>
     </tr>
 </table>

@@ -30,7 +30,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>FacebookMain</servlet-name>
-        <url-pattern>/fbmain/*</url-pattern>
+        <url-pattern>/app/*</url-pattern>
     </servlet-mapping>
 
 

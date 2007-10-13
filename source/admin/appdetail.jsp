@@ -24,7 +24,7 @@
         }
         app = new App();
         app.setPrimarychartid(0);
-        app.setMinifeedtemplate("");
+        app.setMinifeedtemplate("tracked some data with <a href='<$url$>'><$appname$></a>");
     }
 %>
 
@@ -106,6 +106,7 @@ App Detail
                 <textarea name="minifeedtemplate"><%=app.getMinifeedtemplate()%></textarea><br/>
                 <font style="font-size: 9px; font-family: arial;">
                 &lt;$url$><br/>
+                &lt;$appname$><br/>
                 <%
                     List<Question> minifeedquestions = HibernateUtil.getSession().createCriteria(Question.class)
                             .add(Restrictions.eq("appid", app.getAppid()))

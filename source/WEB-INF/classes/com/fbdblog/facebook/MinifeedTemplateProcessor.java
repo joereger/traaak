@@ -58,6 +58,14 @@ public class MinifeedTemplateProcessor {
             }
         }
 
+        if (tag.equals("<$appname$>")){
+            if (app!=null){
+                return app.getTitle();
+            } else {
+                return "";
+            }
+        }
+
 
         //<$questionid.1$> <$questionid.2$> <$questionid.3$>
         logger.debug("didn't find a normal tag");

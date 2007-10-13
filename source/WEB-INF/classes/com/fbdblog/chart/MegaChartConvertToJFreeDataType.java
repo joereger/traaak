@@ -124,39 +124,41 @@ public class MegaChartConvertToJFreeDataType {
         TimeSeries timedata = new TimeSeries("");
         TimeSeriesCollection timedataseries = new TimeSeriesCollection();
         //Loop on the series of the megaChart
-        for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
-            MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
-            logger.debug("found a megaChartSeries appid="+megaChartSeries.appid+" xquestionid="+megaChartSeries.xQuestionid+" yquestionid="+megaChartSeries.yQuestionid);
-            if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
-                timedata = new TimeSeries(megaChartSeries.yAxisTitle, Millisecond.class);
-                for(int i=0; i<megaChartSeries.cleanData.length; i++){
-                    //Y data must always be numeric
-                    if (Num.isdouble(megaChartSeries.cleanData[i][2])) {
-                        if (Double.parseDouble(megaChartSeries.cleanData[i][2])>0){
-                            try{
+        if (megaChart!=null && megaChart.getMegaChartSeries()!=null){
+            for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+                MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
+                logger.debug("found a megaChartSeries appid="+megaChartSeries.appid+" xquestionid="+megaChartSeries.xQuestionid+" yquestionid="+megaChartSeries.yQuestionid);
+                if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
+                    timedata = new TimeSeries(megaChartSeries.yAxisTitle, Millisecond.class);
+                    for(int i=0; i<megaChartSeries.cleanData.length; i++){
+                        //Y data must always be numeric
+                        if (Num.isdouble(megaChartSeries.cleanData[i][2])) {
+                            if (Double.parseDouble(megaChartSeries.cleanData[i][2])>0){
                                 try{
-                                    logger.debug("adding data: date="+megaChartSeries.cleanData[i][1]+" data="+megaChartSeries.cleanData[i][2]);
-                                    java.util.Date tmpDate = new java.util.Date(Long.parseLong(megaChartSeries.cleanData[i][1]));
-                                    timedata.add(new Millisecond(tmpDate), Double.parseDouble(megaChartSeries.cleanData[i][2]));
-                                } catch (Exception e){
-                                    //Here's a situation where the try/catch thing works.  Otherwise
-                                    //I'd have to do a date comparison for every single data point.
-                                    //Which is a lot of overhead in Java's slow date classes.  Instead,
-                                    //I'm relying on the Millisecond's built-in check to see if the date is
-                                    //between 1900 and 9999.  Not as elegant as I'd like, but it works.
-                                    logger.debug(e);
+                                    try{
+                                        logger.debug("adding data: date="+megaChartSeries.cleanData[i][1]+" data="+megaChartSeries.cleanData[i][2]);
+                                        java.util.Date tmpDate = new java.util.Date(Long.parseLong(megaChartSeries.cleanData[i][1]));
+                                        timedata.add(new Millisecond(tmpDate), Double.parseDouble(megaChartSeries.cleanData[i][2]));
+                                    } catch (Exception e){
+                                        //Here's a situation where the try/catch thing works.  Otherwise
+                                        //I'd have to do a date comparison for every single data point.
+                                        //Which is a lot of overhead in Java's slow date classes.  Instead,
+                                        //I'm relying on the Millisecond's built-in check to see if the date is
+                                        //between 1900 and 9999.  Not as elegant as I'd like, but it works.
+                                        logger.debug(e);
+                                    }
+                                } catch (Exception e) {
+                                    //Do not rely on this catch to fix bugs... the reason it's here
+                                    //is to help the graphs be more robust.  Instead of crashing the whole
+                                    //graph, only this data point won't be added.  Solve errors caught here
+                                    //in the above block.  Don't be lazy Joe Reger, Jr.... yeah you!
+                                    logger.error("Error adding data to chart.", e);
                                 }
-                            } catch (Exception e) {
-                                //Do not rely on this catch to fix bugs... the reason it's here
-                                //is to help the graphs be more robust.  Instead of crashing the whole
-                                //graph, only this data point won't be added.  Solve errors caught here
-                                //in the above block.  Don't be lazy Joe Reger, Jr.... yeah you!
-                                logger.error("Error adding data to chart.", e);
                             }
                         }
                     }
+                    timedataseries.addSeries(timedata);
                 }
-                timedataseries.addSeries(timedata);
             }
         }
         return timedataseries;
