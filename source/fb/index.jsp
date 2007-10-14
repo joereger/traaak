@@ -28,7 +28,7 @@
         try {
             SavePost.save(userSession.getApp(), userSession.getUser(), post, appPostParser, userSession);
             out.print("<fb:success>\n" +
-            "     <fb:message>Good trackin'.  Now track some more.</fb:message>\n" +
+            "     <fb:message>Good trackin'.  Now track s'more.</fb:message>\n" +
             "     We've updated your profile so that others can check out your data.\n" +
             "</fb:success>");
         } catch (ComponentException cex) {
@@ -145,7 +145,7 @@ if (userSession.getIsnewappforthisuser()){
             <br/><br/><br/><br/>
 
             <div style="border: 3px solid #e6e6e6;">
-                <center><font style="font-size: 18px; color: #cccccc;">Track Other Stuff</font></center>
+                <center><font style="font-size: 18px; color: #cccccc;">Track Other Stuff Too</font></center>
                 <table cellpadding="3" cellspacing="1" border="0" width="100%" bgcolor="#efefef">
                 <%
                     int col = 0;
