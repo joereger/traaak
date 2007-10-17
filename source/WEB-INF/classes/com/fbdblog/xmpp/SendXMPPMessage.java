@@ -19,10 +19,10 @@ public class SendXMPPMessage implements Runnable {
 
     private String recipientaddress = "regerj@gmail.com";
     private String jabberserver = "jabber.org";
-    private String senderusername = "dneeroserver";
-    private String senderpassword = "dneerorules";
-    private String googlesenderusername = "dneeroserver";
-    private String googlesenderpassword = "dneerorules";
+    private String senderusername = "trackitserver";
+    private String senderpassword = "trackitrules";
+    private String googlesenderusername = "trackitserver";
+    private String googlesenderpassword = "trackitrules";
     private String message = "";
     private int grouptosendto = 0;
 
