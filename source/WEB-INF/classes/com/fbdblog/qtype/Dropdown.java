@@ -232,8 +232,6 @@ public class Dropdown implements Component, ChartField {
                 allCex.addErrorsFromAnotherGeneralException(new ComponentException("'"+question.getQuestion()+"' is required."), "");
             }
         }
-        //Validate newvalue
-        //@todo need to have both, or one, or something... bleh... need some sort of validation
         //Datatype validation
         DataType dt = DataTypeFactory.get(question.getDatatypeid());
         try{
@@ -274,7 +272,9 @@ public class Dropdown implements Component, ChartField {
         //Now save the latest stuff
         logger.debug("start processanswer");
         //Save the answers
-        String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
+        String[] exclude = new String[1];
+        exclude[0]="newdisplayoverride";
+        String[] requestParams = srp.getParamsExcludingThoseWithCertainStringForQuestion(question.getQuestionid(), exclude);
         if (requestParams!=null && requestParams.length>0){
             for (int i = 0; i < requestParams.length; i++) {
                 String requestParam = requestParams[i];
@@ -292,114 +292,190 @@ public class Dropdown implements Component, ChartField {
                 }
             }
         }
-        //Handle new user values
+        //Determine whether this question uses displayoverride or not
+        boolean usedisplayoverride = false;
+        for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
+            Questionconfig questionconfig = iterator.next();
+            if (questionconfig.getName().equals("usedisplayoverride")){
+                usedisplayoverride = true;
+            }
+        }
+        logger.debug("usedisplayoverride = "+usedisplayoverride);
+        //Determine whether there is an inbound newvalue and, if so, what it is
         String[] newvalueRequestParams = srp.getParamsWithCertainStringForQuestion(question.getQuestionid(), "-newvalue");
+        String newvalue = "";
         if (newvalueRequestParams!=null && newvalueRequestParams.length>0){
             for (int i = 0; i < newvalueRequestParams.length; i++) {
                 String requestParam = newvalueRequestParams[i];
-                if (requestParam!=null && requestParam.trim().length()>0){
-                    //Handle new uservalues
-                    logger.debug("handling requestParam["+i+"]="+requestParam+" as a new value");
-                    boolean uservaluealreadyexisted = false;
-                    List<Questionuserconfig> questionuserconfigs = HibernateUtil.getSession().createCriteria(Questionuserconfig.class)
-                                           .add(Restrictions.eq("questionid", question.getQuestionid()))
-                                           .add(Restrictions.eq("userid", user.getUserid()))
-                                           .setCacheable(false)
-                                           .list();
-                    for (Iterator<Questionuserconfig> iterator = questionuserconfigs.iterator(); iterator.hasNext();) {
-                        Questionuserconfig questionuserconfig = iterator.next();
-                        if (questionuserconfig.getName().equals("values")){
-                            //We already have a uservalues entry for this question... need to append to it
-                            logger.debug("found a pre-existing questionuserconfig entry: questionuserconfig.getQuestionuserconfigid()="+questionuserconfig.getQuestionuserconfigid()+" (requestParam="+requestParam+")");
-                            uservaluealreadyexisted = true;
-                            String uservalues = questionuserconfig.getValue();
-                            String[] uservaluesSplit = uservalues.split("\\n");
-                            boolean exactvaluealreadyexisted = false;
-                            for (int j = 0; j < uservaluesSplit.length; j++) {
-                                String s = uservaluesSplit[j];
-                                //Determine whether this exact value exists
-                                logger.debug("s.trim()="+s.trim());
-                                logger.debug("s.trim().indexOf(requestParam.trim())="+s.trim().indexOf(requestParam.trim()));
-                                if (s.trim().indexOf(requestParam.trim())>-1){
-                                    logger.debug("an exact value ("+requestParam.trim()+") already exists in a Questionuserconfig");
-                                    exactvaluealreadyexisted = true;
-                                }
-                            }
-                            if (!exactvaluealreadyexisted){
-                                //Append the new value to the existing Questionuserconfig
-                                logger.debug("appending the new value ("+requestParam.trim()+")");
-                                questionuserconfig.setValue(questionuserconfig.getValue()+"\n"+requestParam);
-                                try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
-                            }
-                        }
-                    }
-                    //Create a new Questionuserconfig
-                    if (!uservaluealreadyexisted){
-                        logger.debug("!uservaluealreadyexisted so creating new one");
-                        Questionuserconfig questionuserconfig = new Questionuserconfig();
-                        questionuserconfig.setName("values");
-                        questionuserconfig.setQuestionid(question.getQuestionid());
-                        questionuserconfig.setUserid(user.getUserid());
-                        questionuserconfig.setValue(requestParam);
-                        try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
-                    }
-                }
+                newvalue = requestParam;
             }
         }
-        //Handle new user displayoverrides
+        logger.debug("newvalue = "+newvalue);
+        //Determine whether there is an inbound displayoverride value and, if so, what it is
         String[] newdisplayoverrideRequestParams = srp.getParamsWithCertainStringForQuestion(question.getQuestionid(), "-newdisplayoverride");
+        String newdisplayoverride = "";
         if (newdisplayoverrideRequestParams!=null && newdisplayoverrideRequestParams.length>0){
             for (int i = 0; i < newdisplayoverrideRequestParams.length; i++) {
                 String requestParam = newdisplayoverrideRequestParams[i];
-                if (requestParam!=null && requestParam.trim().length()>0){
-                    //Handle new displayoverrides
-                    logger.debug("handling requestParam["+i+"]="+requestParam+" as a new displayoverride");
-                    boolean uservaluealreadyexisted = false;
-                    List<Questionuserconfig> questionuserconfigs = HibernateUtil.getSession().createCriteria(Questionuserconfig.class)
-                                           .add(Restrictions.eq("questionid", question.getQuestionid()))
-                                           .add(Restrictions.eq("userid", user.getUserid()))
-                                           .setCacheable(false)
-                                           .list();
-                    for (Iterator<Questionuserconfig> iterator = questionuserconfigs.iterator(); iterator.hasNext();) {
-                        Questionuserconfig questionuserconfig = iterator.next();
-                        if (questionuserconfig.getName().equals("displayoverrides")){
-                            //We already have a uservalues entry for this question... need to append to it
-                            logger.debug("found a pre-existing questionuserconfig entry: questionuserconfig.getQuestionuserconfigid()="+questionuserconfig.getQuestionuserconfigid()+" (requestParam="+requestParam+")");
-                            uservaluealreadyexisted = true;
-                            String uservalues = questionuserconfig.getValue();
-                            String[] uservaluesSplit = uservalues.split("\\n");
-                            boolean exactvaluealreadyexisted = false;
-                            for (int j = 0; j < uservaluesSplit.length; j++) {
-                                String s = uservaluesSplit[j];
-                                //Determine whether this exact value exists
-                                logger.debug("s.trim()="+s.trim());
-                                logger.debug("s.trim().indexOf(requestParam.trim())="+s.trim().indexOf(requestParam.trim()));
-                                if (s.trim().indexOf(requestParam.trim())>-1){
-                                    logger.debug("an exact value ("+requestParam.trim()+") already exists in a Questionuserconfig");
-                                    exactvaluealreadyexisted = true;
+                newdisplayoverride = requestParam;
+            }
+        }
+        if (newdisplayoverride.equals("")){
+            newdisplayoverride = newvalue;    
+        }
+        logger.debug("newdisplayoverride = "+newdisplayoverride);
+        //Handle newvalues
+        if (newvalue!=null && newvalue.trim().length()>0){
+            //Iterate questionconfigs
+            logger.debug("handling newvalue="+newvalue+" as a new value");
+            boolean uservaluealreadyexisted = false;
+            List<Questionuserconfig> questionuserconfigs = HibernateUtil.getSession().createCriteria(Questionuserconfig.class)
+                                   .add(Restrictions.eq("questionid", question.getQuestionid()))
+                                   .add(Restrictions.eq("userid", user.getUserid()))
+                                   .setCacheable(false)
+                                   .list();
+            for (Iterator<Questionuserconfig> iterator = questionuserconfigs.iterator(); iterator.hasNext();) {
+                Questionuserconfig questionuserconfig = iterator.next();
+                if (questionuserconfig.getName().equals("values")){
+                    //We already have a uservalues entry for this question... need to append to it
+                    logger.debug("found a pre-existing questionuserconfig entry: questionuserconfig.getQuestionuserconfigid()="+questionuserconfig.getQuestionuserconfigid()+" (newvalue="+newvalue+")");
+                    uservaluealreadyexisted = true;
+                    String uservalues = questionuserconfig.getValue();
+                    String[] uservaluesSplit = uservalues.split("\\n");
+                    boolean exactvaluealreadyexisted = false;
+                    for (int j = 0; j < uservaluesSplit.length; j++) {
+                        String s = uservaluesSplit[j];
+                        //Determine whether this exact value exists
+                        logger.debug("s.trim()="+s.trim());
+                        logger.debug("s.trim().indexOf(newvalue.trim())="+s.trim().indexOf(newvalue.trim()));
+                        if (s.trim().indexOf(newvalue.trim())>-1){
+                            logger.debug("an exact value ("+newvalue.trim()+") already exists in a Questionuserconfig... but do we have a displayoverride too?");
+                            //We now have a value match but we may need more
+                            if (usedisplayoverride){
+                                //Displayoverride is in use to we need to look to it
+                                for (Iterator<Questionuserconfig> iterator2 = questionuserconfigs.iterator(); iterator2.hasNext();) {
+                                    Questionuserconfig questionuserconfig2 = iterator2.next();
+                                    if (questionuserconfig2.getName().equals("displayoverride")){
+                                        String userdisplayoverrides = questionuserconfig.getValue();
+                                        String[] userdisplayoverridesSplit = userdisplayoverrides.split("\\n");
+                                        for (int k = 0; k < userdisplayoverridesSplit.length; k++) {
+                                            String doov = userdisplayoverridesSplit[k];
+                                            if (doov.trim().indexOf(newdisplayoverride.trim())>-1){
+                                                //Both the value and displayoverride match
+                                                exactvaluealreadyexisted = true;
+                                            }
+                                        }
+                                    }
                                 }
-                            }
-                            if (!exactvaluealreadyexisted){
-                                //Append the new value to the existing Questionuserconfig
-                                logger.debug("appending the new value ("+requestParam.trim()+")");
-                                questionuserconfig.setValue(questionuserconfig.getValue()+"\n"+requestParam);
-                                try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+                            } else {
+                                //Displayoverride is not in use so this qualifies as a match
+                                exactvaluealreadyexisted = true;
                             }
                         }
                     }
-                    //Create a new Questionuserconfig
-                    if (!uservaluealreadyexisted){
-                        logger.debug("!uservaluealreadyexisted so creating new one");
-                        Questionuserconfig questionuserconfig = new Questionuserconfig();
-                        questionuserconfig.setName("displayoverrides");
-                        questionuserconfig.setQuestionid(question.getQuestionid());
-                        questionuserconfig.setUserid(user.getUserid());
-                        questionuserconfig.setValue(requestParam);
+                    //If we didn't find the exact value, append to the existing Questionuserconfig
+                    if (!exactvaluealreadyexisted){
+                        logger.debug("appending the new value ("+newvalue.trim()+")");
+                        questionuserconfig.setValue(questionuserconfig.getValue()+"\n"+newvalue);
                         try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+                        //Now append to displayoverride
+                        //if (usedisplayoverride){
+                            List<Questionuserconfig> questionuserconfigs2 = HibernateUtil.getSession().createCriteria(Questionuserconfig.class)
+                                   .add(Restrictions.eq("questionid", question.getQuestionid()))
+                                   .add(Restrictions.eq("userid", user.getUserid()))
+                                   .setCacheable(false)
+                                   .list();
+                            for (Iterator<Questionuserconfig> iterator2 = questionuserconfigs2.iterator(); iterator2.hasNext();) {
+                                Questionuserconfig questionuserconfig2 = iterator2.next();
+                                if (questionuserconfig2.getName().equals("displayoverrides")){
+                                    String userdisplayoverrides = questionuserconfig2.getValue();
+                                    questionuserconfig2.setValue(questionuserconfig2.getValue()+"\n"+newdisplayoverride);
+                                    try{questionuserconfig2.save();}catch(Exception ex){logger.error(ex);}
+                                }
+                            }
+                        //}
                     }
                 }
             }
+            //Create a new Questionuserconfig for the value
+            if (!uservaluealreadyexisted){
+                logger.debug("!uservaluealreadyexisted so creating new one");
+                Questionuserconfig questionuserconfig = new Questionuserconfig();
+                questionuserconfig.setName("values");
+                questionuserconfig.setQuestionid(question.getQuestionid());
+                questionuserconfig.setUserid(user.getUserid());
+                questionuserconfig.setValue(newvalue);
+                try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+            }
+            //Create a new Questionuserconfig for the displayoverride
+            if (!uservaluealreadyexisted){
+                logger.debug("!uservaluealreadyexisted so creating new one");
+                Questionuserconfig questionuserconfig = new Questionuserconfig();
+                questionuserconfig.setName("displayoverrides");
+                questionuserconfig.setQuestionid(question.getQuestionid());
+                questionuserconfig.setUserid(user.getUserid());
+                questionuserconfig.setValue(newdisplayoverride);
+                try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+            }
         }
+
+
+//        //Handle new user values
+//        String[] newvalueRequestParams = srp.getParamsWithCertainStringForQuestion(question.getQuestionid(), "-newvalue");
+//        if (newvalueRequestParams!=null && newvalueRequestParams.length>0){
+//            for (int i = 0; i < newvalueRequestParams.length; i++) {
+//                String requestParam = newvalueRequestParams[i];
+//                if (requestParam!=null && requestParam.trim().length()>0){
+//                    //Iterate questionconfigs
+//                    logger.debug("handling requestParam["+i+"]="+requestParam+" as a new value");
+//                    boolean uservaluealreadyexisted = false;
+//                    List<Questionuserconfig> questionuserconfigs = HibernateUtil.getSession().createCriteria(Questionuserconfig.class)
+//                                           .add(Restrictions.eq("questionid", question.getQuestionid()))
+//                                           .add(Restrictions.eq("userid", user.getUserid()))
+//                                           .setCacheable(false)
+//                                           .list();
+//                    for (Iterator<Questionuserconfig> iterator = questionuserconfigs.iterator(); iterator.hasNext();) {
+//                        Questionuserconfig questionuserconfig = iterator.next();
+//                        if (questionuserconfig.getName().equals("values")){
+//                            //We already have a uservalues entry for this question... need to append to it
+//                            logger.debug("found a pre-existing questionuserconfig entry: questionuserconfig.getQuestionuserconfigid()="+questionuserconfig.getQuestionuserconfigid()+" (requestParam="+requestParam+")");
+//                            uservaluealreadyexisted = true;
+//                            String uservalues = questionuserconfig.getValue();
+//                            String[] uservaluesSplit = uservalues.split("\\n");
+//                            boolean exactvaluealreadyexisted = false;
+//                            for (int j = 0; j < uservaluesSplit.length; j++) {
+//                                String s = uservaluesSplit[j];
+//                                //Determine whether this exact value exists
+//                                logger.debug("s.trim()="+s.trim());
+//                                logger.debug("s.trim().indexOf(requestParam.trim())="+s.trim().indexOf(requestParam.trim()));
+//                                if (s.trim().indexOf(requestParam.trim())>-1){
+//                                    logger.debug("an exact value ("+requestParam.trim()+") already exists in a Questionuserconfig");
+//                                    exactvaluealreadyexisted = true;
+//                                }
+//                            }
+//                            if (!exactvaluealreadyexisted){
+//                                //Append the new value to the existing Questionuserconfig
+//                                logger.debug("appending the new value ("+requestParam.trim()+")");
+//                                questionuserconfig.setValue(questionuserconfig.getValue()+"\n"+requestParam);
+//                                try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+//                            }
+//                        }
+//                    }
+//                    //Create a new Questionuserconfig
+//                    if (!uservaluealreadyexisted){
+//                        logger.debug("!uservaluealreadyexisted so creating new one");
+//                        Questionuserconfig questionuserconfig = new Questionuserconfig();
+//                        questionuserconfig.setName("values");
+//                        questionuserconfig.setQuestionid(question.getQuestionid());
+//                        questionuserconfig.setUserid(user.getUserid());
+//                        questionuserconfig.setValue(requestParam);
+//                        try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+//                    }
+//                }
+//            }
+//        }
+
+
         logger.debug("end processanswer");
     }
 
