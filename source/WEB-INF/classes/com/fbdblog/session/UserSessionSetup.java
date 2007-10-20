@@ -90,8 +90,6 @@ public class UserSessionSetup {
                 }
             }
 
-
-
             //Pull userSession from cache
             boolean foundSessionInCache = false;
             Object obj = CacheFactory.getCacheProvider().get(userSession.getFacebooksessionkey(), "userSession");
