@@ -14,6 +14,7 @@
 <%@ page import="com.fbdblog.dao.Impression" %>
 <%@ page import="com.fbdblog.impressions.ImpressionActivityObject" %>
 <%@ page import="com.fbdblog.scheduledjobs.ImpressionCache" %>
+<%@ page import="com.fbdblog.systemprops.BaseUrl" %>
 <%
     //Logger
     Logger logger=Logger.getLogger(this.getClass());
@@ -65,12 +66,15 @@
 %>
 
 <style type="text/css">
-.questionfont{font-weight: bold;}
+.questionfont{font-weight: bold; background: #ffffcc;}
 </style>
 
 
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
     <tr>
+        <td valign="top" width="64">
+            <img src="<%=BaseUrl.get(false)%>images/logo-64.png" alt="" width="64" height="64"/>
+        </td>
         <td valign="top">
             <font style="font-size: 24px; font-weight: bold;"><%=userSession.getApp().getTitle()%></font>
         </td>

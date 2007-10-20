@@ -41,7 +41,7 @@ public class ApplicationStartup implements ServletContextListener {
     public void contextInitialized(ServletContextEvent cse) {
        System.out.println("Fbdblog: Application initialized");
        //Shut down mbeans, if they're running
-       shutdownCacheMBean();
+       //shutdownCacheMBean();
        //Configure some dir stuff
         WebAppRootDir ward = new WebAppRootDir(cse.getServletContext());
         iswabapprooddirdiscovered = true;
@@ -87,15 +87,15 @@ public class ApplicationStartup implements ServletContextListener {
 
     public void contextDestroyed(ServletContextEvent cse) {
         //Notify sysadmins
-        SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_SYSADMINS, "Fbdblog Application shut down! ("+WebAppRootDir.getUniqueContextId()+")");
-        xmpp.send();
+        //SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_SYSADMINS, "Fbdblog Application shut down! ("+WebAppRootDir.getUniqueContextId()+")");
+        //xmpp.send();
         //Shut down Hibernate
         try{
-            HibernateUtil.closeSession();
-            HibernateUtil.killSessionFactory();
+            //HibernateUtil.closeSession();
+            //HibernateUtil.killSessionFactory();
         } catch (Exception ex){logger.error(ex);}
         //Shut down MBeans
-        shutdownCacheMBean();
+        //shutdownCacheMBean();
         //Log it
         System.out.println("Fbdblog: Application shut down! ("+InstanceProperties.getInstancename()+")");
     }

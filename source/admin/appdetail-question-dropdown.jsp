@@ -67,11 +67,45 @@
             iterator.remove();
         }
 
-        Questionconfig qc1 = new Questionconfig();
-        qc1.setQuestionid(question.getQuestionid());
-        qc1.setName("options");
-        qc1.setValue(UserInputSafe.clean(request.getParameter("options")));
-        question.getQuestionconfigs().add(qc1);
+        if (request.getParameter("values")!=null && !request.getParameter("values").trim().equals("")){
+            Questionconfig qc = new Questionconfig();
+            qc.setQuestionid(question.getQuestionid());
+            qc.setName("values");
+            qc.setValue(UserInputSafe.clean(request.getParameter("values")));
+            question.getQuestionconfigs().add(qc);
+        }
+
+        if (request.getParameter("displayoverrides")!=null && !request.getParameter("displayoverrides").trim().equals("")){
+            Questionconfig qc = new Questionconfig();
+            qc.setQuestionid(question.getQuestionid());
+            qc.setName("displayoverrides");
+            qc.setValue(UserInputSafe.clean(request.getParameter("displayoverrides")));
+            question.getQuestionconfigs().add(qc);
+        }
+
+        if (request.getParameter("valuelabel")!=null && !request.getParameter("valuelabel").trim().equals("")){
+            Questionconfig qc = new Questionconfig();
+            qc.setQuestionid(question.getQuestionid());
+            qc.setName("valuelabel");
+            qc.setValue(UserInputSafe.clean(request.getParameter("valuelabel")));
+            question.getQuestionconfigs().add(qc);
+        }
+
+        if (request.getParameter("displayoverridelabel")!=null && !request.getParameter("displayoverridelabel").trim().equals("")){
+            Questionconfig qc = new Questionconfig();
+            qc.setQuestionid(question.getQuestionid());
+            qc.setName("displayoverridelabel");
+            qc.setValue(UserInputSafe.clean(request.getParameter("displayoverridelabel")));
+            question.getQuestionconfigs().add(qc);
+        }
+
+        if (request.getParameter("usedisplayoverride")!=null && !request.getParameter("usedisplayoverride").trim().equals("")){
+            Questionconfig qc = new Questionconfig();
+            qc.setQuestionid(question.getQuestionid());
+            qc.setName("usedisplayoverride");
+            qc.setValue(UserInputSafe.clean(request.getParameter("usedisplayoverride")));
+            question.getQuestionconfigs().add(qc);
+        }
 
         try {
             question.save();
@@ -140,19 +174,68 @@ Question Detail: <%=question.getQuestion()%>
         </tr>
         <tr>
             <td valign="top">
-                Options
-            </td>
-            <td valign="top">
+                Values<br/>
                 <%
-                String options = "";
+                String valuelabel = "Description";
                 for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
                     Questionconfig questionconfig = iterator.next();
-                    if (questionconfig.getName().equals("options")){
-                        options = questionconfig.getValue();
+                    if (questionconfig.getName().equals("valuelabel")){
+                        valuelabel = questionconfig.getValue();
                     }
                 }
                 %>
-                <textarea name="options"><%=options%></textarea>
+                <input type="text" name="valuelabel" value="<%=valuelabel%>" size="25" maxlength="255">
+                <br/>
+                <%
+                String values = "";
+                for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
+                    Questionconfig questionconfig = iterator.next();
+                    if (questionconfig.getName().equals("values")){
+                        values = questionconfig.getValue();
+                    }
+                }
+                %>
+                <textarea name="values" rows="10" cols="20"><%=values%></textarea>
+            </td>
+            <td valign="top">
+                Displayoverrides<br/>
+                <%
+                String displayoverridelabel = "Value";
+                for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
+                    Questionconfig questionconfig = iterator.next();
+                    if (questionconfig.getName().equals("displayoverridelabel")){
+                        displayoverridelabel = questionconfig.getValue();
+                    }
+                }
+                %>
+                <input type="text" name="displayoverridelabel" value="<%=displayoverridelabel%>" size="25" maxlength="255">
+                <br/>
+                <%
+                String displayoverrides = "";
+                for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
+                    Questionconfig questionconfig = iterator.next();
+                    if (questionconfig.getName().equals("displayoverrides")){
+                        displayoverrides = questionconfig.getValue();
+                    }
+                }
+                %>
+                <textarea name="displayoverrides" rows="10" cols="20"><%=displayoverrides%></textarea>
+                <br/>
+                <%
+                String usedisplayoverride = "0";
+                String usedisplayoverrideSelected = "";
+                for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
+                    Questionconfig questionconfig = iterator.next();
+                    if (questionconfig.getName().equals("usedisplayoverride")){
+                        usedisplayoverride = questionconfig.getValue();
+                    }
+                }
+                if (usedisplayoverride.equals("1")){
+                    usedisplayoverrideSelected = " checked";
+                }
+                %>
+                <input type="checkbox" name="usedisplayoverride" value="1" <%=usedisplayoverrideSelected%>> Use displayoverride?
+                <br/>
             </td>
         </tr>
         <tr>

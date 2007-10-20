@@ -5,6 +5,7 @@
 <%@ page import="com.fbdblog.dao.hibernate.HibernateUtil" %>
 <%@ page import="com.fbdblog.dao.User" %>
 <%@ page import="java.util.Iterator" %>
+<%@ page import="com.fbdblog.systemprops.BaseUrl" %>
 <%
     //Logger
     Logger logger = Logger.getLogger(this.getClass());
@@ -41,6 +42,7 @@
     }
 %>
 
+<center>
 <form action="login.jsp" method="post">
     <input type="hidden" name="action" value="login">
     <table cellpadding="2" cellspacing="0" border="0">
@@ -49,7 +51,12 @@
                 <img src="/images/cake.jpg" alt="Mmmm, cake"> 
             </td>
             <td valign="top">
-                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                <img src="/images/clear.gif" alt="" width="1" height="240">
+                <br/>
+                <img src="<%=BaseUrl.get(false)%>images/logo-128.png" alt="" width="128" height="128"/>
+            </td>
+            <td valign="top">
+                <img src="/images/clear.gif" alt="" width="1" height="240">
                 <table cellpadding="3" cellspacing="0" border="0">
                     <tr>
                         <td valign="top" colspan="2">
@@ -85,3 +92,4 @@
         </tr>
     </table>  
 </form>
+</center>

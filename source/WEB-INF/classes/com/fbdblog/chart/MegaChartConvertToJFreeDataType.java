@@ -25,22 +25,24 @@ public class MegaChartConvertToJFreeDataType {
         //Dataset to hold data
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         //Loop on the series of the megaChart
-        for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
-            MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
-            if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
-                for(int i=0; i<megaChartSeries.cleanData.length; i++){
-                    //Y data must always be numeric
-                    if (Num.isdouble(megaChartSeries.cleanData[i][2])) {
-                        if (Double.parseDouble(megaChartSeries.cleanData[i][2])>0){
-                            try{
-                                //Base dataset.  Will accept any x axis value
-                                dataset.addValue(Double.parseDouble(megaChartSeries.cleanData[i][2]), megaChartSeries.getyAxisTitle(), megaChartSeries.cleanData[i][1]);
-                            } catch (Exception e) {
-                                //Do not rely on this catch to fix bugs... the reason it's here
-                                //is to help the graphs be more robust.  Instead of crashing the whole
-                                //graph, only this data point won't be added.  Solve errors caught here
-                                //in the above block.  Don't be lazy Joe Reger, Jr.... yeah you!
-                                logger.error("Error adding data to chart.", e);
+        if (megaChart!=null && megaChart.getMegaChartSeries()!=null){
+            for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+                MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
+                if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
+                    for(int i=0; i<megaChartSeries.cleanData.length; i++){
+                        //Y data must always be numeric
+                        if (Num.isdouble(megaChartSeries.cleanData[i][2])) {
+                            if (Double.parseDouble(megaChartSeries.cleanData[i][2])>0){
+                                try{
+                                    //Base dataset.  Will accept any x axis value
+                                    dataset.addValue(Double.parseDouble(megaChartSeries.cleanData[i][2]), megaChartSeries.getyAxisTitle(), megaChartSeries.cleanData[i][1]);
+                                } catch (Exception e) {
+                                    //Do not rely on this catch to fix bugs... the reason it's here
+                                    //is to help the graphs be more robust.  Instead of crashing the whole
+                                    //graph, only this data point won't be added.  Solve errors caught here
+                                    //in the above block.  Don't be lazy Joe Reger, Jr.... yeah you!
+                                    logger.error("Error adding data to chart.", e);
+                                }
                             }
                         }
                     }

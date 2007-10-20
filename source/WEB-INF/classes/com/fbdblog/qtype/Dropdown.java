@@ -57,60 +57,138 @@ public class Dropdown implements Component, ChartField {
         }
         out.append("<br/>");
 
-        //Select options
+        //Select values
         out.append("<select name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_\">");
         out.append("<option value=\"\"></option>");
-        //Main options
-        String options = "";
+        //Main values
+        String values = "";
+        String displayoverrides = "";
+        String valuelabel = "Description";
+        String displayoverridelabel = "Value";
+        boolean usedisplayoverride = false;
         for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
             Questionconfig questionconfig = iterator.next();
-            if (questionconfig.getName().equals("options")){
-                options = questionconfig.getValue();
+            if (questionconfig.getName().equals("values")){
+                values = questionconfig.getValue();
+            }
+            if (questionconfig.getName().equals("displayoverrides")){
+                displayoverrides = questionconfig.getValue();
+            }
+            if (questionconfig.getName().equals("valuelabel")){
+                valuelabel = questionconfig.getValue();
+            }
+            if (questionconfig.getName().equals("displayoverridelabel")){
+                displayoverridelabel = questionconfig.getValue();
+            }
+            if (questionconfig.getName().equals("usedisplayoverride")){
+                usedisplayoverride = true;
             }
         }
-        String[] optionsSplit = options.split("\\n");
-        for (int i = 0; i < optionsSplit.length; i++) {
-            String s = optionsSplit[i];
+        String[] valuesSplit = values.split("\\n");
+        String[] displayoverridesSplit = displayoverrides.split("\\n");
+        for (int i = 0; i < valuesSplit.length; i++) {
+            String s = valuesSplit[i];
             String selected = "";
-            if (isThisOptionSelected(s)){
+            if (isThisvalueSelected(s)){
                 selected = " selected='true'";
             }
-            out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\" "+selected+">" + s.trim() + "</option>");
+            String optiondisplaytext = s.trim();
+            if (usedisplayoverride){
+                optiondisplaytext = getValueDisplayText(valuesSplit, displayoverridesSplit, i).trim();
+                if (!optiondisplaytext.equals(s.trim())){
+                    optiondisplaytext = optiondisplaytext + "("+s.trim()+")";
+                }
+            }
+            out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\" "+selected+">" + optiondisplaytext + "</option>");
         }
-        //User options
+        //User values
         List<Questionuserconfig> questionuserconfigs = HibernateUtil.getSession().createCriteria(Questionuserconfig.class)
                                            .add(Restrictions.eq("questionid", question.getQuestionid()))
                                            .add(Restrictions.eq("userid", user.getUserid()))
                                            .setCacheable(true)
                                            .list();
-        String useroptions = "";
+        String uservalues = "";
+        String userdisplayoverrides = "";
         for (Iterator<Questionuserconfig> iterator = questionuserconfigs.iterator(); iterator.hasNext();) {
             Questionuserconfig questionuserconfig = iterator.next();
-            if (questionuserconfig.getName().equals("options")){
-                useroptions = questionuserconfig.getValue();
+            if (questionuserconfig.getName().equals("values")){
+                uservalues = questionuserconfig.getValue();
+            }
+            if (questionuserconfig.getName().equals("displayoverrides")){
+                userdisplayoverrides = questionuserconfig.getValue();
             }
         }
-        String[] userOptionsSplit = useroptions.split("\\n");
-        for (int i = 0; i < userOptionsSplit.length; i++) {
-            String s = userOptionsSplit[i];
+        String[] uservaluesSplit = uservalues.split("\\n");
+        String[] userDisplayoverridesSplit = userdisplayoverrides.split("\\n");
+        for (int i = 0; i < uservaluesSplit.length; i++) {
+            String s = uservaluesSplit[i];
             if (s.trim().length()>0){
                 String selected = "";
-                if (isThisOptionSelected(s)){
+                if (isThisvalueSelected(s)){
                     selected = " selected='true'";
                 }
-                out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\" "+selected+">" + s.trim() + "</option>");
+                String optiondisplaytext = s.trim();
+                if (usedisplayoverride){
+                    optiondisplaytext = getValueDisplayText(uservaluesSplit, userDisplayoverridesSplit, i).trim();
+                    if (!optiondisplaytext.equals(s.trim())){
+                        optiondisplaytext = optiondisplaytext + "("+s.trim()+" "+valuelabel+")";
+                    }
+                }
+                out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\" "+selected+">" + optiondisplaytext + "</option>");
             }
         }
         //Close select tag
         out.append("</select>");
 
-        //User inputs own option
+        //User inputs own value
         out.append("<br/>");
-        out.append("<font size=-2>Or, enter your own:</font>");
-        out.append("<br/>");
-        out.append("<input type='text' name=\""+AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_-newoption\" value=\""+""+"\" size=\"20\" maxlength=\"255\" style=\"font-size: 7px;\">");
+        out.append("<font size=-2 style=\"color: #666666;\"><b>Or, enter your own:</b></font>");
+        out.append("<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"margin: 0px; padding: 0px;\">");
+        out.append("<tr>");
+        if (usedisplayoverride){
+            out.append("<td valign='top'>");
+                out.append("<input type='text' name=\""+AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_-newdisplayoverride\" value=\""+""+"\" size=\"25\" maxlength=\"255\" style=\"font-size: 7px;\">");
+            out.append("</td>");
+        }
+        out.append("<td valign='top'>");
+            out.append("<input type='text' name=\""+AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_-newvalue\" value=\""+""+"\" size=\"10\" maxlength=\"255\" style=\"font-size: 7px;\">");
+        out.append("</td>");
+        out.append("</tr>");
+        out.append("<tr>");
+        if (usedisplayoverride){
+            out.append("<td valign='top'>");
+                out.append("<font size=-2 style=\"color: #666666;\">"+displayoverridelabel+"</font>");
+            out.append("</td>");
+        }
+        out.append("<td valign='top'>");
+            out.append("<font size=-2 style=\"color: #666666;\">"+valuelabel+"</font>");
+        out.append("</td>");
+        out.append("</tr>");
+        out.append("</table>");
+
 
         return out.toString();
+    }
+
+    private String getValueDisplayText(String[] valuesSplit, String[] displayoverridesSplit, int indextoget){
+        Logger logger = Logger.getLogger(this.getClass().getName());
+        String displaytext = "";
+        try{
+            if (valuesSplit!=null && valuesSplit.length>=(indextoget+1)){
+                logger.debug("found displaytext with valuesSplit["+indextoget+"]="+valuesSplit[indextoget]);
+                displaytext = valuesSplit[indextoget];
+            }
+            if (displayoverridesSplit!=null && displayoverridesSplit.length>=(indextoget+1)){
+                if (displayoverridesSplit[indextoget]!=null && displayoverridesSplit[indextoget].length()>0){
+                    logger.debug("found displaytext with displayoverridesSplit["+indextoget+"]="+displayoverridesSplit[indextoget]);
+                    displaytext = displayoverridesSplit[indextoget];
+                }
+            }
+        } catch (Exception ex){
+            logger.error(ex);
+        }
+        logger.debug("returning displaytext="+displaytext);
+        return displaytext;
     }
 
     public String getValueForDisplay() {
@@ -127,13 +205,13 @@ public class Dropdown implements Component, ChartField {
         return "";
     }
 
-    private boolean isThisOptionSelected(String option){
+    private boolean isThisvalueSelected(String value){
         if (post!=null && post.getPostanswers()!=null){
             for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
                 Postanswer postanswer=iterator.next();
                 if (postanswer.getQuestionid()==question.getQuestionid()){
                     if (postanswer.getName().equals("response")){
-                        if (postanswer.getValue().trim().equals(option.trim())){
+                        if (postanswer.getValue().trim().equals(value.trim())){
                             return true;
                         }
                     }
@@ -154,14 +232,17 @@ public class Dropdown implements Component, ChartField {
                 allCex.addErrorsFromAnotherGeneralException(new ComponentException("'"+question.getQuestion()+"' is required."), "");
             }
         }
+        //Validate newvalue
+        //@todo need to have both, or one, or something... bleh... need some sort of validation
         //Datatype validation
         DataType dt = DataTypeFactory.get(question.getDatatypeid());
         try{
-            String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
+            String[] requestParams = srp.getParamsExcludingThoseWithCertainStringForQuestion(question.getQuestionid(), "newdisplayoverride");
             if (requestParams!=null && requestParams.length>0){
                 for (int i = 0; i < requestParams.length; i++) {
                     String requestParam = requestParams[i];
                     if (requestParam!=null && requestParam.trim().length()>0){
+                        //logger.debug("about to validate requestParams["+i+"]="+requestParams[i]);
                         dt.validataData(requestParam);
                     }
                 }
@@ -189,6 +270,7 @@ public class Dropdown implements Component, ChartField {
                 }
             }
         }
+        
         //Now save the latest stuff
         logger.debug("start processanswer");
         //Save the answers
@@ -210,15 +292,15 @@ public class Dropdown implements Component, ChartField {
                 }
             }
         }
-        //Handle new user options
-        String[] newOptionRequestParams = srp.getParamsWithCertainStringForQuestion(question.getQuestionid(), "-newoption");
-        if (newOptionRequestParams!=null && newOptionRequestParams.length>0){
-            for (int i = 0; i < newOptionRequestParams.length; i++) {
-                String requestParam = newOptionRequestParams[i];
+        //Handle new user values
+        String[] newvalueRequestParams = srp.getParamsWithCertainStringForQuestion(question.getQuestionid(), "-newvalue");
+        if (newvalueRequestParams!=null && newvalueRequestParams.length>0){
+            for (int i = 0; i < newvalueRequestParams.length; i++) {
+                String requestParam = newvalueRequestParams[i];
                 if (requestParam!=null && requestParam.trim().length()>0){
-                    //Handle new useroptions
-                    logger.debug("handling requestParam["+i+"]="+requestParam+" as a new option");
-                    boolean useroptionalreadyexisted = false;
+                    //Handle new uservalues
+                    logger.debug("handling requestParam["+i+"]="+requestParam+" as a new value");
+                    boolean uservaluealreadyexisted = false;
                     List<Questionuserconfig> questionuserconfigs = HibernateUtil.getSession().createCriteria(Questionuserconfig.class)
                                            .add(Restrictions.eq("questionid", question.getQuestionid()))
                                            .add(Restrictions.eq("userid", user.getUserid()))
@@ -226,36 +308,90 @@ public class Dropdown implements Component, ChartField {
                                            .list();
                     for (Iterator<Questionuserconfig> iterator = questionuserconfigs.iterator(); iterator.hasNext();) {
                         Questionuserconfig questionuserconfig = iterator.next();
-                        if (questionuserconfig.getName().equals("options")){
-                            //We already have a useroptions entry for this question... need to append to it
+                        if (questionuserconfig.getName().equals("values")){
+                            //We already have a uservalues entry for this question... need to append to it
                             logger.debug("found a pre-existing questionuserconfig entry: questionuserconfig.getQuestionuserconfigid()="+questionuserconfig.getQuestionuserconfigid()+" (requestParam="+requestParam+")");
-                            useroptionalreadyexisted = true;
-                            String useroptions = questionuserconfig.getValue();
-                            String[] userOptionsSplit = useroptions.split("\\n");
-                            boolean exactoptionalreadyexisted = false;
-                            for (int j = 0; j < userOptionsSplit.length; j++) {
-                                String s = userOptionsSplit[j];
-                                //Determine whether this exact option exists
+                            uservaluealreadyexisted = true;
+                            String uservalues = questionuserconfig.getValue();
+                            String[] uservaluesSplit = uservalues.split("\\n");
+                            boolean exactvaluealreadyexisted = false;
+                            for (int j = 0; j < uservaluesSplit.length; j++) {
+                                String s = uservaluesSplit[j];
+                                //Determine whether this exact value exists
                                 logger.debug("s.trim()="+s.trim());
                                 logger.debug("s.trim().indexOf(requestParam.trim())="+s.trim().indexOf(requestParam.trim()));
                                 if (s.trim().indexOf(requestParam.trim())>-1){
-                                    logger.debug("an exact option ("+requestParam.trim()+") already exists in a Questionuserconfig");
-                                    exactoptionalreadyexisted = true;
+                                    logger.debug("an exact value ("+requestParam.trim()+") already exists in a Questionuserconfig");
+                                    exactvaluealreadyexisted = true;
                                 }
                             }
-                            if (!exactoptionalreadyexisted){
-                                //Append the new option to the existing Questionuserconfig
-                                logger.debug("appending the new option ("+requestParam.trim()+")");
+                            if (!exactvaluealreadyexisted){
+                                //Append the new value to the existing Questionuserconfig
+                                logger.debug("appending the new value ("+requestParam.trim()+")");
                                 questionuserconfig.setValue(questionuserconfig.getValue()+"\n"+requestParam);
                                 try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
                             }
                         }
                     }
                     //Create a new Questionuserconfig
-                    if (!useroptionalreadyexisted){
-                        logger.debug("!useroptionalreadyexisted so creating new one");
+                    if (!uservaluealreadyexisted){
+                        logger.debug("!uservaluealreadyexisted so creating new one");
                         Questionuserconfig questionuserconfig = new Questionuserconfig();
-                        questionuserconfig.setName("options");
+                        questionuserconfig.setName("values");
+                        questionuserconfig.setQuestionid(question.getQuestionid());
+                        questionuserconfig.setUserid(user.getUserid());
+                        questionuserconfig.setValue(requestParam);
+                        try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+                    }
+                }
+            }
+        }
+        //Handle new user displayoverrides
+        String[] newdisplayoverrideRequestParams = srp.getParamsWithCertainStringForQuestion(question.getQuestionid(), "-newdisplayoverride");
+        if (newdisplayoverrideRequestParams!=null && newdisplayoverrideRequestParams.length>0){
+            for (int i = 0; i < newdisplayoverrideRequestParams.length; i++) {
+                String requestParam = newdisplayoverrideRequestParams[i];
+                if (requestParam!=null && requestParam.trim().length()>0){
+                    //Handle new displayoverrides
+                    logger.debug("handling requestParam["+i+"]="+requestParam+" as a new displayoverride");
+                    boolean uservaluealreadyexisted = false;
+                    List<Questionuserconfig> questionuserconfigs = HibernateUtil.getSession().createCriteria(Questionuserconfig.class)
+                                           .add(Restrictions.eq("questionid", question.getQuestionid()))
+                                           .add(Restrictions.eq("userid", user.getUserid()))
+                                           .setCacheable(false)
+                                           .list();
+                    for (Iterator<Questionuserconfig> iterator = questionuserconfigs.iterator(); iterator.hasNext();) {
+                        Questionuserconfig questionuserconfig = iterator.next();
+                        if (questionuserconfig.getName().equals("displayoverrides")){
+                            //We already have a uservalues entry for this question... need to append to it
+                            logger.debug("found a pre-existing questionuserconfig entry: questionuserconfig.getQuestionuserconfigid()="+questionuserconfig.getQuestionuserconfigid()+" (requestParam="+requestParam+")");
+                            uservaluealreadyexisted = true;
+                            String uservalues = questionuserconfig.getValue();
+                            String[] uservaluesSplit = uservalues.split("\\n");
+                            boolean exactvaluealreadyexisted = false;
+                            for (int j = 0; j < uservaluesSplit.length; j++) {
+                                String s = uservaluesSplit[j];
+                                //Determine whether this exact value exists
+                                logger.debug("s.trim()="+s.trim());
+                                logger.debug("s.trim().indexOf(requestParam.trim())="+s.trim().indexOf(requestParam.trim()));
+                                if (s.trim().indexOf(requestParam.trim())>-1){
+                                    logger.debug("an exact value ("+requestParam.trim()+") already exists in a Questionuserconfig");
+                                    exactvaluealreadyexisted = true;
+                                }
+                            }
+                            if (!exactvaluealreadyexisted){
+                                //Append the new value to the existing Questionuserconfig
+                                logger.debug("appending the new value ("+requestParam.trim()+")");
+                                questionuserconfig.setValue(questionuserconfig.getValue()+"\n"+requestParam);
+                                try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+                            }
+                        }
+                    }
+                    //Create a new Questionuserconfig
+                    if (!uservaluealreadyexisted){
+                        logger.debug("!uservaluealreadyexisted so creating new one");
+                        Questionuserconfig questionuserconfig = new Questionuserconfig();
+                        questionuserconfig.setName("displayoverrides");
                         questionuserconfig.setQuestionid(question.getQuestionid());
                         questionuserconfig.setUserid(user.getUserid());
                         questionuserconfig.setValue(requestParam);

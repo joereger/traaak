@@ -142,6 +142,8 @@ if (userSession.getIsnewappforthisuser()){
             <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=userSession.getApp().getPrimarychartid()%>&userid=<%=userSession.getUser().getUserid()%>&size=small&comparetouserid=0" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
             <br/>
             <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts&chartid=<%=userSession.getApp().getPrimarychartid()%>'>+Zoom</a>
+            |
+            <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts'>All Charts</a>
             <br/><br/><br/><br/>
 
             <div style="border: 3px solid #e6e6e6;">
