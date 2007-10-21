@@ -45,7 +45,7 @@
         try {
             megaChart.save();
         } catch (Exception ex) {
-            logger.error(ex);
+            logger.error("",ex);
         }
         //Clear the chart image cache
         ClearCache.clearCacheForChart(app.getAppid(), megaChart.getChart().getChartid());
@@ -53,8 +53,8 @@
         //return;
     }
 %>
-App: <a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a><br/>
-Chartid:<%=megaChart.getChart().getChartid()%>: <%=megaChart.getChart().getName()%>
+<font class="pagetitle">App: <a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a></font>
+<br/>Chartid:<%=megaChart.getChart().getChartid()%>: <%=megaChart.getChart().getName()%>
 <br/><br/>
 <form action="appdetail-chart.jsp" method="post">
     <input type="hidden" name="appid" value="<%=app.getAppid()%>">

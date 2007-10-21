@@ -2,7 +2,12 @@ package com.fbdblog.chart;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.TimeSeriesCollection;
+import org.apache.log4j.Logger;
+
+import java.awt.*;
 
 
 /**
@@ -19,6 +24,11 @@ public class MegaChartTypeTimeSeries implements MegaChartType{
     }
 
     public JFreeChart formatChart(JFreeChart chart) {
+        Logger logger = Logger.getLogger(this.getClass().getName());
+        logger.debug("attempting to format time series");
+        XYPlot plot = chart.getXYPlot();
+        XYItemRenderer renderer = plot.getRenderer();
+        renderer.setBaseStroke(new BasicStroke(2));
         return chart;
     }
 

@@ -56,7 +56,7 @@
         try {
             question.save();
         } catch (Exception ex) {
-            logger.error(ex);
+            logger.error("",ex);
         }
         for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
             Questionconfig questionconfig = iterator.next();
@@ -73,7 +73,7 @@
             question.save();
             app.save();
         } catch (Exception ex) {
-            logger.error(ex);
+            logger.error("",ex);
         }
 
 
@@ -82,8 +82,8 @@
         return;
     }
 %>
-App: <a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a><br/>
-Question Detail: <%=question.getQuestion()%>
+<font class="pagetitle">App: <a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a></font>
+<br/>Question Detail: <%=question.getQuestion()%>
 <br/><br/>
 <form action="appdetail-question-checkboxes.jsp" method="post">
     <input type="hidden" name="appid" value="<%=app.getAppid()%>">

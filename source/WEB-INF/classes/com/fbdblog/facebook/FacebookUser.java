@@ -52,7 +52,7 @@ public class FacebookUser implements Serializable {
             populateFromUserDom(user);
         } catch (Exception ex){
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("",ex);
         }
     }
 

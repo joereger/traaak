@@ -135,7 +135,7 @@ public class ChartFieldEntryWeeksAgo implements ChartField{
         } catch (java.util.NoSuchElementException e){
             //Do nothing
         } catch (Exception e){
-            logger.error(e);
+            logger.error("",e);
         }
         //Return the data
         return data;

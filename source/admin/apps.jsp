@@ -7,7 +7,7 @@
 <%@ include file="header.jsp" %>
 
 
-Apps
+<font class="pagetitle">Apps</font>
 <br/><br/>
 
 <table cellpadding="3" cellspacing="0" border="0">

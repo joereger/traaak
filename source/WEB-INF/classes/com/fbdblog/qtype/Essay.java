@@ -121,7 +121,7 @@ public class Essay implements Component, ChartField {
             allCex.addErrorsFromAnotherGeneralException(cex, "'"+question.getQuestion()+"' ");
         } catch (Exception ex){
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("",ex);
             allCex.addValidationError(ex.getMessage());
         }
         //Throw if necessary
@@ -136,7 +136,7 @@ public class Essay implements Component, ChartField {
             for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
                 Postanswer postanswer=iterator.next();
                 if (postanswer.getQuestionid()==question.getQuestionid()){
-                    try{iterator.remove();}catch(Exception ex){logger.error(ex);}
+                    try{iterator.remove();}catch(Exception ex){logger.error("",ex);}
                 }
             }
         }
@@ -152,7 +152,7 @@ public class Essay implements Component, ChartField {
                     postanswer.setName("response");
                     postanswer.setValue(requestParam.trim());
                     postanswer.setPostid(post.getPostid());
-                    try{postanswer.save();}catch(Exception ex){logger.error(ex);}
+                    try{postanswer.save();}catch(Exception ex){logger.error("",ex);}
                 }
             }
         }

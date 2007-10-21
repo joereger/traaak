@@ -17,7 +17,7 @@
 
 %>
 
-SysProps
+<font class="pagetitle">SysProps</font>
 <br/><br/>
 
 <form action="sysprops.jsp" method="post">

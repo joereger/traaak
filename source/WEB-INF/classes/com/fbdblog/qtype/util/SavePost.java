@@ -44,7 +44,7 @@ public class SavePost {
             }
         } catch (Exception ex){
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("",ex);
             allCex.addValidationError(ex.getMessage());
         }
 
@@ -69,7 +69,7 @@ public class SavePost {
                 try{
                     post.save();
                 } catch (Exception ex){
-                    logger.error(ex);
+                    logger.error("",ex);
                     allCex.addValidationError(ex.getMessage());
                 }
                 //Process each question
@@ -80,9 +80,9 @@ public class SavePost {
                         try{component.processAnswer(appPostParser, post);} catch (ComponentException cex){allCex.addErrorsFromAnotherGeneralException(cex, "");}
                     }
                     //Refresh user
-                    try{user.save();} catch (Exception ex){logger.error(ex);}
+                    try{user.save();} catch (Exception ex){logger.error("",ex);}
                     //Refresh the post
-                    try{post.save();} catch (Exception ex){logger.error(ex);}
+                    try{post.save();} catch (Exception ex){logger.error("",ex);}
                     //Clear the chart image cache
                     ClearCache.clearCacheForUser(user.getUserid(), app.getAppid());
                     //Update Facebook
@@ -95,7 +95,7 @@ public class SavePost {
                 }
             } catch (Exception ex){
                 ex.printStackTrace();
-                logger.error(ex);
+                logger.error("",ex);
                 allCex.addValidationError(ex.getMessage());
             }
             //Notify debug group

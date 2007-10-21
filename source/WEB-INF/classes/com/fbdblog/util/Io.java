@@ -27,9 +27,9 @@ public class Io {
                 }
                 reader.close();
             } catch (FileNotFoundException e) {
-                logger.error(e);
+                logger.error("",e);
             } catch (IOException e) {
-                logger.error(e);
+                logger.error("",e);
             }
 
             sb.append(new String(chars));
@@ -54,9 +54,9 @@ public class Io {
                 }
                 reader.close();
             } catch (FileNotFoundException e) {
-                logger.error(e);
+                logger.error("",e);
             } catch (IOException e) {
-                logger.error(e);
+                logger.error("",e);
             }
 
             sb.append(new String(chars));

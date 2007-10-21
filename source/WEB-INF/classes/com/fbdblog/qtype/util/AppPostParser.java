@@ -60,7 +60,7 @@ public class AppPostParser {
                     }
                 }
             } catch (Exception ex){
-                logger.error(ex);
+                logger.error("",ex);
             }
         }
     }
@@ -81,7 +81,7 @@ public class AppPostParser {
                         qs.append(java.net.URLEncoder.encode(name, "UTF-8")+"="+java.net.URLEncoder.encode(values[j], "UTF-8"));
                         qs.append("&");
                     } catch (Exception ex){
-                        logger.error(ex);
+                        logger.error("",ex);
                     }
                 }
             }

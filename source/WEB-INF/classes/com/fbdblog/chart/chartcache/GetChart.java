@@ -107,7 +107,7 @@ public class GetChart {
             byte[] imgBytes=ChartUtilities.encodeAsPNG(bufImg);
             return imgBytes;
         } catch (Exception ex){
-            logger.error(ex);
+            logger.error("",ex);
         }
         return new byte[0];
     }
@@ -130,7 +130,7 @@ public class GetChart {
                     logger.debug("IO Exception attempting to read file.  Error occurred on mediaout.log: '" + file.getAbsolutePath() + "' - " + e.toString());
                     logger.debug(e);
                 } catch (Throwable e) {
-                    logger.error(e);
+                    logger.error("",e);
                 }
             }
         } catch (IOException e) {
@@ -141,7 +141,7 @@ public class GetChart {
             logger.debug(e);
         } catch (Exception e) {
             if (!e.toString().substring(0, 21).equals("ClientAbortException:")) {
-                logger.error(e);
+                logger.error("",e);
             } else {
                 logger.debug(e);
             }
@@ -165,7 +165,7 @@ public class GetChart {
             logger.debug(e);
         } catch (Exception e) {
             if (!e.toString().substring(0, 21).equals("ClientAbortException:")) {
-                logger.error(e);
+                logger.error("",e);
             } else {
                 logger.debug(e);
             }
@@ -188,7 +188,7 @@ public class GetChart {
             fileOut.close();
         } catch (Exception ex){
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("",ex);
         }
     }
 

@@ -58,7 +58,7 @@ public class FacebookApiWrapper {
                     }
                 }
             } catch (Exception ex){
-                logger.error(ex);
+                logger.error("",ex);
             }
         }
     }
@@ -74,7 +74,7 @@ public class FacebookApiWrapper {
                     FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
                     facebookRestClient.feed_publishActionOfUser(mf.toString(), "");
                 }
-            } catch (Exception ex){logger.error(ex);}
+            } catch (Exception ex){logger.error("",ex);}
         } else {logger.debug("Can't execute because issessionok = false");}
     }
 
@@ -108,7 +108,7 @@ public class FacebookApiWrapper {
                 } else {
                     logger.debug("Apparently refresh fb image was not successful.");
                 }
-            } catch (Exception ex){logger.error(ex);}
+            } catch (Exception ex){logger.error("",ex);}
         } else {logger.debug("Can't execute because issessionok = false");}
     }
 
@@ -139,7 +139,7 @@ public class FacebookApiWrapper {
                         }
                     }
                 }
-            } catch (Exception ex){logger.error(ex);}
+            } catch (Exception ex){logger.error("",ex);}
         } else {logger.debug("Can't execute because issessionok = false");}
         return friends;
     }
@@ -192,7 +192,7 @@ public class FacebookApiWrapper {
                         }
                     }
                 }
-            } catch (Exception ex){logger.error(ex); ex.printStackTrace();}
+            } catch (Exception ex){logger.error("",ex); ex.printStackTrace();}
         } else {logger.debug("Can't execute because issessionok = false");}
         logger.debug("end getFriends() userSession.getFacebooksessionkey()="+userSession.getFacebooksessionkey());
         return friends;
@@ -229,7 +229,7 @@ public class FacebookApiWrapper {
             //@todo have icon for inviting friends
             imgUrl = new URL("http", SystemProperty.getProp(SystemProperty.PROP_BASEURL), "/images/bleh.png");
         } catch (Exception ex){
-            logger.error(ex);
+            logger.error("",ex);
         }
         try{
             URL url = facebookRestClient.notifications_sendRequest(uids, typeChars, contentChars, imgUrl, true);
@@ -241,7 +241,7 @@ public class FacebookApiWrapper {
             }
 
         } catch (Exception ex){
-            logger.error(ex);
+            logger.error("",ex);
         }
     }
 

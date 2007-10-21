@@ -38,14 +38,14 @@ public class ImpressionCache implements Job {
                                     it.remove();
                                 }
                             } catch (Exception ex){
-                                logger.error(ex);
+                                logger.error("",ex);
                             }
                         }
                     }
                 }
             } catch (Exception ex){
                 logger.debug("Error in top block.");
-                logger.error(ex);
+                logger.error("",ex);
             }
 
 

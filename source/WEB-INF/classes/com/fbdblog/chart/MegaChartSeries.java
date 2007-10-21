@@ -151,19 +151,13 @@ public class MegaChartSeries {
 
             //Get xData
             xData = xAxis.get(post.getPostid());
-            if (xData==null){
-                xData = " ";
-            }
 
             //Get yData
             yData = yAxis.get(post.getPostid());
-            if (yData==null){
-                yData = " ";
-            }
 
             //Only add if both x and y have something to contribute
-            //if (xData!=null && !xData.equals("null") && !xData.equals(" ") && !xData.equals("") && !xData.equals("0")){
-                //if (yData!=null && !yData.equals("null") && !yData.equals(" ") && !yData.equals("") && !yData.equals("0")){
+            if (xData!=null && !xData.equals("null") && !xData.equals("")){
+                if (yData!=null && !yData.equals("null") && !yData.equals("")){
                     logger.debug("adding to outData["+count+"]: post.getPostid()="+String.valueOf(post.getPostid())+" xData.toString()="+xData.toString()+" yData.toString()="+yData.toString());
                     //Create triple array
                     String[] tmpArr = new String[3];
@@ -173,8 +167,8 @@ public class MegaChartSeries {
                     //Add this tmpArray to the main data array
                     outData[count] = tmpArr;
                     count = count + 1;
-                //}
-            //}
+                }
+            }
         }
         //Return the data
         return outData;
@@ -203,89 +197,92 @@ public class MegaChartSeries {
         boolean ydupeFlag=false;
         if (tmpChartData!=null && tmpChartData.length>0){
         	for(int i=0; i<tmpChartData.length; i++){
-                logger.debug("tmpChartData["+i+"][0]="+tmpChartData[i][0]+" tmpChartData.length="+tmpChartData.length);
+                //logger.debug("tmpChartData["+i+"][0]="+tmpChartData[i][0]+" tmpChartData.length="+tmpChartData.length);
         	    if (tmpChartData[i][0]==null){
-                    logger.debug("it's really null... tmpChartData[i][0]==null");    
+                    //logger.debug("it's really null... tmpChartData[i][0]==null, tmpChartData[i][1]="+tmpChartData[i][1]+", tmpChartData[i][2]="+tmpChartData[i][2]);
                 }
-        	    //Create a properly typed eventid
-        	    Object eventid = new Integer(tmpChartData[i][0]);
+                if (tmpChartData[i][0]!=null){
+                    logger.debug("tmpChartData[i][0]="+tmpChartData[i][0]+", tmpChartData[i][1]="+tmpChartData[i][1]+", tmpChartData[i][2]="+tmpChartData[i][2]);
+                    //Create a properly typed eventid
+                    Object eventid = new Integer(tmpChartData[i][0]);
 
-        	    //Create a properly typed xAxisValue
-        	    Object xAxisValue = null;
-                if (xMegadatatype==DataTypeInteger.DATATYPEID){
-                    if (Num.isinteger(tmpChartData[i][1])){
-                        xAxisValue = new Integer(tmpChartData[i][1]);
+                    //Create a properly typed xAxisValue
+                    Object xAxisValue = null;
+                    if (xMegadatatype==DataTypeInteger.DATATYPEID){
+                        if (Num.isinteger(tmpChartData[i][1])){
+                            xAxisValue = new Integer(tmpChartData[i][1]);
+                        } else {
+                            xAxisValue = new Integer(0);
+                        }
+                    } else if (xMegadatatype==DataTypeDecimal.DATATYPEID) {
+                        if (Num.isdouble(tmpChartData[i][1])){
+                            xAxisValue = new Double(tmpChartData[i][1]);
+                        } else {
+                            xAxisValue = new Double(0);
+                        }
                     } else {
-                        xAxisValue = new Integer(0);
+                        xAxisValue = tmpChartData[i][1];
                     }
-                } else if (xMegadatatype==DataTypeDecimal.DATATYPEID) {
-                    if (Num.isdouble(tmpChartData[i][1])){
-                        xAxisValue = new Double(tmpChartData[i][1]);
+
+                    //Create a properly typed yAxisValue
+                    Object yAxisValue = null;
+                    if (Num.isdouble(tmpChartData[i][2])){
+                        yAxisValue = new Double(tmpChartData[i][2]);
                     } else {
-                        xAxisValue = new Double(0);
+                        yAxisValue = new Double(0);
                     }
-                } else {
-                    xAxisValue = tmpChartData[i][1];
-                }
 
-                //Create a properly typed yAxisValue
-                Object yAxisValue = null;
-                if (Num.isdouble(tmpChartData[i][2])){
-                    yAxisValue = new Double(tmpChartData[i][2]);
-                } else {
-                    yAxisValue = new Double(0);
-                }
+                    //Reset the dupe finder flag
+                    xdupeFlag=false;
+                    ydupeFlag=false;
 
-                //Reset the dupe finder flag
-                xdupeFlag=false;
-                ydupeFlag=false;
-
-                //I create two treemaps, each keyed off of the eventid (rawChartData[i][0]).
-                //I then check for x dupes and y dupes.  You have to have both duped to find an actual row dupe.
-        	    //Detect x dupes
-        	    if (xDupes.containsKey(eventid) && xDupes.get(eventid).equals(xAxisValue)) {
-                    xdupeFlag=true;
-                } else {
-                    //Add it to the dupe cache
-                    xDupes.put(eventid, xAxisValue);
-                }
-                //Detect y dupes
-        	    if (yDupes.containsKey(eventid) && yDupes.get(eventid).equals(yAxisValue)) {
-                    ydupeFlag=true;
-                } else {
-                    //Add it to the dupe cache
-                    yDupes.put(eventid, yAxisValue);
-                }
-
-                //If no dupes have yet been found for this x,y combination
-                //In other words, each x,y combo will pass through here at least once
-                if (!xdupeFlag && !ydupeFlag) {
-                    //If key already exists, sum/avg the values...
-                    if (tmap.containsKey(xAxisValue)) {
-
-                        //Get the current value
-                        tmpobj=tmap.get(xAxisValue);
-                        //Clear the current treemap entry
-                        tmap.remove(xAxisValue);
-
-                        //Add the entry back with the new avg/sum value
-
-                        //This handles Sum and Average cases because it's doing the Sum
-                        //portion.  Later, after all have been processed, the divide
-                        //part of the average operation is done.
-                        //Note that we're adding to the TreeMap as a typed object so
-                        //that sorting works properly.
-                        tmap.put(xAxisValue, new Double(Double.parseDouble(yAxisValue.toString()) + Double.parseDouble(tmpobj.toString())));
-                        //Be sure to update the avgCount treemap
-                        incrementAvgCount(xAxisValue);
-
-                    //The key doesn't yet exist so we have to add it... simple.
+                    //I create two treemaps, each keyed off of the eventid (rawChartData[i][0]).
+                    //I then check for x dupes and y dupes.  You have to have both duped to find an actual row dupe.
+                    //Detect x dupes
+                    if (xDupes.containsKey(eventid) && xDupes.get(eventid).equals(xAxisValue)) {
+                        xdupeFlag=true;
                     } else {
-                        //Add the new entry to the treemap
-                        tmap.put(xAxisValue, yAxisValue);
+                        //Add it to the dupe cache
+                        xDupes.put(eventid, xAxisValue);
+                    }
+                    //Detect y dupes
+                    if (yDupes.containsKey(eventid) && yDupes.get(eventid).equals(yAxisValue)) {
+                        ydupeFlag=true;
+                    } else {
+                        //Add it to the dupe cache
+                        yDupes.put(eventid, yAxisValue);
+                    }
 
-                        //Be sure to update the avgCount treemap
-                        incrementAvgCount(xAxisValue);
+                    //If no dupes have yet been found for this x,y combination
+                    //In other words, each x,y combo will pass through here at least once
+                    if (!xdupeFlag && !ydupeFlag) {
+                        //If key already exists, sum/avg the values...
+                        if (tmap.containsKey(xAxisValue)) {
+
+                            //Get the current value
+                            tmpobj=tmap.get(xAxisValue);
+                            //Clear the current treemap entry
+                            tmap.remove(xAxisValue);
+
+                            //Add the entry back with the new avg/sum value
+
+                            //This handles Sum and Average cases because it's doing the Sum
+                            //portion.  Later, after all have been processed, the divide
+                            //part of the average operation is done.
+                            //Note that we're adding to the TreeMap as a typed object so
+                            //that sorting works properly.
+                            tmap.put(xAxisValue, new Double(Double.parseDouble(yAxisValue.toString()) + Double.parseDouble(tmpobj.toString())));
+                            //Be sure to update the avgCount treemap
+                            incrementAvgCount(xAxisValue);
+
+                        //The key doesn't yet exist so we have to add it... simple.
+                        } else {
+                            //Add the new entry to the treemap
+                            tmap.put(xAxisValue, yAxisValue);
+
+                            //Be sure to update the avgCount treemap
+                            incrementAvgCount(xAxisValue);
+                        }
                     }
                 }
         	}

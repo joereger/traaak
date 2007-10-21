@@ -1,10 +1,7 @@
 package com.fbdblog.chart;
 
 
-import java.util.Calendar;
-import java.util.TreeMap;
-import java.util.Iterator;
-import java.util.ArrayList;
+import java.util.*;
 
 import com.fbdblog.util.DateDiff;
 import com.fbdblog.util.Time;
@@ -128,6 +125,15 @@ public class ChartFieldEntryDaysAgo implements ChartField{
             //Need to get the min days ago
             int min = Integer.parseInt(data.firstKey().toString());
 
+            //Debug
+            logger.debug("min="+min+" max="+max+" data.size()="+data.size());
+            Iterator keyValuePairs = data.entrySet().iterator();
+            for (int i = 0; i < data.size(); i++){
+                Map.Entry mapentry = (Map.Entry) keyValuePairs.next();
+                Object key = mapentry.getKey();
+                Object value = mapentry.getValue();
+                logger.debug("key="+key+" value="+value);
+            }
 
             //From min to max
             for(int i=min; i<=max; i++){
@@ -135,15 +141,16 @@ public class ChartFieldEntryDaysAgo implements ChartField{
                 //Careful!!! I must make sure it's of the correct type.
                 Integer val = new Integer(i);
                 //If it doesn't exist
-                if(data.get(val)==null){
+                logger.debug("data.get(val)="+data.get(String.valueOf(val)));
+                if(data.get(String.valueOf(val))==null){
                     //Add it to the TreeMap
-                    data.put(val, new Integer(0));
+                    data.put(String.valueOf(val), new Integer(0));
                 }
             }
         } catch (java.util.NoSuchElementException e){
             //Do nothing
         } catch (Exception e){
-            logger.error(e);
+            logger.error("fillEmptyXAxis()", e);
         }
         //Util.logTreeMapToDb("data out of fillEmptyXAxis", data);
         //Return the data

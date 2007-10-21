@@ -175,7 +175,7 @@ public class Checkboxes implements Component, ChartField {
             allCex.addErrorsFromAnotherGeneralException(cex, "'"+question.getQuestion()+"' ");
         } catch (Exception ex){
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("",ex);
             allCex.addValidationError(ex.getMessage());
         }
         //Throw if necessary
@@ -190,7 +190,7 @@ public class Checkboxes implements Component, ChartField {
             for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
                 Postanswer postanswer=iterator.next();
                 if (postanswer.getQuestionid()==question.getQuestionid()){
-                    try{iterator.remove();}catch(Exception ex){logger.error(ex);}
+                    try{iterator.remove();}catch(Exception ex){logger.error("",ex);}
                 }
             }
         }
@@ -211,7 +211,7 @@ public class Checkboxes implements Component, ChartField {
                     postanswer.setName("response");
                     postanswer.setValue(requestParam.trim());
                     postanswer.setPostid(post.getPostid());
-                    try{postanswer.save();}catch(Exception ex){logger.error(ex);}
+                    try{postanswer.save();}catch(Exception ex){logger.error("",ex);}
                 }
             }
         }
@@ -252,7 +252,7 @@ public class Checkboxes implements Component, ChartField {
                                 //Append the new option to the existing Questionuserconfig
                                 logger.debug("appending the new option ("+requestParam.trim()+")");
                                 questionuserconfig.setValue(questionuserconfig.getValue()+"\n"+requestParam);
-                                try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+                                try{questionuserconfig.save();}catch(Exception ex){logger.error("",ex);}
                             }
                         }
                     }
@@ -264,7 +264,7 @@ public class Checkboxes implements Component, ChartField {
                         questionuserconfig.setQuestionid(question.getQuestionid());
                         questionuserconfig.setUserid(user.getUserid());
                         questionuserconfig.setValue(requestParam);
-                        try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+                        try{questionuserconfig.save();}catch(Exception ex){logger.error("",ex);}
                     }
                 }
             }

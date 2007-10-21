@@ -3,7 +3,7 @@
 <%@ include file="header.jsp" %>
 
 
-Financial Model
+<font class="pagetitle">Financial Model</font>
 <br/><br/>
 
 <%

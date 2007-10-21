@@ -27,7 +27,7 @@
 
 %>
 
-InstanceProps
+<font class="pagetitle">InstanceProps</font>
 <br/><br/>
 
 <form action="instanceprops.jsp" method="post">

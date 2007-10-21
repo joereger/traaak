@@ -29,12 +29,15 @@ public class UserSessionFilter implements Filter {
 
 
         try{
-            logger.debug("Start UserSessionCreator");
-            UserSessionSetup.setup((HttpServletRequest)request, response);
-            logger.debug("End UserSessionCreator");
+            HttpServletRequest httpServletRequest = (HttpServletRequest)request;
+            if (httpServletRequest.getRequestURL().indexOf("jpg")==-1 && httpServletRequest.getRequestURL().indexOf("css")==-1 && httpServletRequest.getRequestURL().indexOf("gif")==-1 && httpServletRequest.getRequestURL().indexOf("png")==-1){
+                logger.debug("Start UserSessionCreator");
+                UserSessionSetup.setup((HttpServletRequest)request, response);
+                logger.debug("End UserSessionCreator");
+            }
         } catch (Exception ex){
             logger.debug("Error setting up UserSession");
-            logger.error(ex);
+            logger.error("",ex);
         }
 
 

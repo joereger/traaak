@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import java.util.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * User: Joe Reger Jr
@@ -83,15 +84,17 @@ public class ClearCache {
 
     private static void deleteDirAndSubs(File file){
         Logger logger = Logger.getLogger(ClearCache.class);
-        logger.debug("would have DELETED: "+file.getAbsolutePath());
+        logger.debug("Deleting: "+file.getAbsolutePath());
         try{
             FileUtils.forceDelete(file);
+        } catch (FileNotFoundException fex){
+            //Do nothing
         } catch (Exception ex){
-            logger.error(ex);
+            logger.error("",ex);
             try{
                 FileUtils.forceDeleteOnExit(file);
             } catch (Exception ex2){
-                logger.error(ex2);
+                logger.error("",ex2);
             }
         }
     }

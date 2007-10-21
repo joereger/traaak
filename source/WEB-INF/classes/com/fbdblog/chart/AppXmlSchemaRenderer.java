@@ -153,7 +153,7 @@ public class AppXmlSchemaRenderer {
             return outp.outputString(doc);
 
         } catch (Exception e){
-            logger.error(e);
+            logger.error("",e);
         }
         return "General Failure.  Many apologies.";
     }

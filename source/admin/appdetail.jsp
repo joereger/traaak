@@ -36,7 +36,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
     app.setFacebookappname(request.getParameter("facebookappname"));
     app.setFacebookapikey(request.getParameter("facebookapikey"));
     app.setFacebookapisecret(request.getParameter("facebookapisecret"));
-    try{app.save();}catch(Exception ex){logger.error(ex);}
+    try{app.save();}catch(Exception ex){logger.error("",ex);}
     out.print("Saved.<br/>");
 }
 %>
@@ -45,8 +45,18 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
 if (request.getParameter("action")!=null && request.getParameter("action").equals("deletequestion")){
     if (request.getParameter("questionid") != null && Num.isinteger(request.getParameter("questionid"))) {
         Question question = Question.get(Integer.parseInt(request.getParameter("questionid")));
-        try{question.delete();}catch(Exception ex){logger.error(ex);}
+        try{question.delete();}catch(Exception ex){logger.error("",ex);}
         out.print("Deleted question.<br/>");
+    }
+}
+%>
+
+<%
+if (request.getParameter("action")!=null && request.getParameter("action").equals("deletechart")){
+    if (request.getParameter("chartid") != null && Num.isinteger(request.getParameter("chartid"))) {
+        Chart chart = Chart.get(Integer.parseInt(request.getParameter("chartid")));
+        try{chart.delete();}catch(Exception ex){logger.error("",ex);}
+        out.print("Deleted chart.<br/>");
     }
 }
 %>
@@ -56,7 +66,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
         try {
             ClearCache.clearCacheForApp(app.getAppid());
         } catch (Exception ex) {
-            logger.error(ex);
+            logger.error("",ex);
         }
         out.print("App chart cache cleared.<br/>");
     }
@@ -69,14 +79,14 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                 app.setPrimarychartid(Integer.parseInt(request.getParameter("primarychartid")));
                 app.save();
             } catch (Exception ex) {
-                logger.error(ex);
+                logger.error("",ex);
             }
         }
         out.print("Primary chart has been set.<br/>");
     }
 %>
 
-App Detail
+<font class="pagetitle">App: <a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a></font>
 <br/><br/>
 <form action="appdetail.jsp" method="post">
     <input type="hidden" name="appid" value="<%=app.getAppid()%>">
@@ -228,7 +238,7 @@ App Detail
                         <%
                     } else {
                         %>
-                        (<a href='appdetail.jsp?action=setprimarychartid&appid=<%=app.getAppid()%>&primarychartid=<%=chart.getChartid()%>'>make primary</a>)
+                        (<a href='appdetail.jsp?action=setprimarychartid&appid=<%=app.getAppid()%>&primarychartid=<%=chart.getChartid()%>'>make primary</a>) (<a href='appdetail.jsp?action=deletechart&appid=<%=app.getAppid()%>&chartid=<%=chart.getChartid()%>'>del</a>)
                         <%
                     }
                     %>

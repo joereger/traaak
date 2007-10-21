@@ -2,7 +2,7 @@
 <%@ include file="header.jsp" %>
 
 
-Iao Cache
+<font class="pagetitle">IAO Cache</font>
 <br/><br/>
 
 <%=ImpressionCache.getIaoCacheAsString()%>

@@ -64,7 +64,7 @@ if (userSession.getIsnewappforthisuser()){
                 try {
                     postToDel.delete();
                 } catch (Exception ex) {
-                    logger.error(ex);
+                    logger.error("",ex);
                 }
                 post=null;
                 out.print("<fb:success>\n" +

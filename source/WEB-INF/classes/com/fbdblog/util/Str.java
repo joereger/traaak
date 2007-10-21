@@ -150,7 +150,7 @@ public class Str {
             formatter.setMaximumFractionDigits(2);
             return formatter.format(in);
         } catch (Exception ex){
-            logger.error(ex);
+            logger.error("",ex);
             return "";
         }
     }
@@ -163,7 +163,7 @@ public class Str {
             formatter.setMaximumFractionDigits(xdecimalplaces);
             return formatter.format(in);
         } catch (Exception ex){
-            logger.error(ex);
+            logger.error("",ex);
             return "";
         }
     }
@@ -177,7 +177,7 @@ public class Str {
             formatter.setMaximumFractionDigits(2);
             return formatter.format(in);
         } catch (Exception ex){
-            logger.error(ex);
+            logger.error("",ex);
             return "";
         }
     }
@@ -190,7 +190,7 @@ public class Str {
             formatter.setMaximumFractionDigits(0);
             return formatter.format(in);
         } catch (Exception ex){
-            logger.error(ex);
+            logger.error("",ex);
             return "";
         }
     }

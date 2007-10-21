@@ -35,7 +35,7 @@ public class ExtendedPropsFactory {
                     CacheFactory.getCacheProvider().put(nameInCache, CACHEGROUP, ext);
                     return ext;
                 } catch (Exception e){
-                    logger.error("Error setting up extended object props cache");
+                    logger.error("Error setting up extended object props cache", e);
                     logger.debug("    returning null");
                     return null;
                 }

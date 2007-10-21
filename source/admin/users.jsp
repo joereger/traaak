@@ -11,7 +11,7 @@
 int totalusers = ((Long)HibernateUtil.getSession().createQuery("select count(*) from User").uniqueResult()).intValue();
 %>
 
-Users (<%=totalusers%>)
+<font class="pagetitle">Users (<%=totalusers%>)</font>
 <br/><br/>
 
 

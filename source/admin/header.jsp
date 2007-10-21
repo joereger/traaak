@@ -24,6 +24,7 @@
 
 <style type="text/css">
     body, td {font-family: sans-serif;}
+    .pagetitle {font-family: impact; font-size: 28px; color: #666666;}
 </style>
 
 <body>
@@ -45,7 +46,7 @@
 <table cellpadding="10" cellspacing="0" border="0" width="100%">
     <tr>
         <td valign="top" width="150">
-            <a href='index.jsp'>Index</a><br/>
+            <!--<a href='index.jsp'>Index</a><br/>-->
             <a href='apps.jsp'>Apps</a><br/>
             <a href='users.jsp'>Users</a><br/>
             <a href='sysprops.jsp'>SysProps</a><br/>

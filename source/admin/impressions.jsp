@@ -16,7 +16,7 @@
     }
 %>
 
-Impressions
+<font class="pagetitle">Impressions</font>
 <br/><br/>
 
 <form action="impressions.jsp" method="get">

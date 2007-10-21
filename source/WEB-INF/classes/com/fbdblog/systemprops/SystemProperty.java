@@ -64,7 +64,7 @@ public class SystemProperty {
             if (systemprop.getName().equals(name)){
                 wasabletoupdate = true;
                 systemprop.setValue(value);
-                try{systemprop.save();}catch(Exception ex){logger.error(ex);}
+                try{systemprop.save();}catch(Exception ex){logger.error("",ex);}
             }
         }
         if (!wasabletoupdate){
@@ -72,7 +72,7 @@ public class SystemProperty {
             Systemprop systemprop = new Systemprop();
             systemprop.setName(name);
             systemprop.setValue(value);
-            try{systemprop.save();}catch(Exception ex){logger.error(ex);}
+            try{systemprop.save();}catch(Exception ex){logger.error("",ex);}
         }
         //Now refresh
         refreshAllProps();
@@ -113,7 +113,7 @@ public class SystemProperty {
             }
             propsloadedfromdb = true;
         } catch (Exception ex){
-            //logger.error(ex);
+            //logger.error("",ex);
         }
     }
 

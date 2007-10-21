@@ -21,6 +21,12 @@
     }
 %>
 
+<style type="text/css">
+    body, td {font-family: sans-serif;}
+</style>
+
+<body>
+
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("login")) {
         List<User> users = HibernateUtil.getSession().createCriteria(User.class)
@@ -33,7 +39,7 @@
                 userSession.setUser(user);
                 userSession.setIsloggedin(true);
                 if (userSession.getIssysadmin()){
-                    response.sendRedirect("index.jsp");
+                    response.sendRedirect("apps.jsp");
                     return;
                 }
             }
@@ -41,6 +47,8 @@
         out.print("Sorry.  Fail.");
     }
 %>
+
+
 
 <center>
 <form action="login.jsp" method="post">
@@ -65,7 +73,7 @@
                     </tr>
                     <tr>
                         <td valign="top">
-                            Email:
+                            <font style="font-size: 12px; color: #666666;"><b>Email:</b></font>
                         </td>
                         <td valign="top">
                             <input type="text" name="email" value="" size="25" maxlength="255">
@@ -73,7 +81,7 @@
                     </tr>
                     <tr>
                         <td valign="top">
-                            Password:
+                            <font style="font-size: 12px; color: #666666;"><b>Password:</b></font>
                         </td>
                         <td valign="top">
                             <input type="password" name="password" value="" size="25" maxlength="255">
@@ -93,3 +101,6 @@
     </table>  
 </form>
 </center>
+
+
+</body>

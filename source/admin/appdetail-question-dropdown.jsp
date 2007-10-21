@@ -60,7 +60,7 @@
         try {
             question.save();
         } catch (Exception ex) {
-            logger.error(ex);
+            logger.error("",ex);
         }
         for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
             Questionconfig questionconfig = iterator.next();
@@ -111,15 +111,15 @@
             question.save();
             app.save();
         } catch (Exception ex) {
-            logger.error(ex);
+            logger.error("",ex);
         }
 
         response.sendRedirect("appdetail.jsp?appid=" + app.getAppid());
         return;
     }
 %>
-App: <a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a><br/>
-Question Detail: <%=question.getQuestion()%>
+<font class="pagetitle">App: <a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a></font>
+<br/>Question Detail: <%=question.getQuestion()%>
 <br/><br/>
 <form action="appdetail-question-dropdown.jsp" method="post">
     <input type="hidden" name="appid" value="<%=app.getAppid()%>">
@@ -176,7 +176,7 @@ Question Detail: <%=question.getQuestion()%>
             <td valign="top">
                 Values<br/>
                 <%
-                String valuelabel = "Description";
+                String valuelabel = "Value";
                 for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
                     Questionconfig questionconfig = iterator.next();
                     if (questionconfig.getName().equals("valuelabel")){
@@ -200,7 +200,7 @@ Question Detail: <%=question.getQuestion()%>
             <td valign="top">
                 Displayoverrides<br/>
                 <%
-                String displayoverridelabel = "Value";
+                String displayoverridelabel = "Description";
                 for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
                     Questionconfig questionconfig = iterator.next();
                     if (questionconfig.getName().equals("displayoverridelabel")){

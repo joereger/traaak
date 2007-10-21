@@ -36,7 +36,7 @@ public class DbVersionCheck {
                 } catch (Throwable e){
                     //Also decrement the maxVer if anything else happens
                     maxVer = maxVer - 1;
-                    logger.error(e);
+                    logger.error("",e);
                     break;
                 }
                 maxVer = maxVer + 1;
@@ -72,7 +72,7 @@ public class DbVersionCheck {
                     System.out.println("End upgrade database to version " + (currentDatabaseVersion+1));
                 } catch (ClassNotFoundException ex){
                     //Class isn't found, report it and exit
-                    //logger.error(ex);
+                    //logger.error("",ex);
                     //ex.printStackTrace();
                     keepWorking = false;
                     //RequiredDatabaseVersion.setError(RequiredDatabaseVersion.getError() + ErrorDissect.dissect(ex));
@@ -81,7 +81,7 @@ public class DbVersionCheck {
                     //Some other sort of error
                     System.out.println("Fbdblog UpgradeCheckAtStartup.java: Error upgrading Db:" + e.getMessage());
                     e.printStackTrace();
-                    logger.error(e);
+                    logger.error("",e);
                     keepWorking = false;
                     RequiredDatabaseVersion.setError(RequiredDatabaseVersion.getError() + ErrorDissect.dissect(e));
                     logger.debug("Error: Upgrade database to version " + (currentDatabaseVersion+1) + " had issues recorded.");

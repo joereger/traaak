@@ -15,7 +15,7 @@ import org.apache.commons.mail.HtmlEmail;
 //
 //        sendMail(email);
 //    } catch (Exception e){
-//        logger.error(e);
+//        logger.error("",e);
 //    }
 
 //For HtmlEmail and image embedding see:
@@ -32,8 +32,7 @@ public class EmailSend {
             eThr.htmlEmail = htmlEmail;
             eThr.startThread();
         }catch (Exception e) {
-            logger.error("Error starting email thread.");
-            logger.error(e);
+            logger.error("Error starting email thread.", e);
         }
     }
 

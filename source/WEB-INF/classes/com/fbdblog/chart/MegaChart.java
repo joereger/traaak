@@ -5,6 +5,7 @@ import com.fbdblog.util.Util;
 import com.fbdblog.util.Num;
 import com.fbdblog.dao.Chart;
 import com.fbdblog.dao.Chartyaxis;
+import com.fbdblog.dao.App;
 
 import java.util.Calendar;
 import java.util.ArrayList;
@@ -196,13 +197,13 @@ public class MegaChart {
     public void save(){
         Logger logger = Logger.getLogger(this.getClass().getName());
         if (chart!=null){
-            try{chart.save();}catch(Exception ex){logger.error(ex);}
+            try{chart.save();}catch(Exception ex){logger.error("",ex);}
         }
         //Save yaxis, first delete all existing entries
         if (chart.getChartyaxes()!=null){
             for (Iterator<Chartyaxis> iterator=chart.getChartyaxes().iterator(); iterator.hasNext();) {
                 Chartyaxis chartyaxis=iterator.next();
-                try{iterator.remove();}catch(Exception ex){logger.error(ex);}
+                try{iterator.remove();}catch(Exception ex){logger.error("",ex);}
             }
         }
         if (yquestionid!=null && yquestionid.length>0){
@@ -211,11 +212,18 @@ public class MegaChart {
                 Chartyaxis chartyaxis = new Chartyaxis();
                 chartyaxis.setChartid(chart.getChartid());
                 chartyaxis.setYquestionid(yqid);
-                try{chartyaxis.save();}catch(Exception ex){logger.error(ex);}
+                try{chartyaxis.save();}catch(Exception ex){logger.error("",ex);}
+            }
+        }
+        //If the app has no primarychartid, use this one
+        App app = App.get(chart.getAppid());
+        if (app!=null && app.getAppid()>0){
+            if (app.getPrimarychartid()<=0){
+                app.setPrimarychartid(chart.getChartid());
             }
         }
         //Refresh chart
-        try{chart.save();}catch(Exception ex){logger.error(ex);}
+        try{chart.save();}catch(Exception ex){logger.error("",ex);}
     }
 
 

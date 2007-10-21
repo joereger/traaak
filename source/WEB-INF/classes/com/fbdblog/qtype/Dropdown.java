@@ -96,7 +96,7 @@ public class Dropdown implements Component, ChartField {
             if (usedisplayoverride){
                 optiondisplaytext = getValueDisplayText(valuesSplit, displayoverridesSplit, i).trim();
                 if (!optiondisplaytext.equals(s.trim())){
-                    optiondisplaytext = optiondisplaytext + "("+s.trim()+")";
+                    optiondisplaytext = optiondisplaytext + "("+s.trim()+" "+valuelabel+")";
                 }
             }
             out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\" "+selected+">" + optiondisplaytext + "</option>");
@@ -185,7 +185,7 @@ public class Dropdown implements Component, ChartField {
                 }
             }
         } catch (Exception ex){
-            logger.error(ex);
+            logger.error("",ex);
         }
         logger.debug("returning displaytext="+displaytext);
         return displaytext;
@@ -227,7 +227,21 @@ public class Dropdown implements Component, ChartField {
         ComponentException allCex = new ComponentException();
         //Requiredness validation
         if (question.getIsrequired()){
-            String[] requestParams = srp.getParamsForQuestion(question.getQuestionid());
+            String[] requestParams = srp.getParamsExcludingThoseWithCertainStringForQuestion(question.getQuestionid(), "newdisplayoverride");
+            if (requestParams==null){
+                logger.debug("requestParams==null");
+            } else {
+                if (requestParams.length<1){
+                    logger.debug("requestParams.length<1");
+                } else {
+                    if (requestParams[0]==null){
+                        logger.debug("requestParams[0]==null");
+                    } else {
+                        logger.debug("requestParams[0].trim().equals(\"\")="+requestParams[0].trim().equals(""));
+                        logger.debug("requestParams[0]="+requestParams[0]);
+                    }
+                }
+            }
             if (requestParams==null || requestParams.length<1 || requestParams[0]==null || requestParams[0].trim().equals("")){
                 allCex.addErrorsFromAnotherGeneralException(new ComponentException("'"+question.getQuestion()+"' is required."), "");
             }
@@ -249,7 +263,7 @@ public class Dropdown implements Component, ChartField {
             allCex.addErrorsFromAnotherGeneralException(cex, "'"+question.getQuestion()+"' ");
         } catch (Exception ex){
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("",ex);
             allCex.addValidationError(ex.getMessage());
         }
         //Throw if necessary
@@ -264,7 +278,7 @@ public class Dropdown implements Component, ChartField {
             for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
                 Postanswer postanswer=iterator.next();
                 if (postanswer.getQuestionid()==question.getQuestionid()){
-                    try{iterator.remove();}catch(Exception ex){logger.error(ex);}
+                    try{iterator.remove();}catch(Exception ex){logger.error("",ex);}
                 }
             }
         }
@@ -288,7 +302,7 @@ public class Dropdown implements Component, ChartField {
                     postanswer.setName("response");
                     postanswer.setValue(requestParam.trim());
                     postanswer.setPostid(post.getPostid());
-                    try{postanswer.save();}catch(Exception ex){logger.error(ex);}
+                    try{postanswer.save();}catch(Exception ex){logger.error("",ex);}
                 }
             }
         }
@@ -307,7 +321,9 @@ public class Dropdown implements Component, ChartField {
         if (newvalueRequestParams!=null && newvalueRequestParams.length>0){
             for (int i = 0; i < newvalueRequestParams.length; i++) {
                 String requestParam = newvalueRequestParams[i];
-                newvalue = requestParam;
+                if (requestParam!=null && requestParam.length()>0){
+                    newvalue = requestParam;
+                }
             }
         }
         logger.debug("newvalue = "+newvalue);
@@ -317,10 +333,12 @@ public class Dropdown implements Component, ChartField {
         if (newdisplayoverrideRequestParams!=null && newdisplayoverrideRequestParams.length>0){
             for (int i = 0; i < newdisplayoverrideRequestParams.length; i++) {
                 String requestParam = newdisplayoverrideRequestParams[i];
-                newdisplayoverride = requestParam;
+                if (requestParam!=null && requestParam.length()>0){
+                    newdisplayoverride = requestParam;
+                }
             }
         }
-        if (newdisplayoverride.equals("")){
+        if (newdisplayoverride==null || newdisplayoverride.equals("")){
             newdisplayoverride = newvalue;    
         }
         logger.debug("newdisplayoverride = "+newdisplayoverride);
@@ -377,7 +395,7 @@ public class Dropdown implements Component, ChartField {
                     if (!exactvaluealreadyexisted){
                         logger.debug("appending the new value ("+newvalue.trim()+")");
                         questionuserconfig.setValue(questionuserconfig.getValue()+"\n"+newvalue);
-                        try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+                        try{questionuserconfig.save();}catch(Exception ex){logger.error("",ex);}
                         //Now append to displayoverride
                         //if (usedisplayoverride){
                             List<Questionuserconfig> questionuserconfigs2 = HibernateUtil.getSession().createCriteria(Questionuserconfig.class)
@@ -390,7 +408,7 @@ public class Dropdown implements Component, ChartField {
                                 if (questionuserconfig2.getName().equals("displayoverrides")){
                                     String userdisplayoverrides = questionuserconfig2.getValue();
                                     questionuserconfig2.setValue(questionuserconfig2.getValue()+"\n"+newdisplayoverride);
-                                    try{questionuserconfig2.save();}catch(Exception ex){logger.error(ex);}
+                                    try{questionuserconfig2.save();}catch(Exception ex){logger.error("",ex);}
                                 }
                             }
                         //}
@@ -405,7 +423,7 @@ public class Dropdown implements Component, ChartField {
                 questionuserconfig.setQuestionid(question.getQuestionid());
                 questionuserconfig.setUserid(user.getUserid());
                 questionuserconfig.setValue(newvalue);
-                try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+                try{questionuserconfig.save();}catch(Exception ex){logger.error("",ex);}
             }
             //Create a new Questionuserconfig for the displayoverride
             if (!uservaluealreadyexisted){
@@ -415,7 +433,7 @@ public class Dropdown implements Component, ChartField {
                 questionuserconfig.setQuestionid(question.getQuestionid());
                 questionuserconfig.setUserid(user.getUserid());
                 questionuserconfig.setValue(newdisplayoverride);
-                try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+                try{questionuserconfig.save();}catch(Exception ex){logger.error("",ex);}
             }
         }
 
@@ -457,7 +475,7 @@ public class Dropdown implements Component, ChartField {
 //                                //Append the new value to the existing Questionuserconfig
 //                                logger.debug("appending the new value ("+requestParam.trim()+")");
 //                                questionuserconfig.setValue(questionuserconfig.getValue()+"\n"+requestParam);
-//                                try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+//                                try{questionuserconfig.save();}catch(Exception ex){logger.error("",ex);}
 //                            }
 //                        }
 //                    }
@@ -469,7 +487,7 @@ public class Dropdown implements Component, ChartField {
 //                        questionuserconfig.setQuestionid(question.getQuestionid());
 //                        questionuserconfig.setUserid(user.getUserid());
 //                        questionuserconfig.setValue(requestParam);
-//                        try{questionuserconfig.save();}catch(Exception ex){logger.error(ex);}
+//                        try{questionuserconfig.save();}catch(Exception ex){logger.error("",ex);}
 //                    }
 //                }
 //            }

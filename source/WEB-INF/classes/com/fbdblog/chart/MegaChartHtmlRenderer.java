@@ -51,14 +51,14 @@ public class MegaChartHtmlRenderer {
 
 
 
-        mb.append("<tr><td bgcolor=#ffffff align=center valign=top>");
+        //mb.append("<tr><td bgcolor=#ffffff align=center valign=top>");
         
         //Chart image only if we have a chartid to look at
-        if (megaChart.getChart()!=null && megaChart.getChart().getChartid()>0){
-            mb.append("<img src='/fb/graph.jsp?chartid="+megaChart.getChart().getChartid()+"&userid=0&size=medium&comparetouserid=0' border=0>");
-        }
+        //if (megaChart.getChart()!=null && megaChart.getChart().getChartid()>0){
+            //mb.append("<img src='/fb/graph.jsp?chartid="+megaChart.getChart().getChartid()+"&userid=0&size=medium&comparetouserid=0' border=0>");
+        //}
 
-        mb.append("</td></tr>");
+        //mb.append("</td></tr>");
 
 
         //The goal here is to display any situation where I'm diverging from what the user has selected on the form.

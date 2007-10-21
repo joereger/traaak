@@ -56,7 +56,7 @@ public class ImageCaptchaServlet extends HttpServlet {
                 return;
             } catch (Exception e){
                 logger.error("jCaptcha Error (top in code): captchaId="+httpServletRequest.getSession().getId());
-                logger.error(e);
+                logger.error("",e);
             }
 
             captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
@@ -72,7 +72,7 @@ public class ImageCaptchaServlet extends HttpServlet {
             responseOutputStream.close();
         } catch (Exception e){
             logger.error("jCaptcha Error: captchaId="+httpServletRequest.getSession().getId());
-            logger.error(e);
+            logger.error("",e);
         }
     }
 }

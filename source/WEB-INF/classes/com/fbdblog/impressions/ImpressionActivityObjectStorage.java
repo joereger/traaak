@@ -54,7 +54,7 @@ public class ImpressionActivityObjectStorage {
                     for (Iterator<Impression> iterator=impressions.iterator(); iterator.hasNext();) {
                         Impression impression=iterator.next();
                         impression.setImpressions(impression.getImpressions()+impressioncount);
-                        try{impression.save();}catch(Exception ex){logger.error(ex);}
+                        try{impression.save();}catch(Exception ex){logger.error("",ex);}
                         updatedone = true;
                     }
                     //If nothing was found, create a new record
@@ -65,11 +65,11 @@ public class ImpressionActivityObjectStorage {
                         impression.setYear(Integer.parseInt(keySplit[2]));
                         impression.setMonth(Integer.parseInt(keySplit[3]));
                         impression.setImpressions(impressioncount);
-                        try{impression.save();}catch(Exception ex){logger.error(ex);}
+                        try{impression.save();}catch(Exception ex){logger.error("",ex);}
                     }
                 }
             } catch(Exception ex){
-                logger.error(ex);
+                logger.error("",ex);
             }
         }
 

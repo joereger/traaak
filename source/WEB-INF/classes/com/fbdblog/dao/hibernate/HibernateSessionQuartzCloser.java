@@ -26,7 +26,7 @@ public class HibernateSessionQuartzCloser implements JobListener {
         synchronized(this){
             int rndDelay = Num.randomInt(30000);
             logger.debug("Start waiting "+rndDelay+" millis: "+new Date().getTime()+" for: "+context.getJobDetail().getFullName());
-            try{wait(rndDelay);}catch(Exception ex){logger.error(ex);}
+            try{wait(rndDelay);}catch(Exception ex){logger.error("",ex);}
             logger.debug("End waiting "+rndDelay+" millis: "+new Date().getTime()+" for: "+context.getJobDetail().getFullName());
         }
     }
@@ -42,7 +42,7 @@ public class HibernateSessionQuartzCloser implements JobListener {
             HibernateUtil.closeSession();
         } catch (Exception ex){
             logger.debug("Error closing hibernate session at end of quartz session");
-            logger.error(ex);
+            logger.error("",ex);
         }
     }
 

@@ -50,7 +50,7 @@ public class UserSessionSetup {
 
         //Track app uninstalls
         if (request.getParameter("fb_sig_uninstall")!=null && request.getParameter("fb_sig_uninstall").equals("1")){
-            //try{request.getRequestDispatcher("/fb/uninstall.jsp").forward(request, response);}catch(Exception ex){logger.error(ex);}
+            //try{request.getRequestDispatcher("/fb/uninstall.jsp").forward(request, response);}catch(Exception ex){logger.error("",ex);}
             return;
         }
 
@@ -141,7 +141,7 @@ public class UserSessionSetup {
                         user.setIsenabled(true);
                         user.setEmail("");
                         user.setPassword("");
-                        try {user.save();} catch (Exception ex) {logger.error(ex);}
+                        try {user.save();} catch (Exception ex) {logger.error("",ex);}
                         //Store in session
                         userSession.setUser(user);
                         //Notify via XMPP
@@ -157,7 +157,7 @@ public class UserSessionSetup {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("",ex);
         }
 
         //Track app adds
@@ -185,7 +185,7 @@ public class UserSessionSetup {
                 userappactivity.setMonth(cal.get(Calendar.MONTH)+1);
                 userappactivity.setIsinstall(true);
                 userappactivity.setIsuninstall(false);
-                try {userappactivity.save();} catch (Exception ex) {logger.error(ex);}
+                try {userappactivity.save();} catch (Exception ex) {logger.error("",ex);}
             }
 
 
