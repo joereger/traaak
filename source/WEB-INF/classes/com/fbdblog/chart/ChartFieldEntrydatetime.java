@@ -24,14 +24,14 @@ public class ChartFieldEntrydatetime implements ChartField {
     }
 
     public String getName() {
-        return "Entry Date";
+        return "Date";
     }
 
     /**
      * Description of this field type
      */
     public String getDescription() {
-        return "The date of the entry.";
+        return "The date of the post.";
     }
 
 
