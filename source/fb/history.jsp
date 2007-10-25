@@ -37,14 +37,6 @@
                 <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>'><%=Time.dateformatcompactwithtime(Time.getCalFromDate(post.getPostdate()))%></a>
                 (<a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>&action=deletepost'>delete</a>)
                 </font>
-                <%
-                if (post.getNotes()!=null && post.getNotes().length()>0){
-                    %>
-                    <br/>
-                    <font size=-2><%=post.getNotes()%></font>
-                    <%
-                }
-                %>
             </td>
             <td valign="top">
 

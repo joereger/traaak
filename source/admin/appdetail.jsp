@@ -102,10 +102,34 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
         </tr>
         <tr>
             <td valign="top">
+                Facebook App Name
+            </td>
+            <td valign="top">
+                <input type="text" name="facebookappname" value="<%=app.getFacebookappname()%>" size="25" maxlength="255">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                Facebook Api Key
+            </td>
+            <td valign="top">
+                <input type="text" name="facebookapikey" value="<%=app.getFacebookapikey()%>" size="45" maxlength="255">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                Facebook Api Secret
+            </td>
+            <td valign="top">
+                <input type="text" name="facebookapisecret" value="<%=app.getFacebookapisecret()%>" size="45" maxlength="255">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
                 Description
             </td>
             <td valign="top">
-                <textarea name="description"><%=app.getDescription()%></textarea>
+                <textarea name="description" cols="45" rows="5"><%=app.getDescription()%></textarea>
             </td>
         </tr>
         <tr>
@@ -113,7 +137,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                 MiniFeed Template
             </td>
             <td valign="top">
-                <textarea name="minifeedtemplate"><%=app.getMinifeedtemplate()%></textarea><br/>
+                <textarea name="minifeedtemplate" cols="45" rows="3"><%=app.getMinifeedtemplate()%></textarea><br/>
                 <font style="font-size: 9px; font-family: arial;">
                 &lt;$url$><br/>
                 &lt;$appname$><br/>
@@ -134,30 +158,6 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
         </tr>
         <tr>
             <td valign="top">
-                Facebook App Name
-            </td>
-            <td valign="top">
-                <input type="text" name="facebookappname" value="<%=app.getFacebookappname()%>" size="25" maxlength="255">
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
-                Facebook Api Key
-            </td>
-            <td valign="top">
-                <input type="text" name="facebookapikey" value="<%=app.getFacebookapikey()%>" size="25" maxlength="255">
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
-                Facebook Api Secret
-            </td>
-            <td valign="top">
-                <input type="text" name="facebookapisecret" value="<%=app.getFacebookapisecret()%>" size="25" maxlength="255">
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
 
             </td>
             <td valign="top">
@@ -167,13 +167,13 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
     </table>
 </form>
 
-<br/><br/>
+<br/>
 <table cellpadding="5" cellspacing="0" border="0">
     <tr>
         <td valign="top" width="50%">
 
 
-            Questions:
+            <b>Questions:</b>
             <br/>
             <%
                 List<Question> questions = HibernateUtil.getSession().createCriteria(Question.class)
@@ -223,7 +223,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
         </td>
         <td valign="top">
 
-            Charts:
+            <b>Charts:</b>
             <br/>
             <%
                 List<Chart> charts = HibernateUtil.getSession().createCriteria(Chart.class)

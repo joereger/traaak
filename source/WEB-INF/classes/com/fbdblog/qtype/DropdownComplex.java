@@ -137,7 +137,7 @@ public class DropdownComplex implements Component, ChartField {
                 String displayoverride = Util.getFromStringArraySafely(displayoverrides, i);
                 if (displayoverrides!=null && displayoverrides.length>=(i+1)){
                     if (displayoverrides[i]!=null && displayoverrides[i].length()>0){
-                        logger.debug("found displaytext with displayoverrides["+i+"]="+displayoverrides[i]);
+                        //logger.debug("found displaytext with displayoverrides["+i+"]="+displayoverrides[i]);
                         optiondisplaytext = displayoverrides[i] + "("+value.trim()+" "+valuelabel+")";
                     }
                 }
@@ -145,7 +145,7 @@ public class DropdownComplex implements Component, ChartField {
                 if (isThisvalueSelected(value, displayoverride)){
                     selected = " selected='true'";
                 }
-                out.append("<option value=\""+ Str.cleanForHtml(value.trim()+DELIMITER+displayoverride.trim())+"\" "+selected+">" + optiondisplaytext + "</option>");
+                out.append("<option value=\""+ Str.cleanForHtml(value.trim()+DELIMITER+displayoverride.trim())+"\" "+selected+">" + Str.truncateString(optiondisplaytext, 30) + "</option>");
             }
         }
         return out.toString();

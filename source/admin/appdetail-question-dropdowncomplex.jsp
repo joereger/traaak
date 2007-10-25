@@ -40,6 +40,7 @@
             return;
         }
         question = new Question();
+        question.setQuestion("");
     }
 %>
 
@@ -171,33 +172,10 @@
                 }
                 %>
                 <input type="checkbox" name="isrequired" value="1" <%=selectedIsrequired%>>
+                <br/><br/>
             </td>
         </tr>
         <tr>
-            <td valign="top">
-                Values<br/>
-                <%
-                String valuelabel = "Value";
-                for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
-                    Questionconfig questionconfig = iterator.next();
-                    if (questionconfig.getName().equals("valuelabel")){
-                        valuelabel = questionconfig.getValue();
-                    }
-                }
-                %>
-                <input type="text" name="valuelabel" value="<%=valuelabel%>" size="25" maxlength="255">
-                <br/>
-                <%
-                String values = "";
-                for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
-                    Questionconfig questionconfig = iterator.next();
-                    if (questionconfig.getName().equals("values")){
-                        values = questionconfig.getValue();
-                    }
-                }
-                %>
-                <textarea name="values" rows="10" cols="20"><%=values%></textarea>
-            </td>
             <td valign="top">
                 Displayoverrides<br/>
                 <%
@@ -222,6 +200,30 @@
                 %>
                 <textarea name="displayoverrides" rows="10" cols="20"><%=displayoverrides%></textarea>
                 <br/>
+            </td>
+            <td valign="top">
+                Values<br/>
+                <%
+                String valuelabel = "Value";
+                for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
+                    Questionconfig questionconfig = iterator.next();
+                    if (questionconfig.getName().equals("valuelabel")){
+                        valuelabel = questionconfig.getValue();
+                    }
+                }
+                %>
+                <input type="text" name="valuelabel" value="<%=valuelabel%>" size="25" maxlength="255">
+                <br/>
+                <%
+                String values = "";
+                for (Iterator<Questionconfig> iterator = question.getQuestionconfigs().iterator(); iterator.hasNext();) {
+                    Questionconfig questionconfig = iterator.next();
+                    if (questionconfig.getName().equals("values")){
+                        values = questionconfig.getValue();
+                    }
+                }
+                %>
+                <textarea name="values" rows="10" cols="20"><%=values%></textarea>
             </td>
         </tr>
         <tr>

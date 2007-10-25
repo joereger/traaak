@@ -126,7 +126,7 @@ public class UserSessionSetup {
                         //Is already a user
                         logger.debug("Found local user account");
                         userSession.setUser(user);
-                        logger.debug("Fbdblog Facebook Login: " + user.getFirstname() + " " + user.getLastname() + " (Facebookuid=" + user.getFacebookuid() + ")");
+                        logger.debug("Login to "+userSession.getApp().getTitle()+": " + user.getFirstname() + " " + user.getLastname() + " (Facebookuid=" + user.getFacebookuid() + ")");
                         //Notify via XMPP
                         SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "Facebook Login: " + user.getFirstname() + " " + user.getLastname());
                         xmpp.send();
@@ -145,7 +145,7 @@ public class UserSessionSetup {
                         //Store in session
                         userSession.setUser(user);
                         //Notify via XMPP
-                        SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "New Facebook user '" + userSession.getFacebookUser().getFirst_name() + " " + userSession.getFacebookUser().getLast_name() + "'");
+                        SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "New "+userSession.getApp().getTitle()+" User '" + userSession.getFacebookUser().getFirst_name() + " " + userSession.getFacebookUser().getLast_name() + "'");
                         xmpp.send();
                     }
                 } else {

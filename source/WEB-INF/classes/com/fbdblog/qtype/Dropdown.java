@@ -75,7 +75,7 @@ public class Dropdown implements Component, ChartField {
             if (isThisOptionSelected(s)){
                 selected = " selected='true'";
             }
-            out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\" "+selected+">" + s.trim() + "</option>");
+            out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\" "+selected+">" + Str.truncateString(s.trim(), 30) + "</option>");
         }
         //User options
         List<Questionuserconfig> questionuserconfigs = HibernateUtil.getSession().createCriteria(Questionuserconfig.class)
@@ -98,7 +98,7 @@ public class Dropdown implements Component, ChartField {
                 if (isThisOptionSelected(s)){
                     selected = " selected='true'";
                 }
-                out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\" "+selected+">" + s.trim() + "</option>");
+                out.append("<option value=\""+Str.cleanForHtml(s.trim())+"\" "+selected+">" + Str.truncateString(s.trim(), 30) + "</option>");
             }
         }
         //Close select tag
