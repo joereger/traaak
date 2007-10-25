@@ -1,5 +1,7 @@
 package com.fbdblog.util;
 
+import org.apache.log4j.Logger;
+
 import javax.servlet.http.Cookie;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -32,6 +34,20 @@ public class Util {
         }
         outArr[src.length]=str;
         return outArr;
+    }
+
+    public static String getFromStringArraySafely(String[] array, int indextoget){
+        Logger logger = Logger.getLogger(Util.class);
+        String out = "";
+        try{
+            if (array!=null && array.length>=(indextoget+1)){
+                out = array[indextoget];
+            }
+
+        } catch (Exception ex){
+            logger.error("",ex);
+        }
+        return out;
     }
 
 

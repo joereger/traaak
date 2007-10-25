@@ -189,6 +189,8 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                         comptypefilename = "checkboxes";
                     } else if (question.getComponenttype() == Dropdown.ID) {
                         comptypefilename = "dropdown";
+                    } else if (question.getComponenttype() == DropdownComplex.ID) {
+                        comptypefilename = "dropdowncomplex";
                     } else if (question.getComponenttype() == Essay.ID) {
                         comptypefilename = "essay";
                     } else if (question.getComponenttype() == Matrix.ID) {
@@ -211,6 +213,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
             <br/><a href='appdetail-question-textbox.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Textbox</a>
             <br/><a href='appdetail-question-checkboxes.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Checkboxes</a>
             <br/><a href='appdetail-question-dropdown.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Dropdown</a>
+            <br/><a href='appdetail-question-dropdowncomplex.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Dropdown Complex</a>
             <br/><a href='appdetail-question-essay.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Essay</a>
             <br/><a href='appdetail-question-matrix.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Matrix</a>
             <br/><a href='appdetail-question-range.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Range</a>

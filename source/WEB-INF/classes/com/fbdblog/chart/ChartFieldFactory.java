@@ -34,6 +34,8 @@ public class ChartFieldFactory {
             return new Checkboxes();
         } else if (fieldtype== Dropdown.ID) {
             return new Dropdown();
+        } else if (fieldtype== DropdownComplex.ID) {
+            return new DropdownComplex();
         } else if (fieldtype== Essay.ID) {
             return new Essay();
         } else if (fieldtype== Matrix.ID) {

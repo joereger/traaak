@@ -187,10 +187,10 @@ public class MegaChart {
                     megaChartSeries.add(seriesCompare);
                 }
                 //Debug
-                logger.debug("MegaChart.java - seriesTmp.cleanData.length="+seriesTmp.cleanData.length);
+                logger.debug("seriesTmp.cleanData.length="+seriesTmp.cleanData.length);
                 debugCount = debugCount + seriesTmp.cleanData.length;
             }
-            logger.debug("MegaChart.java - items graphed="+debugCount);
+            logger.debug("items graphed="+debugCount);
         }
     }
 

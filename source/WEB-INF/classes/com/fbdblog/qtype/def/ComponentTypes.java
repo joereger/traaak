@@ -34,6 +34,9 @@ public class ComponentTypes {
         if (ID== Dropdown.ID){
             return new Dropdown(user, post, question);
         }
+        if (ID== DropdownComplex.ID){
+            return new DropdownComplex(user, post, question);
+        }
         if (ID== Checkboxes.ID){
             return new Checkboxes(user, post, question);
         }
@@ -55,6 +58,7 @@ public class ComponentTypes {
             typesaslinkedhashmap.put(Textbox.NAME, Textbox.ID);
             typesaslinkedhashmap.put(Essay.NAME, Essay.ID);
             typesaslinkedhashmap.put(Dropdown.NAME, Dropdown.ID);
+            typesaslinkedhashmap.put(DropdownComplex.NAME, DropdownComplex.ID);
             typesaslinkedhashmap.put(Checkboxes.NAME, Checkboxes.ID);
             typesaslinkedhashmap.put(Range.NAME, Range.ID);
             typesaslinkedhashmap.put(Matrix.NAME, Matrix.ID);

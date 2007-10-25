@@ -55,7 +55,7 @@ public class MegaChartSeries {
 
 
     public MegaChartSeries(int yQuestionid, int appid, MegaChartEntryChooser entryChooser, Chart chart){
-
+        Logger logger = Logger.getLogger(this.getClass().getName());
         //Store the incoming data in the correct place
         this.xQuestionid =chart.getXquestionid();
         this.yQuestionid =yQuestionid;
@@ -98,17 +98,21 @@ public class MegaChartSeries {
 
         //Get the data for x Axis
         TreeMap xAxisData = getFieldData(xQuestionid, xFieldtype, entryChooser.getPosts());
+        logger.debug("xAxisData.size()="+xAxisData.size());
 
         //Get the data for y Axis
         TreeMap yAxisData = getFieldData(yQuestionid, yFieldtype, entryChooser.getPosts());
+        logger.debug("yAxisData.size()="+yAxisData.size());
 
         //Now, combine xAxisData and yAxisData into String[][]
         this.rawChartData = combineTwoTreeMapsIntoDataArray(xAxisData, yAxisData, entryChooser.getPosts());
+        logger.debug("this.rawChartData.length="+this.rawChartData.length);
 
         //Util.logDoubleStringArrayToDb("Combined Data", this.rawChartData);
 
         //Sort, order, cleanup and otherwise massage the data
         massageData();
+        logger.debug("this.cleanData.length="+this.cleanData.length);
 
     }
 
@@ -121,7 +125,7 @@ public class MegaChartSeries {
      */
      public TreeMap getFieldData(int questionid, int fieldtype, ArrayList<Post> posts){
         Logger logger = Logger.getLogger(this.getClass().getName());
-        logger.debug("MegaChartNew.java: getFieldData()<br>questionid=" + questionid + "<br>fieldtype=" + fieldtype);
+        logger.debug("getFieldData() - questionid=" + questionid + " fieldtype=" + fieldtype);
         //Now we pass this to the fieldtype handler
         //Figure out which type of field this is
         ChartField f = ChartFieldFactory.getHandlerByFieldtype(fieldtype);
@@ -129,9 +133,14 @@ public class MegaChartSeries {
         //f.populateFromQuestionid(questionid);
         //Call the function that gets a set of chart data
         //Result[eventid][value]
-        TreeMap AxisRawData = f.getChartData(posts, questionid);
-        //Util.logTreeMapToDb("AxisRawData questionid=" + questionid + " fieldtype=" + fieldtype, AxisRawData);
-        return AxisRawData;
+        TreeMap axisRawData = f.getChartData(posts, questionid);
+        if(axisRawData!=null){
+            logger.debug("axisRawData.size()="+axisRawData.size());
+        } else {
+            logger.debug("axisRawData is null");   
+        }
+        //Util.logTreeMapToDb("axisRawData questionid=" + questionid + " fieldtype=" + fieldtype, axisRawData);
+        return axisRawData;
      }
 
      public String[][] combineTwoTreeMapsIntoDataArray(TreeMap xAxis, TreeMap yAxis, ArrayList<Post> posts){
@@ -154,6 +163,8 @@ public class MegaChartSeries {
 
             //Get yData
             yData = yAxis.get(post.getPostid());
+
+            logger.debug("postid="+post.getPostid()+" xData="+xData+" yData="+yData);
 
             //Only add if both x and y have something to contribute
             if (xData!=null && !xData.equals("null") && !xData.equals("")){
