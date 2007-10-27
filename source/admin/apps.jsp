@@ -59,17 +59,17 @@
         }
         totaltotalimpressions = totaltotalimpressions + totalimpressions;
 
-        Double uniqueusers=0.0;
+        Double installs=0.0;
         Object obj3=HibernateUtil.getSession().createQuery("select count(*) from Userappstatus where appid='" + app.getAppid() + "' and isinstalled=true").uniqueResult();
         if (obj3 != null) {
-            uniqueusers=((Long) obj3).doubleValue();
+            installs=((Long) obj3).doubleValue();
         }
-        totalinstalls = totalinstalls + uniqueusers;
+        totalinstalls = totalinstalls + installs;
 
         %>
         <tr>
             <td valign="top"><a href="appdetail.jsp?appid=<%=app.getAppid()%>"><%=app.getTitle()%></a></td>
-            <td valign="top"><%=Str.formatWithXDecimalPlaces(uniqueusers, 0)%></td>
+            <td valign="top"><%=Str.formatWithXDecimalPlaces(installs, 0)%></td>
             <td valign="top"><%=Str.formatWithXDecimalPlaces(avgimpressionsperuser, 2)%></td>
             <td valign="top"><a href='impressions.jsp?appid=<%=app.getAppid()%>'><%=Str.formatWithXDecimalPlaces(totalimpressions, 0)%></a></td>
             <td valign="top" align="center">
