@@ -23,9 +23,18 @@
             return;
         }
         app = new App();
+        app.setTitle("Track");
+        app.setFacebookapikey("");
+        app.setFacebookapisecret("");
+        app.setFacebookappname("track");
+        app.setDescription("");
         app.setPrimarychartid(0);
-        app.setMinifeedtemplate("tracked some data with <a href='<$url$>'><$appname$></a>");
+        app.setMinifeedtemplate("tracked some stuff with <a href='<$url$>'><$appname$></a>");
         app.setCrosspromote(false);
+        app.setAdglobalheader("");
+        app.setAdhistoryright("");
+        app.setAdpostsave("");
+        app.setAdunderchart("");
     }
 %>
 
@@ -37,6 +46,10 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
     app.setFacebookappname(request.getParameter("facebookappname"));
     app.setFacebookapikey(request.getParameter("facebookapikey"));
     app.setFacebookapisecret(request.getParameter("facebookapisecret"));
+    app.setAdglobalheader(request.getParameter("adglobalheader"));
+    app.setAdhistoryright(request.getParameter("adhistoryright"));
+    app.setAdpostsave(request.getParameter("adpostsave"));
+    app.setAdunderchart(request.getParameter("adunderchart"));
     try{app.save();}catch(Exception ex){logger.error("",ex);}
     out.print("Saved.<br/>");
 }
@@ -87,7 +100,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
     }
 %>
 
-<font class="pagetitle">App: <a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a></font>
+<font class="pagetitle"><a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a></font>
 <br/><br/>
 <form action="appdetail.jsp" method="post">
     <input type="hidden" name="appid" value="<%=app.getAppid()%>">
@@ -155,6 +168,38 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                     }
                 %>
                 </font>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                Adglobalheader
+            </td>
+            <td valign="top">
+                <input type="text" name="adglobalheader" value="<%=app.getAdglobalheader()%>" size="45">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                Adpostsave
+            </td>
+            <td valign="top">
+                <input type="text" name="adpostsave" value="<%=app.getAdpostsave()%>" size="45">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                Adhistoryright
+            </td>
+            <td valign="top">
+                <input type="text" name="adhistoryright" value="<%=app.getAdhistoryright()%>" size="45">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                Adunderchart
+            </td>
+            <td valign="top">
+                <input type="text" name="adunderchart" value="<%=app.getAdunderchart()%>" size="45">
             </td>
         </tr>
         <tr>

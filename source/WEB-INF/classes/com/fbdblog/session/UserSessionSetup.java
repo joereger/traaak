@@ -16,6 +16,7 @@ import com.fbdblog.dao.App;
 import com.fbdblog.dao.Userappactivity;
 import com.fbdblog.dao.hibernate.HibernateUtil;
 import com.fbdblog.cache.providers.CacheFactory;
+import com.fbdblog.UserappstatusUtil;
 import com.facebook.api.FacebookRestClient;
 import com.facebook.api.FacebookException;
 
@@ -175,7 +176,7 @@ public class UserSessionSetup {
                 } else {
                     userSession.setIsnewappforthisuser(true);
                 }
-                //Now record the app add
+                //Record the app activity
                 Calendar cal = Calendar.getInstance();
                 Userappactivity userappactivity=new Userappactivity();
                 userappactivity.setAppid(userSession.getApp().getAppid());
@@ -186,9 +187,12 @@ public class UserSessionSetup {
                 userappactivity.setIsinstall(true);
                 userappactivity.setIsuninstall(false);
                 try {userappactivity.save();} catch (Exception ex) {logger.error("",ex);}
+                //Record the app status
+                UserappstatusUtil.userInstalledApp(userSession.getUser(), userSession.getApp());
+                //Send xmpp
+                SendXMPPMessage xmpp=new SendXMPPMessage(SendXMPPMessage.GROUP_CUSTOMERSUPPORT, userSession.getApp().getTitle()+" installed by " + userSession.getUser().getFirstname() + " " + userSession.getUser().getLastname());
+                xmpp.send();
             }
-
-
         }
 
         //Save UserSession in Cache

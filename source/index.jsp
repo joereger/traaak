@@ -15,9 +15,7 @@
         <td valign="top">
             <font style="font-size: 35px; color: #666666; font-family: arial;"><b>Track Apps</b></font>
             <br/>
-            <font style="font-size: 12px; color: #cccccc; font-family: arial;"><b>Powered by</b></font>
-            <br/>
-            <font style="font-size: 18px; color: #cccccc; font-family: arial;"><b>Reger.com and dNeero.com</b></font>
+            <font style="font-size: 18px; color: #cccccc; font-family: arial;"><b>by Joe Reger, Jr.</b></font>
         </td>
     </tr>
     <tr>
@@ -26,9 +24,9 @@
         </td>
         <td valign="top">
             <font style="font-size: 12px; color: #000000; font-family: arial;">
-            <b>We run numerous Facebook applications that allow Facebookers to track things.</b>  Body weight, movies watched, biorythms, miles run, etc.  This concept is an extension of reger.com's datablogging.
+            <b>We run Facebook applications that allow Facebookers to track stuff.</b>  Body weight, movies watched, biorythms, miles run, etc.  We're adding applications all the time to create the largest network of its kind.
             <br/><br/>
-            <b>Please contact us for advertising/sponsorship opportunities.</b>  You can take over an app that's relevant to your business.  Or we can create a custom app just for you... and then you can take it over.
+            <b>Please contact us for advertising/sponsorship opportunities.</b>  You can advertise on an app that's relevant to your business.  Or we can create a custom app just for you... and then you can advertise on it.
             <br/>
             <a href="mailto:joe@joereger.com">joe.reger@dneero.com</a>
             <br/><br/>

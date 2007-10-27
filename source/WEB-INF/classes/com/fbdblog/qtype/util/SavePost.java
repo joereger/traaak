@@ -99,7 +99,7 @@ public class SavePost {
                 allCex.addValidationError(ex.getMessage());
             }
             //Notify debug group
-            SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_CUSTOMERSUPPORT, "Fbdblog Post Made: "+ app.getTitle()+" by "+user.getFirstname()+" "+user.getLastname()+"");
+            SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_CUSTOMERSUPPORT, app.getTitle()+" Post by "+user.getFirstname()+" "+user.getLastname()+"");
             xmpp.send();
         } else {
             //Throw the errors back at the caller... bam baby!

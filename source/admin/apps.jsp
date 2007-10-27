@@ -26,18 +26,21 @@
 <table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td valign="top"></td>
-<td valign="top">UniqueUsers</td>
-<td valign="top">AvgImpPerUser</td>
+<td valign="top">Installs</td>
+<td valign="top">ImpPerUser</td>
 <td valign="top">TotalImp</td>
-<td valign="top">Crosspromote?</td>
+<td valign="top">Crosspromo?</td>
 </tr>
 <%
-    double totaluniqueusers = 0;
+    double totalinstalls = 0;
     double totaltotalimpressions = 0;
+    double totalapps = 0;
+    int totalusers = ((Long)HibernateUtil.getSession().createQuery("select count(*) from User").uniqueResult()).intValue();
 
     List<App> apps=HibernateUtil.getSession().createQuery("from App").list();
     for (Iterator<App> iterator=apps.iterator(); iterator.hasNext();) {
         App app=iterator.next();
+        totalapps = totalapps + 1;
 
         Calendar now=Calendar.getInstance();
         int currentyear=now.get(Calendar.YEAR);
@@ -57,13 +60,11 @@
         totaltotalimpressions = totaltotalimpressions + totalimpressions;
 
         Double uniqueusers=0.0;
-        Object obj3=HibernateUtil.getSession().createQuery("select count(*) from Impression where appid='" + app.getAppid() + "' and year='" + currentyear + "' and month='" + currentmonth + "'").uniqueResult();
+        Object obj3=HibernateUtil.getSession().createQuery("select count(*) from Userappstatus where appid='" + app.getAppid() + "' and isinstalled=true").uniqueResult();
         if (obj3 != null) {
             uniqueusers=((Long) obj3).doubleValue();
         }
-        totaluniqueusers = totaluniqueusers + uniqueusers;
-
-
+        totalinstalls = totalinstalls + uniqueusers;
 
         %>
         <tr>
@@ -71,12 +72,12 @@
             <td valign="top"><%=Str.formatWithXDecimalPlaces(uniqueusers, 0)%></td>
             <td valign="top"><%=Str.formatWithXDecimalPlaces(avgimpressionsperuser, 2)%></td>
             <td valign="top"><a href='impressions.jsp?appid=<%=app.getAppid()%>'><%=Str.formatWithXDecimalPlaces(totalimpressions, 0)%></a></td>
-            <td valign="top">
+            <td valign="top" align="center">
             <%
             if (app.getCrosspromote()){
-                %><a href='apps.jsp?action=togglecrosspromote&appid=<%=app.getAppid()%>'>On</a><%
+                %><a href='apps.jsp?action=togglecrosspromote&appid=<%=app.getAppid()%>'><img src="/images/misc-green-16.png" alt="" width="16" height="16" border="0"/></a><%
             } else {
-                %><a href='apps.jsp?action=togglecrosspromote&appid=<%=app.getAppid()%>'>Off</a><%   
+                %><a href='apps.jsp?action=togglecrosspromote&appid=<%=app.getAppid()%>'><img src="/images/misc-red-16.png" alt="" width="16" height="16" border="0"/></a><%
             }
             %>
 
@@ -87,13 +88,19 @@
 %>
 <%
 double totalavgimpressionsperuser = 0;
-if (totaluniqueusers>0){
-    totalavgimpressionsperuser = totaltotalimpressions/totaluniqueusers;
+if (totalinstalls>0){
+    totalavgimpressionsperuser = totaltotalimpressions/totalinstalls;
+}
+%>
+<%
+double appsperuser = 0;
+if (totalusers>0){
+    appsperuser = totalinstalls/totalusers;
 }
 %>
 <tr>
     <td valign="top"><b>Total</b></td>
-    <td valign="top"><b><%=Str.formatWithXDecimalPlaces(totaluniqueusers, 0)%></b></td>
+    <td valign="top"><b><%=Str.formatWithXDecimalPlaces(totalinstalls, 0)%></b><br/><font style="font-size: 10px;"><%=Str.formatWithXDecimalPlaces(appsperuser, 2)%><br/>apps/user</font></td>
     <td valign="top"><b><%=Str.formatWithXDecimalPlaces(totalavgimpressionsperuser, 2)%></b></td>
     <td valign="top"><b><%=Str.formatWithXDecimalPlaces(totaltotalimpressions, 0)%></b></td>
     <td valign="top"></td>

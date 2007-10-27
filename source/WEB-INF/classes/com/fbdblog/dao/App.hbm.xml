@@ -39,6 +39,18 @@
         <property name="crosspromote" type="boolean">
             <column name="crosspromote" />
         </property>
+        <property name="adglobalheader" type="text">
+            <column name="adglobalheader" not-null="true"/>
+        </property>
+        <property name="adpostsave" type="text">
+            <column name="adpostsave" not-null="true"/>
+        </property>
+        <property name="adhistoryright" type="text">
+            <column name="adhistoryright" not-null="true"/>
+        </property>
+        <property name="adunderchart" type="text">
+            <column name="adunderchart" not-null="true"/>
+        </property>
 
     </class>
 </hibernate-mapping>

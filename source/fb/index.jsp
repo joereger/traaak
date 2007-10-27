@@ -25,29 +25,45 @@
 %>
 
 <%
+//For holding top of page messages
+String topOfPageMsg = "";
+%>
+
+<%
     if (request.getParameter("action") != null && request.getParameter("action").equals("trackit")) {
         AppPostParser appPostParser = new AppPostParser(request);
         try {
             SavePost.save(userSession.getApp(), userSession.getUser(), post, appPostParser, userSession);
-            out.print("<fb:success>\n" +
+            StringBuffer tmp = new StringBuffer();
+            tmp.append("<fb:success>\n" +
             "     <fb:message>Good trackin'.  Now track s'more.</fb:message>\n" +
             "     We've updated your profile so that others can check out your stuff.  Now's a good time to check out <a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=friends'>your friends' stuff</a>.\n" +
             "</fb:success>");
+            if (!userSession.getApp().getAdpostsave().equals("")){
+                tmp.append("<br/>");
+                tmp.append(userSession.getApp().getAdpostsave());
+                tmp.append("<br/>");
+            }
+            topOfPageMsg = tmp.toString();
         } catch (ComponentException cex) {
-            out.print(" <fb:error>\n" +
+            StringBuffer tmp = new StringBuffer();
+            tmp.append(" <fb:error>\n" +
             "      <fb:message>Houston, we have a problem.</fb:message>\n" +
             "      "+cex.getErrorsAsSingleString()+"\n" +
             " </fb:error>");
+            topOfPageMsg = tmp.toString();
         }
     }
 %>
 
 <%
 if (userSession.getIsnewappforthisuser()){
-    out.print("<fb:success>\n" +
-            "     <fb:message>Howdy!</fb:message>\n" +
-            "     Glad you've added "+userSession.getApp().getTitle()+".  Track some stuff and get some charts.  Just realize that everything you track is public.\n" +
-            "</fb:success>");    
+    StringBuffer tmp = new StringBuffer();
+    tmp.append("<fb:success>\n" +
+    "     <fb:message>Howdy!</fb:message>\n" +
+    "     Glad you've added "+userSession.getApp().getTitle()+".  Track some stuff and get some charts.  Just realize that everything you track is public.\n" +
+    "</fb:success>");
+    topOfPageMsg = tmp.toString();
 }
 %>
 
@@ -69,17 +85,21 @@ if (userSession.getIsnewappforthisuser()){
                     logger.error("",ex);
                 }
                 post=null;
-                out.print("<fb:success>\n" +
+                StringBuffer tmp = new StringBuffer();
+                tmp.append("<fb:success>\n" +
                         "     <fb:message>As ordered, thy data hath been deleted.</fb:message>\n" +
                         "     Now add some more so this app doesn't get an inferiority complex.  It's lonely.  It needs data.\n" +
                         "</fb:success>");
+                topOfPageMsg = tmp.toString();
                 //Clear the chart image cache
                 ClearCache.clearCacheForUser(userSession.getUser().getUserid(), userSession.getApp().getAppid());
             } else {
-                out.print(" <fb:error>\n" +
+                StringBuffer tmp = new StringBuffer();
+                tmp.append(" <fb:error>\n" +
                         "      <fb:message>Seriously? You don't even own that post.</fb:message>\n" +
                         "      " + "Am. Uh. Toor." + "\n" +
                         " </fb:error>");
+                topOfPageMsg = tmp.toString();
             }
         }
     }
@@ -94,6 +114,12 @@ if (userSession.getIsnewappforthisuser()){
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=friends' title='Le Friends' align='right'/>
 </fb:tabs>
 <br/>
+
+<%
+if (!topOfPageMsg.equals("")){
+    %><%=topOfPageMsg%><%
+}
+%>
 
 <table>
     <tr>

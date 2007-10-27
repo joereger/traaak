@@ -18,6 +18,7 @@
         <mapping resource="com/fbdblog/dao/Systemprop.hbm.xml" />
         <mapping resource="com/fbdblog/dao/User.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Userappactivity.hbm.xml" />
+        <mapping resource="com/fbdblog/dao/Userappstatus.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Userpersistentlogin.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Userrole.hbm.xml" />
 

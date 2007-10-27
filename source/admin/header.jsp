@@ -49,6 +49,7 @@
             <!--<a href='index.jsp'>Index</a><br/>-->
             <a href='apps.jsp'>Apps</a><br/>
             <a href='users.jsp'>Users</a><br/>
+            <a href='ads.jsp'>Ads</a><br/>
             <a href='sysprops.jsp'>SysProps</a><br/>
             <a href='instanceprops.jsp'>InstanceProps</a><br/>
             <a href='financialmodel.jsp'>Financial Model</a><br/>

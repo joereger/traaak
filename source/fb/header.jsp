@@ -65,7 +65,12 @@
 .questionfont{font-weight: bold; background: #ffffcc;}
 </style>
 
-
+<%
+if (!userSession.getApp().getAdglobalheader().equals("")){
+    %><%=userSession.getApp().getAdglobalheader()%><%
+    %><br/><%
+}
+%>
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
     <tr>
         <td valign="top" width="64">

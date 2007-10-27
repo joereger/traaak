@@ -31,6 +31,11 @@ public class App extends BasePersistentClass implements java.io.Serializable, Re
      private int primarychartid;
      private String minifeedtemplate;
      private boolean crosspromote;
+     private String adglobalheader;
+     private String adpostsave;
+     private String adhistoryright;
+     private String adunderchart;
+
 
      private Set<Question> questions = new HashSet<Question>();
 
@@ -169,5 +174,37 @@ public class App extends BasePersistentClass implements java.io.Serializable, Re
 
     public void setCrosspromote(boolean crosspromote) {
         this.crosspromote=crosspromote;
+    }
+
+    public String getAdglobalheader() {
+        return adglobalheader;
+    }
+
+    public void setAdglobalheader(String adglobalheader) {
+        this.adglobalheader=adglobalheader;
+    }
+
+    public String getAdpostsave() {
+        return adpostsave;
+    }
+
+    public void setAdpostsave(String adpostsave) {
+        this.adpostsave=adpostsave;
+    }
+
+    public String getAdhistoryright() {
+        return adhistoryright;
+    }
+
+    public void setAdhistoryright(String adhistoryright) {
+        this.adhistoryright=adhistoryright;
+    }
+
+    public String getAdunderchart() {
+        return adunderchart;
+    }
+
+    public void setAdunderchart(String adunderchart) {
+        this.adunderchart=adunderchart;
     }
 }

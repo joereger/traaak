@@ -12,6 +12,7 @@
 <%@ page import="com.fbdblog.dao.Userappactivity" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.Calendar" %>
+<%@ page import="com.fbdblog.UserappstatusUtil" %>
 <%
     //@todo somehow validate that this is a good request from the actual servers... don't want script kiddies uninstalling (not that it does any more than setting a flag)
     Logger logger=Logger.getLogger(this.getClass().getName());
@@ -32,6 +33,7 @@
 
                 Calendar cal=Calendar.getInstance();
 
+                //Record the app activity
                 Userappactivity userappactivity=new Userappactivity();
                 userappactivity.setAppid(app.getAppid());
                 userappactivity.setUserid(user.getUserid());
@@ -40,12 +42,15 @@
                 userappactivity.setMonth(cal.get(Calendar.MONTH) + 1);
                 userappactivity.setIsinstall(false);
                 userappactivity.setIsuninstall(true);
-
                 try {
                     userappactivity.save();
                 } catch (Exception ex) {
-                    logger.error("",ex);
+                    logger.error("", ex);
                 }
+                //Record the app status
+                UserappstatusUtil.userUninstalledApp(user, app);
+                
+                //Send xmpp
                 SendXMPPMessage xmpp=new SendXMPPMessage(SendXMPPMessage.GROUP_CUSTOMERSUPPORT, "Uninstalled Facebook App by " + user.getFirstname() + " " + user.getLastname());
                 xmpp.send();
                 logger.debug("user noted as app removed userid=" + user.getUserid());
