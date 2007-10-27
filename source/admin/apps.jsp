@@ -4,7 +4,20 @@
 <%@ page import="java.util.Iterator" %>
 <%@ page import="java.util.Calendar" %>
 <%@ page import="com.fbdblog.util.Str" %>
+<%@ page import="com.fbdblog.util.Num" %>
 <%@ include file="header.jsp" %>
+
+<%
+    if (request.getParameter("action") != null && request.getParameter("action").equals("togglecrosspromote")) {
+        if (request.getParameter("appid")!=null && Num.isinteger(request.getParameter("appid"))) {
+            App app = App.get(Integer.parseInt(request.getParameter("appid")));
+            if (app!=null && app.getAppid()>0){
+                app.setCrosspromote(!app.getCrosspromote());
+                try {app.save();} catch (Exception ex) {logger.error("", ex);}
+            }
+        }
+    }
+%>
 
 
 <font class="pagetitle">Apps</font>
@@ -16,7 +29,7 @@
 <td valign="top">UniqueUsers</td>
 <td valign="top">AvgImpPerUser</td>
 <td valign="top">TotalImp</td>
-<td valign="top"></td>
+<td valign="top">Crosspromote?</td>
 </tr>
 <%
     double totaluniqueusers = 0;
@@ -57,8 +70,17 @@
             <td valign="top"><a href="appdetail.jsp?appid=<%=app.getAppid()%>"><%=app.getTitle()%></a></td>
             <td valign="top"><%=Str.formatWithXDecimalPlaces(uniqueusers, 0)%></td>
             <td valign="top"><%=Str.formatWithXDecimalPlaces(avgimpressionsperuser, 2)%></td>
-            <td valign="top"><%=Str.formatWithXDecimalPlaces(totalimpressions, 0)%></td>
-            <td valign="top"><a href='impressions.jsp?appid=<%=app.getAppid()%>'>more</a></td>
+            <td valign="top"><a href='impressions.jsp?appid=<%=app.getAppid()%>'><%=Str.formatWithXDecimalPlaces(totalimpressions, 0)%></a></td>
+            <td valign="top">
+            <%
+            if (app.getCrosspromote()){
+                %><a href='apps.jsp?action=togglecrosspromote&appid=<%=app.getAppid()%>'>On</a><%
+            } else {
+                %><a href='apps.jsp?action=togglecrosspromote&appid=<%=app.getAppid()%>'>Off</a><%   
+            }
+            %>
+
+            </td>
         </tr>
         <%
     }

@@ -40,7 +40,7 @@ public interface ChartField {
      * corresponding to those eventid's.
      * Result[eventid][value]
      */
-     TreeMap getChartData(ArrayList<Post> posts, int questionid);
+     TreeMap getChartData(ArrayList<Post> posts, int questionid, boolean usedisplayoverrideifpossible);
 
      /**
      * Set timezoneid of display.   If this fieldtype doesn't use timezoneid then the body of this method can be empty.

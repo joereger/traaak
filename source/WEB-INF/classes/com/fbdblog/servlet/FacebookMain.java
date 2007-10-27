@@ -40,6 +40,11 @@ public class FacebookMain extends HttpServlet {
             return;
         }
 
+        if (request.getParameter("nav")!=null && request.getParameter("nav").equals("friends")){
+            request.getRequestDispatcher("/fb/friends.jsp").forward(request, response);
+            return;
+        }
+
         if (request.getParameter("fb_sig_uninstall")!=null && request.getParameter("fb_sig_uninstall").equals("1")){
             request.getRequestDispatcher("/fb/uninstall.jsp").forward(request, response);
             return;

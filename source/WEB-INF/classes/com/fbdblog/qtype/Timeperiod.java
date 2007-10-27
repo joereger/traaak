@@ -236,7 +236,7 @@ public class Timeperiod implements Component, ChartField {
      * corresponding to those eventid's.
      * Result[eventid][value]
      */
-    public TreeMap getChartData(ArrayList<Post> posts, int questionid) {
+    public TreeMap getChartData(ArrayList<Post> posts, int questionid, boolean usedisplayoverrideifpossible) {
         if (posts!=null && posts.size()>0){
             TreeMap data = new TreeMap();
             for (Iterator it = posts.iterator(); it.hasNext(); ) {

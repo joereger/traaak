@@ -36,6 +36,9 @@
         <property name="minifeedtemplate" type="text">
             <column name="minifeedtemplate" not-null="true"/>
         </property>
+        <property name="crosspromote" type="boolean">
+            <column name="crosspromote" />
+        </property>
 
     </class>
 </hibernate-mapping>

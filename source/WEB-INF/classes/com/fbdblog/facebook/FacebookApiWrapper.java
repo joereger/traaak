@@ -17,10 +17,7 @@ import org.jdom.output.XMLOutputter;
 import org.jdom.input.DOMBuilder;
 import org.w3c.dom.Document;
 
-import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.TreeMap;
+import java.util.*;
 import java.net.URL;
 
 /**
@@ -144,17 +141,58 @@ public class FacebookApiWrapper {
         return friends;
     }
 
-
-    public ArrayList<FacebookUser> getFriends(){
+    public FacebookUser getFacebookUserByUid(String facebookuid){
         Logger logger = Logger.getLogger(this.getClass().getName());
-        logger.debug("begin getFriends() userSession.getFacebooksessionkey()="+userSession.getFacebooksessionkey());
-        ArrayList<FacebookUser> friends = new ArrayList<FacebookUser>();
         if (issessionok){
             try{
+                //Set up the facebook rest client
+                FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
+                    //Go back and get all the important info
+                    String fql = "SELECT "+FacebookUser.sqlListOfCols+" FROM user WHERE uid='"+facebookuid+"'";
+                    Document w3cDoc2 = facebookRestClient.fql_query(fql.subSequence(0,fql.length()));
+                    DOMBuilder builder2 = new DOMBuilder();
+                    org.jdom.Document jdomDoc2 = builder2.build(w3cDoc2);
+                    logger.debug("Start Facebook FQL Response: "+fql);
+                    XMLOutputter outp2 = new XMLOutputter();
+                    outp2.output(jdomDoc2, System.out);
+                    logger.debug(":End Facebook FQL Response");
+                    Element root2 = jdomDoc2.getRootElement();
+                    //Iterate each child
+                    List fbusers = root2.getChildren();
+                    for (Iterator iterator = fbusers.iterator(); iterator.hasNext();) {
+                        Element fbuser = (Element) iterator.next();
+                        if (fbuser.getName().equals("user")){
+                            FacebookUser facebookUser = new FacebookUser(fbuser);
+                            if (facebookUser.getUid().length()>0){
+                                return facebookUser;
+                            }
+                        }
+                    }
+            } catch (Exception ex){logger.error("",ex); ex.printStackTrace();}
+        } else {logger.debug("Can't execute because issessionok = false");}
+        return null;
+    }
 
+
+    public TreeSet<FacebookUser> getFriends(){
+        Logger logger = Logger.getLogger(this.getClass().getName());
+        logger.debug("begin getFriends() userSession.getFacebooksessionkey()="+userSession.getFacebooksessionkey());
+        //ArrayList<FacebookUser> friends = new ArrayList<FacebookUser>();
+        TreeSet friendsSorted = new TreeSet<FacebookUser>(new Comparator() {
+            public int compare(Object a, Object b) {
+                FacebookUser facebookUserA = (FacebookUser) a;
+                FacebookUser facebookUserB = (FacebookUser) b;
+                String firstnameA = facebookUserA.getFirst_name();
+                String firstnameB = facebookUserB.getFirst_name();
+                return firstnameA.compareTo(firstnameB);
+            }
+        });
+        if (issessionok){
+            try{
                 //Set up the facebook rest client
                 FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
                 //Get the list of uids
+                //@todo can I prevent this call by using the fb_sig_friends that seems to be sent all the time?
                 ArrayList<Integer> uids = getFriendUids();
 
                 if (uids!=null && uids.size()>0){
@@ -187,7 +225,7 @@ public class FacebookApiWrapper {
                         if (fbuser.getName().equals("user")){
                             FacebookUser facebookUser = new FacebookUser(fbuser);
                             if (facebookUser.getUid().length()>0){
-                                friends.add(facebookUser);
+                                friendsSorted.add(facebookUser);
                             }
                         }
                     }
@@ -195,12 +233,12 @@ public class FacebookApiWrapper {
             } catch (Exception ex){logger.error("",ex); ex.printStackTrace();}
         } else {logger.debug("Can't execute because issessionok = false");}
         logger.debug("end getFriends() userSession.getFacebooksessionkey()="+userSession.getFacebooksessionkey());
-        return friends;
+        return friendsSorted;
     }
 
 
 
-    private FacebookUser getFacebookUserByUid(ArrayList<FacebookUser> facebookUsers, String uid){
+    public FacebookUser getFacebookUserByUid(ArrayList<FacebookUser> facebookUsers, String uid){
         for (Iterator<FacebookUser> iterator = facebookUsers.iterator(); iterator.hasNext();) {
             FacebookUser facebookUser = iterator.next();
             if (facebookUser.getUid().equals(uid)){

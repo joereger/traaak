@@ -30,6 +30,7 @@ public class App extends BasePersistentClass implements java.io.Serializable, Re
      private String facebookapisecret;
      private int primarychartid;
      private String minifeedtemplate;
+     private boolean crosspromote;
 
      private Set<Question> questions = new HashSet<Question>();
 
@@ -160,5 +161,13 @@ public class App extends BasePersistentClass implements java.io.Serializable, Re
 
     public void setMinifeedtemplate(String minifeedtemplate) {
         this.minifeedtemplate=minifeedtemplate;
+    }
+
+    public boolean getCrosspromote() {
+        return crosspromote;
+    }
+
+    public void setCrosspromote(boolean crosspromote) {
+        this.crosspromote=crosspromote;
     }
 }

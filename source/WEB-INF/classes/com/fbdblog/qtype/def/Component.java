@@ -18,4 +18,5 @@ public interface Component {
     public void validateAnswer(AppPostParser srp) throws com.fbdblog.qtype.def.ComponentException;
     public void processAnswer(AppPostParser srp, Post post) throws ComponentException;
 
+
 }

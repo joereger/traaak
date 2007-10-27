@@ -4,17 +4,13 @@
 <%@ page import="com.fbdblog.facebook.FacebookUser" %>
 <%@ page import="com.fbdblog.session.UserSession" %>
 <%@ page import="com.facebook.api.FacebookException" %>
-<%@ page import="com.fbdblog.dao.User" %>
 <%@ page import="com.fbdblog.facebook.FindUserFromFacebookUid" %>
-<%@ page import="java.util.Date" %>
-<%@ page import="com.fbdblog.dao.App" %>
 <%@ page import="com.fbdblog.facebook.FindApp" %>
 <%@ page import="com.fbdblog.session.UrlSplitter" %>
-<%@ page import="java.util.Calendar" %>
-<%@ page import="com.fbdblog.dao.Impression" %>
 <%@ page import="com.fbdblog.impressions.ImpressionActivityObject" %>
 <%@ page import="com.fbdblog.scheduledjobs.ImpressionCache" %>
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
+<%@ page import="java.util.Calendar" %>
 <%
     //Logger
     Logger logger=Logger.getLogger(this.getClass());
@@ -58,7 +54,7 @@
             iao.setUserid(userSession.getUser().getUserid());
             iao.setAppid(userSession.getApp().getAppid());
             iao.setYear(cal.get(Calendar.YEAR));
-            iao.setMonth(cal.get(Calendar.MONTH)+1);
+            iao.setMonth(cal.get(Calendar.MONTH) + 1);
             ImpressionCache.addIao(iao);
         }
     }
@@ -80,7 +76,7 @@
         </td>
         <td valign="top">
             <div align="right">
-            <font style="font-size: 18px;"><%=userSession.getFacebookUser().getFirst_name()%> <%=userSession.getFacebookUser().getLast_name()%></font>
+            <font style="font-size: 18px; font-weight: bold;"><%=userSession.getFacebookUser().getFirst_name()%> <%=userSession.getFacebookUser().getLast_name()%></font>
             </div>
         </td>
         <td valign="top" width="50">

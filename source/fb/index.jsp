@@ -12,6 +12,8 @@
 <%@ page import="com.fbdblog.util.Num" %>
 <%@ page import="com.fbdblog.util.Time" %>
 <%@ page import="com.fbdblog.chart.chartcache.ClearCache" %>
+<%@ page import="com.fbdblog.dao.App" %>
+<%@ page import="com.fbdblog.dao.hibernate.NumFromUniqueResult" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -29,7 +31,7 @@
             SavePost.save(userSession.getApp(), userSession.getUser(), post, appPostParser, userSession);
             out.print("<fb:success>\n" +
             "     <fb:message>Good trackin'.  Now track s'more.</fb:message>\n" +
-            "     We've updated your profile so that others can check out your data.\n" +
+            "     We've updated your profile so that others can check out your stuff.  Now's a good time to check out <a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=friends'>your friends' stuff</a>.\n" +
             "</fb:success>");
         } catch (ComponentException cex) {
             out.print(" <fb:error>\n" +
@@ -89,6 +91,7 @@ if (userSession.getIsnewappforthisuser()){
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main' title='Track Stuff' selected='true'/>
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts' title='Da Charts' />
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=history' title='Yo History' />
+  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=friends' title='Le Friends' align='right'/>
 </fb:tabs>
 <br/>
 
@@ -98,13 +101,27 @@ if (userSession.getIsnewappforthisuser()){
             <%
             if (post!=null && post.getPostid()>0){
                 %>
-                <font size=-2>
-                Editing data from <%=Time.dateformatcompactwithtime(Time.getCalFromDate(post.getPostdate()))%>.
-                <br/><a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>&action=deletepost'>Delete it?</a>
+                <fb:success>
+                <fb:message>Editing data from <%=Time.dateformatcompactwithtime(Time.getCalFromDate(post.getPostdate()))%>.</fb:message>
+                <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>&action=deletepost'>Delete it?</a>
                 <br/><a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main'>Start new?</a>
-                </font>
+                </fb:success>
                 <br/>
                 <%
+            }
+            %>
+            <%
+            if (userSession.getUser() != null) {
+                int totalposts = NumFromUniqueResult.getInt("select count(*) from Post where userid='"+userSession.getUser().getUserid()+"' and appid='"+userSession.getApp().getAppid()+"'");
+                if (totalposts==0){
+                    %>
+                    <fb:success>
+                    <fb:message>Get Started Tracking!</fb:message>
+                    Just fill out the form below and click Track It.  Fields with an asterisk* are required.
+                    </fb:success>
+                    <br/>
+                    <%
+                }
             }
             %>
             <form action="">
@@ -139,7 +156,7 @@ if (userSession.getIsnewappforthisuser()){
             </form>
         </td>
         <td valign="top" width="400">
-            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=userSession.getApp().getPrimarychartid()%>&userid=<%=userSession.getUser().getUserid()%>&size=small&comparetouserid=0" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
+            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=userSession.getApp().getPrimarychartid()%>&userid=<%=userSession.getUser().getUserid()%>&size=small" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
             <br/>
             <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts&chartid=<%=userSession.getApp().getPrimarychartid()%>'>+Zoom</a>
             |
@@ -150,16 +167,19 @@ if (userSession.getIsnewappforthisuser()){
                 <center><font style="font-size: 18px; color: #cccccc;">Track Other Stuff Too</font></center>
                 <table cellpadding="3" cellspacing="1" border="0" width="100%" bgcolor="#efefef">
                 <%
-                    int col = 0;
+
+
+                    int col=0;
                     List<App> apps=HibernateUtil.getSession().createCriteria(App.class)
+                            .add(Restrictions.eq("crosspromote", true))
                             .setCacheable(true)
                             .list();
                     for (Iterator<App> iterator=apps.iterator(); iterator.hasNext();) {
-                        App app= iterator.next();
-                        if (app.getAppid()!=userSession.getApp().getAppid()){
-                            col = col + 1;
-                            if (col==1){
-                                %><tr><%
+                        App app=iterator.next();
+                        if (app.getAppid() != userSession.getApp().getAppid()) {
+                            col=col + 1;
+                            if (col == 1) {
+                            %><tr><%
                             }
                                 %><td valign="top"><%
                                 %>

@@ -25,6 +25,7 @@
         app = new App();
         app.setPrimarychartid(0);
         app.setMinifeedtemplate("tracked some data with <a href='<$url$>'><$appname$></a>");
+        app.setCrosspromote(false);
     }
 %>
 

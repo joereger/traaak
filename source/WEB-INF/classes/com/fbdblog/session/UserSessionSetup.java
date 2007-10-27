@@ -128,7 +128,7 @@ public class UserSessionSetup {
                         userSession.setUser(user);
                         logger.debug("Login to "+userSession.getApp().getTitle()+": " + user.getFirstname() + " " + user.getLastname() + " (Facebookuid=" + user.getFacebookuid() + ")");
                         //Notify via XMPP
-                        SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "Facebook Login: " + user.getFirstname() + " " + user.getLastname());
+                        SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, userSession.getApp().getTitle()+" Login: " + user.getFirstname() + " " + user.getLastname());
                         xmpp.send();
                     } else {
                         //Create a new User for this facebookuid

@@ -32,6 +32,7 @@
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main' title='Track Stuff'/>
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts' title='Da Charts' selected='true'/>
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=history' title='Yo History'/>
+  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=friends' title='Le Friends' align='right'/>
 </fb:tabs>
 <br/>
 
@@ -40,7 +41,6 @@
 <table>
     <tr>
         <td valign="top" width="10">
-
         </td>
         <td valign="top" width="600">
             <form action="">
@@ -73,7 +73,7 @@
 
         </td>
         <td valign="top" width="600">
-            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=userSession.getUser().getUserid()%>&size=medium&comparetouserid=0" alt="" width="600" height="300" style="border: 3px solid #e6e6e6;"/>
+            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=userSession.getUser().getUserid()%>&size=medium" alt="" width="600" height="300" style="border: 3px solid #e6e6e6;"/>
         </td>
     </tr>
 </table>

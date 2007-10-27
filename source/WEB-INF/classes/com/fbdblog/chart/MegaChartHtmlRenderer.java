@@ -8,6 +8,7 @@ import com.fbdblog.dao.App;
 import com.fbdblog.dao.Question;
 import com.fbdblog.qtype.Checkboxes;
 import com.fbdblog.qtype.Matrix;
+import com.fbdblog.qtype.DropdownComplex;
 import org.apache.log4j.Logger;
 
 /**
@@ -219,6 +220,16 @@ public class MegaChartHtmlRenderer {
                     }
                     mb.append("> "+question.getQuestion()+"<br>");
                     mb.append("</font>");
+                    //Add displayoverride if relevant
+                    if (question.getComponenttype()== DropdownComplex.ID){
+                        mb.append("<font face=arial size=-1 class=smallfont>");
+                        mb.append("<input name=xquestionid type=radio value='"+(question.getQuestionid()+1000000)+"'");
+                        if (megaChart.getChart().getXquestionid()==(question.getQuestionid()+1000000)){
+                            mb.append(" checked");
+                        }
+                        mb.append("> "+question.getQuestion()+" Displayoverride<br>");
+                        mb.append("</font>");
+                    }
                 }
             }
             if (!foundAtLeastOneField) {

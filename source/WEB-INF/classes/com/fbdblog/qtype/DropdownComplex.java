@@ -517,7 +517,7 @@ public class DropdownComplex implements Component, ChartField {
      * corresponding to those eventid's.
      * Result[eventid][value]
      */
-    public TreeMap getChartData(ArrayList<Post> posts, int questionid) {
+    public TreeMap getChartData(ArrayList<Post> posts, int questionid, boolean usedisplayoverrideifpossible) {
         if (posts!=null && posts.size()>0){
             TreeMap data = new TreeMap();
             for (Iterator it = posts.iterator(); it.hasNext(); ) {
@@ -530,9 +530,16 @@ public class DropdownComplex implements Component, ChartField {
                 for (Iterator<Postanswer> iterator=postanswers.iterator(); iterator.hasNext();) {
                     Postanswer postanswer=iterator.next();
                     logger.debug("found postanswerid="+postanswer.getPostanswerid()+" postanswer.getName()="+postanswer.getName()+" postanswer.getValue()="+postanswer.getValue());
-                    if(postanswer.getName().equals("response")){
-                        logger.debug("+ Adding postid="+post.getPostid()+" postanswer.getValue()="+postanswer.getValue());
-                        data.put(post.getPostid(), postanswer.getValue());
+                    if (usedisplayoverrideifpossible){
+                        if(postanswer.getName().equals("displayoverride")){
+                            logger.debug("+ Adding postid="+post.getPostid()+" postanswer.getValue()="+postanswer.getValue());
+                            data.put(post.getPostid(), postanswer.getValue());
+                        }
+                    } else {
+                        if(postanswer.getName().equals("response")){
+                            logger.debug("+ Adding postid="+post.getPostid()+" postanswer.getValue()="+postanswer.getValue());
+                            data.put(post.getPostid(), postanswer.getValue());
+                        }
                     }
                 }
 //                for (Iterator<Postanswer> iterator = post.getPostanswers().iterator(); iterator.hasNext();) {

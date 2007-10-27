@@ -17,6 +17,12 @@ public class MegaChartFactory {
         //Default Type
         MegaChartType ct = new MegaChartTypeLine();
 
+        //Boolean if
+//        boolean isdisplayoverride
+//        if (megaChart.getChart().getXquestionid()>1000000){
+//
+//        }
+
         //Figure out which type the user wants
         if (megaChart.getxMegadatatype()==DataTypeString.DATATYPEID || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPE3DBAR || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEHORIZONTALBAR || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEHORIZONTAL3DBAR || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEBAR  || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART  || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3D || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL) {
             if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPE3DBAR) {

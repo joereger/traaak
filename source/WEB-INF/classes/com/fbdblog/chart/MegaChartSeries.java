@@ -66,34 +66,50 @@ public class MegaChartSeries {
         //If the MegaFieldid < 0 then it's actually a fieldtype
         //xField
         if (xQuestionid < 0){
+            //Less than zero are interpolated types
             xFieldtype = xQuestionid;
-            //Gotta create a field handler to get name
             ChartField f = ChartFieldFactory.getHandlerByFieldtype(xFieldtype);
             xAxisTitle = f.getName();
             xMegadatatype = f.getID();
         } else {
-            //Gotta go to the DB
-            Question question = Question.get(xQuestionid);
-            xFieldtype = question.getComponenttype();
-            xAxisTitle = Str.truncateString(question.getQuestion(), 25);
-            xMegadatatype = question.getDatatypeid();
+            if (xQuestionid>1000000){
+                //Over a million use displayoverride, but here we're just getting field names and can use the question
+                Question question = Question.get(xQuestionid-1000000);
+                xFieldtype = question.getComponenttype();
+                xAxisTitle = Str.truncateString(question.getQuestion(), 25);
+                xMegadatatype = question.getDatatypeid();
+            } else {
+                //Under a million are plain old fields
+                Question question = Question.get(xQuestionid);
+                xFieldtype = question.getComponenttype();
+                xAxisTitle = Str.truncateString(question.getQuestion(), 25);
+                xMegadatatype = question.getDatatypeid();
+            }
         }
 
         //yField
         if (yQuestionid < 0){
+            //Less than zero are interpolated types
             yFieldtype = yQuestionid;
-            //Gotta create a field handler to get name
             ChartField f = ChartFieldFactory.getHandlerByFieldtype(yFieldtype);
             if(f!=null){
                 yAxisTitle = f.getName();
                 yMegadatatype = f.getID();
             }
         } else {
-            //Gotta go to the DB
-            Question question = Question.get(yQuestionid);
-            yFieldtype = question.getComponenttype();
-            yAxisTitle = Str.truncateString(question.getQuestion(),25);
-            yMegadatatype = question.getDatatypeid();
+            if (yQuestionid>1000000){
+                //Over a million use displayoverride, but here we're just getting field names and can use the question
+                Question question = Question.get(yQuestionid-1000000);
+                yFieldtype = question.getComponenttype();
+                yAxisTitle = Str.truncateString(question.getQuestion(),25);
+                yMegadatatype = question.getDatatypeid();
+            } else {
+                //Under a million are plain old fields
+                Question question = Question.get(yQuestionid);
+                yFieldtype = question.getComponenttype();
+                yAxisTitle = Str.truncateString(question.getQuestion(),25);
+                yMegadatatype = question.getDatatypeid();
+            }
         }
 
         //Get the data for x Axis
@@ -126,6 +142,12 @@ public class MegaChartSeries {
      public TreeMap getFieldData(int questionid, int fieldtype, ArrayList<Post> posts){
         Logger logger = Logger.getLogger(this.getClass().getName());
         logger.debug("getFieldData() - questionid=" + questionid + " fieldtype=" + fieldtype);
+        //Adjust for displayoverride... those over 1000000 use it
+        boolean usedisplayoverrideifpossible = false;
+        if (questionid>1000000){
+            usedisplayoverrideifpossible = true;
+            questionid=questionid-1000000;
+        }
         //Now we pass this to the fieldtype handler
         //Figure out which type of field this is
         ChartField f = ChartFieldFactory.getHandlerByFieldtype(fieldtype);
@@ -133,7 +155,7 @@ public class MegaChartSeries {
         //f.populateFromQuestionid(questionid);
         //Call the function that gets a set of chart data
         //Result[eventid][value]
-        TreeMap axisRawData = f.getChartData(posts, questionid);
+        TreeMap axisRawData = f.getChartData(posts, questionid, usedisplayoverrideifpossible);
         if(axisRawData!=null){
             logger.debug("axisRawData.size()="+axisRawData.size());
         } else {
@@ -232,6 +254,10 @@ public class MegaChartSeries {
                             xAxisValue = new Double(0);
                         }
                     } else {
+                        xAxisValue = tmpChartData[i][1];
+                    }
+                    //Override when using displayoverride because strings are allowed
+                    if (xQuestionid>1000000){
                         xAxisValue = tmpChartData[i][1];
                     }
 
