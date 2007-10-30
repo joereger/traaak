@@ -175,7 +175,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                 Adglobalheader
             </td>
             <td valign="top">
-                <input type="text" name="adglobalheader" value="<%=app.getAdglobalheader()%>" size="45">
+                <input type="text" name="adglobalheader" value="<%=Str.cleanForHtml(app.getAdglobalheader())%>" size="45">
             </td>
         </tr>
         <tr>
@@ -183,7 +183,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                 Adpostsave
             </td>
             <td valign="top">
-                <input type="text" name="adpostsave" value="<%=app.getAdpostsave()%>" size="45">
+                <input type="text" name="adpostsave" value="<%=Str.cleanForHtml(app.getAdpostsave())%>" size="45">
             </td>
         </tr>
         <tr>
@@ -191,7 +191,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                 Adhistoryright
             </td>
             <td valign="top">
-                <input type="text" name="adhistoryright" value="<%=app.getAdhistoryright()%>" size="45">
+                <input type="text" name="adhistoryright" value="<%=Str.cleanForHtml(app.getAdhistoryright())%>" size="45">
             </td>
         </tr>
         <tr>
@@ -199,7 +199,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                 Adunderchart
             </td>
             <td valign="top">
-                <input type="text" name="adunderchart" value="<%=app.getAdunderchart()%>" size="45">
+                <input type="text" name="adunderchart" value="<%=Str.cleanForHtml(app.getAdunderchart())%>" size="45">
             </td>
         </tr>
         <tr>
