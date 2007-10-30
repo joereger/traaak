@@ -84,9 +84,12 @@ public class UserSessionSetup {
                     logger.debug("found a fb_sig_session_key in request");
                     userSession.setFacebooksessionkey(request.getParameter("fb_sig_session_key").trim());
                 } else {
-                    logger.debug("no fb_sig_session_key found in request... redirecting to main app page");
-                    HttpServletResponse httpresponse = (HttpServletResponse)response;
-                    httpresponse.sendRedirect("http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/");
+//                    logger.debug("no fb_sig_session_key found in request... redirecting to main app page");
+//                    HttpServletResponse httpresponse = (HttpServletResponse)response;
+//                    httpresponse.sendRedirect("http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/");
+                    logger.debug("no fb_sig_session_key found in request... aborting UserSessionSetup");
+                    //Save in session
+                    request.getSession().setAttribute("userSession", userSession);
                     return;
                 }
             }

@@ -21,9 +21,9 @@
 <br/>
 
 <br/>
-<table cellpadding="3" cellspacing="0" border="0">
+<table cellpadding="0" cellspacing="0" border="0">
     <tr>
-        <td valign="top" width="220">
+        <td valign="top" width="240">
             <table cellpadding="3" cellspacing="0" border="0">
             <%
                 List<Post> posts=HibernateUtil.getSession().createCriteria(Post.class)

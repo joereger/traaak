@@ -40,9 +40,9 @@ public class UserSessionFilter implements Filter {
             logger.error("",ex);
         }
 
-
-        chain.doFilter(request, response);
-
+        if (!response.isCommitted()){
+            chain.doFilter(request, response);
+        }
 
     }
 

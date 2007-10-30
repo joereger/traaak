@@ -112,10 +112,7 @@ if (request.getParameter("facebookuid")==null) {
                                        .uniqueResult();
                             if (selectedUser!=null){
                                 %>
-                                <img src="<%=facebookUser.getPic_square()%>" alt="" width="50" height="50" align="top"/>
-                                <font style="font-size: 16px; font-weight: bold;"><%=facebookUser.getFirst_name()%> <%=facebookUser.getLast_name()%>'s Stuff</font>
-                                <br/>
-                                <br/>
+
                                 <!-- Start Chart -->
                                 <table cellpadding="0" cellspacing="0" border="0">
                                     <tr>
@@ -125,25 +122,36 @@ if (request.getParameter("facebookuid")==null) {
                                             <form action="">
                                                 <input type="hidden" name="nav" value="friends">
                                                 <input type="hidden" name="facebookuid" value="<%=facebookUser.getUid()%>">
-                                                <select name="chartid">
-                                                    <%
-                                                    List<Chart> charts=HibernateUtil.getSession().createCriteria(Chart.class)
-                                                            .add(Restrictions.eq("appid", userSession.getApp().getAppid()))
-                                                            .setCacheable(true)
-                                                            .list();
-                                                    for (Iterator<Chart> iterator=charts.iterator(); iterator.hasNext();) {
-                                                        Chart chartTmp = iterator.next();
-                                                        String selected = "";
-                                                        if (chart!=null && chartTmp.getChartid()==chart.getChartid()){
-                                                            selected = " selected";
-                                                        }
-                                                        %>
-                                                            <option value="<%=chartTmp.getChartid()%>" <%=selected%>><%=Str.cleanForHtml(chartTmp.getName())%></option>
-                                                        <%
-                                                    }
-                                                    %>
-                                                </select>
-                                                <input type="submit" value="Gimme">
+                                                <table cellpadding="0" cellspacing="2" border="0">
+                                                    <tr>
+                                                        <td valign="top" width="50">
+                                                            <img src="<%=facebookUser.getPic_square()%>" alt="" width="50" height="50" align="top"/>
+                                                        </td>
+                                                        <td valign="top">
+                                                            <font style="font-size: 16px; font-weight: bold;"><%=facebookUser.getFirst_name()%> <%=facebookUser.getLast_name()%>'s Stuff</font>
+                                                            <br/>
+                                                            <select name="chartid">
+                                                                <%
+                                                                List<Chart> charts=HibernateUtil.getSession().createCriteria(Chart.class)
+                                                                        .add(Restrictions.eq("appid", userSession.getApp().getAppid()))
+                                                                        .setCacheable(true)
+                                                                        .list();
+                                                                for (Iterator<Chart> iterator=charts.iterator(); iterator.hasNext();) {
+                                                                    Chart chartTmp = iterator.next();
+                                                                    String selected = "";
+                                                                    if (chart!=null && chartTmp.getChartid()==chart.getChartid()){
+                                                                        selected = " selected";
+                                                                    }
+                                                                    %>
+                                                                        <option value="<%=chartTmp.getChartid()%>" <%=selected%>><%=Str.cleanForHtml(chartTmp.getName())%></option>
+                                                                    <%
+                                                                }
+                                                                %>
+                                                            </select>
+                                                            <input type="submit" value="Gimme">
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                             </form>
                                             <br/>
                                         </td>

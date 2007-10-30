@@ -49,8 +49,12 @@ public class FacebookMain extends HttpServlet {
             request.getRequestDispatcher("/fb/uninstall.jsp").forward(request, response);
             return;
         }
-        
-        request.getRequestDispatcher("/fb/index.jsp").forward(request, response);
+        //If the response isn't already committed (as happens when UserSessionSetup.java redirects to app add page)
+        if (!response.isCommitted()){
+            request.getRequestDispatcher("/fb/index.jsp").forward(request, response);
+        }
+
+
     }
 
 

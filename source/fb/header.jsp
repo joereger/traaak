@@ -39,12 +39,15 @@
                 xmpp.send();
             }
             //Redirect to app add page with fbml
+            logger.debug("<fb:redirect url=\"http://www.facebook.com/add.php?api_key=" + userSession.getApp().getFacebookapikey() + "\" />");
             out.print("<fb:redirect url=\"http://www.facebook.com/add.php?api_key=" + userSession.getApp().getFacebookapikey() + "\" />");
             return;
         } else {
             //@todo what to do with unknown app?
+            logger.debug("unknown app");
         }
     }
+    logger.debug("still executing so assuming we have an facebook user who's added the app");
 
     //Record Impression
     if (userSession != null && userSession.getUser() != null && userSession.getApp() != null) {
