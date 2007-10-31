@@ -209,7 +209,7 @@ if (!topOfPageMsg.equals("")){
                             }
                                 %><td valign="top"><%
                                 %>
-                                <a href="http://www.facebook.com/add.php?api_key=<%=app.getFacebookapikey()%>"><%=app.getTitle()%></a>
+                                <a href="http://apps.facebook.com/<%=app.getFacebookappname()%>/"><%=app.getTitle()%></a>
                                 <%
                                 %></td><%
                             if (col==3){

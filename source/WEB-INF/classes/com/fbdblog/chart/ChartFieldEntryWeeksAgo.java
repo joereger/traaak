@@ -125,7 +125,8 @@ public class ChartFieldEntryWeeksAgo implements ChartField{
             for(int i=min; i<=max; i++){
                 //The value we want to make sure exists
                 //Careful!!! I must make sure it's of the correct type.
-                Integer val = new Integer(i);
+                //Integer val = new Integer(i);
+                String val = String.valueOf(i);
                 //If it doesn't exist
                 if(data.get(val)==null){
                     //Add it to the TreeMap
