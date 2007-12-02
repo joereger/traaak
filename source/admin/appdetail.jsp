@@ -11,6 +11,8 @@
 <%@ page import="com.fbdblog.dao.Chart" %>
 <%@ page import="com.fbdblog.chart.chartcache.ClearCache" %>
 <%@ page import="com.fbdblog.util.Str" %>
+<%@ page import="com.fbdblog.dao.Questioncalc" %>
+<%@ page import="org.hibernate.criterion.Order" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -253,6 +255,20 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                     %>
                     <a href="appdetail-question-<%=comptypefilename%>.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>"><%=question.getQuestion()%></a><%=req%> (<a href='appdetail.jsp?action=deletequestion&appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>'>del</a>)<br/>
                     <%
+                    List<Questioncalc> questioncalcs=HibernateUtil.getSession().createCriteria(Questioncalc.class)
+                            .add(Restrictions.eq("questionid", question.getQuestionid()))
+                            .addOrder(Order.asc("questioncalcid"))
+                            .setCacheable(true)
+                            .list();
+                    for (Iterator<Questioncalc> iterator1=questioncalcs.iterator(); iterator1.hasNext();) {
+                        Questioncalc questioncalc = iterator1.next();
+                        %>
+                        <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail-calc.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&questioncalcid=<%=questioncalc.getQuestioncalcid()%>"><%=questioncalc.getName()%></a>(del)</font><br/>
+                        <%
+                    }
+                    %>
+                    <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail-calc.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&action=newcalc">+ Add Calc</a></font><br/>
+                    <%
                 }
             %>
             <br/>
@@ -268,7 +284,6 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
 
         </td>
         <td valign="top">
-
             <b>Charts:</b>
             <br/>
             <%
@@ -299,6 +314,8 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
             <br/><a href="appdetail-chart.jsp?action=newchart&appid=<%=app.getAppid()%>">+ Add Chart</a>
             <br/><a href='appdetail.jsp?action=clearchartcache&appid=<%=app.getAppid()%>'>- Clear Chart Cache For App</a>
         </td>
+
+
     </tr>
 </table>
 

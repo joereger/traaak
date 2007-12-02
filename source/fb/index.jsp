@@ -14,6 +14,7 @@
 <%@ page import="com.fbdblog.chart.chartcache.ClearCache" %>
 <%@ page import="com.fbdblog.dao.App" %>
 <%@ page import="com.fbdblog.dao.hibernate.NumFromUniqueResult" %>
+<%@ page import="com.fbdblog.calc.DoCalculationsAfterPost" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -67,12 +68,6 @@ if (userSession.getIsnewappforthisuser()){
 }
 %>
 
-<%
-    if (request.getParameter("action") != null && request.getParameter("action").equals("compare")) {
-        //@todo implement compare
-        logger.debug("compare called");
-    }
-%>
 
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("deletepost")) {
@@ -82,24 +77,26 @@ if (userSession.getIsnewappforthisuser()){
                 try {
                     postToDel.delete();
                 } catch (Exception ex) {
-                    logger.error("",ex);
+                    logger.error("", ex);
                 }
                 post=null;
-                StringBuffer tmp = new StringBuffer();
+                StringBuffer tmp=new StringBuffer();
                 tmp.append("<fb:success>\n" +
                         "     <fb:message>As ordered, thy data hath been deleted.</fb:message>\n" +
                         "     Now add some more so this app doesn't get an inferiority complex.  It's lonely.  It needs data.\n" +
                         "</fb:success>");
-                topOfPageMsg = tmp.toString();
+                topOfPageMsg=tmp.toString();
                 //Clear the chart image cache
                 ClearCache.clearCacheForUser(userSession.getUser().getUserid(), userSession.getApp().getAppid());
+                //Do Calculations
+                DoCalculationsAfterPost.doCalculations(userSession.getUser(), userSession.getApp());
             } else {
-                StringBuffer tmp = new StringBuffer();
+                StringBuffer tmp=new StringBuffer();
                 tmp.append(" <fb:error>\n" +
                         "      <fb:message>Seriously? You don't even own that post.</fb:message>\n" +
                         "      " + "Am. Uh. Toor." + "\n" +
                         " </fb:error>");
-                topOfPageMsg = tmp.toString();
+                topOfPageMsg=tmp.toString();
             }
         }
     }
@@ -110,6 +107,7 @@ if (userSession.getIsnewappforthisuser()){
 <fb:tabs>
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main' title='Track Stuff' selected='true'/>
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts' title='Da Charts' />
+  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=reports' title='Da Reports'/>
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=history' title='Yo History' />
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=friends' title='Le Friends' align='right'/>
 </fb:tabs>

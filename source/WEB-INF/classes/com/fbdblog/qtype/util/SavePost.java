@@ -11,6 +11,7 @@ import com.fbdblog.facebook.FacebookApiWrapper;
 import com.fbdblog.xmpp.SendXMPPMessage;
 import com.fbdblog.chart.chartcache.ClearCache;
 import com.fbdblog.session.UserSession;
+import com.fbdblog.calc.DoCalculationsAfterPost;
 
 
 import java.util.Date;
@@ -85,6 +86,8 @@ public class SavePost {
                     try{post.save();} catch (Exception ex){logger.error("",ex);}
                     //Clear the chart image cache
                     ClearCache.clearCacheForUser(user.getUserid(), app.getAppid());
+                    //Do Calculations
+                    DoCalculationsAfterPost.doCalculations(post);
                     //Update Facebook
                     //@todo before going to production remove limitation of not updating mini feed for userid=1
                     if (user.getUserid()>1){

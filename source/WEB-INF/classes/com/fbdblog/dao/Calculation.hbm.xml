@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.fbdblog.dao.Calculation" table="calculation">
+        <cache usage="transactional"/>
+        <id name="calculationid" type="int">
+            <column name="calculationid" />
+            <generator class="native" />
+        </id>
+        <property name="questionid" type="int">
+            <column name="questionid" not-null="true" />
+        </property>
+        <property name="userid" type="int">
+            <column name="userid" not-null="true" />
+        </property>
+        <property name="calculationtype" type="int">
+            <column name="calculationtype" not-null="true" />
+        </property>
+        <property name="calctimeperiodid" type="int">
+            <column name="calctimeperiodid" not-null="true" />
+        </property>
+        <property name="recordeddate" type="timestamp">
+            <column name="recordeddate" not-null="true" />
+        </property>
+        <property name="calctimeperiodkey" type="text">
+            <column name="calctimeperiodkey" not-null="true" />
+        </property>
+        <property name="value" type="double">
+            <column name="value" precision="22" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
