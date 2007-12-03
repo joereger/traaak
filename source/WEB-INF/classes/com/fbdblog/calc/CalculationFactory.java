@@ -11,6 +11,15 @@ public class CalculationFactory {
         if (calculationtype==CalculationSum.ID){
             return new CalculationSum();
         }
+        if (calculationtype==CalculationAvg.ID){
+            return new CalculationAvg();
+        }
+        if (calculationtype==CalculationDeltaAbs.ID){
+            return new CalculationDeltaAbs();
+        }
+        if (calculationtype==CalculationDeltaPercent.ID){
+            return new CalculationDeltaPercent();
+        }
         return null;
     }
 

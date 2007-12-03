@@ -10,9 +10,8 @@
 <%@ page import="com.fbdblog.chart.DataTypeDatetime" %>
 <%@ page import="com.fbdblog.chart.DataTypeInteger" %>
 <%@ page import="com.fbdblog.chart.DataTypeDecimal" %>
-<%@ page import="com.fbdblog.calc.CalculationSum" %>
-<%@ page import="com.fbdblog.calc.CalctimeperiodAlltime" %>
 <%@ page import="com.fbdblog.dao.Questioncalc" %>
+<%@ page import="com.fbdblog.calc.*" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -73,28 +72,78 @@
     <input type="hidden" name="questionid" value="<%=question.getQuestionid()%>">
     <input type="hidden" name="action" value="save">
 
-    <table cellpadding="0" cellspacing="0" border="0">
+    <table cellpadding="5" cellspacing="2" border="0">
         <tr>
             <td valign="top">
                 <select name="calculationtype">
+                    <%String sel = "";%>
                     <%
-                    String sumSel = "";
+                    sel = "";
                     if (questioncalc.getCalculationtype()==CalculationSum.ID){
-                        sumSel = " selected";
+                        sel = " selected";
                     }
                     %>
-                    <option value="<%=CalculationSum.ID%>" <%=sumSel%>>Sum</option>
+                    <option value="<%=CalculationSum.ID%>" <%=sel%>>Sum</option>
+                    <%
+                        sel = "";
+                        if (questioncalc.getCalculationtype()==CalculationAvg.ID){
+                            sel = " selected";
+                        }
+                    %>
+                    <option value="<%=CalculationAvg.ID%>" <%=sel%>>Average</option>
+                    <%
+                        sel="";
+                        if (questioncalc.getCalculationtype()==CalculationDeltaAbs.ID) {
+                            sel=" selected";
+                        }
+                    %>
+                    <option value="<%=CalculationDeltaAbs.ID%>" <%=sel%>>Increase/Decrease</option>
+                    <%
+                        sel="";
+                        if (questioncalc.getCalculationtype() == CalculationDeltaPercent.ID) {
+                            sel=" selected";
+                        }
+                    %>
+                    <option value="<%=CalculationDeltaPercent.ID%>" <%=sel%>>Increase/Decrease Percent</option>
                 </select>
             </td>
             <td valign="top">
                 <select name="calctimeperiodid">
                     <%
-                    String alltimeSel = "";
+                    sel = "";
                     if (questioncalc.getCalctimeperiodid()==CalctimeperiodAlltime.ID){
-                        alltimeSel = " selected";
+                        sel = " selected";
                     }
                     %>
-                    <option value="<%=CalctimeperiodAlltime.ID%>" <%=alltimeSel%>>All Time</option>
+                    <option value="<%=CalctimeperiodAlltime.ID%>" <%=sel%>>All Time</option>
+                    <%
+                    sel = "";
+                    if (questioncalc.getCalctimeperiodid()==CalctimeperiodYear.ID){
+                        sel = " selected";
+                    }
+                    %>
+                    <option value="<%=CalctimeperiodYear.ID%>" <%=sel%>>Year</option>
+                    <%
+                    sel = "";
+                    if (questioncalc.getCalctimeperiodid()==CalctimeperiodMonth.ID){
+                        sel = " selected";
+                    }
+                    %>
+                    <option value="<%=CalctimeperiodMonth.ID%>" <%=sel%>>Month</option>
+                    <%
+                    sel = "";
+                    if (questioncalc.getCalctimeperiodid()==CalctimeperiodWeek.ID){
+                        sel = " selected";
+                    }
+                    %>
+                    <option value="<%=CalctimeperiodWeek.ID%>" <%=sel%>>Week</option>
+                    <%
+                    sel = "";
+                    if (questioncalc.getCalctimeperiodid()==CalctimeperiodDay.ID){
+                        sel = " selected";
+                    }
+                    %>
+                    <option value="<%=CalctimeperiodDay.ID%>" <%=sel%>>Day</option>
                 </select>
             </td>
         </tr>
@@ -104,18 +153,10 @@
                 <input type="text" name="name" value="<%=questioncalc.getName()%>" size="25" maxlength="255"/>
             </td>
             <td valign="top">
-
-            </td>
-        </tr>
-
-        <tr>
-            <td valign="top">
-
-            </td>
-            <td valign="top">
                 <input type="submit" value="Save">
             </td>
         </tr>
+
     </table>
 </form>
 

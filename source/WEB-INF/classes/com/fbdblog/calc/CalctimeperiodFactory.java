@@ -32,6 +32,18 @@ public class CalctimeperiodFactory {
         if (calctimeperiodid==CalctimeperiodAlltime.ID){
             return new CalctimeperiodAlltime(user, app);
         }
+        if (calctimeperiodid==CalctimeperiodMonth.ID){
+            return new CalctimeperiodMonth(user, app);
+        }
+        if (calctimeperiodid==CalctimeperiodYear.ID){
+            return new CalctimeperiodYear(user, app);
+        }
+        if (calctimeperiodid==CalctimeperiodDay.ID){
+            return new CalctimeperiodDay(user, app);
+        }
+        if (calctimeperiodid==CalctimeperiodWeek.ID){
+            return new CalctimeperiodWeek(user, app);
+        }
         return null;
     }
 
