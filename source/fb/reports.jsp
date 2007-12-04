@@ -16,6 +16,9 @@
 <%@ page import="com.fbdblog.dao.Calculation" %>
 <%@ page import="com.fbdblog.chart.DataTypeDecimal" %>
 <%@ page import="com.fbdblog.chart.DataTypeInteger" %>
+<%@ page import="com.fbdblog.calc.Calctimeperiod" %>
+<%@ page import="com.fbdblog.calc.CalculationFactory" %>
+<%@ page import="com.fbdblog.calc.CalctimeperiodFactory" %>
 <%@ include file="header.jsp" %>
 
 
@@ -50,26 +53,38 @@
                 %>
                 <font style="font-size: 14px; font-weight: bold;"><%=question.getQuestion()%></font><br/>
                 <%
-            }
-            for (Iterator<Questioncalc> iterator1=questioncalcs.iterator(); iterator1.hasNext();) {
-                Questioncalc questioncalc=iterator1.next();
+                for (Iterator<Questioncalc> iterator1=questioncalcs.iterator(); iterator1.hasNext();) {
+                    Questioncalc questioncalc=iterator1.next();
 
-                //Get the user's most recent value for this
-                List<Calculation> calculations=HibernateUtil.getSession().createCriteria(Calculation.class)
-                        .add(Restrictions.eq("questionid", question.getQuestionid()))
-                        .add(Restrictions.eq("userid", userSession.getUser().getUserid()))
-                        .add(Restrictions.eq("calculationtype", questioncalc.getCalculationtype()))
-                        .add(Restrictions.eq("calctimeperiodid", questioncalc.getCalctimeperiodid()))
-                        .addOrder(Order.desc("recordeddate"))
-                        .setMaxResults(1)
-                        .setCacheable(true)
-                        .list();
-
-                for (Iterator<Calculation> iterator2=calculations.iterator(); iterator2.hasNext();) {
-                    Calculation calculation=iterator2.next();
-                    %>
-                    <img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 10px;"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=reportsdetail&questioncalcid=<%=questioncalc.getQuestioncalcid()%>"><%=questioncalc.getName()%></a>: <%=calculation.getValue()%></font><br/>
-                    <%
+                    Calctimeperiod calctimeperiod=CalctimeperiodFactory.getCalctimeperiodByIdStatic(questioncalc.getCalctimeperiodid());
+                    com.fbdblog.calc.Calculation calculation=CalculationFactory.getCalculationByType(questioncalc.getCalculationtype());
+                    if (calctimeperiod != null && calculation != null) {
+                        //See if something's already recorded for this key
+                        boolean foundValue=false;
+                        double value = 0;
+                        List<com.fbdblog.dao.Calculation> calcs=HibernateUtil.getSession().createCriteria(com.fbdblog.dao.Calculation.class)
+                                .add(Restrictions.eq("calctimeperiodid", calctimeperiod.getId()))
+                                .add(Restrictions.eq("calctimeperiodkey", calctimeperiod.getKey()))
+                                .add(Restrictions.eq("calculationtype", calculation.getId()))
+                                .add(Restrictions.eq("questionid", question.getQuestionid()))
+                                .add(Restrictions.eq("userid", userSession.getUser().getUserid()))
+                                .setCacheable(true)
+                                .list();
+                        for (Iterator<com.fbdblog.dao.Calculation> iterator2=calcs.iterator(); iterator2.hasNext();) {
+                            com.fbdblog.dao.Calculation calcTmp = iterator2.next();
+                            value = calcTmp.getValue();
+                            foundValue = true;
+                        }
+                        if (foundValue){
+                            %>
+                            <img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 10px;"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=reportsdetail&questioncalcid=<%=questioncalc.getQuestioncalcid()%>"><%=questioncalc.getName()%></a>: <%=Str.formatWithXDecimalPlaces(value, 2)%></font><br/>
+                            <%
+                        } else {
+                            %>
+                            <img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 10px;"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=reportsdetail&questioncalcid=<%=questioncalc.getQuestioncalcid()%>"><%=questioncalc.getName()%></a>: na</font><br/>
+                            <%
+                        }
+                    }
                 }
             }
         }

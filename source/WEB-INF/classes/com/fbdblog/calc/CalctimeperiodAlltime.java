@@ -21,6 +21,10 @@ public class CalctimeperiodAlltime implements Calctimeperiod {
     public static int ID = 1;
     private List<Post> posts;
 
+    public CalctimeperiodAlltime(){
+
+    }
+
     public CalctimeperiodAlltime(User user, App app){
         List<Post> posts = HibernateUtil.getSession().createCriteria(Post.class)
                                            .add(Restrictions.eq("userid", user.getUserid()))
@@ -40,7 +44,7 @@ public class CalctimeperiodAlltime implements Calctimeperiod {
     }
 
     public String getKey(){ // "alltime", "2007-08", "2007-08-07"
-        return "alltime";
+        return "Forever";
     }
 
     public List<Post> getPosts() {

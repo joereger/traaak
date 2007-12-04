@@ -67,6 +67,9 @@
             <font style="font-size: 12px; font-weight: bold;">Calculated On</font>
         </td>
         <td bgcolor="#cccccc">
+            <font style="font-size: 12px; font-weight: bold;">Time Period</font>
+        </td>
+        <td bgcolor="#cccccc">
             <font style="font-size: 12px; font-weight: bold;">Value</font>
         </td>
     </tr>
@@ -77,6 +80,9 @@
         <tr>
             <td bgcolor="#e6e6e6">
                 <font style="font-size: 10px;"><%=Time.dateformatcompactwithtime(Time.getCalFromDate(calculation.getRecordeddate()))%></font>
+            </td>
+            <td bgcolor="#e6e6e6">
+                <font style="font-size: 10px;"><%=calculation.getCalctimeperiodkey()%></font>
             </td>
             <td>
                 <font style="font-size: 12px; font-weight: bold;"><%=calculation.getValue()%></font>

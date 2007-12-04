@@ -21,6 +21,12 @@
 </fb:tabs>
 <br/>
 
+<fb:success>
+<fb:message>A List of Your Old Stuff</fb:message>
+This is a list of all of the stuff you've tracked, organized by date.  You can edit and delete stuff using this screen.
+</fb:success>
+<br/>
+
 <br/>
 <table cellpadding="0" cellspacing="0" border="0">
     <tr>
@@ -40,7 +46,6 @@
                         <td valign="top">
                             <font size="-1">
                             <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>'><%=Time.dateformatcompactwithtime(Time.getCalFromDate(post.getPostdate()))%></a>
-                            (<a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>&action=deletepost'>delete</a>)
                             </font>
                         </td>
                         <td valign="top">

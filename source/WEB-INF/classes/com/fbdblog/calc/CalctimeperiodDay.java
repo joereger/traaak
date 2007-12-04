@@ -23,6 +23,10 @@ public class CalctimeperiodDay implements Calctimeperiod {
     public static int ID = 4;
     private List<Post> posts;
 
+    public CalctimeperiodDay(){
+
+    }
+
     public CalctimeperiodDay(User user, App app){
         Logger logger = Logger.getLogger(this.getClass().getName());
         Calendar startTime = Time.xDaysAgoStart(Calendar.getInstance(), 0);
@@ -55,6 +59,7 @@ public class CalctimeperiodDay implements Calctimeperiod {
         int day = cal.get(Calendar.DAY_OF_MONTH);
         return year+"-"+month+"-"+day;
     }
+
 
     public List<Post> getPosts() {
         return posts;

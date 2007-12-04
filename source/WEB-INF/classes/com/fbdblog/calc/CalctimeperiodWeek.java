@@ -24,6 +24,10 @@ public class CalctimeperiodWeek implements Calctimeperiod {
     public static int ID = 5;
     private List<Post> posts;
 
+    public CalctimeperiodWeek(){
+
+    }
+
     public CalctimeperiodWeek(User user, App app){
         Logger logger = Logger.getLogger(this.getClass().getName());
         Calendar startTime = Time.xWeeksAgoStart(Calendar.getInstance(), 0);

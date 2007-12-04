@@ -2,7 +2,6 @@ package com.fbdblog.calc;
 
 import com.fbdblog.dao.*;
 import com.fbdblog.dao.hibernate.HibernateUtil;
-import com.fbdblog.util.Num;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Order;
 import org.apache.log4j.Logger;
@@ -42,16 +41,38 @@ public class DoCalculationsAfterPost {
                 Calctimeperiod calctimeperiod = calctimeperiodFactory.getCalctimeperiod(questioncalc.getCalctimeperiodid());
                 Calculation calculation = CalculationFactory.getCalculationByType(questioncalc.getCalculationtype());
                 if (calctimeperiod!=null && calculation!=null){
+                    //Do the calculation
                     double value = calculation.calculate(user, question, calctimeperiod.getPosts());
-                    com.fbdblog.dao.Calculation calcDao = new com.fbdblog.dao.Calculation();
-                    calcDao.setRecordeddate(new Date());
-                    calcDao.setCalctimeperiodid(calctimeperiod.getId());
-                    calcDao.setCalctimeperiodkey(calctimeperiod.getKey());
-                    calcDao.setCalculationtype(calculation.getId());
-                    calcDao.setQuestionid(question.getQuestionid());
-                    calcDao.setUserid(user.getUserid());
-                    calcDao.setValue(value);
-                    try{calcDao.save();}catch (Exception ex){logger.error("", ex);}
+                    //See if something's already recorded for this key
+                    boolean foundonetoupdate = false;
+                    List<com.fbdblog.dao.Calculation> calcs = HibernateUtil.getSession().createCriteria(com.fbdblog.dao.Calculation.class)
+                                                       .add(Restrictions.eq("calctimeperiodid", calctimeperiod.getId()))
+                                                       .add(Restrictions.eq("calctimeperiodkey", calctimeperiod.getKey()))
+                                                       .add(Restrictions.eq("calculationtype", calculation.getId()))
+                                                       .add(Restrictions.eq("questionid", question.getQuestionid()))
+                                                       .add(Restrictions.eq("userid", user.getUserid()))
+                                                       .setCacheable(true)
+                                                       .list();
+                    for (Iterator<com.fbdblog.dao.Calculation> iterator2=calcs.iterator(); iterator2.hasNext();) {
+                        com.fbdblog.dao.Calculation calcTmp=iterator2.next();
+                        //Just update this calculation
+                        foundonetoupdate = true;
+                        calcTmp.setValue(value);
+                        calcTmp.setRecordeddate(new Date());
+                        try{calcTmp.save();}catch (Exception ex){logger.error("", ex);}
+                    }
+                    if (!foundonetoupdate){
+                        //Add a new record
+                        com.fbdblog.dao.Calculation calcDao = new com.fbdblog.dao.Calculation();
+                        calcDao.setCalctimeperiodid(calctimeperiod.getId());
+                        calcDao.setCalctimeperiodkey(calctimeperiod.getKey());
+                        calcDao.setCalculationtype(calculation.getId());
+                        calcDao.setQuestionid(question.getQuestionid());
+                        calcDao.setUserid(user.getUserid());
+                        calcDao.setValue(value);
+                        calcDao.setRecordeddate(new Date());
+                        try{calcDao.save();}catch (Exception ex){logger.error("", ex);}
+                    }
                 }
             }                                                                 
         }

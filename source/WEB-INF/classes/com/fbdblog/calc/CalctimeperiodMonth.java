@@ -24,6 +24,10 @@ public class CalctimeperiodMonth implements Calctimeperiod {
     public static int ID = 2;
     private List<Post> posts;
 
+    public CalctimeperiodMonth(){
+
+    }
+
     public CalctimeperiodMonth(User user, App app){
         Logger logger = Logger.getLogger(this.getClass().getName());
         Calendar startTime = Time.xMonthsAgoStart(Calendar.getInstance(), 0);

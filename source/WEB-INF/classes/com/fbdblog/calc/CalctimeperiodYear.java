@@ -24,6 +24,10 @@ public class CalctimeperiodYear implements Calctimeperiod {
     public static int ID = 3;
     private List<Post> posts;
 
+    public CalctimeperiodYear(){
+
+    }
+
     public CalctimeperiodYear(User user, App app){
         Logger logger = Logger.getLogger(this.getClass().getName());
         Calendar startTime = Time.xYearsAgoStart(Calendar.getInstance(), 0);

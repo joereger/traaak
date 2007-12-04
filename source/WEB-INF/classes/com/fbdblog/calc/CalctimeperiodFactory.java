@@ -47,7 +47,24 @@ public class CalctimeperiodFactory {
         return null;
     }
 
-
+    public static Calctimeperiod getCalctimeperiodByIdStatic(int calctimeperiodid){
+        if (calctimeperiodid==CalctimeperiodAlltime.ID){
+            return new CalctimeperiodAlltime();
+        }
+        if (calctimeperiodid==CalctimeperiodMonth.ID){
+            return new CalctimeperiodMonth();
+        }
+        if (calctimeperiodid==CalctimeperiodYear.ID){
+            return new CalctimeperiodYear();
+        }
+        if (calctimeperiodid==CalctimeperiodDay.ID){
+            return new CalctimeperiodDay();
+        }
+        if (calctimeperiodid==CalctimeperiodWeek.ID){
+            return new CalctimeperiodWeek();
+        }
+        return null;
+    }
 
 
 }
