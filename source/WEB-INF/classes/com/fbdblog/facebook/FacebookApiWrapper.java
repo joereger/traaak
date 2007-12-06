@@ -7,11 +7,8 @@ import com.fbdblog.systemprops.BaseUrl;
 import com.fbdblog.dao.Post;
 import com.fbdblog.dao.User;
 import com.fbdblog.dao.App;
-import com.fbdblog.util.Str;
 import com.fbdblog.util.Num;
 import org.apache.log4j.Logger;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.Order;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 import org.jdom.input.DOMBuilder;
@@ -93,7 +90,7 @@ public class FacebookApiWrapper {
 
                 CharSequence cs = fbml.subSequence(0, fbml.length());
                 FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
-                boolean success = facebookRestClient.profile_setFBML(cs, Integer.parseInt(user.getFacebookuid()));
+                boolean success = facebookRestClient.profile_setFBML(cs, Long.parseLong(user.getFacebookuid()));
                 if (success){
                     logger.debug("Apparently the setFBML was successful.");
                 } else {
@@ -251,7 +248,7 @@ public class FacebookApiWrapper {
 
 
 
-    public void inviteFriendsToApp(ArrayList<Integer> uids, App app){
+    public void inviteFriendsToApp(ArrayList<Long> uids, App app){
         Logger logger = Logger.getLogger(this.getClass().getName());
         FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
 

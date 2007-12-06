@@ -18,6 +18,7 @@
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=reports' title='Da Reports'/>
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=history' title='Yo History' selected='true'/>
   <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=friends' title='Le Friends' align='right'/>
+  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdowns' title='Throwdown!!!' align='right'/>
 </fb:tabs>
 <br/>
 
@@ -28,6 +29,7 @@ This is a list of all of the stuff you've tracked, organized by date.  You can e
 <br/>
 
 <br/>
+<div style="padding: 10px;">
 <table cellpadding="0" cellspacing="0" border="0">
     <tr>
         <td valign="top" width="240">
@@ -62,6 +64,6 @@ This is a list of all of the stuff you've tracked, organized by date.  You can e
         </td>
     </tr>
 </table>
-
+</div>
 <br/><br/>
 <%@ include file="footer.jsp" %>

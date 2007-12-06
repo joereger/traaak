@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.fbdblog.dao.Throwdown" table="throwdown">
+        <cache usage="transactional"/>
+        <id name="throwdownid" type="int">
+            <column name="throwdownid" />
+            <generator class="native" />
+        </id>
+        <property name="fromuserid" type="int">
+            <column name="fromuserid" not-null="true" />
+        </property>
+        <property name="tofacebookuid" type="text">
+            <column name="tofacebookuid" not-null="true" />
+        </property>
+        <property name="touserid" type="int">
+            <column name="touserid" not-null="true" />
+        </property>
+        <property name="appid" type="int">
+            <column name="appid" not-null="true" />
+        </property>
+        <property name="isaccepted" type="boolean">
+            <column name="isaccepted" />
+        </property>
+        <property name="isdeclined" type="boolean">
+            <column name="isdeclined" />
+        </property>
+        <property name="createdate" type="timestamp">
+            <column name="createdate" not-null="true" />
+        </property>
+        <property name="enddate" type="timestamp">
+            <column name="enddate" not-null="true" />
+        </property>
+        <property name="questionid" type="int">
+            <column name="questionid" not-null="true" />
+        </property>
+        <property name="questioncalcid" type="int">
+            <column name="questioncalcid" not-null="true" />
+        </property>
+        <property name="isgreaterthan" type="boolean">
+            <column name="isgreaterthan" />
+        </property>
+        <property name="name" type="text">
+            <column name="name" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

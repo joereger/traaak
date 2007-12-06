@@ -144,6 +144,10 @@
                   <attribute name="maxNodes">50000</attribute>
                   <attribute name="timeToLiveSeconds">0</attribute>
               </region>
+
+              <region name="/userSession">
+                  <attribute name="timeToLiveSeconds">600</attribute>
+              </region>
            </config>
         </attribute>
 

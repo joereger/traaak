@@ -18,6 +18,7 @@
         <mapping resource="com/fbdblog/dao/Questionconfig.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Questionuserconfig.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Systemprop.hbm.xml" />
+        <mapping resource="com/fbdblog/dao/Throwdown.hbm.xml" />
         <mapping resource="com/fbdblog/dao/User.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Userappactivity.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Userappstatus.hbm.xml" />

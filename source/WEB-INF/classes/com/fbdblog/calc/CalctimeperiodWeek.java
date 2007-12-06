@@ -59,7 +59,7 @@ public class CalctimeperiodWeek implements Calctimeperiod {
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH)+1;
         int weekofmonth = cal.get(Calendar.WEEK_OF_MONTH);
-        return year+"-"+month+" wk:"+weekofmonth;
+        return year+"-"+month+" Week#"+weekofmonth;
     }
 
     public List<Post> getPosts() {

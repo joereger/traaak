@@ -26,7 +26,7 @@ public class FacebookUser implements Serializable {
 
     public static String sqlListOfCols = "first_name, last_name, birthday, sex, uid, pic_square, has_added_app";
 
-    public FacebookUser(int facebookuserid, String facebookSessionKey, String api_key, String api_secret){
+    public FacebookUser(Long facebookuserid, String facebookSessionKey, String api_key, String api_secret){
         refreshFromFacebookApi(facebookuserid, facebookSessionKey, api_key, api_secret);
     }
 
@@ -34,7 +34,7 @@ public class FacebookUser implements Serializable {
         populateFromUserDom(userDom);
     }
 
-    public void refreshFromFacebookApi(int facebookuserid, String facebookSessionKey, String api_key, String api_secret){
+    public void refreshFromFacebookApi(Long facebookuserid, String facebookSessionKey, String api_key, String api_secret){
         Logger logger = Logger.getLogger(this.getClass().getName());
         try{
             FacebookRestClient facebookRestClient = new FacebookRestClient(api_key, api_secret, facebookSessionKey);
