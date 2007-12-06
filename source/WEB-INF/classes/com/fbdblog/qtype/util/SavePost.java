@@ -92,8 +92,8 @@ public class SavePost {
                     //@todo before going to production remove limitation of not updating mini feed for userid=1
                     if (user.getUserid()>1){
                         FacebookApiWrapper facebookApiWrapper = new FacebookApiWrapper(userSession);
-                        facebookApiWrapper.postSurveyToFacebookMiniFeed(post);
-                        facebookApiWrapper.updateFacebookProfile(user);
+                        facebookApiWrapper.postToFeed(post);
+                        facebookApiWrapper.updateProfile(user);
                     }
                 }
             } catch (Exception ex){

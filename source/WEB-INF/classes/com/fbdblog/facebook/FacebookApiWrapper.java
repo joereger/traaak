@@ -1,13 +1,16 @@
 package com.fbdblog.facebook;
 
 import com.facebook.api.FacebookRestClient;
+import com.facebook.api.TemplatizedAction;
 import com.fbdblog.session.UserSession;
 import com.fbdblog.systemprops.SystemProperty;
 import com.fbdblog.systemprops.BaseUrl;
 import com.fbdblog.dao.Post;
 import com.fbdblog.dao.User;
 import com.fbdblog.dao.App;
+import com.fbdblog.dao.Throwdown;
 import com.fbdblog.util.Num;
+import com.fbdblog.util.Str;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
@@ -57,22 +60,101 @@ public class FacebookApiWrapper {
         }
     }
 
-    public void postSurveyToFacebookMiniFeed(Post post){
+    public String sendNotification(ArrayList<Long> recipientIds, String notification, String email){
         Logger logger = Logger.getLogger(this.getClass().getName());
         if (issessionok){
             try{
                 if (userSession!=null && userSession.getApp()!=null && !userSession.getApp().getMinifeedtemplate().equals("")){
-                    //@todo need to limit the length to 60 chars... not counting tags... just the displayed chars
+                    FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
+                    URL url = facebookRestClient.notifications_send(recipientIds, Str.getCharSequence(notification), Str.getCharSequence(email));
+                    if (url!=null){
+                        return url.toString();
+                    }
+                }
+            } catch (Exception ex){logger.error("",ex);}
+        } else {logger.debug("Can't execute because issessionok = false");}
+        return "";
+    }
+
+    public void postToFeed(Post post){
+        Logger logger = Logger.getLogger(this.getClass().getName());
+        if (issessionok){
+            try{
+                if (userSession!=null && userSession.getApp()!=null && !userSession.getApp().getMinifeedtemplate().equals("")){
                     StringBuffer mf = new StringBuffer();
                     mf.append(MinifeedTemplateProcessor.processTemplate(userSession.getApp().getMinifeedtemplate(), userSession.getUser(), post));
+
+                    StringBuffer titleTemplate = new StringBuffer();
+                    titleTemplate.append("{actor} "+mf.toString());
+
+                    TemplatizedAction action = new TemplatizedAction(titleTemplate.toString());
+
                     FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
-                    facebookRestClient.feed_publishActionOfUser(mf.toString(), "");
+                    facebookRestClient.feed_PublishTemplatizedAction(action);
                 }
             } catch (Exception ex){logger.error("",ex);}
         } else {logger.debug("Can't execute because issessionok = false");}
     }
 
-    public void updateFacebookProfile(User user){
+    public void postThrowdownChallengeToFeed(Throwdown throwdown){
+        Logger logger = Logger.getLogger(this.getClass().getName());
+        if (issessionok){
+            try{
+                if (userSession!=null && userSession.getApp()!=null && !userSession.getApp().getMinifeedtemplate().equals("")){
+
+                    FacebookUser toFacebookUser = getFacebookUserByUid(throwdown.getTofacebookuid());
+                    String toname=toFacebookUser.getFirst_name()+" "+toFacebookUser.getLast_name();
+
+
+                    StringBuffer titleTemplate = new StringBuffer();
+                    titleTemplate.append("{actor} challenged {toname} to a throwdown!");
+
+                    StringBuffer bodyTemplate = new StringBuffer();
+                    bodyTemplate.append("{throwdownname} {toname} must now choose whether to accept this challenge.");
+
+                    TemplatizedAction action = new TemplatizedAction(titleTemplate.toString(), bodyTemplate.toString());
+                    action.addTargetIds(throwdown.getTofacebookuid());
+                    action.addTitleParam("toname", toname);
+                    action.addBodyParam("throwdownname", "<a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>");
+
+                    FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
+                    facebookRestClient.feed_PublishTemplatizedAction(action);
+                }
+            } catch (Exception ex){logger.error("",ex);}
+        } else {logger.debug("Can't execute because issessionok = false");}
+    }
+
+    public void postThrowdownAcceptToFeed(Throwdown throwdown){
+        Logger logger = Logger.getLogger(this.getClass().getName());
+        if (issessionok){
+            try{
+                if (userSession!=null && userSession.getApp()!=null && !userSession.getApp().getMinifeedtemplate().equals("")){
+
+                    FacebookUser toFacebookUser = getFacebookUserByUid(throwdown.getTofacebookuid());
+                    User fromUser = User.get(throwdown.getFromuserid());
+                    FacebookUser fromFacebookUser = getFacebookUserByUid(fromUser.getFacebookuid());
+                    String toname=toFacebookUser.getFirst_name()+" "+toFacebookUser.getLast_name();
+                    String fromname=fromFacebookUser.getFirst_name()+" "+fromFacebookUser.getLast_name();
+
+                    StringBuffer titleTemplate = new StringBuffer();
+                    titleTemplate.append("{actor} accepted {fromname}'s challenge to a throwdown!");
+
+                    StringBuffer bodyTemplate = new StringBuffer();
+                    bodyTemplate.append("{throwdownname} They will not battle it out in this epic throwdown!");
+
+                    TemplatizedAction action = new TemplatizedAction(titleTemplate.toString(), bodyTemplate.toString());
+                    action.addTargetIds(throwdown.getTofacebookuid());
+                    action.addTitleParam("fromname", fromname);
+                    action.addBodyParam("throwdownname", "<a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>");
+
+                    FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
+                    facebookRestClient.feed_PublishTemplatizedAction(action);
+                }
+            } catch (Exception ex){logger.error("",ex);}
+        } else {logger.debug("Can't execute because issessionok = false");}
+    }
+
+    public void updateProfile(User user){
         Logger logger = Logger.getLogger(this.getClass().getName());
         logger.debug("Starting to create FBML for profile");
         if (issessionok){
@@ -87,6 +169,8 @@ public class FacebookApiWrapper {
                 fbml.append("<font size='-2'>Chart by "+userSession.getApp().getTitle()+"</font>");
                 fbml.append("</a>");
                 fbml.append("</center>");
+
+                //@todo Add throwdowns update to profile here
 
                 CharSequence cs = fbml.subSequence(0, fbml.length());
                 FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());
@@ -259,15 +343,8 @@ public class FacebookApiWrapper {
 
         content.append("<fb:req-choice url=\"http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?action=invited\" label=\"Check it Out\" />");
         CharSequence contentChars = content.subSequence(0, content.length());
-        URL imgUrl = null;
         try{
-            //@todo have icon for inviting friends
-            imgUrl = new URL("http", SystemProperty.getProp(SystemProperty.PROP_BASEURL), "/images/bleh.png");
-        } catch (Exception ex){
-            logger.error("",ex);
-        }
-        try{
-            URL url = facebookRestClient.notifications_sendRequest(uids, typeChars, contentChars, imgUrl, true);
+            URL url = facebookRestClient.notifications_send(uids, typeChars, contentChars);
             if (url!=null){
                 logger.debug("FacebookAPI returned: " + url.toString());
                 //String redirUrl = "/redirectoutofframe.jsp?url="+ URLEncoder.encode(url.toString(), "UTF-8");
@@ -308,16 +385,7 @@ public class FacebookApiWrapper {
             outputChildrenToLogger(element, level);
         }
     }
-//
-//
-//
-//    public boolean getIssessionok() {
-//        return issessionok;
-//    }
-//
-//    public String getFacebooksessionkey() {
-//        return facebookSessionKey;
-//    }
+
 
 
 }

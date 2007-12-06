@@ -12,6 +12,8 @@ import com.fbdblog.dao.App;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * User: Joe Reger Jr
@@ -21,7 +23,7 @@ import java.util.Iterator;
 public class ImpressionCache implements Job {
 
 
-    public static ArrayList<ImpressionActivityObject> iaos;
+    public static List<ImpressionActivityObject> iaos;
 
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         Logger logger = Logger.getLogger(this.getClass().getName());
@@ -34,9 +36,7 @@ public class ImpressionCache implements Job {
                             ImpressionActivityObject iao = (ImpressionActivityObject)it.next();
                             try{
                                 ImpressionActivityObjectStorage.store(iao);
-                                synchronized(it){
-                                    it.remove();
-                                }
+                                it.remove();
                             } catch (Exception ex){
                                 logger.error("",ex);
                             }
@@ -58,16 +58,16 @@ public class ImpressionCache implements Job {
 
 
 
-    public static void addIao(ImpressionActivityObject iao){
+    public static synchronized void addIao(ImpressionActivityObject iao){
         if (iaos==null){
-            iaos = new ArrayList<ImpressionActivityObject>();
+            iaos = Collections.synchronizedList(new ArrayList<ImpressionActivityObject>());
         }
         synchronized(iaos){
             iaos.add(iao);
         }
     }
 
-    public static ArrayList<ImpressionActivityObject> getIaos() {
+    public static List<ImpressionActivityObject> getIaos() {
         if(iaos!=null){
             synchronized(iaos){
                 return iaos;

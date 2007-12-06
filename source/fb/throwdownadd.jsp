@@ -92,9 +92,21 @@
             } catch (Exception ex) {
                 logger.error("", ex);
             }
-            //Redirect to list
+
+            //Notify challengee
+            FacebookApiWrapper faw = new FacebookApiWrapper(userSession);
+            faw.postThrowdownChallengeToFeed(throwdown);
+            ArrayList<Long> recipientIds = new ArrayList<Long>();
+            recipientIds.add(Long.parseLong(throwdown.getTofacebookuid()));
+            StringBuffer message = new StringBuffer();
+            message.append(" has challenged you to a throwdown called <a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>.  You must now choose whether to accept or decline this challenge.  Be strong.");
+            String url = faw.sendNotification(recipientIds, message.toString(), message.toString());
+            if (url.equals("")){
+                url = "http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=throwdowns&action=addcomplete";
+            }
+            //Redirect to either the facebook-defined page or to the complete page
             %>
-            <fb:redirect url="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdowns&action=addcomplete" />
+            <fb:redirect url="<%=url%>" />
             <%
             return;
         } else {

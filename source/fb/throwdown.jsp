@@ -19,6 +19,7 @@
 <%@ page import="com.fbdblog.facebook.FacebookApiWrapper" %>
 <%@ page import="com.fbdblog.util.Time" %>
 <%@ page import="com.fbdblog.calc.CalcUtil" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ include file="header.jsp" %>
 
 
@@ -61,12 +62,22 @@ if (userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid()))
 
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("accept")) {
-        if (userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid())){
+        if (userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid())) {
             throwdown.setIsaccepted(true);
             throwdown.setIsdeclined(false);
             throwdown.setTouserid(userSession.getUser().getUserid());
-            try{throwdown.save();}catch(Exception ex){logger.error("", ex);}
-            //@todo message screen
+            try {
+                throwdown.save();
+            } catch (Exception ex) {
+                logger.error("", ex);
+            }
+            faw.postThrowdownAcceptToFeed(throwdown);
+            ArrayList<Long> recipientIds=new ArrayList<Long>();
+            recipientIds.add(Long.parseLong(fromFacebookUser.getUid()));
+            StringBuffer message=new StringBuffer();
+            message.append(" has accepted your throwdown challenge called <a href='http://apps.facebook.com/" + userSession.getApp().getFacebookappname() + "/?nav=throwdown&throwdownid=" + throwdown.getThrowdownid() + "'>" + throwdown.getName() + "</a>.  Now it is on!");
+            String url=faw.sendNotification(recipientIds, message.toString(), message.toString());
+            //@todo message may not work because not redirecting to url
         }
     }
 %>
@@ -78,7 +89,6 @@ if (userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid()))
             throwdown.setIsdeclined(true);
             throwdown.setTouserid(userSession.getUser().getUserid());
             try{throwdown.save();}catch(Exception ex){logger.error("", ex);}
-            //@todo message screen
         }
     }
 %>
