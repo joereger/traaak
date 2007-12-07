@@ -99,16 +99,8 @@ if (userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid()))
 %>
 
 
-<br/>
-<fb:tabs>
-  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main' title='Track Stuff'/>
-  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts' title='Da Charts'/>
-  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=reports' title='Da Reports'/>
-  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=history' title='Yo History'/>
-  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=friends' title='Le Friends' align='right'/>
-  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdowns' title='Throwdown!!!' align='right' selected='true'/>
-</fb:tabs>
-<br/>
+<%String selectedTab="throwdown";%>
+<%@ include file="tabs.jsp" %>
 
 
 <div style="padding: 10px;">
@@ -164,7 +156,7 @@ if (!throwdown.getIsaccepted() && !throwdown.getIsdeclined()){
                     <br/>
                     <font style="font-size: 10px; font-weight: bold;">to a Throwdown called</font>
                     <br/>
-                    <font style="font-size: 18px; font-weight: bold; color: #ff0000;"><%=throwdown.getName()%></font>
+                    <font style="font-size: 25px; font-weight: bold; color: #ff0000;"><%=throwdown.getName()%></font>
                     <br/>
                     <br/>
                     <font style="font-size: 10px; font-weight: bold;"><%=fromFacebookUser.getFirst_name()%> says that on</font>

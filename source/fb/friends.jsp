@@ -46,16 +46,9 @@ for (Iterator it=friends.iterator(); it.hasNext();) {
     }
 %>
 
-<br/>
-<fb:tabs>
-  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main' title='Track Stuff'/>
-  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts' title='Da Charts' />
-  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=reports' title='Da Reports'/>
-  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=history' title='Yo History' />
-  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=friends' title='Le Friends' align='right' selected='true'/>
-  <fb:tab-item href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdowns' title='Throwdown!!!' align='right'/>
-</fb:tabs>
-<br/>
+<%String selectedTab="friends";%>
+<%@ include file="tabs.jsp" %>
+
 <br/>
 <%
 if (request.getParameter("facebookuid")==null) {
