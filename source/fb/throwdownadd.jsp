@@ -185,7 +185,7 @@ if (!topOfPageMsg.equals("")){
                     <input type="text" name="name" value="<%=userSession.getApp().getTitle()%> Throwdown Challenge">.
                     <br/>
                     <br/>
-                    <%=userSession.getFacebookUser().getFirst_name()%> wages that on
+                    <%=userSession.getFacebookUser().getFirst_name()%> says that on
                     <br/>
                     <%=DateTimeHtmlInput.getHtml("enddate", Calendar.getInstance(), "", "")%>
                     <br/>

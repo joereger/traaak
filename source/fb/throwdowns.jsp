@@ -63,88 +63,105 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
 
 <div style="padding: 10px;">
 
-<div style="text-align: right;">
-<a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdownadd">Start a New Throwdown!!!</a>
-</div>
+
+
 
 <table cellpadding="3" cellspacing="1" border="0" width="100%">
-
 <tr>
-    <td valign="top" colspan="5" bgcolor="#e6e6e6"><b>Throwdowns You've Instigated</b></td>
-</tr>
-<%
-    if (1==1){
-        List<Throwdown> throwdowns=HibernateUtil.getSession().createCriteria(Throwdown.class)
-                .add(Restrictions.eq("fromuserid", userSession.getUser().getUserid()))
-                .setCacheable(true)
-                .list();
-        if (throwdowns!=null && throwdowns.size()>0){
-            for (Iterator<Throwdown> iterator=throwdowns.iterator(); iterator.hasNext();) {
-                Throwdown throwdown=iterator.next();
-                FacebookUser toFbUser = faw.getFacebookUserByUid(throwdown.getTofacebookuid());
-                %>
-                 <tr>
-                     <td valign="top"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><%=throwdown.getName()%></a></td>
-                     <td valign="top"><img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><%=userSession.getFacebookUser().getFirst_name()%> <%=userSession.getFacebookUser().getLast_name()%></td>
-                     <td valign="center">vs.</td>
-                     <td valign="top"><img src="<%=toFbUser.getPic_square()%>" alt="" width="50" height="50"/><br/><%=toFbUser.getFirst_name()%> <%=toFbUser.getLast_name()%></td>
-                     <td valign="top">Ends On<br/><%=Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))%></td>
-                 </tr>
-                 <%
-            }
-        } else {
-            %>
+    <td valign="top">
+        <fb:success>
+            <fb:message>What're you waiting for?</fb:message>
+            <a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdownadd">It's always a good time for a Throwdown!!!</a>
+        </fb:success>
+
+        <br/><br/>
+
+        <table cellpadding="3" cellspacing="1" border="0" width="100%">
+
             <tr>
-                <td valign="top" colspan="5">None... the competitive spirit is weak in you... <a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdownadd">why not take it up a notch?</a></td>
+                <td valign="top" colspan="3" bgcolor="#e6e6e6"><b>Throwdowns You've Instigated</b></td>
             </tr>
             <%
-        }
-    }
-%>
-
-<tr>
-    <td valign="top" colspan="5"><br/><br/></td>
-</tr>
-<tr>
-    <td valign="top" colspan="5" bgcolor="#e6e6e6"><b>Throwdowns Where You've Been Called Out</b></td>
-</tr>
-<%
-    if (1==1){
-        List<Throwdown> throwdowns=HibernateUtil.getSession().createCriteria(Throwdown.class)
-                .add(Restrictions.eq("tofacebookuid", userSession.getFacebookUser().getUid()))
-                .setCacheable(true)
-                .list();
-        if (throwdowns!=null && throwdowns.size()>0){
-            for (Iterator<Throwdown> iterator=throwdowns.iterator(); iterator.hasNext();) {
-                Throwdown throwdown=iterator.next();
-                User fromUser = User.get(throwdown.getFromuserid());
-                FacebookUser fromFbUser = faw.getFacebookUserByUid(fromUser.getFacebookuid());
-                %>
-                 <tr>
-                     <td valign="top"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><%=throwdown.getName()%></a></td>
-                     <td valign="top"><img src="<%=fromFbUser.getPic_square()%>" alt="" width="50" height="50"/><br/><%=fromFbUser.getFirst_name()%> <%=fromFbUser.getLast_name()%></td>
-                     <td valign="center">vs.</td>
-                     <td valign="top"><img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><%=userSession.getFacebookUser().getFirst_name()%> <%=userSession.getFacebookUser().getLast_name()%></td>
-                     <td valign="top">Ends On<br/><%=Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))%></td>
-                 </tr>
-                 <%
-            }
-        } else {
+                if (1==1){
+                    List<Throwdown> throwdowns=HibernateUtil.getSession().createCriteria(Throwdown.class)
+                            .add(Restrictions.eq("fromuserid", userSession.getUser().getUserid()))
+                            .setCacheable(true)
+                            .list();
+                    if (throwdowns!=null && throwdowns.size()>0){
+                        for (Iterator<Throwdown> iterator=throwdowns.iterator(); iterator.hasNext();) {
+                            Throwdown throwdown=iterator.next();
+                            FacebookUser toFbUser = faw.getFacebookUserByUid(throwdown.getTofacebookuid());
+                            %>
+                             <tr>
+                                 <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))%></font></td>
+                             </tr>
+                             <tr>
+                                 <td valign="top" width="40%"><div style="text-align: right;"><img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><%=userSession.getFacebookUser().getFirst_name()%><br/><%=userSession.getFacebookUser().getLast_name()%></div></td>
+                                 <td valign="top" width="20%"><center><font style="font-size: 14px; font-weight: bold; color: #666666;">vs.</font></center></td>
+                                 <td valign="top" width="40%"><img src="<%=toFbUser.getPic_square()%>" alt="" width="50" height="50"/><br/><%=toFbUser.getFirst_name()%><br/><%=toFbUser.getLast_name()%></td>
+                             </tr>
+                             <%
+                        }
+                    } else {
+                        %>
+                        <tr>
+                            <td valign="top" colspan="3">None... the competitive spirit is weak in you... <a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdownadd">why not take it up a notch?</a></td>
+                        </tr>
+                        <%
+                    }
+                }
             %>
+
             <tr>
-                <td valign="top" colspan="5">None... not being a target is a worthy skill in life.</td>
+                <td valign="top" colspan="3"><br/><br/></td>
+            </tr>
+            <tr>
+                <td valign="top" colspan="3" bgcolor="#e6e6e6"><b>Throwdowns Where You've Been Called Out</b></td>
             </tr>
             <%
-        }
-    }
-%>
+                if (1==1){
+                    List<Throwdown> throwdowns=HibernateUtil.getSession().createCriteria(Throwdown.class)
+                            .add(Restrictions.eq("tofacebookuid", userSession.getFacebookUser().getUid()))
+                            .setCacheable(true)
+                            .list();
+                    if (throwdowns!=null && throwdowns.size()>0){
+                        for (Iterator<Throwdown> iterator=throwdowns.iterator(); iterator.hasNext();) {
+                            Throwdown throwdown=iterator.next();
+                            User fromUser = User.get(throwdown.getFromuserid());
+                            FacebookUser fromFbUser = faw.getFacebookUserByUid(fromUser.getFacebookuid());
+                            %>
+                             <tr>
+                                 <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))%></font></td>
+                             </tr>
+                             <tr>
+                                 <td valign="top" width="40%"><div style="text-align: right;"><img src="<%=fromFbUser.getPic_square()%>" alt="" width="50" height="50"/><br/><%=fromFbUser.getFirst_name()%><br/><%=fromFbUser.getLast_name()%></div></td>
+                                 <td valign="top" width="20%"><center><font style="font-size: 14px; font-weight: bold; color: #666666;">vs.</font></center></td>
+                                 <td valign="top" width="40%"><img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><%=userSession.getFacebookUser().getFirst_name()%><br/><%=userSession.getFacebookUser().getLast_name()%></td>
+                             </tr>
+                             <%
+                        }
+                    } else {
+                        %>
+                        <tr>
+                            <td valign="top" colspan="3">None... not being a target is a worthy skill in life.</td>
+                        </tr>
+                        <%
+                    }
+                }
+            %>
+            
+            <%
+            //@todo add list of all of your friends' throwdowns
+            %>
 
-<%
-//@todo add list of all of your friends' throwdowns
-%>
+        </table>
 
+    </td>
+    <td valign="top" width="300">
+        <img src="<%=BaseUrl.get(false)%>images/throwdown-title.gif" alt="" width="300" height="170" align="right"/>
+    </td>
+</tr>
 </table>
-
 
 
 

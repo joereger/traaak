@@ -12,6 +12,7 @@ import com.fbdblog.xmpp.SendXMPPMessage;
 import com.fbdblog.chart.chartcache.ClearCache;
 import com.fbdblog.session.UserSession;
 import com.fbdblog.calc.DoCalculationsAfterPost;
+import com.fbdblog.threads.PostSaveWork;
 
 
 import java.util.Date;
@@ -86,15 +87,13 @@ public class SavePost {
                     try{post.save();} catch (Exception ex){logger.error("",ex);}
                     //Clear the chart image cache
                     ClearCache.clearCacheForUser(user.getUserid(), app.getAppid());
-                    //Do Calculations
-                    DoCalculationsAfterPost.doCalculations(post);
-                    //Update Facebook
-                    //@todo before going to production remove limitation of not updating mini feed for userid=1
-                    if (user.getUserid()>1){
-                        FacebookApiWrapper facebookApiWrapper = new FacebookApiWrapper(userSession);
-                        facebookApiWrapper.postToFeed(post);
-                        facebookApiWrapper.updateProfile(user);
-                    }
+                    //Do the heavier work in a thread
+                    try{
+                        PostSaveWork psw = new PostSaveWork(post, userSession);
+                        psw.startThread();
+                    } catch(Exception ex){
+                        logger.error("", ex);
+                    }   
                 }
             } catch (Exception ex){
                 ex.printStackTrace();

@@ -9,13 +9,17 @@ import com.fbdblog.dao.Post;
 import com.fbdblog.dao.User;
 import com.fbdblog.dao.App;
 import com.fbdblog.dao.Throwdown;
+import com.fbdblog.dao.hibernate.HibernateUtil;
 import com.fbdblog.util.Num;
 import com.fbdblog.util.Str;
+import com.fbdblog.util.Time;
+import com.fbdblog.throwdown.ThrowdownStatus;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 import org.jdom.input.DOMBuilder;
 import org.w3c.dom.Document;
+import org.hibernate.criterion.Restrictions;
 
 import java.util.*;
 import java.net.URL;
@@ -170,7 +174,42 @@ public class FacebookApiWrapper {
                 fbml.append("</a>");
                 fbml.append("</center>");
 
-                //@todo Add throwdowns update to profile here
+                //Add throwdowns update to profile here
+                List<Throwdown> throwdowns=HibernateUtil.getSession().createCriteria(Throwdown.class)
+                        .add(Restrictions.or(
+                                            Restrictions.eq("fromuserid", userSession.getUser().getUserid()),
+                                            Restrictions.eq("tofacebookuid", userSession.getFacebookUser().getUid()))
+                                            )
+                        .add(Restrictions.eq("isaccepted", true))
+                        .add(Restrictions.ge("enddate", Time.xDaysAgoStart(Calendar.getInstance(), 7).getTime()))
+                        .setCacheable(true)
+                        .list();
+                if (throwdowns!=null && throwdowns.size()>0){
+                    fbml.append("<center>");
+                    fbml.append("<table cellpadding='2' cellspacing='1' border='0' width='100%'>");
+                    for (Iterator<Throwdown> iterator=throwdowns.iterator(); iterator.hasNext();) {
+                        Throwdown throwdown=iterator.next();
+                        ThrowdownStatus ts = new ThrowdownStatus(throwdown, userSession);
+                        fbml.append("<tr>");
+                            fbml.append("<td valign=\"top\" colspan=\"3\" bgcolor=\"#e6e6e6\"><center><a href=\"http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"\"><font style=\"color: #0000ff; font-weight: bold;\">"+throwdown.getName()+"</font></a></center></td>");
+                        fbml.append("</tr>");
+                        fbml.append("<tr>");
+                            fbml.append("<td valign=\"top\" colspan=\"3\"><center>Ends: "+Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))+"</center></td>");
+                        fbml.append("</tr>");
+                        fbml.append("<tr>");
+                             fbml.append("<td valign=\"top\"><center>"+ts.getFromStatus()+"</center></td>");
+                             fbml.append("<td valign=\"center\"></td>");
+                             fbml.append("<td valign=\"top\"><center>"+ts.getToStatus()+"</center></td>");
+                        fbml.append("</tr>");
+                        fbml.append("<tr>");
+                             fbml.append("<td valign=\"top\"><center><fb:profile-pic uid=\""+ts.getFromFacebookUser().getUid()+"\" size=\"square\" linked=\"false\"/><br/>"+ts.getFromFacebookUser().getFirst_name()+" "+ts.getFromFacebookUser().getLast_name()+"</center></td>");
+                             fbml.append("<td valign=\"center\"><center>vs.</center></td>");
+                             fbml.append("<td valign=\"top\"><center><fb:profile-pic uid=\""+ts.getToFacebookUser().getUid()+"\" size=\"square\" linked=\"false\"/><br/>"+ts.getToFacebookUser().getFirst_name()+" "+ts.getToFacebookUser().getLast_name()+"</center></td>");
+                        fbml.append("</tr>");
+                    }
+                    fbml.append("</table>");
+                    fbml.append("</center>");
+                }
 
                 CharSequence cs = fbml.subSequence(0, fbml.length());
                 FacebookRestClient facebookRestClient = new FacebookRestClient(userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret(), userSession.getFacebooksessionkey());

@@ -20,6 +20,7 @@
 <%@ page import="com.fbdblog.util.Time" %>
 <%@ page import="com.fbdblog.calc.CalcUtil" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="com.fbdblog.throwdown.ThrowdownStatus" %>
 <%@ include file="header.jsp" %>
 
 
@@ -136,38 +137,42 @@ if (!throwdown.getIsaccepted() && !throwdown.getIsdeclined()){
 
 <center>
     <table cellspacing="0" cellpadding="0" border="0">
+
+
+
+
+
+
         <tr>
-            <td height="50" valign="top"><center><img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><%=fromFacebookUser.getFirst_name()%> <%=fromFacebookUser.getLast_name()%></center></td>
+            <td height="50" valign="top" width="75"><center><font style="font-size: 10px; font-weight: bold;"><%=fromFacebookUser.getFirst_name()%><br/><%=fromFacebookUser.getLast_name()%></font><br/><img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><img src="<%=BaseUrl.get(false)%>images/throwdown-body.gif" alt="" width="85" height="189"/></center></td>
             <td rowspan="3" valign="top"><img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="10" height="1"/></td>
             <td rowspan="3" valign="top">
-
-
-
                     <%
                         String hisher = "his";
                         if (!fromFacebookUser.getSex().equals("male")){
                             hisher = "her";
                         }
                     %>
-
-                    <center><font style="font-size: 35px; color: #cccccc;">vs.</font></center>
-                    <br/><br/>
-                    <%=fromFacebookUser.getFirst_name()%> <%=fromFacebookUser.getLast_name()%>
+                    <center>
+                    <img src="<%=BaseUrl.get(false)%>images/throwdown-vs-big.gif" alt="" width="128" height="149"/>
                     <br/>
-                    hereby challenges
+                    <font style="font-size: 14px; font-weight: bold;"><%=fromFacebookUser.getFirst_name()%> <%=fromFacebookUser.getLast_name()%></font>
                     <br/>
-                    <%=toFacebookUser.getFirst_name()%> <%=toFacebookUser.getLast_name()%>
+                    <font style="font-size: 10px; font-weight: bold;">hereby challenges</font>
                     <br/>
-                    to a Throwdown called
+                    <font style="font-size: 14px; font-weight: bold;"><%=toFacebookUser.getFirst_name()%> <%=toFacebookUser.getLast_name()%></font>
                     <br/>
-                    <%=throwdown.getName()%>.
+                    <font style="font-size: 10px; font-weight: bold;">to a Throwdown called</font>
+                    <br/>
+                    <font style="font-size: 18px; font-weight: bold; color: #ff0000;"><%=throwdown.getName()%></font>
                     <br/>
                     <br/>
-                    <%=fromFacebookUser.getFirst_name()%> wages that on
+                    <font style="font-size: 10px; font-weight: bold;"><%=fromFacebookUser.getFirst_name()%> says that on</font>
                     <br/>
-                    <%=Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))%>
+                    <font style="font-size: 10px; font-weight: bold;"><%=Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))%></font>
                     <br/>
-                    <%=hisher%> value of
+                    <font style="font-size: 10px; font-weight: bold;"><%=hisher%> value of</font>
+                    <br/>
                     <%
                     //It's a question
                     if (throwdown.getQuestionid()>0){
@@ -182,7 +187,7 @@ if (!throwdown.getIsaccepted() && !throwdown.getIsdeclined()){
                             for (Iterator<Question> iterator1=questions.iterator(); iterator1.hasNext();) {
                                 Question question=iterator1.next();
                                 %>
-                                <%=question.getQuestion()%>
+                                <font style="font-size: 12px; font-weight: bold;"><%=question.getQuestion()%></font>
                                 <%
                             }
                         }
@@ -199,87 +204,71 @@ if (!throwdown.getIsaccepted() && !throwdown.getIsdeclined()){
                             for (Iterator<Questioncalc> iterator1=questioncalcs.iterator(); iterator1.hasNext();) {
                                 Questioncalc questioncalc=iterator1.next();
                                 %>
-                                <%=questioncalc.getName()%>
+                                <font style="font-size: 12px; font-weight: bold;"><%=questioncalc.getName()%></font>
                                 <%
                             }
                         }
                     }
                     %>
                     <br/>
-                    will be
+                    <font style="font-size: 10px; font-weight: bold;">will be</font>
                     <br/>
                     <%
                     if (throwdown.getIsgreaterthan()){
                         %>
-                        greater than
+                        <font style="font-size: 12px; font-weight: bold;">greater than</font>
                         <%
                     } else {
                         %>
-                        less than
+                        <font style="font-size: 10px; font-weight: bold;">less than</font>
                         <%
                     }
                     %>
                     <br/>
-                    <%=toFacebookUser.getFirst_name()%> <%=toFacebookUser.getLast_name()%>'s.
+                    <font style="font-size: 10px; font-weight: bold;"><%=toFacebookUser.getFirst_name()%> <%=toFacebookUser.getLast_name()%>'s.</font>
+                    </center>
 
             </td>
             <td rowspan="3" valign="top"><img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="10" height="1"/></td>
-            <td height="50" valign="top"><center><img src="<%=BaseUrl.get(false)%>images/facebook-50x50-placeholder.gif" alt="" width="50" height="50"/><br/><%=toFacebookUser.getFirst_name()%> <%=toFacebookUser.getLast_name()%></center></td>
+            <td height="50" valign="top" width="75"><center><font style="font-size: 10px; font-weight: bold;"><%=toFacebookUser.getFirst_name()%><br/><%=toFacebookUser.getLast_name()%></font><br/><img src="<%=BaseUrl.get(false)%>images/facebook-50x50-placeholder.gif" alt="" width="50" height="50"/><br/><img src="<%=BaseUrl.get(false)%>images/throwdown-body.gif" alt="" width="85" height="189"/></center></td>
         </tr>
-        <tr>
-            <td valign="top"><!--Body Left--></td>
-            <td valign="top"><!--Body Right--></td>
-        </tr>
+
 
         <%
         //If the challenge has been accepted
         if (throwdown.getIsaccepted()){
-        %>
-            <%
-                double fromValue = 0;
-                if (throwdown.getQuestionid()>0){
-                    fromValue = CalcUtil.getValueForQuestion(Question.get(throwdown.getQuestionid()), fromUser);
-                } else if (throwdown.getQuestioncalcid()>0) {
-                    fromValue = CalcUtil.getValueForCalc(Questioncalc.get(throwdown.getQuestioncalcid()), fromUser);
-                }
-            %>
-            <%
-                double toValue = 0;
-                if (toUser!=null){
-                    if (throwdown.getQuestionid()>0){
-                        toValue = CalcUtil.getValueForQuestion(Question.get(throwdown.getQuestionid()), toUser);
-                    } else if (throwdown.getQuestioncalcid()>0) {
-                        toValue = CalcUtil.getValueForCalc(Questioncalc.get(throwdown.getQuestioncalcid()), toUser);
-                    }
-                }
-            %>
-            <%
-            String fromStatus = "";
-            String toStatus = "";
-            if (fromValue==toValue){
-                fromStatus = "Tied.";
-                toStatus = "Tied.";
-            } else if (throwdown.getIsgreaterthan() && fromValue>toValue){
-                fromStatus = "Winning!";
-                toStatus = "Losing.";
-            } else if (!throwdown.getIsgreaterthan() && fromValue<toValue){
-                fromStatus = "Winning!";
-                toStatus = "Losing.";
-            } else {
-                fromStatus = "Losing.";
-                toStatus = "Winning!";
-            }
+            ThrowdownStatus throwdownStatus=new ThrowdownStatus(throwdown, userSession, fromFacebookUser, toFacebookUser, fromUser, toUser);
             %>
             <tr>
+                <%
+                String fromColor = "#ff6666";
+                if (throwdownStatus.getIsFromWinning()){
+                    fromColor = "#cccc99";
+                }
+                %>
                 <td valign="top">
-                    <font style="font-size: 13px;"><%=fromStatus%></font>
+                    <div style="background: <%=fromColor%>; border: 1px solid #000000;">
+                    <center>
+                    <font style="font-size: 13px;"><%=throwdownStatus.getFromStatus()%></font>
                     <br/>
-                    <font style="font-size: 18px;"><%=Str.formatWithXDecimalPlaces(fromValue, 2)%></font>
+                    <font style="font-size: 18px;"><%=Str.formatWithXDecimalPlaces(throwdownStatus.getFromValue(), 2)%></font>
+                    </center>
+                    </div>
                 </td>
+                <%
+                String toColor = "#ff6666";
+                if (throwdownStatus.getIsToWinning()){
+                    toColor = "#cccc99";
+                }
+                %>
                 <td valign="top">
-                    <font style="font-size: 13px;"><%=toStatus%></font>
+                    <div style="background: <%=toColor%>; border: 1px solid #000000;">
+                    <center>
+                    <font style="font-size: 13px;"><%=throwdownStatus.getToStatus()%></font>
                     <br/>
-                    <font style="font-size: 18px;"><%=Str.formatWithXDecimalPlaces(toValue, 2)%></font>
+                    <font style="font-size: 18px;"><%=Str.formatWithXDecimalPlaces(throwdownStatus.getToValue(), 2)%></font>
+                    </center>
+                    </div>
                 </td>
             </tr>
         <%}%>

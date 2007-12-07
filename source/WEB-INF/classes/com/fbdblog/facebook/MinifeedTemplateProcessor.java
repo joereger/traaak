@@ -52,7 +52,7 @@ public class MinifeedTemplateProcessor {
 
         if (tag.equals("<$url$>")){
             if (app!=null){
-                return "http://apps.facebook.com/"+app.getFacebookappname()+"/?comparetouserid="+user.getUserid();
+                return "http://apps.facebook.com/"+app.getFacebookappname()+"/";
             } else {
                 return "";
             }
@@ -80,7 +80,9 @@ public class MinifeedTemplateProcessor {
                     int questionid = Integer.parseInt(tagSplit[1]);
                     Question question = Question.get(questionid);
                     Component ct = ComponentTypes.getComponentByID(question.getComponenttype(), question, post, user);
-                    return ct.getValueForDisplay();
+                    if (ct!=null){
+                        return ct.getValueForDisplay();
+                    }
                 }
             }
         }
