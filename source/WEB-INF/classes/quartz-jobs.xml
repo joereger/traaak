@@ -52,7 +52,27 @@
         </trigger>
     </job>
 
-
+    <job>
+        <job-detail>
+          <name>throwdownStatusScheduledTask</name>
+          <group>myJobs</group>
+          <job-class>com.fbdblog.scheduledjobs.ThrowdownStatusScheduledTask</job-class>
+          <volatility>false</volatility>
+          <durability>false</durability>
+          <recover>false</recover>
+        </job-detail>
+        <trigger>
+          <!-- Sample cron triggers: http://www.opensymphony.com/quartz/wikidocs/TutorialLesson6.html -->
+          <cron>
+            <name>throwdownStatusScheduledTaskTrigger</name>
+            <group>myTriggers</group>
+            <job-name>throwdownStatusScheduledTask</job-name>
+            <job-group>myJobs</job-group>
+            <!-- every x minutes -->
+            <cron-expression>0 0/10 * * * ?</cron-expression>
+          </cron>
+        </trigger>
+    </job>
 
 
 

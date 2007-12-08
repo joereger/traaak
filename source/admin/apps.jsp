@@ -30,6 +30,7 @@
 <td valign="top">ImpPerUser</td>
 <td valign="top">TotalImp</td>
 <td valign="top">Crosspromo?</td>
+<td valign="top"></td>
 </tr>
 <%
     double totalinstalls = 0;
@@ -80,7 +81,7 @@
                 %><a href='apps.jsp?action=togglecrosspromote&appid=<%=app.getAppid()%>'><img src="/images/misc-red-16.png" alt="" width="16" height="16" border="0"/></a><%
             }
             %>
-
+            <td valign="top"><%if (app.getFacebookinfinitesessionkey()==null || app.getFacebookinfinitesessionkey().equals("")){out.print("<font style=\"font-size: 8px;\">Infinite Session Key Missing</font>");}%></td>
             </td>
         </tr>
         <%

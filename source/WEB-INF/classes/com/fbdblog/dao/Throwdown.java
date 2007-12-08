@@ -30,6 +30,10 @@ public class Throwdown extends BasePersistentClass implements java.io.Serializab
      private int questioncalcid;
      private boolean isgreaterthan;
      private String name;
+     private boolean iscomplete;
+     private boolean isfromwinner;
+     private double fromvalue;
+     private double tovalue;
 
 
     //Validator
@@ -182,5 +186,37 @@ public class Throwdown extends BasePersistentClass implements java.io.Serializab
 
     public void setName(String name) {
         this.name=name;
+    }
+
+    public boolean getIscomplete() {
+        return iscomplete;
+    }
+
+    public void setIscomplete(boolean iscomplete) {
+        this.iscomplete=iscomplete;
+    }
+
+    public boolean getIsfromwinner() {
+        return isfromwinner;
+    }
+
+    public void setIsfromwinner(boolean isfromwinner) {
+        this.isfromwinner=isfromwinner;
+    }
+
+    public double getFromvalue() {
+        return fromvalue;
+    }
+
+    public void setFromvalue(double fromvalue) {
+        this.fromvalue=fromvalue;
+    }
+
+    public double getTovalue() {
+        return tovalue;
+    }
+
+    public void setTovalue(double tovalue) {
+        this.tovalue=tovalue;
     }
 }

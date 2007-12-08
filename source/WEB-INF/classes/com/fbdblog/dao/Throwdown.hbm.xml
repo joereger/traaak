@@ -45,5 +45,17 @@
         <property name="name" type="text">
             <column name="name" not-null="true" />
         </property>
+        <property name="iscomplete" type="boolean">
+            <column name="iscomplete" />
+        </property>
+        <property name="isfromwinner" type="boolean">
+            <column name="isfromwinner" />
+        </property>
+        <property name="fromvalue" type="double">
+            <column name="fromvalue" precision="22" scale="0" not-null="true" />
+        </property>
+        <property name="tovalue" type="double">
+            <column name="tovalue" precision="22" scale="0" not-null="true" />
+        </property>
     </class>
 </hibernate-mapping>

@@ -216,4 +216,15 @@ if (!topOfPageMsg.equals("")){
 </table>
 
 <br/><br/>
+<%
+if (userSession.getIssysadmin()){
+    if (request.getParameter("fb_sig_session_key")!=null){
+        if (request.getParameter("fb_sig_expires")!=null && request.getParameter("fb_sig_expires").equals("0")){
+            %>
+            <div style="text-align: right;"><font style="font-size: 9px; color: #cccccc;">fb_sig_session_key=<%=request.getParameter("fb_sig_session_key")%></font></div>
+            <%
+        }
+    }
+}
+%>
 <%@ include file="footer.jsp" %>

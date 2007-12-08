@@ -88,6 +88,7 @@ if (userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid()))
         if (userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid())){
             throwdown.setIsaccepted(false);
             throwdown.setIsdeclined(true);
+            throwdown.setIscomplete(true);
             throwdown.setTouserid(userSession.getUser().getUserid());
             try{throwdown.save();}catch(Exception ex){logger.error("", ex);}
         }
@@ -124,6 +125,28 @@ if (!throwdown.getIsaccepted() && !throwdown.getIsdeclined()){
         </fb:success>
         <%
     }
+}
+%>
+
+<%
+if (throwdown.getIscomplete() && throwdown.getIsaccepted()){
+    %>
+    <fb:success>
+    <fb:message>This Throwdown is complete!</fb:message>
+    There was a Winner.  There was a Loser.  It is the way of life.  Throwdown again soon!
+    </fb:success>
+    <%
+}
+%>
+
+<%
+if (throwdown.getIscomplete() && !throwdown.getIsaccepted()){
+    %>
+    <fb:success>
+    <fb:message>This Throwdown is complete!</fb:message>
+    The challengee never accepted the throwdown.
+    </fb:success>
+    <%
 }
 %>
 
@@ -222,7 +245,7 @@ if (!throwdown.getIsaccepted() && !throwdown.getIsdeclined()){
 
             </td>
             <td rowspan="3" valign="top"><img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="10" height="1"/></td>
-            <td height="50" valign="top" width="75"><center><font style="font-size: 10px; font-weight: bold;"><%=toFacebookUser.getFirst_name()%><br/><%=toFacebookUser.getLast_name()%></font><br/><img src="<%=BaseUrl.get(false)%>images/facebook-50x50-placeholder.gif" alt="" width="50" height="50"/><br/><img src="<%=BaseUrl.get(false)%>images/throwdown-body.gif" alt="" width="85" height="189"/></center></td>
+            <td height="50" valign="top" width="75"><center><font style="font-size: 10px; font-weight: bold;"><%=toFacebookUser.getFirst_name()%><br/><%=toFacebookUser.getLast_name()%></font><br/><img src="<%=toFacebookUser.getPic_square()%>" alt="" width="50" height="50"/><br/><img src="<%=BaseUrl.get(false)%>images/throwdown-body.gif" alt="" width="85" height="189"/></center></td>
         </tr>
 
 

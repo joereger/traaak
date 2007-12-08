@@ -37,6 +37,7 @@
         app.setAdhistoryright("");
         app.setAdpostsave("");
         app.setAdunderchart("");
+        app.setFacebookinfinitesessionkey("");
     }
 %>
 
@@ -48,6 +49,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
     app.setFacebookappname(request.getParameter("facebookappname"));
     app.setFacebookapikey(request.getParameter("facebookapikey"));
     app.setFacebookapisecret(request.getParameter("facebookapisecret"));
+    app.setFacebookinfinitesessionkey(request.getParameter("facebookinfinitesessionkey"));
     app.setAdglobalheader(request.getParameter("adglobalheader"));
     app.setAdhistoryright(request.getParameter("adhistoryright"));
     app.setAdpostsave(request.getParameter("adpostsave"));
@@ -138,6 +140,14 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
             </td>
             <td valign="top">
                 <input type="text" name="facebookapisecret" value="<%=app.getFacebookapisecret()%>" size="45" maxlength="255">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                Facebook Infinite Session Key
+            </td>
+            <td valign="top">
+                <input type="text" name="facebookinfinitesessionkey" value="<%=app.getFacebookinfinitesessionkey()%>" size="45" maxlength="255">
             </td>
         </tr>
         <tr>

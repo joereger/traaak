@@ -28,6 +28,7 @@ public class App extends BasePersistentClass implements java.io.Serializable, Re
      private String facebookappname;
      private String facebookapikey;
      private String facebookapisecret;
+     private String facebookinfinitesessionkey;
      private int primarychartid;
      private String minifeedtemplate;
      private boolean crosspromote;
@@ -206,5 +207,13 @@ public class App extends BasePersistentClass implements java.io.Serializable, Re
 
     public void setAdunderchart(String adunderchart) {
         this.adunderchart=adunderchart;
+    }
+
+    public String getFacebookinfinitesessionkey() {
+        return facebookinfinitesessionkey;
+    }
+
+    public void setFacebookinfinitesessionkey(String facebookinfinitesessionkey) {
+        this.facebookinfinitesessionkey=facebookinfinitesessionkey;
     }
 }

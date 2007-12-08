@@ -49,6 +49,10 @@
             throwdown.setFromuserid(userSession.getUser().getUserid());
             throwdown.setIsaccepted(false);
             throwdown.setIsdeclined(false);
+            throwdown.setIscomplete(false);
+            throwdown.setIsfromwinner(false);
+            throwdown.setFromvalue(0);
+            throwdown.setTovalue(0);
             if (request.getParameter("isgreaterthan") != null && request.getParameter("isgreaterthan").equals("1")) {
                 throwdown.setIsgreaterthan(true);
             } else {

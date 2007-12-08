@@ -30,6 +30,9 @@
         <property name="facebookapisecret" type="text">
             <column name="facebookapisecret" not-null="true"/>
         </property>
+        <property name="facebookinfinitesessionkey" type="text">
+            <column name="facebookinfinitesessionkey" />
+        </property>
         <property name="primarychartid" type="int">
             <column name="primarychartid" not-null="true" />
         </property>

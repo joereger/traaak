@@ -1,9 +1,6 @@
 package com.fbdblog.throwdown;
 
-import com.fbdblog.dao.Throwdown;
-import com.fbdblog.dao.Question;
-import com.fbdblog.dao.Questioncalc;
-import com.fbdblog.dao.User;
+import com.fbdblog.dao.*;
 import com.fbdblog.calc.CalcUtil;
 import com.fbdblog.facebook.FacebookUser;
 import com.fbdblog.facebook.FacebookApiWrapper;
@@ -17,7 +14,7 @@ import com.fbdblog.session.UserSession;
 public class ThrowdownStatus {
 
     private Throwdown throwdown;
-    private UserSession userSession;
+    private String sessionkey;
     private double fromValue = 0;
     private double toValue = 0;
     private FacebookUser fromFacebookUser;
@@ -29,16 +26,22 @@ public class ThrowdownStatus {
     private boolean isFromWinning = false;
     private boolean isToWinning = false;
 
-    public ThrowdownStatus(Throwdown throwdown, UserSession userSession){
+    public ThrowdownStatus(Throwdown throwdown){
         this.throwdown = throwdown;
-        this.userSession = userSession;
+        initUsers();
+        initBean();
+    }
+
+    public ThrowdownStatus(Throwdown throwdown, String sessionkey){
+        this.throwdown = throwdown;
+        this.sessionkey = sessionkey;
         initUsers();
         initBean();
     }
 
     public ThrowdownStatus(Throwdown throwdown, UserSession userSession, FacebookUser fromFacebookUser, FacebookUser toFacebookUser, User fromUser, User toUser){
         this.throwdown = throwdown;
-        this.userSession = userSession;
+        this.sessionkey = userSession.getFacebooksessionkey();
         this.fromFacebookUser = fromFacebookUser;
         this.toFacebookUser = toFacebookUser;
         this.fromUser = fromUser;
@@ -48,8 +51,13 @@ public class ThrowdownStatus {
     }
 
     private void initUsers(){
-        FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
         fromUser = User.get(throwdown.getFromuserid());
+        FacebookApiWrapper faw = null;
+        if (sessionkey!=null){
+            faw=new FacebookApiWrapper(App.get(throwdown.getAppid()), fromUser, sessionkey);
+        } else {
+            faw=new FacebookApiWrapper(App.get(throwdown.getAppid()), fromUser);
+        }
         fromFacebookUser = faw.getFacebookUserByUid(fromUser.getFacebookuid());
         toFacebookUser = faw.getFacebookUserByUid(throwdown.getTofacebookuid());
         if (throwdown.getTouserid()>0){
@@ -58,36 +66,57 @@ public class ThrowdownStatus {
     }
 
     private void initBean(){
-        if (throwdown.getQuestionid()>0){
-            fromValue = CalcUtil.getValueForQuestion(Question.get(throwdown.getQuestionid()), fromUser);
-        } else if (throwdown.getQuestioncalcid()>0) {
-            fromValue = CalcUtil.getValueForCalc(Questioncalc.get(throwdown.getQuestioncalcid()), fromUser);
-        }
-        if (toUser!=null){
+        if(!throwdown.getIscomplete()){
             if (throwdown.getQuestionid()>0){
-                toValue = CalcUtil.getValueForQuestion(Question.get(throwdown.getQuestionid()), toUser);
+                fromValue = CalcUtil.getValueForQuestion(Question.get(throwdown.getQuestionid()), fromUser);
             } else if (throwdown.getQuestioncalcid()>0) {
-                toValue = CalcUtil.getValueForCalc(Questioncalc.get(throwdown.getQuestioncalcid()), toUser);
+                fromValue = CalcUtil.getValueForCalc(Questioncalc.get(throwdown.getQuestioncalcid()), fromUser);
             }
-        }
-        if (fromValue==toValue){
-            fromStatus = "Tied.";
-            toStatus = "Tied.";
-        } else if (throwdown.getIsgreaterthan() && fromValue>toValue){
-            fromStatus = "Winning!";
-            isFromWinning = true;
-            toStatus = "Losing.";
-            isToWinning = false;
-        } else if (!throwdown.getIsgreaterthan() && fromValue<toValue){
-            fromStatus = "Winning!";
-            isFromWinning = true;
-            toStatus = "Losing.";
-            isToWinning = false;
+            if (toUser!=null){
+                if (throwdown.getQuestionid()>0){
+                    toValue = CalcUtil.getValueForQuestion(Question.get(throwdown.getQuestionid()), toUser);
+                } else if (throwdown.getQuestioncalcid()>0) {
+                    toValue = CalcUtil.getValueForCalc(Questioncalc.get(throwdown.getQuestioncalcid()), toUser);
+                }
+            }
+            if (fromValue==toValue){
+                fromStatus = "Tied.";
+                toStatus = "Tied.";
+            } else if (throwdown.getIsgreaterthan() && fromValue>toValue){
+                fromStatus = "Winning!";
+                isFromWinning = true;
+                toStatus = "Losing.";
+                isToWinning = false;
+            } else if (!throwdown.getIsgreaterthan() && fromValue<toValue){
+                fromStatus = "Winning!";
+                isFromWinning = true;
+                toStatus = "Losing.";
+                isToWinning = false;
+            } else {
+                fromStatus = "Losing.";
+                isFromWinning = false;
+                toStatus = "Winning!";
+                isToWinning = true;
+            }
         } else {
-            fromStatus = "Losing.";
-            isFromWinning = false;
-            toStatus = "Winning!";
-            isToWinning = true;
+            fromValue = throwdown.getFromvalue();
+            toValue = throwdown.getTovalue();
+            if (throwdown.getIsfromwinner()){
+                fromStatus = "Winner!";
+                isFromWinning = true;
+                toStatus = "Loser.";
+                isToWinning = false;
+            } else if (throwdown.getIsfromwinner() && (fromValue!=toValue)) {
+                fromStatus = "Loser.";
+                isFromWinning = false;
+                toStatus = "Winner!";
+                isToWinning = true;
+            } else {
+                fromStatus = "Tie.";
+                isFromWinning = false;
+                toStatus = "Tie.";
+                isToWinning = false;
+            }
         }
     }
 
