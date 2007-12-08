@@ -227,7 +227,7 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
 
     </td>
     <td valign="top" width="300">
-        <img src="<%=BaseUrl.get(false)%>images/throwdown-title.gif" alt="" width="300" height="170" align="right"/>
+        <a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdownadd"><img src="<%=BaseUrl.get(false)%>images/throwdown-title.gif" alt="" width="300" height="170" align="right" border="0"/></a>
     </td>
 </tr>
 </table>

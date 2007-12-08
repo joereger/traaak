@@ -18,6 +18,7 @@
 <%@ page import="com.fbdblog.ui.DateTimeHtmlInput" %>
 <%@ page import="com.fbdblog.dao.*" %>
 <%@ page import="com.fbdblog.util.ValidationException" %>
+<%@ page import="com.fbdblog.util.Time"%>
 <%@ include file="header.jsp" %>
 
 <%
@@ -141,7 +142,7 @@ if (!topOfPageMsg.equals("")){
 <center>
     <table cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <td height="50" valign="top"><center><img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/></center></td>
+            <td height="50" valign="top"><center><img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><img src="<%=BaseUrl.get(false)%>images/throwdown-body.gif" alt="" width="85" height="189"/></center></td>
             <td rowspan="2" valign="top"><img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="10" height="1"/></td>
             <td rowspan="2" valign="top">
                 <form action="">
@@ -155,11 +156,12 @@ if (!topOfPageMsg.equals("")){
                         }
                     %>
 
-                    <center><font style="font-size: 35px; color: #cccccc;">vs.</font></center>
-                    <br/><br/>
-                    <%=userSession.getFacebookUser().getFirst_name()%> <%=userSession.getFacebookUser().getLast_name()%>
+                    <center>
+                    <img src="<%=BaseUrl.get(false)%>images/throwdown-vs-big.gif" alt="" width="128" height="149"/>
                     <br/>
-                    hereby challenges
+                    <font style="font-size: 14px; font-weight: bold;"><%=userSession.getFacebookUser().getFirst_name()%> <%=userSession.getFacebookUser().getLast_name()%></font>
+                    <br/>
+                    <font style="font-size: 10px; font-weight: bold;">hereby challenges</font>
                     <br/>
                     <select name="facebookuid">
                     <%
@@ -176,16 +178,17 @@ if (!topOfPageMsg.equals("")){
                     %>
                     </select>
                     <br/>
-                    to a Throwdown called
+                    <font style="font-size: 10px; font-weight: bold;">to a Throwdown called</font>
                     <br/>
                     <input type="text" name="name" value="<%=userSession.getApp().getTitle()%> Throwdown Challenge">.
                     <br/>
                     <br/>
-                    <%=userSession.getFacebookUser().getFirst_name()%> says that on
+                    <font style="font-size: 10px; font-weight: bold;"><%=userSession.getFacebookUser().getFirst_name()%> says that on</font>
                     <br/>
-                    <%=DateTimeHtmlInput.getHtml("enddate", Calendar.getInstance(), "", "")%>
+                    <%=DateTimeHtmlInput.getHtml("enddate", Time.xDaysAgoStart(Calendar.getInstance(), -7), "", "")%>
                     <br/>
-                    <%=hisher%> value of
+                    <font style="font-size: 10px; font-weight: bold;"><%=hisher%> value of</font>
+                    <div style="text-align: left;">
                     <%
                     for (Iterator<Question> iterator=userSession.getApp().getQuestions().iterator(); iterator.hasNext();) {
                         Question question=iterator.next();
@@ -211,26 +214,24 @@ if (!topOfPageMsg.equals("")){
                         }
                     }
                     %>
+                    </div>
                     <br/>
-                    will be
+                    <font style="font-size: 10px; font-weight: bold;">will be</font>
                     <br/>
                     <select name="isgreaterthan">
                         <option value="1">Greater Than</option>
                         <option value="0">Less Than</option>
                     </select>
                     <br/>
-                    <%=hisher%> competitor's.
+                    <font style="font-size: 10px; font-weight: bold;"><%=hisher%> competitor's.</font>
                     <br/><br/>
                     <input id="sendbutton" type="submit" value="Throwdown!!!" />
 
+                    </center>
                 </form>
             </td>
             <td rowspan="2" valign="top"><img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="10" height="1"/></td>
-            <td height="50" valign="top"><center><img src="<%=BaseUrl.get(false)%>images/facebook-50x50-placeholder.gif" alt="" width="50" height="50"/></center></td>
-        </tr>
-        <tr>
-            <td valign="top"><!--Body Left--></td>
-            <td valign="top"><!--Body Right--></td>
+            <td height="50" valign="top"><center><img src="<%=BaseUrl.get(false)%>images/facebook-50x50-placeholder.gif" alt="" width="50" height="50"/><br/><img src="<%=BaseUrl.get(false)%>images/throwdown-body.gif" alt="" width="85" height="189"/></center></td>
         </tr>
     </table>
 </center>
