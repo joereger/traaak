@@ -11,6 +11,7 @@
 <%@ page import="com.fbdblog.scheduledjobs.ImpressionCache" %>
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
 <%@ page import="java.util.Calendar" %>
+<%@ page import="java.net.URLEncoder" %>
 <%
     //Logger
     Logger logger=Logger.getLogger(this.getClass());
@@ -38,9 +39,13 @@
                 SendXMPPMessage xmpp=new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "Redirecting an unknown facebook user to add app page.");
                 xmpp.send();
             }
+            //Get the current url
+            UrlSplitter urlSplitter=new UrlSplitter(request);
+            String next="http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?"+urlSplitter.getQuerystring();
+            next = URLEncoder.encode(next, "UTF-8");
             //Redirect to app add page with fbml
-            logger.debug("<fb:redirect url=\"http://www.facebook.com/add.php?api_key=" + userSession.getApp().getFacebookapikey() + "\" />");
-            out.print("<fb:redirect url=\"http://www.facebook.com/add.php?api_key=" + userSession.getApp().getFacebookapikey() + "\" />");
+            logger.debug("<fb:redirect url=\"http://www.facebook.com/add.php?api_key=" + userSession.getApp().getFacebookapikey() + "&next="+next+"\" />");
+            out.print("<fb:redirect url=\"http://www.facebook.com/add.php?api_key=" + userSession.getApp().getFacebookapikey() + "&next="+next+"\" />");
             return;
         } else {
             //@todo what to do with unknown app?

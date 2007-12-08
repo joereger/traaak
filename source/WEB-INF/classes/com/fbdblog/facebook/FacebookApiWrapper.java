@@ -138,11 +138,12 @@ public class FacebookApiWrapper {
                 titleTemplate.append("{actor} challenged {toname} to a throwdown!");
 
                 StringBuffer bodyTemplate = new StringBuffer();
-                bodyTemplate.append("{throwdownname} {toname} must now choose whether to accept this challenge.");
+                bodyTemplate.append("{toname} must now choose whether to accept this throwdown challenge called {throwdownname}.");
 
                 TemplatizedAction action = new TemplatizedAction(titleTemplate.toString(), bodyTemplate.toString());
                 action.addTargetIds(throwdown.getTofacebookuid());
                 action.addTitleParam("toname", toname);
+                action.addBodyParam("toname", toname);
                 action.addBodyParam("throwdownname", "<a href='http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>");
 
                 FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);

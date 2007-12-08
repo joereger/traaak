@@ -101,6 +101,7 @@ if (request.getParameter("facebookuid")==null) {
                     if (facebookUser.getHas_added_app()){
                         if (chart!=null){
                             //Need to find the userid of the person selected
+                            //@todo Optimize this by only making one db call higher up in the code
                             User selectedUser = (User)HibernateUtil.getSession().createCriteria(User.class)
                                        .add(Restrictions.eq("facebookuid", facebookUser.getUid()))
                                        .setCacheable(true)
