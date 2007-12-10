@@ -62,7 +62,7 @@ if (userSession.getIsnewappforthisuser()){
     StringBuffer tmp = new StringBuffer();
     tmp.append("<fb:success>\n" +
     "     <fb:message>Howdy!</fb:message>\n" +
-    "     Glad you've added "+userSession.getApp().getTitle()+".  Track some stuff and get some charts.  Just realize that everything you track is public.\n" +
+    "     Glad you've added "+userSession.getApp().getTitle()+".  Track some stuff and get some charts.  Just realize that everything you track is public unless you change your <a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=settings'>settings</a>.\n" +
     "</fb:success>");
     topOfPageMsg = tmp.toString();
 }
@@ -126,6 +126,7 @@ if (!topOfPageMsg.equals("")){
                 <%
             }
             %>
+
             <%
             if (userSession.getUser() != null) {
                 int totalposts = NumFromUniqueResult.getInt("select count(*) from Post where userid='"+userSession.getUser().getUserid()+"' and appid='"+userSession.getApp().getAppid()+"'");
@@ -166,9 +167,28 @@ if (!topOfPageMsg.equals("")){
                     }
                     %>
                     <textarea cols="30" rows="3" name="<%=AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER%>notes"><%=notes%></textarea>
-                    <br/>
-                    <input id="sendbutton" type="submit" value="Track It" />
+                    <br/><br/>
+                    <input id="sendbutton" type="submit" value="Track this Stuff" />
                 </div>
+                <%
+                if (userSession.getUserappsettings()!=null && userSession.getUserappsettings().getIsprivate()){
+                    %>
+                    <fb:success>
+                    <fb:message>Private Mode</fb:message>
+                    Your friends won't be able to see your stuff. You can make stuff public <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+                    </fb:success>
+                    <br/>
+                    <%
+                } else {
+                    %>
+                    <fb:success>
+                    <fb:message>Public Mode</fb:message>
+                    Everything you post is visible to friends. Make stuff private <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+                    </fb:success>
+                    <br/>
+                    <%
+                }
+                %>
             </form>
         </td>
         <td valign="top" width="400">

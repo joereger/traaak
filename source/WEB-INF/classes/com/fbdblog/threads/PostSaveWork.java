@@ -32,9 +32,11 @@ public class PostSaveWork implements Runnable, Serializable {
             //Do Calculations
             DoCalculationsAfterPost.doCalculations(post);
             //Update Facebook
-            FacebookApiWrapper facebookApiWrapper = new FacebookApiWrapper(userSession);
-            facebookApiWrapper.postToFeed(post);
-            facebookApiWrapper.updateProfile(userSession.getUser());
+            if (!userSession.getUserappsettings().getIsprivate()){ 
+                FacebookApiWrapper facebookApiWrapper = new FacebookApiWrapper(userSession);
+                facebookApiWrapper.postToFeed(post);
+                facebookApiWrapper.updateProfile(userSession.getUser());
+            }
         } catch (Exception ex){
             logger.error("", ex);
         }

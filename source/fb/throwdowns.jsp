@@ -19,6 +19,7 @@
 <%@ page import="com.fbdblog.facebook.FacebookApiWrapper" %>
 <%@ page import="com.fbdblog.util.Time" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="com.fbdblog.throwdown.ThrowdownPrivacy" %>
 <%@ include file="header.jsp" %>
 
 
@@ -152,7 +153,7 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
             <%
                 if (1 == 1) {
                     ArrayList<Integer> frienduids=faw.getFriendUids();
-                    if (frienduids!=null && frienduids.size()>0) {
+                    if (frienduids != null && frienduids.size()>0) {
                         //frienduidsFql will be used in the main query on the throwdowns tabls
                         //userFql is used in a pre query to get the userids of those people who are this user's friends
                         StringBuffer frienduidsFql=new StringBuffer();
@@ -171,12 +172,12 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
                         frienduidsFql.append(" ) ");
                         userFql.append(" ) ");
                         //Get some fql for the throwdown table's fromuserid col
-                        StringBuffer tduserFql = new StringBuffer();
+                        StringBuffer tduserFql=new StringBuffer();
                         List<Integer> userids=HibernateUtil.getSession().createQuery("select userid from User where " + userFql).list();
-                        if (userids!=null && userids.size()>0){
+                        if (userids != null && userids.size()>0) {
                             tduserFql.append(" ( ");
                             for (Iterator<Integer> iterator=userids.iterator(); iterator.hasNext();) {
-                                Integer userid = iterator.next();
+                                Integer userid=iterator.next();
                                 tduserFql.append(" fromuserid='" + userid + "'");
                                 if (iterator.hasNext()) {
                                     tduserFql.append(" OR ");
@@ -184,27 +185,29 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
                             }
                             tduserFql.append(" ) ");
                         }
-                        if (tduserFql.length()==0){
+                        if (tduserFql.length() == 0) {
                             tduserFql.append(" (fromuserid='-1') "); //Something that won't trigger a match
                         }
                         //Query the throwdown table using all this convoluted fql... hope it works
-                        List<Throwdown> throwdowns=HibernateUtil.getSession().createQuery("from Throwdown where ( "+frienduidsFql+" OR "+tduserFql+" ) AND (fromuserid<>'"+userSession.getUser().getUserid()+"') AND (tofacebookuid<>'"+userSession.getUser().getFacebookuid()+"')").list();
+                        List<Throwdown> throwdowns=HibernateUtil.getSession().createQuery("from Throwdown where ( " + frienduidsFql + " OR " + tduserFql + " ) AND (fromuserid<>'" + userSession.getUser().getUserid() + "') AND (tofacebookuid<>'" + userSession.getUser().getFacebookuid() + "')").list();
                         if (throwdowns != null && throwdowns.size()>0) {
                             for (Iterator<Throwdown> iterator=throwdowns.iterator(); iterator.hasNext();) {
                                 Throwdown throwdown=iterator.next();
-                                User fromUser=User.get(throwdown.getFromuserid());
-                                FacebookUser fromFbUser=faw.getFacebookUserByUid(fromUser.getFacebookuid());
-                                FacebookUser toFbUser = faw.getFacebookUserByUid(throwdown.getTofacebookuid());
-                                %>
-                                 <tr>
-                                     <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))%></font></td>
-                                 </tr>
-                                 <tr>
-                                     <td valign="top" width="40%"><div style="text-align: right;"><img src="<%=fromFbUser.getPic_square()%>" alt="" width="50" height="50"/><br/><%=fromFbUser.getFirst_name()%><br/><%=fromFbUser.getLast_name()%></div></td>
-                                     <td valign="top" width="20%"><center><font style="font-size: 14px; font-weight: bold; color: #666666;">vs.</font></center></td>
-                                     <td valign="top" width="40%"><img src="<%=toFbUser.getPic_square()%>" alt="" width="50" height="50"/><br/><%=toFbUser.getFirst_name()%><br/><%=toFbUser.getLast_name()%></td>
-                                 </tr>
-                                 <%
+                                if (!ThrowdownPrivacy.isok(throwdown)) {
+                                    User fromUser=User.get(throwdown.getFromuserid());
+                                    FacebookUser fromFbUser=faw.getFacebookUserByUid(fromUser.getFacebookuid());
+                                    FacebookUser toFbUser=faw.getFacebookUserByUid(throwdown.getTofacebookuid());
+                                     %>
+                                     <tr>
+                                         <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))%></font></td>
+                                     </tr>
+                                     <tr>
+                                         <td valign="top" width="40%"><div style="text-align: right;"><img src="<%=fromFbUser.getPic_square()%>" alt="" width="50" height="50"/><br/><%=fromFbUser.getFirst_name()%><br/><%=fromFbUser.getLast_name()%></div></td>
+                                         <td valign="top" width="20%"><center><font style="font-size: 14px; font-weight: bold; color: #666666;">vs.</font></center></td>
+                                         <td valign="top" width="40%"><img src="<%=toFbUser.getPic_square()%>" alt="" width="50" height="50"/><br/><%=toFbUser.getFirst_name()%><br/><%=toFbUser.getLast_name()%></td>
+                                     </tr>
+                                     <%
+                                 }
                             }
                         } else {
                             %>

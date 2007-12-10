@@ -3,12 +3,16 @@ package com.fbdblog.session;
 import com.fbdblog.dao.User;
 import com.fbdblog.dao.Userrole;
 import com.fbdblog.dao.App;
+import com.fbdblog.dao.Userappsettings;
+import com.fbdblog.dao.hibernate.HibernateUtil;
 import com.fbdblog.facebook.FacebookUser;
 import org.apache.log4j.Logger;
+import org.hibernate.criterion.Restrictions;
 
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.List;
 import java.io.Serializable;
 
 /**
@@ -23,6 +27,7 @@ public class UserSession implements Serializable {
 
     private int userid;
     private int appid;
+    private int userappsettingsid;
     private boolean isloggedin = false;
     private boolean issysadmin = false;
     private String facebooksessionkey = "";
@@ -70,6 +75,27 @@ public class UserSession implements Serializable {
             appid = app.getAppid();
         } else {
             appid = 0;
+        }
+    }
+
+    public Userappsettings getUserappsettings() {
+        Logger logger = Logger.getLogger(this.getClass().getName());
+        if (userappsettingsid>0){
+            return Userappsettings.get(userappsettingsid);
+        } else {
+            Userappsettings userappsettings = FindUserappsettings.get(User.get(userid), App.get(appid));
+            if (userappsettings!=null){
+                userappsettingsid = userappsettings.getUserappsettingsid();
+            }
+            return userappsettings;
+        }
+    }
+
+    public void setUserappsettings(Userappsettings userappsettings) {
+        if (userappsettings!=null){
+            userappsettingsid = userappsettings.getUserappsettingsid();
+        } else {
+            userappsettingsid = 0;
         }
     }
 

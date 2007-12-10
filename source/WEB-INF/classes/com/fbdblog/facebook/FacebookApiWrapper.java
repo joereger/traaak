@@ -3,17 +3,16 @@ package com.fbdblog.facebook;
 import com.facebook.api.FacebookRestClient;
 import com.facebook.api.TemplatizedAction;
 import com.fbdblog.session.UserSession;
+import com.fbdblog.session.FindUserappsettings;
 import com.fbdblog.systemprops.SystemProperty;
 import com.fbdblog.systemprops.BaseUrl;
-import com.fbdblog.dao.Post;
-import com.fbdblog.dao.User;
-import com.fbdblog.dao.App;
-import com.fbdblog.dao.Throwdown;
+import com.fbdblog.dao.*;
 import com.fbdblog.dao.hibernate.HibernateUtil;
 import com.fbdblog.util.Num;
 import com.fbdblog.util.Str;
 import com.fbdblog.util.Time;
 import com.fbdblog.throwdown.ThrowdownStatus;
+import com.fbdblog.throwdown.ThrowdownPrivacy;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
@@ -35,7 +34,7 @@ public class FacebookApiWrapper {
     private String sessionkey;
     private App app;
     private User user;
-
+    private Userappsettings userappsettings;
 
 
     public FacebookApiWrapper(UserSession userSession){
@@ -49,17 +48,24 @@ public class FacebookApiWrapper {
         if (userSession.getApp()!=null){
             app = userSession.getApp();
         }
+        userappsettings = userSession.getUserappsettings();
     }
 
     public FacebookApiWrapper(App app, User user, String sessionkey) {
         this.app = app;
         this.user = user;
+        if (user!=null && app!=null){
+            userappsettings = FindUserappsettings.get(user, app);
+        }
         this.sessionkey = sessionkey;
     }
 
     public FacebookApiWrapper(App app, User user) {
         this.app = app;
         this.user = user;
+        if (user!=null && app!=null){
+            userappsettings = FindUserappsettings.get(user, app);
+        }
         this.sessionkey = app.getFacebookinfinitesessionkey();
     }
 
@@ -111,16 +117,18 @@ public class FacebookApiWrapper {
         Logger logger = Logger.getLogger(this.getClass().getName());
         try{
             if (app!=null && !app.getMinifeedtemplate().equals("")){
-                StringBuffer mf = new StringBuffer();
-                mf.append(MinifeedTemplateProcessor.processTemplate(app.getMinifeedtemplate(), user, post));
+                if (!userappsettings.getIsprivate()){   
+                    StringBuffer mf = new StringBuffer();
+                    mf.append(MinifeedTemplateProcessor.processTemplate(app.getMinifeedtemplate(), user, post));
 
-                StringBuffer titleTemplate = new StringBuffer();
-                titleTemplate.append("{actor} "+mf.toString());
+                    StringBuffer titleTemplate = new StringBuffer();
+                    titleTemplate.append("{actor} "+mf.toString());
 
-                TemplatizedAction action = new TemplatizedAction(titleTemplate.toString());
+                    TemplatizedAction action = new TemplatizedAction(titleTemplate.toString());
 
-                FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
-                facebookRestClient.feed_PublishTemplatizedAction(action);
+                    FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+                    facebookRestClient.feed_PublishTemplatizedAction(action);
+                }
             }
         } catch (Exception ex){logger.error("",ex);}
     }
@@ -129,25 +137,27 @@ public class FacebookApiWrapper {
         Logger logger = Logger.getLogger(this.getClass().getName());
         try{
             if (app!=null && !app.getMinifeedtemplate().equals("")){
+                if (!userappsettings.getIsprivate()){
+                    if (ThrowdownPrivacy.isok(throwdown)){
+                        FacebookUser toFacebookUser = getFacebookUserByUid(throwdown.getTofacebookuid());
+                        String toname=toFacebookUser.getFirst_name()+" "+toFacebookUser.getLast_name();
 
-                FacebookUser toFacebookUser = getFacebookUserByUid(throwdown.getTofacebookuid());
-                String toname=toFacebookUser.getFirst_name()+" "+toFacebookUser.getLast_name();
+                        StringBuffer titleTemplate = new StringBuffer();
+                        titleTemplate.append("{actor} challenged {toname} to a throwdown!");
 
+                        StringBuffer bodyTemplate = new StringBuffer();
+                        bodyTemplate.append("{toname} must now choose whether to accept this throwdown challenge called {throwdownname}.");
 
-                StringBuffer titleTemplate = new StringBuffer();
-                titleTemplate.append("{actor} challenged {toname} to a throwdown!");
+                        TemplatizedAction action = new TemplatizedAction(titleTemplate.toString(), bodyTemplate.toString());
+                        action.addTargetIds(throwdown.getTofacebookuid());
+                        action.addTitleParam("toname", toname);
+                        action.addBodyParam("toname", toname);
+                        action.addBodyParam("throwdownname", "<a href='http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>");
 
-                StringBuffer bodyTemplate = new StringBuffer();
-                bodyTemplate.append("{toname} must now choose whether to accept this throwdown challenge called {throwdownname}.");
-
-                TemplatizedAction action = new TemplatizedAction(titleTemplate.toString(), bodyTemplate.toString());
-                action.addTargetIds(throwdown.getTofacebookuid());
-                action.addTitleParam("toname", toname);
-                action.addBodyParam("toname", toname);
-                action.addBodyParam("throwdownname", "<a href='http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>");
-
-                FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
-                facebookRestClient.feed_PublishTemplatizedAction(action);
+                        FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+                        facebookRestClient.feed_PublishTemplatizedAction(action);
+                    }
+                }
             }
         } catch (Exception ex){logger.error("",ex);}
     }
@@ -156,26 +166,29 @@ public class FacebookApiWrapper {
         Logger logger = Logger.getLogger(this.getClass().getName());
         try{
             if (app!=null && !app.getMinifeedtemplate().equals("")){
+                if (!userappsettings.getIsprivate()){
+                    if (ThrowdownPrivacy.isok(throwdown)){
+                        FacebookUser toFacebookUser = getFacebookUserByUid(throwdown.getTofacebookuid());
+                        User fromUser = User.get(throwdown.getFromuserid());
+                        FacebookUser fromFacebookUser = getFacebookUserByUid(fromUser.getFacebookuid());
+                        String toname=toFacebookUser.getFirst_name()+" "+toFacebookUser.getLast_name();
+                        String fromname=fromFacebookUser.getFirst_name()+" "+fromFacebookUser.getLast_name();
 
-                FacebookUser toFacebookUser = getFacebookUserByUid(throwdown.getTofacebookuid());
-                User fromUser = User.get(throwdown.getFromuserid());
-                FacebookUser fromFacebookUser = getFacebookUserByUid(fromUser.getFacebookuid());
-                String toname=toFacebookUser.getFirst_name()+" "+toFacebookUser.getLast_name();
-                String fromname=fromFacebookUser.getFirst_name()+" "+fromFacebookUser.getLast_name();
+                        StringBuffer titleTemplate = new StringBuffer();
+                        titleTemplate.append("{actor} accepted {fromname}'s challenge to a throwdown!");
 
-                StringBuffer titleTemplate = new StringBuffer();
-                titleTemplate.append("{actor} accepted {fromname}'s challenge to a throwdown!");
+                        StringBuffer bodyTemplate = new StringBuffer();
+                        bodyTemplate.append("{throwdownname} They will not battle it out in this epic throwdown!");
 
-                StringBuffer bodyTemplate = new StringBuffer();
-                bodyTemplate.append("{throwdownname} They will not battle it out in this epic throwdown!");
+                        TemplatizedAction action = new TemplatizedAction(titleTemplate.toString(), bodyTemplate.toString());
+                        action.addTargetIds(throwdown.getTofacebookuid());
+                        action.addTitleParam("fromname", fromname);
+                        action.addBodyParam("throwdownname", "<a href='http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>");
 
-                TemplatizedAction action = new TemplatizedAction(titleTemplate.toString(), bodyTemplate.toString());
-                action.addTargetIds(throwdown.getTofacebookuid());
-                action.addTitleParam("fromname", fromname);
-                action.addBodyParam("throwdownname", "<a href='http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>");
-
-                FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
-                facebookRestClient.feed_PublishTemplatizedAction(action);
+                        FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+                        facebookRestClient.feed_PublishTemplatizedAction(action);
+                    }
+                }
             }
         } catch (Exception ex){logger.error("",ex);}
     }
@@ -184,23 +197,26 @@ public class FacebookApiWrapper {
         Logger logger = Logger.getLogger(this.getClass().getName());
         try{
             if (app!=null && !app.getMinifeedtemplate().equals("")){
+                if (!userappsettings.getIsprivate()){
+                    if (ThrowdownPrivacy.isok(throwdown)){
+                        User fromUser = User.get(throwdown.getFromuserid());
+                        FacebookUser toFacebookUser = getFacebookUserByUid(throwdown.getTofacebookuid());
 
-                User fromUser = User.get(throwdown.getFromuserid());
-                FacebookUser toFacebookUser = getFacebookUserByUid(throwdown.getTofacebookuid());
+                        StringBuffer titleTemplate = new StringBuffer();
+                        titleTemplate.append("The Throwdown is officially complete!");
 
-                StringBuffer titleTemplate = new StringBuffer();
-                titleTemplate.append("The Throwdown is officially complete!");
+                        StringBuffer bodyTemplate = new StringBuffer();
+                        bodyTemplate.append("{throwdownname} has completed.  Now go see who won!");
 
-                StringBuffer bodyTemplate = new StringBuffer();
-                bodyTemplate.append("{throwdownname} has completed.  Now go see who won!");
+                        TemplatizedAction action = new TemplatizedAction(titleTemplate.toString(), bodyTemplate.toString());
 
-                TemplatizedAction action = new TemplatizedAction(titleTemplate.toString(), bodyTemplate.toString());
+                        action.addTargetIds(throwdown.getTofacebookuid()+","+fromUser.getFacebookuid());
+                        action.addBodyParam("throwdownname", "<a href='http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>");
 
-                action.addTargetIds(throwdown.getTofacebookuid()+","+fromUser.getFacebookuid());
-                action.addBodyParam("throwdownname", "<a href='http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>");
-
-                FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
-                facebookRestClient.feed_PublishTemplatizedAction(action);
+                        FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+                        facebookRestClient.feed_PublishTemplatizedAction(action);
+                    }
+                }
             }
         } catch (Exception ex){logger.error("",ex);}
     }
@@ -209,67 +225,71 @@ public class FacebookApiWrapper {
         Logger logger = Logger.getLogger(this.getClass().getName());
         logger.debug("Starting to create FBML for profile");
         try{
-            String imgUrl = BaseUrl.get(false)+"fb/graph.jsp?chartid="+app.getPrimarychartid()+"&userid="+user.getUserid()+"&size=profilewide&comparetouserid=0";
+            if (!userappsettings.getIsprivate()){
+                String imgUrl = BaseUrl.get(false)+"fb/graph.jsp?chartid="+app.getPrimarychartid()+"&userid="+user.getUserid()+"&size=profilewide&comparetouserid=0";
 
-            StringBuffer fbml = new StringBuffer();
-            fbml.append("<center>");
-            fbml.append("<a href='http://apps.facebook.com/"+app.getFacebookappname()+"/'>");
-            fbml.append("<img src=\""+imgUrl+"\" alt=\"\" width=\"380\" height=\"200\"/>");
-            fbml.append("<br/>");
-            fbml.append("<font size='-2'>Chart by "+app.getTitle()+"</font>");
-            fbml.append("</a>");
-            fbml.append("</center>");
-
-            //Add throwdowns update to profile here
-            List<Throwdown> throwdowns=HibernateUtil.getSession().createCriteria(Throwdown.class)
-                    .add(Restrictions.or(
-                                        Restrictions.eq("fromuserid", user.getUserid()),
-                                        Restrictions.eq("tofacebookuid", user.getFacebookuid()))
-                                        )
-                    .add(Restrictions.eq("isaccepted", true))
-                    .add(Restrictions.ge("enddate", Time.xDaysAgoStart(Calendar.getInstance(), 7).getTime()))
-                    .setCacheable(true)
-                    .list();
-            if (throwdowns!=null && throwdowns.size()>0){
+                StringBuffer fbml = new StringBuffer();
                 fbml.append("<center>");
-                fbml.append("<table cellpadding='2' cellspacing='1' border='0' width='100%'>");
-                for (Iterator<Throwdown> iterator=throwdowns.iterator(); iterator.hasNext();) {
-                    Throwdown throwdown=iterator.next();
-                    ThrowdownStatus ts = new ThrowdownStatus(throwdown);
-                    fbml.append("<tr>");
-                        fbml.append("<td valign=\"top\" colspan=\"3\" bgcolor=\"#e6e6e6\"><center><a href=\"http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"\"><font style=\"color: #0000ff; font-weight: bold;\">"+throwdown.getName()+"</font></a></center></td>");
-                    fbml.append("</tr>");
-                    fbml.append("<tr>");
-                        fbml.append("<td valign=\"top\" colspan=\"3\"><center>Ends: "+Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))+"</center></td>");
-                    fbml.append("</tr>");
-                    fbml.append("<tr>");
-                         fbml.append("<td valign=\"top\"><center>"+ts.getFromStatus()+"</center></td>");
-                         fbml.append("<td valign=\"center\"></td>");
-                         fbml.append("<td valign=\"top\"><center>"+ts.getToStatus()+"</center></td>");
-                    fbml.append("</tr>");
-                    fbml.append("<tr>");
-                         fbml.append("<td valign=\"top\"><center><fb:profile-pic uid=\""+ts.getFromFacebookUser().getUid()+"\" size=\"square\" linked=\"false\"/><br/>"+ts.getFromFacebookUser().getFirst_name()+" "+ts.getFromFacebookUser().getLast_name()+"</center></td>");
-                         fbml.append("<td valign=\"center\"><center>vs.</center></td>");
-                         fbml.append("<td valign=\"top\"><center><fb:profile-pic uid=\""+ts.getToFacebookUser().getUid()+"\" size=\"square\" linked=\"false\"/><br/>"+ts.getToFacebookUser().getFirst_name()+" "+ts.getToFacebookUser().getLast_name()+"</center></td>");
-                    fbml.append("</tr>");
-                }
-                fbml.append("</table>");
+                fbml.append("<a href='http://apps.facebook.com/"+app.getFacebookappname()+"/'>");
+                fbml.append("<img src=\""+imgUrl+"\" alt=\"\" width=\"380\" height=\"200\"/>");
+                fbml.append("<br/>");
+                fbml.append("<font size='-2'>Chart by "+app.getTitle()+"</font>");
+                fbml.append("</a>");
                 fbml.append("</center>");
-            }
 
-            CharSequence cs = fbml.subSequence(0, fbml.length());
-            FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
-            boolean success = facebookRestClient.profile_setFBML(cs, Long.parseLong(user.getFacebookuid()));
-            if (success){
-                logger.debug("Apparently the setFBML was successful.");
-            } else {
-                logger.debug("Apparently the setFBML was not successful.");
-            }
-            boolean successrefreshimage = facebookRestClient.fbml_refreshImgSrc(imgUrl);
-            if (successrefreshimage){
-                logger.debug("Apparently refresh fb image was successful.");
-            } else {
-                logger.debug("Apparently refresh fb image was not successful.");
+                //Add throwdowns update to profile here
+                List<Throwdown> throwdowns=HibernateUtil.getSession().createCriteria(Throwdown.class)
+                        .add(Restrictions.or(
+                                            Restrictions.eq("fromuserid", user.getUserid()),
+                                            Restrictions.eq("tofacebookuid", user.getFacebookuid()))
+                                            )
+                        .add(Restrictions.eq("isaccepted", true))
+                        .add(Restrictions.ge("enddate", Time.xDaysAgoStart(Calendar.getInstance(), 7).getTime()))
+                        .setCacheable(true)
+                        .list();
+                if (throwdowns!=null && throwdowns.size()>0){
+                    fbml.append("<center>");
+                    fbml.append("<table cellpadding='2' cellspacing='1' border='0' width='100%'>");
+                    for (Iterator<Throwdown> iterator=throwdowns.iterator(); iterator.hasNext();) {
+                        Throwdown throwdown=iterator.next();
+                        if (ThrowdownPrivacy.isok(throwdown)){
+                            ThrowdownStatus ts = new ThrowdownStatus(throwdown);
+                            fbml.append("<tr>");
+                                fbml.append("<td valign=\"top\" colspan=\"3\" bgcolor=\"#e6e6e6\"><center><a href=\"http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"\"><font style=\"color: #0000ff; font-weight: bold;\">"+throwdown.getName()+"</font></a></center></td>");
+                            fbml.append("</tr>");
+                            fbml.append("<tr>");
+                                fbml.append("<td valign=\"top\" colspan=\"3\"><center>Ends: "+Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))+"</center></td>");
+                            fbml.append("</tr>");
+                            fbml.append("<tr>");
+                                 fbml.append("<td valign=\"top\"><center>"+ts.getFromStatus()+"</center></td>");
+                                 fbml.append("<td valign=\"center\"></td>");
+                                 fbml.append("<td valign=\"top\"><center>"+ts.getToStatus()+"</center></td>");
+                            fbml.append("</tr>");
+                            fbml.append("<tr>");
+                                 fbml.append("<td valign=\"top\"><center><fb:profile-pic uid=\""+ts.getFromFacebookUser().getUid()+"\" size=\"square\" linked=\"false\"/><br/>"+ts.getFromFacebookUser().getFirst_name()+" "+ts.getFromFacebookUser().getLast_name()+"</center></td>");
+                                 fbml.append("<td valign=\"center\"><center>vs.</center></td>");
+                                 fbml.append("<td valign=\"top\"><center><fb:profile-pic uid=\""+ts.getToFacebookUser().getUid()+"\" size=\"square\" linked=\"false\"/><br/>"+ts.getToFacebookUser().getFirst_name()+" "+ts.getToFacebookUser().getLast_name()+"</center></td>");
+                            fbml.append("</tr>");
+                        }
+                    }
+                    fbml.append("</table>");
+                    fbml.append("</center>");
+                }
+
+                CharSequence cs = fbml.subSequence(0, fbml.length());
+                FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+                boolean success = facebookRestClient.profile_setFBML(cs, Long.parseLong(user.getFacebookuid()));
+                if (success){
+                    logger.debug("Apparently the setFBML was successful.");
+                } else {
+                    logger.debug("Apparently the setFBML was not successful.");
+                }
+                boolean successrefreshimage = facebookRestClient.fbml_refreshImgSrc(imgUrl);
+                if (successrefreshimage){
+                    logger.debug("Apparently refresh fb image was successful.");
+                } else {
+                    logger.debug("Apparently refresh fb image was not successful.");
+                }
             }
         } catch (Exception ex){logger.error("",ex);}
     }

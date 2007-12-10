@@ -15,6 +15,7 @@
             <key column="userid"></key>
             <one-to-many class="com.fbdblog.dao.Userrole" not-found="ignore"></one-to-many>
         </set>
+       
 
         <property name="facebookuid" type="string">
             <column name="facebookuid" not-null="true" />

@@ -11,6 +11,7 @@
 <%@ page import="com.fbdblog.dao.*" %>
 <%@ page import="com.fbdblog.util.Num" %>
 <%@ page import="com.fbdblog.util.Str" %>
+<%@ page import="com.fbdblog.session.FindUserappsettings" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -34,7 +35,7 @@ for (Iterator it=friends.iterator(); it.hasNext();) {
 
 <%
     Chart chart=null;
-    if (request.getParameter("facebookuid") != null) {
+    if (request.getParameter("frienduserid")!=null && Num.isinteger(request.getParameter("frienduserid"))){
         //Load the chart requested
         if (request.getParameter("chartid") != null && Num.isinteger(request.getParameter("chartid"))) {
             chart=Chart.get(Integer.parseInt(request.getParameter("chartid")));
@@ -54,8 +55,8 @@ for (Iterator it=friends.iterator(); it.hasNext();) {
 if (request.getParameter("facebookuid")==null) {
     %>
     <fb:success>
-    <fb:message>Check Out Your Friends' Stuff</fb:message>
-    Click a friend to see their <%=userSession.getApp().getTitle()%> charts or invite them.  Friends with an asterisk* already have the app installed.
+    <fb:message>These Friends Track the Same Stuff You Do</fb:message>
+    Click a friend to see their <%=userSession.getApp().getTitle()%> charts or invite them.  Listed are those who have the app installed.
     </fb:success>
     <br/>
     <%
@@ -69,19 +70,42 @@ if (request.getParameter("facebookuid")==null) {
         <td valign="top" width="200">
             <!-- Begin Friends List -->
             <table cellpadding="2" cellspacing="0" border="0">
+
             <%
+                boolean haveaddedafriend = false;
                 for (Iterator it=friends.iterator(); it.hasNext();) {
-                    FacebookUser facebookUser = (FacebookUser) it.next();
+                    FacebookUser facebookUser=(FacebookUser) it.next();
+                    if (facebookUser.getHas_added_app()) {
+                        User user=null;
+                        List<User> users=HibernateUtil.getSession().createCriteria(User.class)
+                                .add(Restrictions.eq("facebookuid", facebookUser.getUid()))
+                                .setCacheable(true)
+                                .list();
+                        for (Iterator<User> iterator=users.iterator(); iterator.hasNext();) {
+                            user=iterator.next();
+                        }
+                        Userappsettings userappsettings=FindUserappsettings.get(user, userSession.getApp());
+                        if (user!=null && !userappsettings.getIsprivate()) {
+                            haveaddedafriend = true;
+                            %>
+                            <tr>
+                                <td valign="top">
+                                    <font style="font-size: 14px; font-weight: bold;">
+                                        <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=friends&frienduserid=<%=user.getUserid()%>'><%=facebookUser.getFirst_name()%> <%=facebookUser.getLast_name()%></a>
+                                    </font>
+                                </td>
+                                <%//@todo calculations columns?%>
+                            </tr>
+                            <%
+                        }
+                    }
+                }
+                if (!haveaddedafriend){
                     %>
                     <tr>
                         <td valign="top">
                             <font size="-1">
-                            <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=friends&facebookuid=<%=facebookUser.getUid()%>'><%=facebookUser.getFirst_name()%> <%=facebookUser.getLast_name()%></a>
-                            <%
-                            if (facebookUser.getHas_added_app()){
-                                %> *<%
-                            }
-                            %>
+                                None.
                             </font>
                         </td>
                     </tr>
@@ -92,116 +116,103 @@ if (request.getParameter("facebookuid")==null) {
             <!-- End Friends List -->
         </td>
         <%
-        if (request.getParameter("facebookuid")!=null){
-            FacebookUser facebookUser = faw.getFacebookUserByUid(request.getParameter("facebookuid"));
-            if (facebookUser!=null){
-                %>
-                <td valign="top" width="410">
+        if (request.getParameter("frienduserid")!=null && Num.isinteger(request.getParameter("frienduserid"))){
+            User friend = User.get(Integer.parseInt(request.getParameter("frienduserid")));
+            if (friend!=null){
+                Userappsettings friendUserappsettings=FindUserappsettings.get(friend, userSession.getApp());
+                if (!friendUserappsettings.getIsprivate()){
+                    FacebookUser friendFacebookuser = new FacebookUser(Long.parseLong(String.valueOf(friend.getFacebookuid())), userSession.getFacebooksessionkey(), userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret());
+                    %>
+                    <td valign="top" width="410">
                     <%
-                    if (facebookUser.getHas_added_app()){
-                        if (chart!=null){
-                            //Need to find the userid of the person selected
-                            //@todo Optimize this by only making one db call higher up in the code
-                            User selectedUser = (User)HibernateUtil.getSession().createCriteria(User.class)
-                                       .add(Restrictions.eq("facebookuid", facebookUser.getUid()))
-                                       .setCacheable(true)
-                                       .uniqueResult();
-                            if (selectedUser!=null){
-                                %>
-
-                                <!-- Start Chart -->
-                                <table cellpadding="0" cellspacing="0" border="0">
-                                    <tr>
-                                        <td valign="top" width="10">
-                                        </td>
-                                        <td valign="top" width="400">
-                                            <form action="">
-                                                <input type="hidden" name="nav" value="friends">
-                                                <input type="hidden" name="facebookuid" value="<%=facebookUser.getUid()%>">
-                                                <table cellpadding="0" cellspacing="2" border="0">
-                                                    <tr>
-                                                        <td valign="top" width="50">
-                                                            <img src="<%=facebookUser.getPic_square()%>" alt="" width="50" height="50" align="top"/>
-                                                        </td>
-                                                        <td valign="top">
-                                                            <font style="font-size: 16px; font-weight: bold;"><%=facebookUser.getFirst_name()%> <%=facebookUser.getLast_name()%>'s Stuff</font>
-                                                            <br/>
-                                                            <select name="chartid">
-                                                                <%
-                                                                List<Chart> charts=HibernateUtil.getSession().createCriteria(Chart.class)
-                                                                        .add(Restrictions.eq("appid", userSession.getApp().getAppid()))
-                                                                        .setCacheable(true)
-                                                                        .list();
-                                                                for (Iterator<Chart> iterator=charts.iterator(); iterator.hasNext();) {
-                                                                    Chart chartTmp = iterator.next();
-                                                                    String selected = "";
-                                                                    if (chart!=null && chartTmp.getChartid()==chart.getChartid()){
-                                                                        selected = " selected";
-                                                                    }
-                                                                    %>
-                                                                        <option value="<%=chartTmp.getChartid()%>" <%=selected%>><%=Str.cleanForHtml(chartTmp.getName())%></option>
-                                                                    <%
-                                                                }
-                                                                %>
-                                                            </select>
-                                                            <input type="submit" value="Gimme">
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </form>
-                                            <br/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td valign="top" width="10">
-
-                                        </td>
-                                        <td valign="top" width="400">
-                                            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=selectedUser.getUserid()%>&size=small" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <!-- End Chart -->
-                                <%
-                            } else {
-                                //@todo what if selectedUser is null (i.e. Facebook thinks they have the app installed but we don't have their facebookuid in the database?)
-                            }
-                        }
-                    //Put up the invitations screen
-                    } else {
+                    if (chart!=null){
                         %>
-                        <fb:success>
-                        <fb:message><%=facebookUser.getFirst_name()%> <%=facebookUser.getLast_name()%> hasn't added <%=userSession.getApp().getTitle()%>... yet.</fb:message>
-                        Invite <%=facebookUser.getFirst_name()%> and some other friends so you can compare stuff!
-                        </fb:success>
-                        <br/>
-                        <fb:request-form
-                            action="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=friends&invitecomplete=1"
-                            method="POST"
-                            invite="true"
-                            type="<%=userSession.getApp().getTitle()%>"
-                            content="<%=userSession.getApp().getDescription()%><fb:req-choice url='http://www.facebook.com/add.php?api_key=<%=userSession.getApp().getFacebookapikey()%>' label='Check out <%=userSession.getApp().getTitle()%>!' />
-                        ">
-                            <fb:multi-friend-selector
-                                showborder="false"
-                                actiontext="Invite friends to <%=userSession.getApp().getTitle()%>."
-                                exclude_ids="<%=commaSepFriendsAlreadyUsingApp.toString()%>"
-                                rows="3"
-                                max="20"
-                                bypass="cancel" />
-                        </fb:request-form>
+                        <!-- Start Chart -->
+                        <table cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td valign="top" width="10">
+                                </td>
+                                <td valign="top" width="400">
+                                    <form action="">
+                                        <input type="hidden" name="nav" value="friends">
+                                        <input type="hidden" name="frienduserid" value="<%=friend.getUserid()%>">
+                                        <table cellpadding="0" cellspacing="2" border="0">
+                                            <tr>
+                                                <td valign="top" width="50">
+                                                    <img src="<%=friendFacebookuser.getPic_square()%>" alt="" width="50" height="50" align="top"/>
+                                                </td>
+                                                <td valign="top">
+                                                    <font style="font-size: 16px; font-weight: bold;"><%=friendFacebookuser.getFirst_name()%> <%=friendFacebookuser.getLast_name()%>'s Stuff</font>
+                                                    <br/>
+                                                    <select name="chartid">
+                                                        <%
+                                                        List<Chart> charts=HibernateUtil.getSession().createCriteria(Chart.class)
+                                                                .add(Restrictions.eq("appid", userSession.getApp().getAppid()))
+                                                                .setCacheable(true)
+                                                                .list();
+                                                        for (Iterator<Chart> iterator=charts.iterator(); iterator.hasNext();) {
+                                                            Chart chartTmp = iterator.next();
+                                                            String selected = "";
+                                                            if (chart!=null && chartTmp.getChartid()==chart.getChartid()){
+                                                                selected = " selected";
+                                                            }
+                                                            %>
+                                                                <option value="<%=chartTmp.getChartid()%>" <%=selected%>><%=Str.cleanForHtml(chartTmp.getName())%></option>
+                                                            <%
+                                                        }
+                                                        %>
+                                                    </select>
+                                                    <input type="submit" value="Gimme">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </form>
+                                    <br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" width="10">
+
+                                </td>
+                                <td valign="top" width="400">
+                                    <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=friend.getUserid()%>&size=small" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- End Chart -->
                         <%
                     }
                     %>
-                </td>
-                <%
+                    </td>
+                    <%
+                } else {
+                    %>Sorry, that friend is not found.<%
+                }
             } else {
-                //@todo what if facebook doesn't return user?
+                %>
+                Sorry, that friend is not found.
+                <%
             }
         }
         %>
     </tr>
 </table>
+<br/>
+<fb:request-form
+    action="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=friends&invitecomplete=1"
+    method="POST"
+    invite="true"
+    type="<%=userSession.getApp().getTitle()%>"
+    content="<%=userSession.getApp().getDescription()%> <fb:req-choice url='http://www.facebook.com/add.php?api_key=<%=userSession.getApp().getFacebookapikey()%>' label='Check out <%=userSession.getApp().getTitle()%>!' />
+">
+    <fb:multi-friend-selector
+        showborder="true"
+        actiontext="Invite friends to <%=userSession.getApp().getTitle()%>."
+        exclude_ids="<%=commaSepFriendsAlreadyUsingApp.toString()%>"
+        rows="3"
+        max="20"
+        bypass="cancel" />
+</fb:request-form>
 
 <br/><br/>
 <%@ include file="footer.jsp" %>

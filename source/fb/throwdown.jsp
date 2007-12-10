@@ -21,6 +21,7 @@
 <%@ page import="com.fbdblog.calc.CalcUtil" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.fbdblog.throwdown.ThrowdownStatus" %>
+<%@ page import="com.fbdblog.throwdown.ThrowdownPrivacy" %>
 <%@ include file="header.jsp" %>
 
 
@@ -32,6 +33,12 @@
         throwdown=Throwdown.get(Integer.parseInt(request.getParameter("throwdownid")));
     }
     if (throwdown==null || throwdown.getThrowdownid()==0){
+        %>
+        <fb:redirect url="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdowns" />
+        <%
+        return;
+    }
+    if (!ThrowdownPrivacy.isok(throwdown)) {
         %>
         <fb:redirect url="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdowns" />
         <%

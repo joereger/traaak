@@ -14,6 +14,7 @@ import com.fbdblog.xmpp.SendXMPPMessage;
 import com.fbdblog.dao.User;
 import com.fbdblog.dao.App;
 import com.fbdblog.dao.Userappactivity;
+import com.fbdblog.dao.Userappsettings;
 import com.fbdblog.dao.hibernate.HibernateUtil;
 import com.fbdblog.cache.providers.CacheFactory;
 import com.fbdblog.UserappstatusUtil;

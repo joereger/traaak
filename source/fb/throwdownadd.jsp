@@ -34,6 +34,10 @@
             haveerror=true;
             errMsg.append("You must give your Throwdown a name.");
         }
+        if (userSession.getUserappsettings().getIsprivate()) {
+            haveerror=true;
+            errMsg.append("Sorry, you can't create a Throwdown when you're in Private mode because it would display your data to others.");
+        }
         Calendar enddateCal = Calendar.getInstance();
         try {
             enddateCal=DateTimeHtmlInput.getValueFromRequest("enddate", "End Date", false, request);

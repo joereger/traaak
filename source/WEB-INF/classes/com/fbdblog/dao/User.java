@@ -154,4 +154,6 @@ public class User extends BasePersistentClass implements java.io.Serializable, R
     public void setPassword(String password) {
         this.password = password;
     }
+
+
 }
