@@ -71,7 +71,7 @@
         %>
         <tr>
             <td bgcolor="#e6e6e6">
-                <font style="font-size: 10px;"><%=Time.dateformatcompactwithtime(Time.getCalFromDate(calculation.getRecordeddate()))%></font>
+                <font style="font-size: 10px;"><%=Time.dateformatcompactwithtime(Time.gmttousertime(calculation.getRecordeddate(), userSession.getUser().getTimezoneid()))%></font>
             </td>
             <td bgcolor="#e6e6e6">
                 <font style="font-size: 10px;"><%=calculation.getCalctimeperiodkey()%></font>

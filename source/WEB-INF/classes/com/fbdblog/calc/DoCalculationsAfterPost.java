@@ -2,6 +2,7 @@ package com.fbdblog.calc;
 
 import com.fbdblog.dao.*;
 import com.fbdblog.dao.hibernate.HibernateUtil;
+import com.fbdblog.util.Time;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Order;
 import org.apache.log4j.Logger;
@@ -58,7 +59,7 @@ public class DoCalculationsAfterPost {
                         //Just update this calculation
                         foundonetoupdate = true;
                         calcTmp.setValue(value);
-                        calcTmp.setRecordeddate(new Date());
+                        calcTmp.setRecordeddate(Time.nowInGmtDate());
                         try{calcTmp.save();}catch (Exception ex){logger.error("", ex);}
                     }
                     if (!foundonetoupdate){
@@ -70,7 +71,7 @@ public class DoCalculationsAfterPost {
                         calcDao.setQuestionid(question.getQuestionid());
                         calcDao.setUserid(user.getUserid());
                         calcDao.setValue(value);
-                        calcDao.setRecordeddate(new Date());
+                        calcDao.setRecordeddate(Time.nowInGmtDate());
                         try{calcDao.save();}catch (Exception ex){logger.error("", ex);}
                     }
                 }

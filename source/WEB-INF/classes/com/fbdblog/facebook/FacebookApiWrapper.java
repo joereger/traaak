@@ -260,7 +260,7 @@ public class FacebookApiWrapper {
                             fbml.append("<td valign=\"top\" colspan=\"3\" bgcolor=\"#e6e6e6\"><center><a href=\"http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"\"><font style=\"color: #0000ff; font-weight: bold;\">"+throwdown.getName()+"</font></a></center></td>");
                         fbml.append("</tr>");
                         fbml.append("<tr>");
-                            fbml.append("<td valign=\"top\" colspan=\"3\"><center>Ends: "+Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))+"</center></td>");
+                            fbml.append("<td valign=\"top\" colspan=\"3\"><center>Ends: "+Time.dateformatcompactwithtime(Time.gmttousertime(throwdown.getEnddate(), user.getTimezoneid()))+"</center></td>");
                         fbml.append("</tr>");
                         fbml.append("<tr>");
                              fbml.append("<td valign=\"top\"><center>"+ts.getFromStatus()+"</center></td>");

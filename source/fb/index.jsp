@@ -119,7 +119,7 @@ if (!topOfPageMsg.equals("")){
             if (post!=null && post.getPostid()>0){
                 %>
                 <fb:success>
-                <fb:message>Editing data from <%=Time.dateformatcompactwithtime(Time.getCalFromDate(post.getPostdate()))%>.</fb:message>
+                <fb:message>Editing data from <%=Time.dateformatcompactwithtime(Time.gmttousertime(post.getPostdate(), userSession.getUser().getTimezoneid()))%>.</fb:message>
                 <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>&action=deletepost'>Delete it?</a>
                 <br/><a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main'>Start new?</a>
                 </fb:success>

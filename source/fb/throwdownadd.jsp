@@ -49,8 +49,8 @@
         if (!haveerror){
             Throwdown throwdown=new Throwdown();
             throwdown.setAppid(userSession.getApp().getAppid());
-            throwdown.setCreatedate(new Date());
-            throwdown.setEnddate(enddateCal.getTime());
+            throwdown.setCreatedate(Time.nowInGmtDate());
+            throwdown.setEnddate(Time.convertFromOneTimeZoneToAnother(enddateCal, userSession.getUser().getTimezoneid(), "GMT").getTime());
             throwdown.setFromuserid(userSession.getUser().getUserid());
             throwdown.setIsaccepted(false);
             throwdown.setIsdeclined(false);

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletOutputStream;
 import java.net.URLEncoder;
+import java.util.Date;
 
 /**
  * User: Joe Reger Jr
@@ -15,7 +16,7 @@ import java.net.URLEncoder;
 public class Pagez {
 
     private static ThreadLocal<Long> startTime = new ThreadLocal<Long>();
-
+    private static ThreadLocal<String> timezoneidTl = new ThreadLocal<String>();
 
 
     public static void setStartTime(Long time){
@@ -23,6 +24,9 @@ public class Pagez {
     }
 
     public static Long getStartTime(){
+        if (startTime.get()==null){
+            startTime.set((new Date()).getTime());
+        }
         return startTime.get();
     }
 
@@ -30,6 +34,17 @@ public class Pagez {
         long timeend = new java.util.Date().getTime();
         long elapsedtime = timeend - startTime.get();
         return elapsedtime;
+    }
+
+    public static void setTz(String timezoneid){
+        timezoneidTl.set(timezoneid);
+    }
+
+    public static String getTz(){
+        if (timezoneidTl.get()==null || timezoneidTl.get().equals("")){
+            timezoneidTl.set("EST");
+        }
+        return timezoneidTl.get();
     }
 
 

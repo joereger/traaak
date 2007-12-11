@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import com.fbdblog.util.Time;
 import com.fbdblog.util.DateDiff;
 import com.fbdblog.dao.Post;
+import com.fbdblog.dao.User;
 import org.apache.log4j.Logger;
 
 /**
@@ -61,7 +62,8 @@ public class ChartFieldEntryWeeksAgo implements ChartField{
 
             for (Iterator it = posts.iterator(); it.hasNext(); ) {
                 Post post = (Post)it.next();
-                Calendar cal = Time.getCalFromDate(post.getPostdate());
+                User user = User.get(post.getUserid());
+                Calendar cal = Time.getCalFromDate(Time.gmttousertime(post.getPostdate(), user.getTimezoneid()));
                 cal = Time.gmttousertime(cal, getTimezoneid());
                 //Get the weeks ago
                 int daysago = DateDiff.dateDiff("week", endOfWeekInUserTimezone, cal);

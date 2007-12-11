@@ -2,6 +2,7 @@ package com.fbdblog.session;
 
 import com.fbdblog.util.Num;
 import com.fbdblog.util.Util;
+import com.fbdblog.util.Time;
 import com.fbdblog.dao.hibernate.HibernateUtil;
 import com.fbdblog.dao.Userpersistentlogin;
 import com.fbdblog.systemprops.SystemProperty;
@@ -49,7 +50,7 @@ public class PersistentLogin {
                     List<Userpersistentlogin> userpersistentlogins = crit.list();
                     for (Iterator<Userpersistentlogin> iterator = userpersistentlogins.iterator(); iterator.hasNext();){
                         Userpersistentlogin userpersistentlogin = iterator.next();
-                        userpersistentlogin.setLastusedtologin(new Date());
+                        userpersistentlogin.setLastusedtologin(Time.nowInGmtDate());
                         try{userpersistentlogin.save();}catch(Exception ex){logger.error("",ex);};
                         return userpersistentlogin.getUserid();
                     }
@@ -92,7 +93,7 @@ public class PersistentLogin {
 
         //Store this persistent cookie to the database
         Userpersistentlogin userpersistentlogin = new Userpersistentlogin();
-        userpersistentlogin.setLastusedtologin(new Date());
+        userpersistentlogin.setLastusedtologin(Time.nowInGmtDate());
         userpersistentlogin.setRandomstring(randomString);
         userpersistentlogin.setUserid(userid);
         try{userpersistentlogin.save();}catch(Exception ex){logger.error("",ex);};

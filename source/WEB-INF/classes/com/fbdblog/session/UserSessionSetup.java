@@ -18,6 +18,7 @@ import com.fbdblog.dao.Userappsettings;
 import com.fbdblog.dao.hibernate.HibernateUtil;
 import com.fbdblog.cache.providers.CacheFactory;
 import com.fbdblog.UserappstatusUtil;
+import com.fbdblog.util.Time;
 import com.facebook.api.FacebookRestClient;
 import com.facebook.api.FacebookException;
 
@@ -139,13 +140,14 @@ public class UserSessionSetup {
                         //Create a new User for this facebookuid
                         logger.debug("Creating a new user account for this facebookuid");
                         user = new User();
-                        user.setCreatedate(new Date());
+                        user.setCreatedate(Time.nowInGmtDate());
                         user.setFacebookuid(userSession.getFacebookUser().getUid());
                         user.setFirstname(userSession.getFacebookUser().getFirst_name());
                         user.setLastname(userSession.getFacebookUser().getLast_name());
                         user.setIsenabled(true);
                         user.setEmail("");
                         user.setPassword("");
+                        user.setTimezoneid(Time.getTimezoneidFromFacebookOffset(userSession.getFacebookUser().getTimezoneoffset()));
                         try {user.save();} catch (Exception ex) {logger.error("",ex);}
                         //Store in session
                         userSession.setUser(user);
@@ -153,6 +155,8 @@ public class UserSessionSetup {
                         SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "New "+userSession.getApp().getTitle()+" User '" + userSession.getFacebookUser().getFirst_name() + " " + userSession.getFacebookUser().getLast_name() + "'");
                         xmpp.send();
                     }
+                    //Set the timezoneid
+                    Pagez.setTz(user.getTimezoneid());
                 } else {
                     logger.debug("userSession.getFacebookUser() is empty after calling facebook api");
                     //@todo how to handle facebook call to populate user is empty?
@@ -185,7 +189,7 @@ public class UserSessionSetup {
                 Userappactivity userappactivity=new Userappactivity();
                 userappactivity.setAppid(userSession.getApp().getAppid());
                 userappactivity.setUserid(userSession.getUser().getUserid());
-                userappactivity.setDate(new Date());
+                userappactivity.setDate(Time.nowInGmtDate());
                 userappactivity.setYear(cal.get(Calendar.YEAR));
                 userappactivity.setMonth(cal.get(Calendar.MONTH)+1);
                 userappactivity.setIsinstall(true);

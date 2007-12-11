@@ -38,6 +38,8 @@
         <property name="createdate" type="timestamp">
             <column name="createdate" not-null="true" />
         </property>
-
+        <property name="timezoneid" type="text">
+            <column name="timezoneid" not-null="true" />
+        </property>
     </class>
 </hibernate-mapping>

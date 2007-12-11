@@ -23,8 +23,9 @@ public class FacebookUser implements Serializable {
     private String sex;
     private String pic_square;
     private boolean has_added_app;
+    private String timezoneoffset;
 
-    public static String sqlListOfCols = "first_name, last_name, birthday, sex, uid, pic_square, has_added_app";
+    public static String sqlListOfCols = "first_name, last_name, birthday, sex, uid, pic_square, has_added_app, timezone";
 
     public FacebookUser(Long facebookuserid, String facebookSessionKey, String api_key, String api_secret){
         refreshFromFacebookApi(facebookuserid, facebookSessionKey, api_key, api_secret);
@@ -77,6 +78,8 @@ public class FacebookUser implements Serializable {
         } else {
             this.has_added_app = false;
         }
+        Element timezone = FacebookApiWrapper.getChild(userDom, "timezone");
+        this.timezoneoffset = timezone.getTextTrim();
     }
 
     public String getFirst_name() {
@@ -125,5 +128,13 @@ public class FacebookUser implements Serializable {
 
     public void setHas_added_app(boolean has_added_app) {
         this.has_added_app = has_added_app;
+    }
+
+    public String getTimezoneoffset() {
+        return timezoneoffset;
+    }
+
+    public void setTimezoneoffset(String timezoneoffset) {
+        this.timezoneoffset=timezoneoffset;
     }
 }

@@ -13,6 +13,7 @@ import com.fbdblog.chart.chartcache.ClearCache;
 import com.fbdblog.session.UserSession;
 import com.fbdblog.calc.DoCalculationsAfterPost;
 import com.fbdblog.threads.PostSaveWork;
+import com.fbdblog.util.Time;
 
 
 import java.util.Date;
@@ -56,7 +57,7 @@ public class SavePost {
                 //Create the post
                 if (post==null){
                     post = new Post();
-                    post.setPostdate(new Date());
+                    post.setPostdate(Time.nowInGmtDate());
                 }
                 post.setUserid(user.getUserid());
                 post.setAppid(app.getAppid());

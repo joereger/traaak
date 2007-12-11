@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.fbdblog.util.Time;
 import com.fbdblog.dao.Post;
+import com.fbdblog.dao.User;
 
 /**
  * A dropdown field
@@ -53,7 +54,8 @@ public class ChartFieldEntryDayofmonth implements ChartField{
             TreeMap data = new TreeMap();
             for (Iterator it = posts.iterator(); it.hasNext(); ) {
                 Post post = (Post)it.next();
-                Calendar cal = Time.getCalFromDate(post.getPostdate());
+                User user = User.get(post.getUserid());
+                Calendar cal = Time.getCalFromDate(Time.gmttousertime(post.getPostdate(), user.getTimezoneid()));
                 cal = Time.gmttousertime(cal, getTimezoneid());
                 //Get the day of the month
                 String dayofmonth = "NA";

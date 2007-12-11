@@ -87,7 +87,7 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
                             FacebookUser toFbUser = faw.getFacebookUserByUid(throwdown.getTofacebookuid());
                             %>
                              <tr>
-                                 <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))%></font></td>
+                                 <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.gmttousertime(throwdown.getEnddate(), userSession.getUser().getTimezoneid()))%></font></td>
                              </tr>
                              <tr>
                                  <td valign="top" width="40%"><div style="text-align: right;"><img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><%=userSession.getFacebookUser().getFirst_name()%><br/><%=userSession.getFacebookUser().getLast_name()%></div></td>
@@ -125,7 +125,7 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
                             FacebookUser fromFbUser = faw.getFacebookUserByUid(fromUser.getFacebookuid());
                             %>
                              <tr>
-                                 <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))%></font></td>
+                                 <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.gmttousertime(throwdown.getEnddate(), userSession.getUser().getTimezoneid()))%></font></td>
                              </tr>
                              <tr>
                                  <td valign="top" width="40%"><div style="text-align: right;"><img src="<%=fromFbUser.getPic_square()%>" alt="" width="50" height="50"/><br/><%=fromFbUser.getFirst_name()%><br/><%=fromFbUser.getLast_name()%></div></td>
@@ -199,7 +199,7 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
                                     FacebookUser toFbUser=faw.getFacebookUserByUid(throwdown.getTofacebookuid());
                                      %>
                                      <tr>
-                                         <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))%></font></td>
+                                         <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.gmttousertime(throwdown.getEnddate(), userSession.getUser().getTimezoneid()))%></font></td>
                                      </tr>
                                      <tr>
                                          <td valign="top" width="40%"><div style="text-align: right;"><img src="<%=fromFbUser.getPic_square()%>" alt="" width="50" height="50"/><br/><%=fromFbUser.getFirst_name()%><br/><%=fromFbUser.getLast_name()%></div></td>

@@ -20,7 +20,7 @@ int totalusers = ((Long)HibernateUtil.getSession().createQuery("select count(*) 
     for (Iterator<User> iterator=users.iterator(); iterator.hasNext();) {
         User user=iterator.next();
         %>
-        (<%=user.getUserid()%>) <%=user.getFirstname()%> <%=user.getLastname()%> - <%=user.getFacebookuid()%> - <%=Time.dateformatcompactwithtime(Time.getCalFromDate(user.getCreatedate()))%><br/>
+        (<%=user.getUserid()%>) <%=user.getFirstname()%> <%=user.getLastname()%> - <%=user.getFacebookuid()%> - <%=Time.dateformatcompactwithtime(Time.gmttousertime(user.getCreatedate(), userSession.getUser().getTimezoneid()))%><br/>
         <%
     }
 %>

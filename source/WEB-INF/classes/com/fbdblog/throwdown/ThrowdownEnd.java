@@ -4,6 +4,7 @@ import com.fbdblog.dao.Throwdown;
 import com.fbdblog.dao.App;
 import com.fbdblog.dao.User;
 import com.fbdblog.facebook.FacebookApiWrapper;
+import com.fbdblog.util.Time;
 
 import java.util.Date;
 
@@ -19,7 +20,7 @@ public class ThrowdownEnd {
     public static void checkEnd(Throwdown throwdown, String sessionkey){
         Logger logger = Logger.getLogger(ThrowdownEnd.class);
         if (!throwdown.getIscomplete()){
-            if (throwdown.getEnddate().before(new Date())){
+            if (throwdown.getEnddate().before(Time.nowInGmtDate())){
                 //Let's end this Throwdown
                 throwdown.setIscomplete(true);
                 //Let's figure out who won and what the score was

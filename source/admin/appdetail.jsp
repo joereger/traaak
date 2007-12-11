@@ -283,8 +283,6 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
 <table cellpadding="5" cellspacing="0" border="0">
     <tr>
         <td valign="top" width="50%">
-
-
             <b>Questions:</b>
             <br/>
             <%

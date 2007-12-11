@@ -29,6 +29,7 @@ public class User extends BasePersistentClass implements java.io.Serializable, R
      private String email;
      private String password;
      private Date createdate;
+     private String timezoneid;
 
 
      //Association
@@ -156,4 +157,11 @@ public class User extends BasePersistentClass implements java.io.Serializable, R
     }
 
 
+    public String getTimezoneid() {
+        return timezoneid;
+    }
+
+    public void setTimezoneid(String timezoneid) {
+        this.timezoneid=timezoneid;
+    }
 }

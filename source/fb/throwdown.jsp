@@ -191,7 +191,7 @@ if (throwdown.getIscomplete() && !throwdown.getIsaccepted()){
                     <br/>
                     <font style="font-size: 10px; font-weight: bold;"><%=fromFacebookUser.getFirst_name()%> says that on</font>
                     <br/>
-                    <font style="font-size: 10px; font-weight: bold;"><%=Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))%></font>
+                    <font style="font-size: 10px; font-weight: bold;"><%=Time.dateformatcompactwithtime(Time.gmttousertime(throwdown.getEnddate(), userSession.getUser().getTimezoneid()))%></font>
                     <br/>
                     <font style="font-size: 10px; font-weight: bold;"><%=hisher%> value of</font>
                     <br/>

@@ -17,6 +17,9 @@ public class Time {
 	* Convert a date to a calendar with the GMT Timezone
 	* The offset var = the user's timezone offset
 	*/
+	public static Date usertogmttime(Date date, String timezoneid){
+        return usertogmttime(getCalFromDate(date), timezoneid).getTime();
+    }
 	public static Calendar usertogmttime(Calendar date, String timezoneid){
 
 	    //System.out.println("-----------");
@@ -24,7 +27,7 @@ public class Time {
 	    //System.out.println("timezoneid: "+timezoneid+"<br>dateformatfordb(date): " +Time.dateformatfordb(date) + "<br>date.getTimeZone().getID():"+date.getTimeZone().getID());
 	    Calendar outCal = (Calendar) date.clone();
 	    //System.out.println("timezoneid: "+timezoneid+"<br>dateformatfordb(outCal): " +Time.dateformatfordb(outCal) + "<br>outCal.getTimeZone().getID():"+outCal.getTimeZone().getID());
-	    outCal.setTimeZone(TimeZoneCache.get("EST"));
+	    outCal.setTimeZone(TimeZoneCache.get("GMT"));
 	    //System.out.println("timezoneid: "+timezoneid+"<br>dateformatfordb(outCal): " +Time.dateformatfordb(outCal) + "<br>outCal.getTimeZone().getID():"+outCal.getTimeZone().getID());
 		int offset = TimeZoneCache.get(timezoneid).getOffset(outCal.getTimeInMillis());
 		//System.out.println("timezoneid: "+timezoneid+"<br>offset: " +offset);
@@ -42,13 +45,16 @@ public class Time {
 	* Convert a gmt date to a user's local time
 	* The offset var = the user's timezone offset
 	*/
+	public static Date gmttousertime(Date date, String timezoneid){
+        return gmttousertime(getCalFromDate(date), timezoneid).getTime();
+    }
 	public static Calendar gmttousertime(Calendar date, String timezoneid){
 		if (date!=null){
             Calendar outCal = (Calendar) date.clone();
             if (timezoneid != null && !timezoneid.equals("")) {
                 outCal.setTimeZone(TimeZoneCache.get(timezoneid));
             } else {
-                outCal.setTimeZone(TimeZoneCache.get("EST"));
+                outCal.setTimeZone(TimeZoneCache.get("GMT"));
             }
             int offset = TimeZoneCache.get(timezoneid).getOffset(outCal.getTimeInMillis());
             outCal.add(Calendar.MILLISECOND, (1)*offset);
@@ -83,6 +89,21 @@ public class Time {
 		//Convert from server (not GMT... server in Atlanta) time to user's timezone.
 		usertime = Time.convertFromOneTimeZoneToAnother(usertime, usertime.getTimeZone().getID(), timezoneid);
         return usertime;
+    }
+    public static Date nowInUserTimezoneDate(String timezoneid){
+        return nowInUserTimezone(timezoneid).getTime();
+    }
+
+    public static String nowInGmtString(){
+        return dateformatfordb(nowInUserTimezone("GMT"));
+    }
+
+    public static Calendar nowInGmtCalendar(){
+        return nowInUserTimezone("GMT");
+    }
+
+    public static Date nowInGmtDate(){
+        return nowInUserTimezone("GMT").getTime();
     }
 	
 	/**
@@ -254,6 +275,9 @@ public class Time {
     * Date format
     *
     */
+    public static String dateformatcompactwithtime(Date date) {
+        return dateformatcompactwithtime(getCalFromDate(date));
+    }
 	public static String dateformatcompactwithtime(Calendar date) {
 		DateFormat myDateFormat = new SimpleDateFormat("EEE, MMM d, yyyy HH:mm:ss");
 		if (date==null){
@@ -357,7 +381,7 @@ public class Time {
         //Get time on the physical server (probably in Atlanta)
         Calendar now = Calendar.getInstance();
         //Convert from server (not GMT... server in Atlanta) time to gmt timezone.
-        now = Time.convertFromOneTimeZoneToAnother(now, now.getTimeZone().getID(), "EST");
+        now = Time.convertFromOneTimeZoneToAnother(now, now.getTimeZone().getID(), "GMT");
 
 		
 		//Calculate datediff at various units
@@ -975,13 +999,7 @@ public class Time {
         return outCal;
     }
 
-    public static String nowInGmtString(){
-        return dateformatfordb(nowInUserTimezone("EST"));
-    }
 
-    public static Calendar nowInGmtCalendar(){
-        return nowInUserTimezone("EST");
-    }
 
     public static Calendar getRandomDateInPast(int maxAgeInDays){
         int maxAgeInMinutes = maxAgeInDays * 60 * 24;
@@ -1031,6 +1049,30 @@ public class Time {
             return "Sat";
         }
         return "NA";
+     }
+
+     public static String getTimezoneidFromFacebookOffset(String facebookoffset){
+        if (Num.isinteger(facebookoffset)){
+            String[] timezone=TimeZone.getAvailableIDs();
+            String closestTzid = "EST";
+            int closestMillis = Integer.MAX_VALUE;
+            for (int i=0; i<timezone.length; i++) {
+                TimeZone tz = TimeZoneCache.get(timezone[i]);
+                int tzRawOffset = tz.getRawOffset();
+                //facebookoffset is in hours... e.g. -8 for California
+                //So need to multiply 60min*60sec*1000millis=3600000
+                int fbRawOffset = Integer.parseInt(facebookoffset) * 3600000;
+                //Compare the two
+                int absDiff = Math.abs(fbRawOffset-tzRawOffset);
+                //If they're closer than the previous best, save them
+                if (absDiff<closestMillis){
+                    closestTzid = tz.getID();
+                    closestMillis = absDiff;
+                }
+            }
+            return closestTzid;
+        }
+        return "EST";
      }
 
 
