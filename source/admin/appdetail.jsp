@@ -66,6 +66,14 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
 if (request.getParameter("action")!=null && request.getParameter("action").equals("deletequestion")){
     if (request.getParameter("questionid") != null && Num.isinteger(request.getParameter("questionid"))) {
         Question question = Question.get(Integer.parseInt(request.getParameter("questionid")));
+        HibernateUtil.getSession().createQuery("delete Calculation c where c.questionid='"+question.getQuestionid()+"'").executeUpdate();
+        HibernateUtil.getSession().createQuery("delete Questioncalc c where c.questionid='"+question.getQuestionid()+"'").executeUpdate();
+        HibernateUtil.getSession().createQuery("delete Postanswer c where c.questionid='"+question.getQuestionid()+"'").executeUpdate();
+        HibernateUtil.getSession().createQuery("delete Questionconfig c where c.questionid='"+question.getQuestionid()+"'").executeUpdate();
+        HibernateUtil.getSession().createQuery("delete Questionuserconfig c where c.questionid='"+question.getQuestionid()+"'").executeUpdate();
+        HibernateUtil.getSession().createQuery("delete Throwdown c where c.questionid='"+question.getQuestionid()+"'").executeUpdate();
+        HibernateUtil.getSession().createQuery("delete Chartyaxis c where c.yquestionid='"+question.getQuestionid()+"'").executeUpdate();
+        HibernateUtil.getSession().createQuery("delete Chart c where c.xquestionid='"+question.getQuestionid()+"'").executeUpdate();
         try{question.delete();}catch(Exception ex){logger.error("",ex);}
         out.print("Deleted question.<br/>");
     }
@@ -114,6 +122,37 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
             if (question!=null && question.getQuestionid()>0) {
                 SysadminAutoCalcCreator.createAllPossibleCalcs(question);
                 out.print("Calcs created.<br/>");
+            }
+        }
+    }
+%>
+
+<%
+    if (request.getParameter("action") != null && request.getParameter("action").equals("commoncalcs")) {
+        if (request.getParameter("questionid")!=null && Num.isinteger(request.getParameter("questionid"))) {
+            Question question=Question.get(Integer.parseInt(request.getParameter("questionid")));
+            if (question!=null && question.getQuestionid()>0) {
+                SysadminAutoCalcCreator.createCommonCalcs(question);
+                out.print("Calcs created.<br/>");
+            }
+        }
+    }
+%>
+
+<%
+    if (request.getParameter("action") != null && request.getParameter("action").equals("deletequestioncalc")) {
+        if (request.getParameter("questionid")!=null && Num.isinteger(request.getParameter("questionid"))) {
+            Question question=Question.get(Integer.parseInt(request.getParameter("questionid")));
+            if (question!=null && question.getQuestionid()>0) {
+                if (request.getParameter("questioncalcid")!=null && Num.isinteger(request.getParameter("questioncalcid"))) {
+                    Questioncalc questioncalc = Questioncalc.get(Integer.parseInt(request.getParameter("questioncalcid")));
+                    if (questioncalc!=null && questioncalc.getQuestioncalcid()>0){
+                        HibernateUtil.getSession().createQuery("delete Calculation c where c.questionid='"+questioncalc.getQuestionid()+"' and c.calculationtype='"+questioncalc.getCalculationtype()+"' and c.calctimeperiodid='"+questioncalc.getCalctimeperiodid()+"'").executeUpdate();
+                        HibernateUtil.getSession().createQuery("delete Throwdown c where c.questioncalcid='"+questioncalc.getQuestioncalcid()+"'").executeUpdate();
+                        try{questioncalc.delete();}catch(Exception ex){logger.error("", ex);}
+                        out.print("Calc deleted.<br/>");
+                    }
+                }
             }
         }
     }
@@ -288,15 +327,16 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                     for (Iterator<Questioncalc> iterator1=questioncalcs.iterator(); iterator1.hasNext();) {
                         Questioncalc questioncalc = iterator1.next();
                         %>
-                        <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail-calc.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&questioncalcid=<%=questioncalc.getQuestioncalcid()%>"><%=questioncalc.getName()%></a>(del)</font><br/>
+                        <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&questioncalcid=<%=questioncalc.getQuestioncalcid()%>"><%=questioncalc.getName()%></a>(<a href="appdetail.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&questioncalcid=<%=questioncalc.getQuestioncalcid()%>&action=deletequestioncalc">del</a>)</font><br/>
                         <%
-                        }
-                        if (question.getDatatypeid() == DataTypeDecimal.DATATYPEID || question.getDatatypeid() == DataTypeInteger.DATATYPEID) {
-                            %>
-                            <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail-calc.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&action=newcalc">+ Add Calc</a></font><br/>
-                            <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&action=allpossiblecalcs">+ Add All Possible Calcs</a></font><br/>
-                            <%
-                        }
+                    }
+                    if (question.getDatatypeid() == DataTypeDecimal.DATATYPEID || question.getDatatypeid() == DataTypeInteger.DATATYPEID) {
+                        %>
+                        <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail-calc.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&action=newcalc">+ Add Calc</a></font><br/>
+                        <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&action=commoncalcs">+ Add Common Calcs</a></font><br/>
+                        <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&action=allpossiblecalcs">+ Add All Possible Calcs</a></font><br/>
+                        <%
+                    }
                 }
             %>
             <br/>

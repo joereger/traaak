@@ -33,6 +33,17 @@ public class SysadminAutoCalcCreator {
         createCalcOfTypeAndOfTimePeriod(question, calctypeid, CalctimeperiodWeek.ID, typename, "Weekly");
     }
 
+    public static void createCommonCalcs(Question question){
+        createCalcOfTypeOnCommonPeriods(question, CalculationSum.ID, "Total");
+        createCalcOfTypeOnCommonPeriods(question, CalculationAvg.ID, "Average");
+        createCalcOfTypeOnCommonPeriods(question, CalculationDeltaPercent.ID, "Percent Change in");
+    }
+
+    private static void createCalcOfTypeOnCommonPeriods(Question question, int calctypeid, String typename){
+        createCalcOfTypeAndOfTimePeriod(question, calctypeid, CalctimeperiodAlltime.ID, typename, "All Time");
+        createCalcOfTypeAndOfTimePeriod(question, calctypeid, CalctimeperiodMonth.ID, typename, "Monthly");
+    }
+
     private static void createCalcOfTypeAndOfTimePeriod(Question question, int calctypeid, int timeperiodid, String typename, String timeperiodname){
         Logger logger = Logger.getLogger(SysadminAutoCalcCreator.class);
 
