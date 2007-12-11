@@ -67,16 +67,17 @@ public class ThrowdownStatus {
 
     private void initBean(){
         if(!throwdown.getIscomplete()){
+            App app = App.get(throwdown.getAppid());
             if (throwdown.getQuestionid()>0){
-                fromValue = CalcUtil.getValueForQuestion(Question.get(throwdown.getQuestionid()), fromUser);
+                fromValue = CalcUtil.getValueForQuestion(Question.get(throwdown.getQuestionid()), fromUser, app);
             } else if (throwdown.getQuestioncalcid()>0) {
-                fromValue = CalcUtil.getValueForCalc(Questioncalc.get(throwdown.getQuestioncalcid()), fromUser);
+                fromValue = CalcUtil.getValueForCalc(Questioncalc.get(throwdown.getQuestioncalcid()), fromUser, app);
             }
             if (toUser!=null){
                 if (throwdown.getQuestionid()>0){
-                    toValue = CalcUtil.getValueForQuestion(Question.get(throwdown.getQuestionid()), toUser);
+                    toValue = CalcUtil.getValueForQuestion(Question.get(throwdown.getQuestionid()), toUser, app);
                 } else if (throwdown.getQuestioncalcid()>0) {
-                    toValue = CalcUtil.getValueForCalc(Questioncalc.get(throwdown.getQuestioncalcid()), toUser);
+                    toValue = CalcUtil.getValueForCalc(Questioncalc.get(throwdown.getQuestioncalcid()), toUser, app);
                 }
             }
             if (fromValue==toValue){

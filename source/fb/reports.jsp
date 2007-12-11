@@ -46,30 +46,31 @@
                 %>
                 <font style="font-size: 14px; font-weight: bold;"><%=question.getQuestion()%></font><br/>
                 <%
-                for (Iterator<Questioncalc> iterator1=questioncalcs.iterator(); iterator1.hasNext();) {
-                    Questioncalc questioncalc=iterator1.next();
-
-                    Calctimeperiod calctimeperiod=CalctimeperiodFactory.getCalctimeperiodByIdStatic(questioncalc.getCalctimeperiodid());
-                    com.fbdblog.calc.Calculation calculation=CalculationFactory.getCalculationByType(questioncalc.getCalculationtype());
-                    if (calctimeperiod != null && calculation != null) {
-                        //See if something's already recorded for this key
-                        boolean foundValue=false;
-                        double value = 0;
-                        List<com.fbdblog.dao.Calculation> calcs=HibernateUtil.getSession().createCriteria(com.fbdblog.dao.Calculation.class)
-                                .add(Restrictions.eq("calctimeperiodid", calctimeperiod.getId()))
-                                .add(Restrictions.eq("calctimeperiodkey", calctimeperiod.getKey()))
-                                .add(Restrictions.eq("calculationtype", calculation.getId()))
-                                .add(Restrictions.eq("questionid", question.getQuestionid()))
-                                .add(Restrictions.eq("userid", userSession.getUser().getUserid()))
-                                .setCacheable(true)
-                                .list();
-                        for (Iterator<com.fbdblog.dao.Calculation> iterator2=calcs.iterator(); iterator2.hasNext();) {
-                            com.fbdblog.dao.Calculation calcTmp = iterator2.next();
-                            value = calcTmp.getValue();
-                            foundValue = true;
-                        }
-                        if (foundValue){
-                            %>
+                    for (Iterator<Questioncalc> iterator1=questioncalcs.iterator(); iterator1.hasNext();) {
+                        Questioncalc questioncalc=iterator1.next();
+                        CalctimeperiodFactory ctpFactory=new CalctimeperiodFactory(userSession.getUser(), userSession.getApp());
+                        Calctimeperiod calctimeperiod=ctpFactory.getCalctimeperiodUnpopulated(questioncalc.getCalctimeperiodid());
+                        com.fbdblog.calc.Calculation calculation=CalculationFactory.getCalculationByType(questioncalc.getCalculationtype());
+                        if (calctimeperiod != null && calculation != null) {
+                            //See if something's already recorded for this key
+                            boolean foundValue=false;
+                            double value=0;
+                            List<com.fbdblog.dao.Calculation> calcs=HibernateUtil.getSession().createCriteria(com.fbdblog.dao.Calculation.class)
+                                    .add(Restrictions.eq("calctimeperiodid", calctimeperiod.getId()))
+                                    .add(Restrictions.eq("calctimeperiodkey", calctimeperiod.getKey()))
+                                    .add(Restrictions.eq("calculationtype", calculation.getId()))
+                                    .add(Restrictions.eq("questionid", question.getQuestionid()))
+                                    .add(Restrictions.eq("userid", userSession.getUser().getUserid()))
+                                    .setCacheable(true)
+                                    .list();
+                            for (Iterator<com.fbdblog.dao.Calculation> iterator2=calcs.iterator(); iterator2.hasNext();)
+                            {
+                                com.fbdblog.dao.Calculation calcTmp=iterator2.next();
+                                value=calcTmp.getValue();
+                                foundValue=true;
+                            }
+                            if (foundValue) {
+                %>
                             <img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 10px;"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=reportsdetail&questioncalcid=<%=questioncalc.getQuestioncalcid()%>"><%=questioncalc.getName()%></a>: <%=Str.formatWithXDecimalPlaces(value, 2)%></font><br/>
                             <%
                         } else {

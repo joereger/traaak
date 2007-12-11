@@ -20,12 +20,15 @@ public class CalctimeperiodAlltime implements Calctimeperiod {
 
     public static int ID = 1;
     private List<Post> posts;
-
-    public CalctimeperiodAlltime(){
-
-    }
+    private User user;
+    private App app;
 
     public CalctimeperiodAlltime(User user, App app){
+        this.user = user;
+        this.app = app;
+    }
+
+    public void loadPosts(){
         List<Post> posts = HibernateUtil.getSession().createCriteria(Post.class)
                                            .add(Restrictions.eq("userid", user.getUserid()))
                                            .add(Restrictions.eq("appid", app.getAppid()))

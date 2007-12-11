@@ -9,7 +9,6 @@
 <%@ page import="com.fbdblog.session.UrlSplitter" %>
 <%@ page import="com.fbdblog.impressions.ImpressionActivityObject" %>
 <%@ page import="com.fbdblog.scheduledjobs.ImpressionCache" %>
-<%@ page import="com.fbdblog.systemprops.BaseUrl" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.util.Calendar" %>
 <%

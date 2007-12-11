@@ -23,14 +23,18 @@ public class CalctimeperiodWeek implements Calctimeperiod {
 
     public static int ID = 5;
     private List<Post> posts;
+    private User user;
+    private App app;
 
-    public CalctimeperiodWeek(){
-
-    }
 
     public CalctimeperiodWeek(User user, App app){
+        this.user = user;
+        this.app = app;
+    }
+
+    public void loadPosts(){
         Logger logger = Logger.getLogger(this.getClass().getName());
-        Calendar startTime = Time.xWeeksAgoStart(Calendar.getInstance(), 0);
+        Calendar startTime = Time.xWeeksAgoStart(Time.nowInUserTimezone(user.getTimezoneid()), 0);
         //logger.debug("startTime="+Time.dateformatcompactwithtime(startTime));
         List<Post> posts = HibernateUtil.getSession().createCriteria(Post.class)
                                            .add(Restrictions.eq("userid", user.getUserid()))
@@ -40,10 +44,6 @@ public class CalctimeperiodWeek implements Calctimeperiod {
                                            .setCacheable(true)
                                            .list();
         this.posts = posts;
-//        for (Iterator<Post> iterator=posts.iterator(); iterator.hasNext();) {
-//            Post post=iterator.next();
-//            logger.debug(Time.dateformatcompactwithtime(Time.getCalFromDate(post.getPostdate()))+" - postid="+post.getPostid());
-//        }
     }
 
     public int getId() {
@@ -55,7 +55,7 @@ public class CalctimeperiodWeek implements Calctimeperiod {
     }
 
     public String getKey(){ // "alltime", "2007-08", "2007-08-07"
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Time.nowInUserTimezone(user.getTimezoneid());
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH)+1;
         int weekofmonth = cal.get(Calendar.WEEK_OF_MONTH);

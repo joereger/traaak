@@ -21,9 +21,18 @@ public class CalctimeperiodFactory {
         this.app = app;
     }
 
-    public Calctimeperiod getCalctimeperiod(int calctimeperiodid){
+    public Calctimeperiod getCalctimeperiodUnpopulated(int calctimeperiodid){
         if (!calctimeperiods.containsKey(calctimeperiodid)){
             calctimeperiods.put(calctimeperiodid, getCalctimeperiodById(calctimeperiodid));
+        }
+        return calctimeperiods.get(calctimeperiodid);
+    }
+
+    public Calctimeperiod getCalctimeperiodPopulated(int calctimeperiodid){
+        if (!calctimeperiods.containsKey(calctimeperiodid)){
+            Calctimeperiod calctimeperiod = getCalctimeperiodById(calctimeperiodid);
+            calctimeperiod.loadPosts();   
+            calctimeperiods.put(calctimeperiodid, calctimeperiod);
         }
         return calctimeperiods.get(calctimeperiodid);
     }
@@ -47,24 +56,24 @@ public class CalctimeperiodFactory {
         return null;
     }
 
-    public static Calctimeperiod getCalctimeperiodByIdStatic(int calctimeperiodid){
-        if (calctimeperiodid==CalctimeperiodAlltime.ID){
-            return new CalctimeperiodAlltime();
-        }
-        if (calctimeperiodid==CalctimeperiodMonth.ID){
-            return new CalctimeperiodMonth();
-        }
-        if (calctimeperiodid==CalctimeperiodYear.ID){
-            return new CalctimeperiodYear();
-        }
-        if (calctimeperiodid==CalctimeperiodDay.ID){
-            return new CalctimeperiodDay();
-        }
-        if (calctimeperiodid==CalctimeperiodWeek.ID){
-            return new CalctimeperiodWeek();
-        }
-        return null;
-    }
+//    public static Calctimeperiod getCalctimeperiodByIdStatic(int calctimeperiodid){
+//        if (calctimeperiodid==CalctimeperiodAlltime.ID){
+//            return new CalctimeperiodAlltime();
+//        }
+//        if (calctimeperiodid==CalctimeperiodMonth.ID){
+//            return new CalctimeperiodMonth();
+//        }
+//        if (calctimeperiodid==CalctimeperiodYear.ID){
+//            return new CalctimeperiodYear();
+//        }
+//        if (calctimeperiodid==CalctimeperiodDay.ID){
+//            return new CalctimeperiodDay();
+//        }
+//        if (calctimeperiodid==CalctimeperiodWeek.ID){
+//            return new CalctimeperiodWeek();
+//        }
+//        return null;
+//    }
 
 
 }

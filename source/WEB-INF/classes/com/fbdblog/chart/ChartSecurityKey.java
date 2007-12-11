@@ -1,6 +1,7 @@
 package com.fbdblog.chart;
 
 import org.jasypt.util.text.BasicTextEncryptor;
+import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.apache.log4j.Logger;
 
 import java.net.URLEncoder;
@@ -28,6 +29,8 @@ public class ChartSecurityKey {
             if (plainTextKey==null || !plainTextKey.equals(userid+"-"+chartid)){
                 return false;
             }
+        } catch (EncryptionOperationNotPossibleException enpe){
+            logger.debug("", enpe);
         } catch (Exception ex){
             logger.error("", ex);
         }

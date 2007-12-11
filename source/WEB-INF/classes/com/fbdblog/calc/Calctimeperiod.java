@@ -15,6 +15,7 @@ import java.util.List;
 public interface Calctimeperiod {
 
     public int getId();
+    public void loadPosts();
     public String getName(); //"All Time", "Monthly", "Daily"
     public String getKey(); // "alltime", "2007-08", "2007-08-07"
     public List<Post> getPosts();

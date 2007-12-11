@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 import java.util.Iterator;
-import java.util.Date;
 
 
 /**
@@ -39,7 +38,7 @@ public class DoCalculationsAfterPost {
                                            .list();
             for (Iterator<Questioncalc> iterator1=questioncalcs.iterator(); iterator1.hasNext();) {
                 Questioncalc questioncalc=iterator1.next();
-                Calctimeperiod calctimeperiod = calctimeperiodFactory.getCalctimeperiod(questioncalc.getCalctimeperiodid());
+                Calctimeperiod calctimeperiod = calctimeperiodFactory.getCalctimeperiodPopulated(questioncalc.getCalctimeperiodid());
                 Calculation calculation = CalculationFactory.getCalculationByType(questioncalc.getCalculationtype());
                 if (calctimeperiod!=null && calculation!=null){
                     //Do the calculation

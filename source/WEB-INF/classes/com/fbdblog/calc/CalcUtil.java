@@ -3,7 +3,6 @@ package com.fbdblog.calc;
 import com.fbdblog.dao.*;
 import com.fbdblog.dao.Calculation;
 import com.fbdblog.dao.hibernate.HibernateUtil;
-import com.fbdblog.util.Str;
 import com.fbdblog.util.Num;
 import com.fbdblog.qtype.def.ComponentTypes;
 import com.fbdblog.qtype.def.Component;
@@ -21,9 +20,10 @@ import org.hibernate.criterion.Order;
  */
 public class CalcUtil {
 
-    public static double getValueForCalc(Questioncalc questioncalc, User user){
+    public static double getValueForCalc(Questioncalc questioncalc, User user, App app){
         double out = 0;
-        Calctimeperiod calctimeperiod=CalctimeperiodFactory.getCalctimeperiodByIdStatic(questioncalc.getCalctimeperiodid());
+        CalctimeperiodFactory ctpFactory = new CalctimeperiodFactory(user, app);
+        Calctimeperiod calctimeperiod=ctpFactory.getCalctimeperiodUnpopulated(questioncalc.getCalctimeperiodid());
         com.fbdblog.calc.Calculation calculation=CalculationFactory.getCalculationByType(questioncalc.getCalculationtype());
         if (calctimeperiod != null && calculation != null) {
             //See if something's already recorded for this key
@@ -46,7 +46,7 @@ public class CalcUtil {
         return out;
     }
 
-    public static double getValueForQuestion(Question question, User user){
+    public static double getValueForQuestion(Question question, User user, App app){
 
         //Find the latest post with an answer for this question so that I can pass it to the component
         Post post = null;

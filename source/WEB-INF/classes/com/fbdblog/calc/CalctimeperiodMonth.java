@@ -23,14 +23,17 @@ public class CalctimeperiodMonth implements Calctimeperiod {
 
     public static int ID = 2;
     private List<Post> posts;
-
-    public CalctimeperiodMonth(){
-
-    }
+    private User user;
+    private App app;
 
     public CalctimeperiodMonth(User user, App app){
+        this.user = user;
+        this.app = app;
+    }
+
+    public void loadPosts(){
         Logger logger = Logger.getLogger(this.getClass().getName());
-        Calendar startTime = Time.xMonthsAgoStart(Calendar.getInstance(), 0);
+        Calendar startTime = Time.xMonthsAgoStart(Time.nowInUserTimezone(user.getTimezoneid()), 0);
         List<Post> posts = HibernateUtil.getSession().createCriteria(Post.class)
                                            .add(Restrictions.eq("userid", user.getUserid()))
                                            .add(Restrictions.eq("appid", app.getAppid()))
@@ -39,10 +42,6 @@ public class CalctimeperiodMonth implements Calctimeperiod {
                                            .setCacheable(true)
                                            .list();
         this.posts = posts;
-//        for (Iterator<Post> iterator=posts.iterator(); iterator.hasNext();) {
-//            Post post=iterator.next();
-//            logger.debug(Time.dateformatcompactwithtime(Time.getCalFromDate(post.getPostdate()))+" - postid="+post.getPostid());
-//        }
     }
 
     public int getId() {
@@ -54,7 +53,7 @@ public class CalctimeperiodMonth implements Calctimeperiod {
     }
 
     public String getKey(){ // "alltime", "2007-08", "2007-08-07"
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Time.nowInUserTimezone(user.getTimezoneid());
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH)+1;
         return year+"-"+month;
