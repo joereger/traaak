@@ -1,7 +1,8 @@
 <%@ page import="com.fbdblog.systemprops.InstanceProperties" %>
+<%@ page import="com.fbdblog.session.Pagez" %>
 
 <br/>
-<div style="text-align: right;"><font style="font-size: 9px; color: #cccccc;">Brought to you by a server called <%=InstanceProperties.getInstancename()%></font></div>
+<div style="text-align: right;"><font style="font-size: 9px; color: #cccccc;">Brought to you by a server called <%=InstanceProperties.getInstancename()%> in <%=Pagez.getElapsedTime()%> milliseconds</font></div>
 
 <fb:google-analytics uacct="UA-208946-6" page="<%=userSession.getApp().getTitle()%>(<%=userSession.getApp().getAppid()%>)" />
 

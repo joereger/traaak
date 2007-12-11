@@ -12,6 +12,7 @@
 <%@ page import="com.fbdblog.util.Num" %>
 <%@ page import="com.fbdblog.util.Str" %>
 <%@ page import="com.fbdblog.session.FindUserappsettings" %>
+<%@ page import="com.fbdblog.chart.ChartSecurityKey" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -175,7 +176,10 @@ if (request.getParameter("facebookuid")==null) {
 
                                 </td>
                                 <td valign="top" width="400">
-                                    <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=friend.getUserid()%>&size=small" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
+                                    <%
+                                    String key=ChartSecurityKey.getChartKey(userSession.getUser().getUserid(), chart.getChartid());
+                                    %>
+                                    <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=friend.getUserid()%>&size=small&key=<%=key%>" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
                                 </td>
                             </tr>
                         </table>
@@ -197,7 +201,7 @@ if (request.getParameter("facebookuid")==null) {
         %>
     </tr>
 </table>
-<br/>
+<br/><br/><br/>
 <fb:request-form
     action="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=friends&invitecomplete=1"
     method="POST"

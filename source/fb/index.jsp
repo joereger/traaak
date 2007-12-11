@@ -15,6 +15,7 @@
 <%@ page import="com.fbdblog.dao.App" %>
 <%@ page import="com.fbdblog.dao.hibernate.NumFromUniqueResult" %>
 <%@ page import="com.fbdblog.calc.DoCalculationsAfterPost" %>
+<%@ page import="com.fbdblog.chart.ChartSecurityKey" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -192,7 +193,10 @@ if (!topOfPageMsg.equals("")){
             </form>
         </td>
         <td valign="top" width="400">
-            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=userSession.getApp().getPrimarychartid()%>&userid=<%=userSession.getUser().getUserid()%>&size=small" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
+            <%
+            String key=ChartSecurityKey.getChartKey(userSession.getUser().getUserid(), userSession.getApp().getPrimarychartid());
+            %>
+            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=userSession.getApp().getPrimarychartid()%>&userid=<%=userSession.getUser().getUserid()%>&size=small&key=<%=key%>" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
             <br/>
             <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts&chartid=<%=userSession.getApp().getPrimarychartid()%>'>+Zoom</a>
             |

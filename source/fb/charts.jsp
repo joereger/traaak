@@ -10,6 +10,7 @@
 <%@ page import="com.fbdblog.util.Str" %>
 <%@ page import="com.fbdblog.util.Num" %>
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
+<%@ page import="com.fbdblog.chart.ChartSecurityKey" %>
 <%@ include file="header.jsp" %>
 
 
@@ -66,7 +67,10 @@
 
         </td>
         <td valign="top" width="600">
-            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=userSession.getUser().getUserid()%>&size=medium" alt="" width="600" height="300" style="border: 3px solid #e6e6e6;"/>
+            <%
+            String key=ChartSecurityKey.getChartKey(userSession.getUser().getUserid(), chart.getChartid());
+            %>
+            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=userSession.getUser().getUserid()%>&size=medium&key=<%=key%>" alt="" width="600" height="300" style="border: 3px solid #e6e6e6;"/>
         </td>
     </tr>
 </table>

@@ -13,6 +13,7 @@ import com.fbdblog.util.Str;
 import com.fbdblog.util.Time;
 import com.fbdblog.throwdown.ThrowdownStatus;
 import com.fbdblog.throwdown.ThrowdownPrivacy;
+import com.fbdblog.chart.ChartSecurityKey;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
@@ -225,72 +226,78 @@ public class FacebookApiWrapper {
         Logger logger = Logger.getLogger(this.getClass().getName());
         logger.debug("Starting to create FBML for profile");
         try{
-            if (!userappsettings.getIsprivate()){
-                String imgUrl = BaseUrl.get(false)+"fb/graph.jsp?chartid="+app.getPrimarychartid()+"&userid="+user.getUserid()+"&size=profilewide&comparetouserid=0";
 
-                StringBuffer fbml = new StringBuffer();
+            String key=ChartSecurityKey.getChartKey(user.getUserid(), app.getPrimarychartid());
+            String imgUrl = BaseUrl.get(false)+"fb/graph.jsp?chartid="+app.getPrimarychartid()+"&userid="+user.getUserid()+"&size=profilewide&key="+key;
+
+            StringBuffer fbml = new StringBuffer();
+            fbml.append("<center>");
+            fbml.append("<a href='http://apps.facebook.com/"+app.getFacebookappname()+"/'>");
+            fbml.append("<img src=\""+imgUrl+"\" alt=\"\" width=\"380\" height=\"200\"/>");
+            fbml.append("<br/>");
+            fbml.append("<font size='-2'>Chart by "+app.getTitle()+"</font>");
+            fbml.append("</a>");
+            fbml.append("</center>");
+
+            //Add throwdowns update to profile here
+            List<Throwdown> throwdowns=HibernateUtil.getSession().createCriteria(Throwdown.class)
+                    .add(Restrictions.or(
+                                        Restrictions.eq("fromuserid", user.getUserid()),
+                                        Restrictions.eq("tofacebookuid", user.getFacebookuid()))
+                                        )
+                    .add(Restrictions.eq("isaccepted", true))
+                    .add(Restrictions.ge("enddate", Time.xDaysAgoStart(Calendar.getInstance(), 7).getTime()))
+                    .setCacheable(true)
+                    .list();
+            if (throwdowns!=null && throwdowns.size()>0){
                 fbml.append("<center>");
-                fbml.append("<a href='http://apps.facebook.com/"+app.getFacebookappname()+"/'>");
-                fbml.append("<img src=\""+imgUrl+"\" alt=\"\" width=\"380\" height=\"200\"/>");
-                fbml.append("<br/>");
-                fbml.append("<font size='-2'>Chart by "+app.getTitle()+"</font>");
-                fbml.append("</a>");
-                fbml.append("</center>");
-
-                //Add throwdowns update to profile here
-                List<Throwdown> throwdowns=HibernateUtil.getSession().createCriteria(Throwdown.class)
-                        .add(Restrictions.or(
-                                            Restrictions.eq("fromuserid", user.getUserid()),
-                                            Restrictions.eq("tofacebookuid", user.getFacebookuid()))
-                                            )
-                        .add(Restrictions.eq("isaccepted", true))
-                        .add(Restrictions.ge("enddate", Time.xDaysAgoStart(Calendar.getInstance(), 7).getTime()))
-                        .setCacheable(true)
-                        .list();
-                if (throwdowns!=null && throwdowns.size()>0){
-                    fbml.append("<center>");
-                    fbml.append("<table cellpadding='2' cellspacing='1' border='0' width='100%'>");
-                    for (Iterator<Throwdown> iterator=throwdowns.iterator(); iterator.hasNext();) {
-                        Throwdown throwdown=iterator.next();
-                        if (ThrowdownPrivacy.isok(throwdown)){
-                            ThrowdownStatus ts = new ThrowdownStatus(throwdown);
-                            fbml.append("<tr>");
-                                fbml.append("<td valign=\"top\" colspan=\"3\" bgcolor=\"#e6e6e6\"><center><a href=\"http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"\"><font style=\"color: #0000ff; font-weight: bold;\">"+throwdown.getName()+"</font></a></center></td>");
-                            fbml.append("</tr>");
-                            fbml.append("<tr>");
-                                fbml.append("<td valign=\"top\" colspan=\"3\"><center>Ends: "+Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))+"</center></td>");
-                            fbml.append("</tr>");
-                            fbml.append("<tr>");
-                                 fbml.append("<td valign=\"top\"><center>"+ts.getFromStatus()+"</center></td>");
-                                 fbml.append("<td valign=\"center\"></td>");
-                                 fbml.append("<td valign=\"top\"><center>"+ts.getToStatus()+"</center></td>");
-                            fbml.append("</tr>");
-                            fbml.append("<tr>");
-                                 fbml.append("<td valign=\"top\"><center><fb:profile-pic uid=\""+ts.getFromFacebookUser().getUid()+"\" size=\"square\" linked=\"false\"/><br/>"+ts.getFromFacebookUser().getFirst_name()+" "+ts.getFromFacebookUser().getLast_name()+"</center></td>");
-                                 fbml.append("<td valign=\"center\"><center>vs.</center></td>");
-                                 fbml.append("<td valign=\"top\"><center><fb:profile-pic uid=\""+ts.getToFacebookUser().getUid()+"\" size=\"square\" linked=\"false\"/><br/>"+ts.getToFacebookUser().getFirst_name()+" "+ts.getToFacebookUser().getLast_name()+"</center></td>");
-                            fbml.append("</tr>");
-                        }
+                fbml.append("<table cellpadding='2' cellspacing='1' border='0' width='100%'>");
+                for (Iterator<Throwdown> iterator=throwdowns.iterator(); iterator.hasNext();) {
+                    Throwdown throwdown=iterator.next();
+                    if (ThrowdownPrivacy.isok(throwdown)){
+                        ThrowdownStatus ts = new ThrowdownStatus(throwdown);
+                        fbml.append("<tr>");
+                            fbml.append("<td valign=\"top\" colspan=\"3\" bgcolor=\"#e6e6e6\"><center><a href=\"http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"\"><font style=\"color: #0000ff; font-weight: bold;\">"+throwdown.getName()+"</font></a></center></td>");
+                        fbml.append("</tr>");
+                        fbml.append("<tr>");
+                            fbml.append("<td valign=\"top\" colspan=\"3\"><center>Ends: "+Time.dateformatcompactwithtime(Time.getCalFromDate(throwdown.getEnddate()))+"</center></td>");
+                        fbml.append("</tr>");
+                        fbml.append("<tr>");
+                             fbml.append("<td valign=\"top\"><center>"+ts.getFromStatus()+"</center></td>");
+                             fbml.append("<td valign=\"center\"></td>");
+                             fbml.append("<td valign=\"top\"><center>"+ts.getToStatus()+"</center></td>");
+                        fbml.append("</tr>");
+                        fbml.append("<tr>");
+                             fbml.append("<td valign=\"top\"><center><fb:profile-pic uid=\""+ts.getFromFacebookUser().getUid()+"\" size=\"square\" linked=\"false\"/><br/>"+ts.getFromFacebookUser().getFirst_name()+" "+ts.getFromFacebookUser().getLast_name()+"</center></td>");
+                             fbml.append("<td valign=\"center\"><center>vs.</center></td>");
+                             fbml.append("<td valign=\"top\"><center><fb:profile-pic uid=\""+ts.getToFacebookUser().getUid()+"\" size=\"square\" linked=\"false\"/><br/>"+ts.getToFacebookUser().getFirst_name()+" "+ts.getToFacebookUser().getLast_name()+"</center></td>");
+                        fbml.append("</tr>");
                     }
-                    fbml.append("</table>");
-                    fbml.append("</center>");
                 }
-
-                CharSequence cs = fbml.subSequence(0, fbml.length());
-                FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
-                boolean success = facebookRestClient.profile_setFBML(cs, Long.parseLong(user.getFacebookuid()));
-                if (success){
-                    logger.debug("Apparently the setFBML was successful.");
-                } else {
-                    logger.debug("Apparently the setFBML was not successful.");
-                }
-                boolean successrefreshimage = facebookRestClient.fbml_refreshImgSrc(imgUrl);
-                if (successrefreshimage){
-                    logger.debug("Apparently refresh fb image was successful.");
-                } else {
-                    logger.debug("Apparently refresh fb image was not successful.");
-                }
+                fbml.append("</table>");
+                fbml.append("</center>");
             }
+
+            //If it's marked private, wipe out fbml
+            if (userappsettings.getIsprivate()){
+                fbml = new StringBuffer();
+            }
+
+            CharSequence cs = fbml.subSequence(0, fbml.length());
+            FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+            boolean success = facebookRestClient.profile_setFBML(cs, Long.parseLong(user.getFacebookuid()));
+            if (success){
+                logger.debug("Apparently the setFBML was successful.");
+            } else {
+                logger.debug("Apparently the setFBML was not successful.");
+            }
+            boolean successrefreshimage = facebookRestClient.fbml_refreshImgSrc(imgUrl);
+            if (successrefreshimage){
+                logger.debug("Apparently refresh fb image was successful.");
+            } else {
+                logger.debug("Apparently refresh fb image was not successful.");
+            }
+
         } catch (Exception ex){logger.error("",ex);}
     }
 

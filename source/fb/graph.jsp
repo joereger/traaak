@@ -13,9 +13,16 @@ page import="com.fbdblog.util.Num" %><%@
 page import="java.io.IOException" %><%@
 page import="java.io.FileInputStream" %><%@
 page import="org.apache.commons.io.FilenameUtils" %><%@
-page import="com.fbdblog.chart.chartcache.GetChart" %><%
+page import="com.fbdblog.chart.chartcache.GetChart" %><%@
+page import="com.fbdblog.dao.User" %><%@
+page import="com.fbdblog.dao.App" %><%@
+page import="com.fbdblog.dao.Chart" %><%@
+page import="com.fbdblog.session.FindUserappsettings" %><%@
+page import="com.fbdblog.dao.Userappsettings" %><%@
+page import="org.jasypt.util.text.BasicTextEncryptor" %><%@
+page import="com.fbdblog.chart.ChartSecurityKey" %><%
     //Expected URL format
-    //graph.jsp?chartid=34&userid=12&size=small&comparetouserid=45
+    //graph.jsp?chartid=34&userid=12&size=small&comparetouserid=45&key=KJHGKU
 
     //Logger
     Logger logger=Logger.getLogger(this.getClass().getName());
@@ -74,9 +81,27 @@ page import="com.fbdblog.chart.chartcache.GetChart" %><%
         size="xlarge";
     }
 
-    //Create our output stream to the browser
-    OutputStream outStream=response.getOutputStream();
-    //Output the actual chart
-    GetChart.getChart(outStream, response, chartid, userid, comparetouserid, size);
-    
+    boolean safetodisplay=true;
+
+    User user=User.get(userid);
+    Chart chart=Chart.get(chartid);
+    App app=App.get(chart.getAppid());
+    Userappsettings userappsettings=FindUserappsettings.get(user, app);
+    if (userappsettings.getIsprivate()) {
+        logger.debug("checking key="+request.getParameter("key"));
+        //Now need to look for the key
+        if (!ChartSecurityKey.isValidChartKey(request.getParameter("key"), userid, chartid)){
+            safetodisplay = false;
+        }
+    }
+
+    if (safetodisplay) {
+        //Create our output stream to the browser
+        OutputStream outStream=response.getOutputStream();
+        //Output the actual chart
+        GetChart.getChart(outStream, response, chartid, userid, comparetouserid, size);
+    } else {
+        //@todo display an error image... for now it'll be a broken image
+    }
+
 %>

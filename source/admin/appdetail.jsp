@@ -13,6 +13,9 @@
 <%@ page import="com.fbdblog.util.Str" %>
 <%@ page import="com.fbdblog.dao.Questioncalc" %>
 <%@ page import="org.hibernate.criterion.Order" %>
+<%@ page import="com.fbdblog.chart.SysadminAutoCalcCreator" %>
+<%@ page import="com.fbdblog.chart.DataTypeDecimal" %>
+<%@ page import="com.fbdblog.chart.DataTypeInteger" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -101,6 +104,18 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
             }
         }
         out.print("Primary chart has been set.<br/>");
+    }
+%>
+
+<%
+    if (request.getParameter("action") != null && request.getParameter("action").equals("allpossiblecalcs")) {
+        if (request.getParameter("questionid")!=null && Num.isinteger(request.getParameter("questionid"))) {
+            Question question=Question.get(Integer.parseInt(request.getParameter("questionid")));
+            if (question!=null && question.getQuestionid()>0) {
+                SysadminAutoCalcCreator.createAllPossibleCalcs(question);
+                out.print("Calcs created.<br/>");
+            }
+        }
     }
 %>
 
@@ -275,10 +290,13 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                         %>
                         <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail-calc.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&questioncalcid=<%=questioncalc.getQuestioncalcid()%>"><%=questioncalc.getName()%></a>(del)</font><br/>
                         <%
-                    }
-                    %>
-                    <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail-calc.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&action=newcalc">+ Add Calc</a></font><br/>
-                    <%
+                        }
+                        if (question.getDatatypeid() == DataTypeDecimal.DATATYPEID || question.getDatatypeid() == DataTypeInteger.DATATYPEID) {
+                            %>
+                            <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail-calc.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&action=newcalc">+ Add Calc</a></font><br/>
+                            <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&action=allpossiblecalcs">+ Add All Possible Calcs</a></font><br/>
+                            <%
+                        }
                 }
             %>
             <br/>

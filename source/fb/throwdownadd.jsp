@@ -135,6 +135,18 @@
 <%@ include file="tabs.jsp" %>
 
 <%
+if (userSession.getUserappsettings()!=null && userSession.getUserappsettings().getIsprivate()){
+    %>
+    <fb:error>
+    <fb:message>You Can't Create Throwdowns Because You're in Private Mode</fb:message>
+    Your friends won't be able to see your stuff. You can make stuff public <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+    </fb:error>
+    <br/>
+    <%
+}
+%>
+
+<%
 if (!topOfPageMsg.equals("")){
     %><%=topOfPageMsg%><%
 }

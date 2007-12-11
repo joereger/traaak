@@ -56,7 +56,7 @@ public class MegaChartHtmlRenderer {
         
         //Chart image only if we have a chartid to look at
         //if (megaChart.getChart()!=null && megaChart.getChart().getChartid()>0){
-            //mb.append("<img src='/fb/graph.jsp?chartid="+megaChart.getChart().getChartid()+"&userid=0&size=medium&comparetouserid=0' border=0>");
+            //mb.append("<img src='/fb/graph.jsp?chartid="+megaChart.getChart().getChartid()+"&userid=0&size=medium&key="+key+"' border=0>");
         //}
 
         //mb.append("</td></tr>");
