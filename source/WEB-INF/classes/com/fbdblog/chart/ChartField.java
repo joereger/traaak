@@ -52,6 +52,8 @@ public interface ChartField {
      */
     String getTimezoneid();
 
+    int getMegadatatypeid();
+
 
 
 }

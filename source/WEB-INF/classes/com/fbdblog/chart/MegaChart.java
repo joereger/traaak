@@ -27,10 +27,6 @@ public class MegaChart {
     private String yAxisTitle = "";
     private int[] yquestionid = new int[0];
 
-
-
-
-
     public MegaChart(int chartid){
         chart = Chart.get(chartid);
         if (chart.getChartid()>0){

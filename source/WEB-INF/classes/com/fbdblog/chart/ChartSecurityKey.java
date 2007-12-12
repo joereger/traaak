@@ -22,17 +22,19 @@ public class ChartSecurityKey {
             return false;
         }
         try{
-            String urldecodedKey = URLDecoder.decode(key, "UTF-8");
+            //String urldecodedKey = URLDecoder.decode(key, "UTF-8");
             BasicTextEncryptor textEncryptor=new BasicTextEncryptor();
             textEncryptor.setPassword(ENC_PASS);
-            String plainTextKey=textEncryptor.decrypt(urldecodedKey);
+            String plainTextKey=textEncryptor.decrypt(key);
             if (plainTextKey==null || !plainTextKey.equals(userid+"-"+chartid)){
                 return false;
             }
         } catch (EncryptionOperationNotPossibleException enpe){
-            logger.debug("", enpe);
+            logger.error("", enpe);
+            return false;
         } catch (Exception ex){
             logger.error("", ex);
+            return false;
         }
         return true;
     }

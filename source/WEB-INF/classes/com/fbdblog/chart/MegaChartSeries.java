@@ -70,7 +70,7 @@ public class MegaChartSeries {
             xFieldtype = xQuestionid;
             ChartField f = ChartFieldFactory.getHandlerByFieldtype(xFieldtype);
             xAxisTitle = f.getName();
-            xMegadatatype = f.getID();
+            xMegadatatype = f.getMegadatatypeid();
         } else {
             if (xQuestionid>1000000){
                 //Over a million use displayoverride, but here we're just getting field names and can use the question
@@ -86,6 +86,7 @@ public class MegaChartSeries {
                 xMegadatatype = question.getDatatypeid();
             }
         }
+        logger.debug("in costructor() point A xMegadatatype="+xMegadatatype);
 
         //yField
         if (yQuestionid < 0){
@@ -241,19 +242,26 @@ public class MegaChartSeries {
 
                     //Create a properly typed xAxisValue
                     Object xAxisValue = null;
+                    logger.debug("in massageData() point B xMegadatatype="+xMegadatatype);
+                    logger.debug("in massageData() point B xFieldtype="+xFieldtype);
                     if (xMegadatatype==DataTypeInteger.DATATYPEID){
                         if (Num.isinteger(tmpChartData[i][1])){
+                            logger.debug("xMegadatatype==DataTypeInteger.DATATYPEID for tmpChartData[i][1]:"+tmpChartData[i][1]);
                             xAxisValue = new Integer(tmpChartData[i][1]);
                         } else {
+                            logger.debug("setting to zero because not Integer for tmpChartData[i][1]:"+tmpChartData[i][1]);
                             xAxisValue = new Integer(0);
                         }
                     } else if (xMegadatatype==DataTypeDecimal.DATATYPEID) {
                         if (Num.isdouble(tmpChartData[i][1])){
+                            logger.debug("xMegadatatype==DataTypeDecimal.DATATYPEID for tmpChartData[i][1]:"+tmpChartData[i][1]);
                             xAxisValue = new Double(tmpChartData[i][1]);
                         } else {
+                            logger.debug("setting to zero because not Double for tmpChartData[i][1]:"+tmpChartData[i][1]);
                             xAxisValue = new Double(0);
                         }
                     } else {
+                        logger.debug("setting to String because not numeric:"+tmpChartData[i][1]);
                         xAxisValue = tmpChartData[i][1];
                     }
                     //Override when using displayoverride because strings are allowed

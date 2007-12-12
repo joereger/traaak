@@ -325,7 +325,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                     for (Iterator<Questioncalc> iterator1=questioncalcs.iterator(); iterator1.hasNext();) {
                         Questioncalc questioncalc = iterator1.next();
                         %>
-                        <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&questioncalcid=<%=questioncalc.getQuestioncalcid()%>"><%=questioncalc.getName()%></a>(<a href="appdetail.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&questioncalcid=<%=questioncalc.getQuestioncalcid()%>&action=deletequestioncalc">del</a>)</font><br/>
+                        <img src="/images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 9px;"><a href="appdetail.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&questioncalcid=<%=questioncalc.getQuestioncalcid()%>"><%=questioncalc.getName()%></a> (<a href="appdetail.jsp?appid=<%=app.getAppid()%>&questionid=<%=question.getQuestionid()%>&questioncalcid=<%=questioncalc.getQuestioncalcid()%>&action=deletequestioncalc">del</a>)</font><br/>
                         <%
                     }
                     if (question.getDatatypeid() == DataTypeDecimal.DATATYPEID || question.getDatatypeid() == DataTypeInteger.DATATYPEID) {
@@ -337,7 +337,6 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                     }
                 }
             %>
-            <br/>
             <br/><a href='appdetail-question-textbox.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Textbox</a>
             <br/><a href='appdetail-question-checkboxes.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Checkboxes</a>
             <br/><a href='appdetail-question-dropdown.jsp?action=newquestion&appid=<%=app.getAppid()%>'>+ Add Dropdown</a>
@@ -360,7 +359,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                 for (Iterator<Chart> iterator = charts.iterator(); iterator.hasNext();) {
                     Chart chart = (Chart)iterator.next();
                     %>
-                    <a href="appdetail-chart.jsp?appid=<%=app.getAppid()%>&chartid=<%=chart.getChartid()%>"><%=chart.getChartid()%>: <%=chart.getName()%></a>
+                    <a href="appdetail-chart.jsp?appid=<%=app.getAppid()%>&chartid=<%=chart.getChartid()%>"><%=chart.getName()%></a>
                     <%
                     if (chart.getChartid()==app.getPrimarychartid()){
                         %>
@@ -376,7 +375,6 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                     <%
                 }
             %>
-            <br/>
             <br/><a href="appdetail-chart.jsp?action=newchart&appid=<%=app.getAppid()%>">+ Add Chart</a>
             <br/><a href='appdetail.jsp?action=clearchartcache&appid=<%=app.getAppid()%>'>- Clear Chart Cache For App</a>
         </td>

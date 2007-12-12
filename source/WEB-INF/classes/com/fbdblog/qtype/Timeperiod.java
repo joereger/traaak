@@ -6,6 +6,7 @@ import com.fbdblog.qtype.util.AppPostParser;
 import com.fbdblog.chart.ChartField;
 import com.fbdblog.chart.DataType;
 import com.fbdblog.chart.DataTypeFactory;
+import com.fbdblog.chart.DataTypeString;
 import com.fbdblog.dao.Question;
 import com.fbdblog.dao.User;
 import com.fbdblog.dao.Post;
@@ -49,6 +50,13 @@ public class Timeperiod implements Component, ChartField {
 
     public int getID(){
         return ID;
+    }
+
+    public int getMegadatatypeid() {
+        if (question!=null){
+            return question.getDatatypeid();
+        }
+        return DataTypeString.DATATYPEID;
     }
 
     public String getHtmlForInput() {

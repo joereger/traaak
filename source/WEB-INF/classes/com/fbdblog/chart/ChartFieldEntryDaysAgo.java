@@ -143,10 +143,10 @@ public class ChartFieldEntryDaysAgo implements ChartField{
                 //Careful!!! I must make sure it's of the correct type.
                 Integer val = new Integer(i);
                 //If it doesn't exist
-                logger.debug("data.get(val)="+data.get(String.valueOf(val)));
-                if(data.get(String.valueOf(val))==null){
+                logger.debug("i="+i+" data.get(val)="+data.get(val));
+                if(data.get(val)==null){
                     //Add it to the TreeMap
-                    data.put(String.valueOf(val), new Integer(0));
+                    data.put(val, new Integer(0));
                 }
             }
         } catch (java.util.NoSuchElementException e){

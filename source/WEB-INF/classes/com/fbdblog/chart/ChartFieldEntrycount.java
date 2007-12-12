@@ -41,6 +41,8 @@ public class ChartFieldEntrycount implements ChartField {
     }
 
 
+
+
     /**
      * Accepts an array of eventid's and returns a set of values for this field
      * corresponding to those eventid's.

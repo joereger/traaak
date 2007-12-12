@@ -13,6 +13,7 @@ import com.fbdblog.qtype.util.AppPostParser;
 import com.fbdblog.chart.ChartField;
 import com.fbdblog.chart.DataType;
 import com.fbdblog.chart.DataTypeFactory;
+import com.fbdblog.chart.DataTypeString;
 import com.fbdblog.util.Str;
 
 import java.util.TreeMap;
@@ -50,6 +51,13 @@ public class Textbox implements Component, ChartField {
 
     public int getID(){
         return ID;
+    }
+
+    public int getMegadatatypeid() {
+        if (question!=null){
+            return question.getDatatypeid();
+        }
+        return DataTypeString.DATATYPEID;
     }
 
     public String getHtmlForInput() {

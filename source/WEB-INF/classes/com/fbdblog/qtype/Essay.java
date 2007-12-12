@@ -13,6 +13,7 @@ import com.fbdblog.qtype.util.AppPostParser;
 import com.fbdblog.chart.ChartField;
 import com.fbdblog.chart.DataType;
 import com.fbdblog.chart.DataTypeFactory;
+import com.fbdblog.chart.DataTypeString;
 
 import java.util.TreeMap;
 import java.util.ArrayList;
@@ -49,6 +50,13 @@ public class Essay implements Component, ChartField {
 
     public int getID(){
         return Essay.ID;
+    }
+
+    public int getMegadatatypeid() {
+        if (question!=null){
+            return question.getDatatypeid();
+        }
+        return DataTypeString.DATATYPEID;
     }
 
     public String getHtmlForInput() {

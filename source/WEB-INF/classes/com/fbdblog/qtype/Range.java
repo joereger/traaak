@@ -14,6 +14,7 @@ import com.fbdblog.qtype.util.AppPostParser;
 import com.fbdblog.chart.ChartField;
 import com.fbdblog.chart.DataType;
 import com.fbdblog.chart.DataTypeFactory;
+import com.fbdblog.chart.DataTypeString;
 
 /**
  * User: Joe Reger Jr
@@ -46,6 +47,13 @@ public class Range implements Component, ChartField {
 
     public int getID(){
         return Range.ID;
+    }
+
+    public int getMegadatatypeid() {
+        if (question!=null){
+            return question.getDatatypeid();
+        }
+        return DataTypeString.DATATYPEID;
     }
 
     public String getHtmlForInput() {
