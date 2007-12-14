@@ -5,22 +5,44 @@
 <%@ page import="org.hibernate.criterion.Restrictions" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.fbdblog.dao.hibernate.HibernateUtil" %>
-<%@ page import="com.fbdblog.dao.Chart" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page import="com.fbdblog.util.Str" %>
 <%@ page import="com.fbdblog.util.Num" %>
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
-<%@ page import="com.fbdblog.dao.Question" %>
-<%@ page import="com.fbdblog.dao.Questioncalc" %>
 <%@ page import="org.hibernate.criterion.Order" %>
-<%@ page import="com.fbdblog.dao.Calculation" %>
 <%@ page import="com.fbdblog.chart.DataTypeDecimal" %>
 <%@ page import="com.fbdblog.chart.DataTypeInteger" %>
 <%@ page import="com.fbdblog.calc.Calctimeperiod" %>
 <%@ page import="com.fbdblog.calc.CalculationFactory" %>
 <%@ page import="com.fbdblog.calc.CalctimeperiodFactory" %>
+<%@ page import="com.fbdblog.calc.DoCalculationsAfterPost" %>
+<%@ page import="com.fbdblog.dao.*" %>
 <%@ include file="header.jsp" %>
 
+<%
+
+    //Just a test... remove before production
+//    Post post = null;
+//    List<Post> posts=HibernateUtil.getSession().createCriteria(Post.class)
+//            .add(Restrictions.eq("userid", userSession.getUser().getUserid()))
+//            .add(Restrictions.eq("appid", userSession.getApp().getAppid()))
+//            .addOrder(Order.desc("postid"))
+//            .setMaxResults(1)
+//            .setCacheable(true)
+//            .list();
+//    for (Iterator<Post> iterator=posts.iterator(); iterator.hasNext();) {
+//         Post p=iterator.next();
+//         post = p;
+//    }
+//    if (post!=null){
+//        logger.debug("Starting calculations");
+//        long startTime = Pagez.getElapsedTime();
+//        DoCalculationsAfterPost.doCalculations(post);
+//        long endTime = Pagez.getElapsedTime();
+//        logger.debug("Done with calculations... "+(endTime-startTime)+" millis elapsed");
+//    }
+
+%>
 
 
 
