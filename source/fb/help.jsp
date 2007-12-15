@@ -94,7 +94,7 @@ if (!topOfPageMsg.equals("")){
             <font style="font-size: 14px; font-weight: bold; color: #666666;">Got something to say?  Have a Question? Found a bug?  Want to track other stuff?</font>
             <br/>
             <font style="font-size: 9px; color: #666666;">We're geeks, stuck behind computer monitors 24/7... we crave the attention! So let us know what you think.  Recommend something new that you'd like to track.  Tell us about a bug.  Ask us a question about how something works.  We're game.</font>
-            <br/>
+            <br/><br/>
             <form action="help.jsp" method="post">
                 <input type="hidden" name="action" value="save">
                 <input type="hidden" name="nav" value="help">
@@ -132,7 +132,7 @@ if (!topOfPageMsg.equals("")){
             <br/><br/>
             <!-- FAQ will go here -->
         </td>
-        <td valign="top">
+        <td valign="top" bgcolor="#e6e6e6">
             <%
                 List<Supportissue> supportissues=HibernateUtil.getSession().createCriteria(Supportissue.class)
                         .add(Restrictions.eq("userid", userSession.getUser().getUserid()))

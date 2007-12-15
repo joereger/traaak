@@ -90,6 +90,7 @@ if (!topOfPageMsg.equals("")){
             <tr>
                 <td valign="top" colspan="2">
                     <font style="font-size: 20px; font-weight: bold; color: #666666;"><%=supportissue.getSubject()%></font>
+                    <br/><br/>
                 </td>
             </tr>
 
@@ -99,20 +100,21 @@ if (!topOfPageMsg.equals("")){
                     User userwhosent = User.get(supportissuecomm.getUserid());
                     %>
                     <tr>
-                        <td valign="top" width="20%">
+                        <td valign="top" width="20%" style="text-align: right;">
                             <font style="font-size: 12px; font-weight: bold;"><%=userwhosent.getFirstname()%> <%=userwhosent.getLastname()%></font>
                             <br/>
                             <font style="font-size: 9px;"><%=Time.dateformatcompactwithtime(Time.gmttousertime(supportissuecomm.getDatetime(), userSession.getUser().getTimezoneid()))%></font>
                         </td>
                         <td valign="top">
                             <font style="font-size: 10px;"><%=supportissuecomm.getNotes()%></font>
+                            <br/><br/>
                         </td>
                     </tr>
                     <%
                 }
             %>
             <tr>
-                <td valign="top" width="20%">
+                <td valign="top" width="20%" style="text-align: right;">
                     <font style="font-size: 12px; font-weight: bold;"><%=userSession.getUser().getFirstname()%> <%=userSession.getUser().getLastname()%></font>
                     <br/>
                     <font style="font-size: 9px;">Anything you'd like to add?</font>
