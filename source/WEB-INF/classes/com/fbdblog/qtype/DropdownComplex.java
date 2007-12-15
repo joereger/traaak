@@ -153,10 +153,24 @@ public class DropdownComplex implements Component, ChartField {
                 if (isThisvalueSelected(value, displayoverride)){
                     selected = " selected='true'";
                 }
-                out.append("<option value=\""+ Str.cleanForHtml(value.trim()+DELIMITER+displayoverride.trim())+"\" "+selected+">" + Str.truncateString(optiondisplaytext, 30) + "</option>");
+                out.append("<option value=\""+ Str.cleanForHtml(value.trim()+DELIMITER+displayoverride.trim())+"\" "+selected+">" + Str.truncateString(optiondisplaytext, 29) + "</option>");
             }
         }
         return out.toString();
+    }
+
+    public String getValue() {
+        if (post!=null && post.getPostanswers()!=null){
+            for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
+                Postanswer postanswer=iterator.next();
+                if (postanswer.getQuestionid()==question.getQuestionid()){
+                    if (postanswer.getName().equals("response")){
+                        return postanswer.getValue();
+                    }
+                }
+            }
+        }
+        return "";
     }
 
 
@@ -165,6 +179,9 @@ public class DropdownComplex implements Component, ChartField {
             for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
                 Postanswer postanswer=iterator.next();
                 if (postanswer.getQuestionid()==question.getQuestionid()){
+                    if (postanswer.getName().equals("displayoverride")){
+                        return postanswer.getValue();
+                    }
                     if (postanswer.getName().equals("response")){
                         return postanswer.getValue();
                     }

@@ -64,7 +64,7 @@ public class CalcUtil {
 
         if (post!=null && post.getPostid()>0){
             Component component = ComponentTypes.getComponentByID(question.getComponenttype(), question, post, user);
-            String val = component.getValueForDisplay();
+            String val = component.getValue();
             if (Num.isdouble(val)){
                 return Double.parseDouble(val);
             }

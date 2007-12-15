@@ -26,6 +26,22 @@ public class SysadminAutoCalcCreator {
         createCalcOfTypeOnAllTimePeriods(question, CalculationDeltaPercent.ID, "Percent Change in");
     }
 
+    public static void createAllTotalCalcs(Question question){
+        createCalcOfTypeOnAllTimePeriods(question, CalculationSum.ID, "Total");
+    }
+
+    public static void createAllAverageCalcs(Question question){
+        createCalcOfTypeOnAllTimePeriods(question, CalculationAvg.ID, "Average");
+    }
+
+    public static void createAllDeltaAbsCalcs(Question question){
+        createCalcOfTypeOnAllTimePeriods(question, CalculationDeltaAbs.ID, "Change in");
+    }
+
+    public static void createAllDeltaPctCalcs(Question question){
+        createCalcOfTypeOnAllTimePeriods(question, CalculationDeltaPercent.ID, "Percent Change in");
+    }
+
     private static void createCalcOfTypeOnAllTimePeriods(Question question, int calctypeid, String typename){
         createCalcOfTypeAndOfTimePeriod(question, calctypeid, CalctimeperiodAlltime.ID, typename, "All Time");
         createCalcOfTypeAndOfTimePeriod(question, calctypeid, CalctimeperiodYear.ID, typename, "Yearly");

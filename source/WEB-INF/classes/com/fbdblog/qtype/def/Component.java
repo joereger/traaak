@@ -14,6 +14,7 @@ public interface Component {
     public String getName();
     public int getID();
     public String getHtmlForInput();
+    public String getValue();
     public String getValueForDisplay();
     public void validateAnswer(AppPostParser srp) throws com.fbdblog.qtype.def.ComponentException;
     public void processAnswer(AppPostParser srp, Post post) throws ComponentException;

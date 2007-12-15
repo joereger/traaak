@@ -49,8 +49,8 @@
         }
         //Clear the chart image cache
         ClearCache.clearCacheForChart(app.getAppid(), megaChart.getChart().getChartid());
-        //response.sendRedirect("appdetail.jsp?appid="+app.getAppid());
-        //return;
+        response.sendRedirect("appdetail.jsp?appid="+app.getAppid());
+        return;
     }
 %>
 <font class="pagetitle">App: <a href='appdetail.jsp?appid=<%=app.getAppid()%>'><%=app.getTitle()%></a></font>

@@ -27,6 +27,10 @@
     .pagetitle {font-family: impact; font-size: 28px; color: #666666;}
 </style>
 
+<style type="text/css">
+.questionfont{font-weight: bold; background: #ffffcc;}
+</style>
+
 <body>
 
 <table cellpadding="3" cellspacing="0" border="0" width="100%">

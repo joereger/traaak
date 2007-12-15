@@ -87,6 +87,10 @@ public class Textbox implements Component, ChartField {
         return out.toString();
     }
 
+    public String getValue() {
+        return getValueForDisplay();
+    }
+
     public String getValueForDisplay() {
         logger.debug("getValueForDisplay()");
         if (post!=null && post.getPostanswers()!=null){

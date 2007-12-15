@@ -139,6 +139,10 @@ public class Matrix implements Component, ChartField {
         return out.toString();
     }
 
+    public String getValue() {
+        return getValueForDisplay();
+    }
+
     public String getValueForDisplay() {
         StringBuffer out = new StringBuffer();
         if (post!=null && post.getPostanswers()!=null){

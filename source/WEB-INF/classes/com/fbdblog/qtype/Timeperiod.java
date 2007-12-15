@@ -119,6 +119,10 @@ public class Timeperiod implements Component, ChartField {
         return out.toString();
     }
 
+    public String getValue() {
+        return getValueForDisplay();
+    }
+
     public String getValueForDisplay() {
         if (post!=null && post.getPostanswers()!=null){
             for (Iterator<Postanswer> iterator=post.getPostanswers().iterator(); iterator.hasNext();) {
