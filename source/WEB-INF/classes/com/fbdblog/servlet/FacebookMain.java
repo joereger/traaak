@@ -45,6 +45,16 @@ public class FacebookMain extends HttpServlet {
             return;
         }
 
+        if (request.getParameter("nav")!=null && request.getParameter("nav").equals("help")){
+            request.getRequestDispatcher("/fb/help.jsp").forward(request, response);
+            return;
+        }
+
+        if (request.getParameter("nav")!=null && request.getParameter("nav").equals("helpissuedetail")){
+            request.getRequestDispatcher("/fb/help-issuedetail.jsp").forward(request, response);
+            return;
+        }
+
         if (request.getParameter("nav")!=null && request.getParameter("nav").equals("reportsdetail")){
             request.getRequestDispatcher("/fb/reportsdetail.jsp").forward(request, response);
             return;

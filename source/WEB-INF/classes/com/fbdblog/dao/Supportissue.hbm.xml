@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.fbdblog.dao.Supportissue" table="supportissue">
+        <cache usage="transactional"/>
+        <id name="supportissueid" type="int">
+            <column name="supportissueid" />
+            <generator class="native" />
+        </id>
+
+
+        <set name="supportissuecomms" inverse="true" order-by="supportissuecommid asc" cascade="all-delete-orphan">
+            <cache usage="transactional"/>
+            <key column="supportissueid"></key>
+            <one-to-many class="com.fbdblog.dao.Supportissuecomm" not-found="ignore"></one-to-many>
+        </set>
+        <property name="userid" type="int">
+            <column name="userid" not-null="true" />
+        </property>
+        <property name="datetime" type="timestamp">
+            <column name="datetime" not-null="true" />
+        </property>
+        <property name="status" type="int">
+            <column name="status" not-null="true" />
+        </property>
+        <property name="type" type="int">
+            <column name="type" not-null="true" />
+        </property>
+        <property name="subject" type="text">
+            <column name="subject"/>
+        </property>
+
+    </class>
+</hibernate-mapping>
