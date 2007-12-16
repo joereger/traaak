@@ -18,8 +18,8 @@ import org.apache.log4j.Logger;
 
 public class Supportissue extends BasePersistentClass implements java.io.Serializable, RegerEntity, AuthControlled {
 
-     public static int STATUS_OPEN = 0;
-     public static int STATUS_WORKING = 1;
+     public static int STATUS_NEW = 0;
+     public static int STATUS_REPLYWAITING = 1;
      public static int STATUS_CLOSED = 2;
 
      public static int TYPE_UNDEFINED = 0;
@@ -30,7 +30,9 @@ public class Supportissue extends BasePersistentClass implements java.io.Seriali
      // Fields
      private int supportissueid;
      private int userid;
+     private int appid;
      private Date datetime;
+     private Date mostrecentupdateat;
      private int status;
      private int type;
      private String subject;
@@ -144,5 +146,21 @@ public class Supportissue extends BasePersistentClass implements java.io.Seriali
 
     public void setType(int type) {
         this.type=type;
+    }
+
+    public Date getMostrecentupdateat() {
+        return mostrecentupdateat;
+    }
+
+    public void setMostrecentupdateat(Date mostrecentupdateat) {
+        this.mostrecentupdateat=mostrecentupdateat;
+    }
+
+    public int getAppid() {
+        return appid;
+    }
+
+    public void setAppid(int appid) {
+        this.appid=appid;
     }
 }

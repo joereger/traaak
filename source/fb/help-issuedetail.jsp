@@ -48,7 +48,9 @@ String topOfPageMsg = "";
             supportissuecomm.setDatetime(Time.nowInGmtDate());
             try {
                 supportissuecomm.save();
-                supportissue.refresh();
+                supportissue.setMostrecentupdateat(Time.nowInGmtDate());
+                supportissue.setStatus(Supportissue.STATUS_NEW);
+                supportissue.save();
             } catch (Exception ex) {
                 logger.error("", ex);
             }
@@ -103,7 +105,7 @@ if (!topOfPageMsg.equals("")){
                         <td valign="top" width="20%" style="text-align: right;">
                             <font style="font-size: 12px; font-weight: bold;"><%=userwhosent.getFirstname()%> <%=userwhosent.getLastname()%></font>
                             <br/>
-                            <font style="font-size: 9px;"><%=Time.dateformatcompactwithtime(Time.gmttousertime(supportissuecomm.getDatetime(), userSession.getUser().getTimezoneid()))%></font>
+                            <font style="font-size: 9px;"><%=Time.agoText(Time.getCalFromDate(supportissuecomm.getDatetime()))%></font>
                         </td>
                         <td valign="top">
                             <font style="font-size: 10px;"><%=supportissuecomm.getNotes()%></font>

@@ -27,11 +27,13 @@ String topOfPageMsg = "";
         if (request.getParameter("subject") != null && !request.getParameter("subject").equals("")) {
             if (request.getParameter("notes") != null && !request.getParameter("notes").equals("")) {
                 Supportissue supportissue=new Supportissue();
-                supportissue.setStatus(Supportissue.STATUS_OPEN);
+                supportissue.setStatus(Supportissue.STATUS_NEW);
+                supportissue.setAppid(userSession.getApp().getAppid());
                 supportissue.setSubject(request.getParameter("subject"));
                 supportissue.setType(Supportissue.TYPE_UNDEFINED);
                 supportissue.setUserid(userSession.getUser().getUserid());
                 supportissue.setDatetime(Time.nowInGmtDate());
+                supportissue.setMostrecentupdateat(Time.nowInGmtDate());
                 try {
                     supportissue.save();
                 } catch (Exception ex) {
@@ -106,7 +108,7 @@ if (!topOfPageMsg.equals("")){
                             <font style="font-size: 9px;">The short and sweet of it.</font>
                         </td>
                         <td valign="top">
-                            <input type="text" name="subject" value="" size="40" maxlength="250">
+                            <input type="text" name="subject" value="" size="40" maxlength="100">
                         </td>
                     </tr>
                     <tr>
@@ -132,29 +134,40 @@ if (!topOfPageMsg.equals("")){
             <br/><br/>
             <!-- FAQ will go here -->
         </td>
-        <td valign="top" bgcolor="#e6e6e6">
+        <td valign="top" bgcolor="#f6f6f6">
+            <font style="font-size: 14px; font-weight: bold; color: #666666;">Things You've Sent Us</font>
+            <br/>
             <%
                 List<Supportissue> supportissues=HibernateUtil.getSession().createCriteria(Supportissue.class)
                         .add(Restrictions.eq("userid", userSession.getUser().getUserid()))
-                        .addOrder(Order.desc("supportissueid"))
+                        .add(Restrictions.eq("appid", userSession.getApp().getAppid()))
+                        .addOrder(Order.desc("mostrecentupdateat"))
                         .setCacheable(true)
                         .list();
                 if (supportissues != null && supportissues.size()>0) {
                     %>
-                    <font style="font-size: 14px; font-weight: bold; color: #666666;">Things You've Sent Us</font>
-                    <br/>
-                    <font style="font-size: 9px; color: #666666;">Click in to see if we've responded.</font>
-                    <br/><br/>
                     <%
                     for (Iterator<Supportissue> iterator=supportissues.iterator(); iterator.hasNext();) {
                          Supportissue supportissue=iterator.next();
+                         String statusStr = "New";
+                         if (supportissue.getStatus()==Supportissue.STATUS_NEW){
+                            statusStr = "New";
+                         } else if (supportissue.getStatus()==Supportissue.STATUS_REPLYWAITING){
+                            statusStr = "Reply Waiting";
+                         } else if (supportissue.getStatus()==Supportissue.STATUS_CLOSED){
+                            statusStr = "Closed";    
+                         }
                         %>
-                        <font style="font-size: 8px; font-weight: bold;"><%=Time.dateformatcompactwithtime(Time.gmttousertime(supportissue.getDatetime(), userSession.getUser().getTimezoneid()))%></font>
+                        <font style="font-size: 8px; font-weight: bold;"><%=Time.agoText(Time.getCalFromDate(supportissue.getMostrecentupdateat()))%>: <%=statusStr%></font>
                         <br/>
                         <a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=helpissuedetail&supportissueid=<%=supportissue.getSupportissueid()%>"><font style="font-size: 10px; font-weight: bold;"><%=supportissue.getSubject()%></font></a>
                         <br/><br/>
                         <%
                     }
+                } else {
+                    %>
+                    <font style="font-size: 9px; color: #666666;">You haven't sent us anything yet!</font>
+                    <%
                 }
                 %>
         </td>

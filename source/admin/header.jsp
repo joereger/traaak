@@ -1,6 +1,11 @@
 <%@ page import="com.fbdblog.session.UserSession" %>
 <%@ page import="org.apache.log4j.Logger" %>
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
+<%@ page import="com.fbdblog.dao.hibernate.HibernateUtil" %>
+<%@ page import="org.hibernate.criterion.Restrictions" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.fbdblog.dao.Supportissue" %>
+<%@ page import="com.fbdblog.dao.hibernate.NumFromUniqueResult" %>
 <%
     //Logger
     Logger logger = Logger.getLogger(this.getClass());
@@ -20,6 +25,11 @@
         response.sendRedirect("login.jsp");
         return;
     }
+%>
+
+<%
+    //Count new supportissues
+    int newsupportissues=NumFromUniqueResult.getInt("select count(*) from Supportissue where status='"+Supportissue.STATUS_NEW+"'");
 %>
 
 <style type="text/css">
@@ -59,6 +69,7 @@
             <a href='financialmodel.jsp'>Financial Model</a><br/>
             <a href='iaocache.jsp'>Iao Cache</a><br/>
             <a href='impressions.jsp'>Impressions</a><br/>
+            <a href='support.jsp'>Support Issues (<%=newsupportissues%>)</a><br/>
         </td>
         <td valign="top">
 
