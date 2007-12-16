@@ -11,6 +11,7 @@
 <%@ page import="com.fbdblog.scheduledjobs.ImpressionCache" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.util.Calendar" %>
+<%@ page import="com.fbdblog.systemprops.BaseUrl" %>
 <%
     //Logger
     Logger logger=Logger.getLogger(this.getClass());
@@ -81,7 +82,7 @@ if (!userSession.getApp().getAdglobalheader().equals("")){
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
     <tr>
         <td valign="top" width="64">
-            <img src="<%=BaseUrl.get(false)%>images/logo-64.png" alt="" width="64" height="64"/>
+            <img src="<%=com.fbdblog.systemprops.BaseUrl.get(false)%>images/logo-64.png" alt="" width="64" height="64"/>
         </td>
         <td valign="top">
             <font style="font-size: 24px; font-weight: bold;"><%=userSession.getApp().getTitle()%></font>
