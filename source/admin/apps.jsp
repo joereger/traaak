@@ -5,6 +5,7 @@
 <%@ page import="java.util.Calendar" %>
 <%@ page import="com.fbdblog.util.Str" %>
 <%@ page import="com.fbdblog.util.Num" %>
+<%@ page import="org.hibernate.criterion.Order" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -33,15 +34,17 @@
 <td valign="top"></td>
 </tr>
 <%
-    double totalinstalls = 0;
-    double totaltotalimpressions = 0;
-    double totalapps = 0;
-    int totalusers = ((Long)HibernateUtil.getSession().createQuery("select count(*) from User").uniqueResult()).intValue();
-
-    List<App> apps=HibernateUtil.getSession().createQuery("from App").list();
+    double totalinstalls=0;
+    double totaltotalimpressions=0;
+    double totalapps=0;
+    int totalusers=((Long) HibernateUtil.getSession().createQuery("select count(*) from User").uniqueResult()).intValue();
+    List<App> apps = HibernateUtil.getSession().createCriteria(App.class)
+            .addOrder(Order.asc("title"))
+            .setCacheable(true)
+            .list();
     for (Iterator<App> iterator=apps.iterator(); iterator.hasNext();) {
         App app=iterator.next();
-        totalapps = totalapps + 1;
+        totalapps=totalapps + 1;
 
         Calendar now=Calendar.getInstance();
         int currentyear=now.get(Calendar.YEAR);
@@ -58,16 +61,16 @@
         if (obj2 != null) {
             totalimpressions=((Long) obj2).doubleValue();
         }
-        totaltotalimpressions = totaltotalimpressions + totalimpressions;
+        totaltotalimpressions=totaltotalimpressions + totalimpressions;
 
         Double installs=0.0;
         Object obj3=HibernateUtil.getSession().createQuery("select count(*) from Userappstatus where appid='" + app.getAppid() + "' and isinstalled=true").uniqueResult();
         if (obj3 != null) {
             installs=((Long) obj3).doubleValue();
         }
-        totalinstalls = totalinstalls + installs;
+        totalinstalls=totalinstalls + installs;
 
-        %>
+%>
         <tr>
             <td valign="top"><a href="appdetail.jsp?appid=<%=app.getAppid()%>"><%=app.getTitle()%></a></td>
             <td valign="top"><%=Str.formatWithXDecimalPlaces(installs, 0)%></td>

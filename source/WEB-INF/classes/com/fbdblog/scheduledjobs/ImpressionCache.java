@@ -10,10 +10,7 @@ import com.fbdblog.impressions.ImpressionActivityObjectStorage;
 import com.fbdblog.dao.User;
 import com.fbdblog.dao.App;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Joe Reger Jr
@@ -23,7 +20,8 @@ import java.util.List;
 public class ImpressionCache implements Job {
 
 
-    public static List<ImpressionActivityObject> iaos;
+    //private static List<ImpressionActivityObject> iaos;
+    private static Map<String, Integer> iaos;
 
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         Logger logger = Logger.getLogger(this.getClass().getName());
@@ -32,24 +30,14 @@ public class ImpressionCache implements Job {
             try{
                 if (iaos!=null){
                     synchronized(iaos){
-                        for (Iterator it = iaos.iterator(); it.hasNext(); ) {
-                            ImpressionActivityObject iao = (ImpressionActivityObject)it.next();
-                            try{
-                                ImpressionActivityObjectStorage.store(iao);
-                                it.remove();
-                            } catch (Exception ex){
-                                logger.error("",ex);
-                            }
-                        }
+                        ImpressionActivityObjectStorage.store(iaos);
+                        iaos = Collections.synchronizedMap(new HashMap<String, Integer>());
                     }
                 }
             } catch (Exception ex){
                 logger.debug("Error in top block.");
                 logger.error("",ex);
             }
-
-
-
 
 //        } else {
 //            logger.debug("InstanceProperties.getRunScheduledTasksOnThisInstance() is FALSE for this instance so this task is not being executed.");
@@ -60,14 +48,21 @@ public class ImpressionCache implements Job {
 
     public static synchronized void addIao(ImpressionActivityObject iao){
         if (iaos==null){
-            iaos = Collections.synchronizedList(new ArrayList<ImpressionActivityObject>());
+            iaos = Collections.synchronizedMap(new HashMap<String, Integer>());
         }
         synchronized(iaos){
-            iaos.add(iao);
+            if (iao.getAppid()>0 && iao.getYear()>0 && iao.getMonth()>0 && iao.getDay()>0){
+                String iaoID = iao.getAppid()+ImpressionActivityObjectStorage.DELIM+iao.getYear()+ImpressionActivityObjectStorage.DELIM+iao.getMonth()+ImpressionActivityObjectStorage.DELIM+iao.getDay()+ImpressionActivityObjectStorage.DELIM+iao.getPage();
+                if (iaos.containsKey(iaoID)){
+                    iaos.put(iaoID, ((Integer)iaos.get(iaoID))+1);
+                } else {
+                    iaos.put(iaoID, 1);
+                }
+            }
         }
     }
 
-    public static List<ImpressionActivityObject> getIaos() {
+    public static Map<String, Integer> getIaos() {
         if(iaos!=null){
             synchronized(iaos){
                 return iaos;
@@ -80,31 +75,19 @@ public class ImpressionCache implements Job {
         StringBuffer out = new StringBuffer();
         if (iaos!=null){
             out.append("<table cellpadding='3' cellspacing='0' border='0'>");
-            for (Iterator it = iaos.iterator(); it.hasNext(); ) {
-                ImpressionActivityObject iao = (ImpressionActivityObject)it.next();
-               
 
-                User user = User.get(iao.getUserid());
-                App app = App.get(iao.getAppid());
+            Iterator keyValuePairs = iaos.entrySet().iterator();
+            for (int i = 0; i < iaos.size(); i++){
+                Map.Entry mapentry = (Map.Entry) keyValuePairs.next();
+                String key = (String)mapentry.getKey();
+                Integer impressioncount = (Integer)mapentry.getValue();
 
                 out.append("<tr>");
                 out.append("<td valign='top'>");
-                out.append("userid:"+user.getUserid());
+                out.append(key);
                 out.append("</td>");
                 out.append("<td valign='top'>");
-                out.append(user.getFirstname()+" "+user.getLastname());
-                out.append("</td>");
-                out.append("<td valign='top'>");
-                out.append("appid:"+app.getAppid());
-                out.append("</td>");
-                out.append("<td valign='top'>");
-                out.append(app.getTitle());
-                out.append("</td>");
-                out.append("<td valign='top'>");
-                out.append(iao.getYear());
-                out.append("</td>");
-                out.append("<td valign='top'>");
-                out.append(iao.getMonth());
+                out.append(impressioncount);
                 out.append("</td>");
                 out.append("</tr>");
 

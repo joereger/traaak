@@ -58,7 +58,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
 <input type="hidden" name="unit" value="<%=unit%>">
 <input type="hidden" name="action" value="save">
 
-<table cellpadding="3" cellspacing="0" border="0">
+<table cellpadding="3" cellspacing="0" border="0" width="100%">
     <tr>
         <td valign="top"></td>
         <td valign="top"></td>
@@ -69,7 +69,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
         App app=iterator.next();
         %>
         <tr>
-            <td valign="top"><a href="appdetail.jsp?appid=<%=app.getAppid()%>"><%=app.getTitle()%></a></td>
+            <td valign="top" style="text-align: right;"><a href="appdetail.jsp?appid=<%=app.getAppid()%>"><b><%=app.getTitle()%></b></a></td>
             <td valign="top" align="center">
                 <%
                 String ad = "";
@@ -83,7 +83,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
                     ad = app.getAdunderchart();
                 }
                 %>
-                <textarea name="<%=unit%>-ad-appid-<%=app.getAppid()%>" cols="45" rows="2"><%=ad%></textarea>
+                <textarea name="<%=unit%>-ad-appid-<%=app.getAppid()%>" cols="65" rows="3" style="width: 100%;"><%=ad%></textarea>
             </td>
         </tr>
         <%

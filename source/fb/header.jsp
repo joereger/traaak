@@ -59,10 +59,11 @@
         if (userSession.getUser().getUserid()>0 && userSession.getApp().getAppid()>0) {
             Calendar cal=Calendar.getInstance();
             ImpressionActivityObject iao=new ImpressionActivityObject();
-            iao.setUserid(userSession.getUser().getUserid());
             iao.setAppid(userSession.getApp().getAppid());
             iao.setYear(cal.get(Calendar.YEAR));
             iao.setMonth(cal.get(Calendar.MONTH) + 1);
+            iao.setDay(cal.get(Calendar.DAY_OF_MONTH));
+            iao.setPage(request.getServletPath());
             ImpressionCache.addIao(iao);
         }
     }

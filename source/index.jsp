@@ -4,6 +4,7 @@
 <%@ page import="com.fbdblog.dao.hibernate.HibernateUtil" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
+<%@ page import="org.hibernate.criterion.Order" %>
 
 <br/><br/><br/><br/>
 <center>
@@ -45,12 +46,14 @@
             <font style="font-size: 22px; color: #cccccc; font-family: arial;"><b>The Apps</b></font>
             <font style="font-size: 12px; color: #000000; font-family: arial;">
             <%
+
                 List<App> apps=HibernateUtil.getSession().createCriteria(App.class)
                         .add(Restrictions.eq("crosspromote", true))
+                        .addOrder(Order.asc("title"))
                         .setCacheable(true)
                         .list();
                 for (Iterator<App> iterator=apps.iterator(); iterator.hasNext();) {
-                    App app= iterator.next();
+                    App app=iterator.next();
                     %>
                         <br/>&nbsp;&nbsp;<a href="http://apps.facebook.com/<%=app.getFacebookappname()%>/"><%=app.getTitle()%></a>
                     <%

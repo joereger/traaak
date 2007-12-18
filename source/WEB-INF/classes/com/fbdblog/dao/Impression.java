@@ -20,11 +20,12 @@ public class Impression extends BasePersistentClass implements java.io.Serializa
 
 
      private int impressionid;
-     private int userid;
      private int appid;
      private int year;
      private int month;
+     private int day;
      private int impressions;
+     private String page;
 
     //Validator
     public void validateRegerEntity() throws GeneralException {
@@ -81,14 +82,6 @@ public class Impression extends BasePersistentClass implements java.io.Serializa
         this.impressionid=impressionid;
     }
 
-    public int getUserid() {
-        return userid;
-    }
-
-    public void setUserid(int userid) {
-        this.userid=userid;
-    }
-
     public int getAppid() {
         return appid;
     }
@@ -113,11 +106,27 @@ public class Impression extends BasePersistentClass implements java.io.Serializa
         this.month=month;
     }
 
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day=day;
+    }
+
     public int getImpressions() {
         return impressions;
     }
 
     public void setImpressions(int impressions) {
         this.impressions=impressions;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page=page;
     }
 }

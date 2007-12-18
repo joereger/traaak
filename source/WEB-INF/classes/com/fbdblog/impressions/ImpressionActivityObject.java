@@ -7,18 +7,13 @@ package com.fbdblog.impressions;
  */
 public class ImpressionActivityObject {
 
-    private int userid=0;
     private int appid=0;
     private int year=0;
     private int month=0;
+    private int day=0;
+    private String page="";
 
-    public int getUserid() {
-        return userid;
-    }
 
-    public void setUserid(int userid) {
-        this.userid=userid;
-    }
 
     public int getAppid() {
         return appid;
@@ -44,4 +39,19 @@ public class ImpressionActivityObject {
         this.month=month;
     }
 
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day=day;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page=page;
+    }
 }

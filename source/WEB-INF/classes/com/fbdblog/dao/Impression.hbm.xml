@@ -9,9 +9,7 @@
             <column name="impressionid" />
             <generator class="native" />
         </id>
-        <property name="userid" type="int">
-            <column name="userid" not-null="true" />
-        </property>
+        
         <property name="appid" type="int">
             <column name="appid" not-null="true" />
         </property>
@@ -21,8 +19,14 @@
         <property name="month" type="int">
             <column name="month" not-null="true" />
         </property>
+        <property name="day" type="int">
+            <column name="day" not-null="true" />
+        </property>
         <property name="impressions" type="int">
             <column name="impressions" not-null="true" />
+        </property>
+        <property name="page" type="text">
+            <column name="page" not-null="true" />
         </property>
     </class>
 </hibernate-mapping>

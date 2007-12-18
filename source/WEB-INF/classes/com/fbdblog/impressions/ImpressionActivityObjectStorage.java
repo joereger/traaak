@@ -18,21 +18,11 @@ import com.fbdblog.dao.Impression;
  */
 public class ImpressionActivityObjectStorage {
 
-    public static void store(ImpressionActivityObject iao){
+    public static String DELIM = "---";
+
+
+    public static void store(Map<String, Integer> queue){
         Logger logger = Logger.getLogger(ImpressionActivityObjectStorage.class);
-
-        //Collapse impressions into queue with key=1-45-2007-06
-        //Goal here is to cut down on inserts into the database
-        HashMap<String, Integer> queue = new HashMap<String, Integer>();
-        if (iao.getUserid()>0 && iao.getAppid()>0 && iao.getYear()>0 && iao.getMonth()>0){
-            String iaoID = iao.getUserid()+"-"+iao.getAppid()+"-"+iao.getYear()+"-"+iao.getMonth();
-            if (queue.containsKey(iaoID)){
-                queue.put(iaoID, ((Integer)queue.get(iaoID))+1);
-            } else {
-                queue.put(iaoID, 1);
-            }
-        }
-
         //Run through queue and add to database
         Iterator keyValuePairs = queue.entrySet().iterator();
         for (int i = 0; i < queue.size(); i++){
@@ -40,15 +30,16 @@ public class ImpressionActivityObjectStorage {
                 Map.Entry mapentry = (Map.Entry) keyValuePairs.next();
                 String key = (String)mapentry.getKey();
                 Integer impressioncount = (Integer)mapentry.getValue();
-                String[] keySplit = key.split("-");
-                if (keySplit.length>=4){
+                String[] keySplit = key.split(DELIM);
+                if (keySplit.length>=5){
                     boolean updatedone = false;
                     //See if there's already an entry in the db for this userid, appid, year and month
                     List<Impression> impressions = HibernateUtil.getSession().createCriteria(Impression.class)
-                                                       .add(Restrictions.eq("userid", Integer.parseInt(keySplit[0])))
-                                                       .add(Restrictions.eq("appid", Integer.parseInt(keySplit[1])))
-                                                       .add(Restrictions.eq("year", Integer.parseInt(keySplit[2])))
-                                                       .add(Restrictions.eq("month", Integer.parseInt(keySplit[3])))
+                                                       .add(Restrictions.eq("appid", Integer.parseInt(keySplit[0])))
+                                                       .add(Restrictions.eq("year", Integer.parseInt(keySplit[1])))
+                                                       .add(Restrictions.eq("month", Integer.parseInt(keySplit[2])))
+                                                       .add(Restrictions.eq("day", Integer.parseInt(keySplit[3])))
+                                                       .add(Restrictions.eq("page", keySplit[4]))
                                                        .setCacheable(false)
                                                        .list();
                     for (Iterator<Impression> iterator=impressions.iterator(); iterator.hasNext();) {
@@ -60,10 +51,11 @@ public class ImpressionActivityObjectStorage {
                     //If nothing was found, create a new record
                     if (!updatedone){
                         Impression impression = new Impression();
-                        impression.setUserid(Integer.parseInt(keySplit[0]));
-                        impression.setAppid(Integer.parseInt(keySplit[1]));
-                        impression.setYear(Integer.parseInt(keySplit[2]));
-                        impression.setMonth(Integer.parseInt(keySplit[3]));
+                        impression.setAppid(Integer.parseInt(keySplit[0]));
+                        impression.setYear(Integer.parseInt(keySplit[1]));
+                        impression.setMonth(Integer.parseInt(keySplit[2]));
+                        impression.setDay(Integer.parseInt(keySplit[3]));
+                        impression.setPage(keySplit[4]);
                         impression.setImpressions(impressioncount);
                         try{impression.save();}catch(Exception ex){logger.error("",ex);}
                     }

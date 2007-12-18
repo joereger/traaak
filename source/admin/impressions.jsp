@@ -85,6 +85,8 @@ for (Iterator iterator=apps.iterator(); iterator.hasNext();) {
             <td valign="top"><%=Str.formatForMoney(avgimpressionsperuser)%></td>
             <td valign="top"><%=Str.formatForMoney(totalimpressions)%></td>
             </tr>
+
+
             <%
 
             //Decrement year/month
