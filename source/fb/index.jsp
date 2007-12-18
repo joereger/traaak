@@ -16,6 +16,7 @@
 <%@ page import="com.fbdblog.dao.hibernate.NumFromUniqueResult" %>
 <%@ page import="com.fbdblog.calc.DoCalculationsAfterPost" %>
 <%@ page import="com.fbdblog.chart.ChartSecurityKey" %>
+<%@ page import="org.hibernate.criterion.Order" %>
 <%@ include file="header.jsp" %>
 
 <%
@@ -212,6 +213,7 @@ if (!topOfPageMsg.equals("")){
                     int col=0;
                     List<App> apps=HibernateUtil.getSession().createCriteria(App.class)
                             .add(Restrictions.eq("crosspromote", true))
+                            .addOrder(Order.asc("title"))
                             .setCacheable(true)
                             .list();
                     for (Iterator<App> iterator=apps.iterator(); iterator.hasNext();) {
@@ -219,7 +221,7 @@ if (!topOfPageMsg.equals("")){
                         if (app.getAppid() != userSession.getApp().getAppid()) {
                             col=col + 1;
                             if (col == 1) {
-                            %><tr><%
+                                %><tr><%
                             }
                                 %><td valign="top"><%
                                 %>
@@ -235,6 +237,7 @@ if (!topOfPageMsg.equals("")){
                 %>
                 </table>
             </div>
+            <div style="text-align: center;"><font style="font-size: 10px;">Don't see what you want?  <a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=help">Tell us what you'd like to track.</a></font></div>
         </td>
     </tr>
 </table>

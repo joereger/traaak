@@ -2,6 +2,8 @@ package com.fbdblog.startup.dbversion;
 
 import com.fbdblog.startup.UpgradeDatabaseOneVersion;
 import com.fbdblog.db.Db;
+import com.fbdblog.util.Time;
+import com.fbdblog.util.Str;
 import org.apache.log4j.Logger;
 
 /**
@@ -9,7 +11,7 @@ import org.apache.log4j.Logger;
  * Date: Nov 26, 2006
  * Time: 11:57:46 AM
  */
-public class Version1 implements UpgradeDatabaseOneVersion {
+public class Version9 implements UpgradeDatabaseOneVersion {
 
     Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -23,17 +25,14 @@ public class Version1 implements UpgradeDatabaseOneVersion {
         logger.debug("doPostHibernateUpgrade() start");
 
 
-        //-----------------------------------
-        //-----------------------------------
-        int count2 = Db.RunSQLUpdate("UPDATE questionconfig SET name='values' WHERE name='options'");
-        //-----------------------------------
-        //-----------------------------------
 
         //-----------------------------------
         //-----------------------------------
-        int count3 = Db.RunSQLUpdate("UPDATE questionuserconfig SET name='values' WHERE name='options'");
+        int count = Db.RunSQLUpdate("UPDATE app SET createdate='"+ Time.dateformatfordb(Time.nowInGmtCalendar()) +"'");
         //-----------------------------------
         //-----------------------------------
+
+
 
 
         logger.debug("doPostHibernateUpgrade() finish");

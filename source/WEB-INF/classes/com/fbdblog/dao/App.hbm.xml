@@ -15,6 +15,9 @@
             <one-to-many class="com.fbdblog.dao.Question" not-found="ignore"></one-to-many>
         </set>
 
+        <property name="createdate" type="timestamp">
+            <column name="createdate" not-null="true" />
+        </property>
         <property name="title" type="text">
             <column name="title" not-null="true" />
         </property>

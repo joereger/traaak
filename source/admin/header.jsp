@@ -69,7 +69,7 @@
             <a href='financialmodel.jsp'>Financial Model</a><br/>
             <a href='iaocache.jsp'>Iao Cache</a><br/>
             <a href='impressions.jsp'>Impressions</a><br/>
-            <a href='support.jsp'>Support Issues (<%=newsupportissues%>)</a><br/>
+            <a href='support.jsp'>Support Issues <%if (newsupportissues>0){%>(<%=newsupportissues%>)<%}%></a><br/>
         </td>
         <td valign="top">
 

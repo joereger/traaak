@@ -14,13 +14,13 @@ public class Version0 implements UpgradeDatabaseOneVersion {
 
     public void doPreHibernateUpgrade(){
         logger.debug("doPreHibernateUpgrade() start");
-        logger.debug("Not really doing anything... Version0 is a placeholder class.");
+        logger.debug("Not really doing anything...");
         logger.debug("doPreHibernateUpgrade() finish");  
     }
 
     public void doPostHibernateUpgrade(){
         logger.debug("doPostHibernateUpgrade() start");
-        logger.debug("Not really doing anything... Version0 is a placeholder class.");
+        logger.debug("Not really doing anything...");
         logger.debug("doPostHibernateUpgrade() finish");
     }
 

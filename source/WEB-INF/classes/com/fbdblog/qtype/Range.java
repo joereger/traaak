@@ -15,6 +15,8 @@ import com.fbdblog.chart.ChartField;
 import com.fbdblog.chart.DataType;
 import com.fbdblog.chart.DataTypeFactory;
 import com.fbdblog.chart.DataTypeString;
+import com.fbdblog.util.Num;
+import com.fbdblog.util.Str;
 
 /**
  * User: Joe Reger Jr
@@ -97,7 +99,7 @@ public class Range implements Component, ChartField {
             }
         }
 
-        out.append("<table cellpadding=\"3\" cellspacing=\"0\" border=\"0\">");
+        out.append("<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\">");
         out.append("<tr>");
         out.append("<td align=\"center\" valign=\"top\">");
         out.append(mintitle);
@@ -112,9 +114,11 @@ public class Range implements Component, ChartField {
                 checked = " checked";
             }
             out.append("<td align=\"center\" valign=\"top\">");
+            out.append("<center>");
             out.append("<input type=\"radio\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_\" value=\""+i+"\" "+checked+">");
             out.append("<br>");
-            out.append(i);
+            out.append(Str.formatWithXDecimalPlaces(i, 0));
+            out.append("</center>");
             out.append("</td>");
         }
         if (!createdExactlyMaxRadio){
@@ -123,9 +127,11 @@ public class Range implements Component, ChartField {
                 checked = " checked";
             }
             out.append("<td align=\"center\" valign=\"top\">");
+            out.append("<center>");
             out.append("<input type=\"radio\" name=\""+ AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER +"questionid_"+question.getQuestionid()+"_\" value=\""+max+"\" "+checked+">");
             out.append("<br>");
             out.append(max);
+            out.append("</center>");
             out.append("</td>");
         }
         out.append("<td align=\"center\" valign=\"top\">");

@@ -9,6 +9,7 @@ import com.fbdblog.dao.hibernate.AuthControlled;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 
@@ -36,6 +37,7 @@ public class App extends BasePersistentClass implements java.io.Serializable, Re
      private String adpostsave;
      private String adhistoryright;
      private String adunderchart;
+     private Date createdate;
 
 
      private Set<Question> questions = new HashSet<Question>();
@@ -215,5 +217,13 @@ public class App extends BasePersistentClass implements java.io.Serializable, Re
 
     public void setFacebookinfinitesessionkey(String facebookinfinitesessionkey) {
         this.facebookinfinitesessionkey=facebookinfinitesessionkey;
+    }
+
+    public Date getCreatedate() {
+        return createdate;
+    }
+
+    public void setCreatedate(Date createdate) {
+        this.createdate=createdate;
     }
 }

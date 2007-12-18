@@ -17,18 +17,19 @@
 <%@ page import="com.fbdblog.chart.DataTypeDecimal" %>
 <%@ page import="com.fbdblog.chart.DataTypeInteger" %>
 <%@ page import="com.fbdblog.qtype.util.AppTemplateProcessor" %>
+<%@ page import="com.fbdblog.util.Time" %>
 <%@ include file="header.jsp" %>
 
 <%
-    App app = null;
-    if (request.getParameter("appid") != null && Num.isinteger(request.getParameter("appid"))) {
-        app = App.get(Integer.parseInt(request.getParameter("appid")));
+    App app=null;
+    if (request.getParameter("appid")!=null && Num.isinteger(request.getParameter("appid")) && Integer.parseInt(request.getParameter("appid"))>0) {
+        app=App.get(Integer.parseInt(request.getParameter("appid")));
     } else {
-        if (request.getParameter("action")==null){
+        if (request.getParameter("action") == null) {
             response.sendRedirect("apps.jsp");
             return;
         }
-        app = new App();
+        app=new App();
         app.setTitle("Track");
         app.setFacebookapikey("");
         app.setFacebookapisecret("");
@@ -42,6 +43,7 @@
         app.setAdpostsave("");
         app.setAdunderchart("");
         app.setFacebookinfinitesessionkey("");
+        app.setCreatedate(Time.nowInGmtDate());
     }
 %>
 

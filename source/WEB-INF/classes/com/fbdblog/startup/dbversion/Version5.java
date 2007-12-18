@@ -15,7 +15,7 @@ public class Version5 implements UpgradeDatabaseOneVersion {
 
     public void doPreHibernateUpgrade(){
         logger.debug("doPreHibernateUpgrade() start");
-        logger.debug("Not really doing anything... Version0 is a placeholder class.");
+        logger.debug("Not really doing anything...");
         logger.debug("doPreHibernateUpgrade() finish");
     }
 
