@@ -20,6 +20,18 @@
     }
 %>
 
+<%
+    if (request.getParameter("action") != null && request.getParameter("action").equals("toggleisdefaultprivate")) {
+        if (request.getParameter("appid")!=null && Num.isinteger(request.getParameter("appid"))) {
+            App app = App.get(Integer.parseInt(request.getParameter("appid")));
+            if (app!=null && app.getAppid()>0){
+                app.setIsdefaultprivate(!app.getIsdefaultprivate());
+                try {app.save();} catch (Exception ex) {logger.error("", ex);}
+            }
+        }
+    }
+%>
+
 
 <font class="pagetitle">Apps</font>
 <br/><br/>
@@ -30,8 +42,9 @@
 <td valign="top">Installs</td>
 <td valign="top">ImpPerUser</td>
 <td valign="top">TotalImp</td>
-<td valign="top">Crosspromo?</td>
-<td valign="top"></td>
+<td valign="top">Promote</td>
+<td valign="top">Private</td>
+<td valign="top">InfSessKey</td>
 </tr>
 <%
     double totalinstalls=0;
@@ -79,12 +92,28 @@
             <td valign="top" align="center">
             <%
             if (app.getCrosspromote()){
-                %><a href='apps.jsp?action=togglecrosspromote&appid=<%=app.getAppid()%>'><img src="/images/misc-green-16.png" alt="" width="16" height="16" border="0"/></a><%
+                %><a href='apps.jsp?action=togglecrosspromote&appid=<%=app.getAppid()%>'><img src="/images/wireless-green-16.png" alt="Promote It" width="16" height="16" border="0"/></a><%
             } else {
-                %><a href='apps.jsp?action=togglecrosspromote&appid=<%=app.getAppid()%>'><img src="/images/misc-red-16.png" alt="" width="16" height="16" border="0"/></a><%
+                %><a href='apps.jsp?action=togglecrosspromote&appid=<%=app.getAppid()%>'><img src="/images/misc-16.png" alt="Don't Promote It" width="16" height="16" border="0"/></a><%
             }
             %>
-            <td valign="top"><%if (app.getFacebookinfinitesessionkey()==null || app.getFacebookinfinitesessionkey().equals("")){out.print("<font style=\"font-size: 8px;\">Infinite Session Key Missing</font>");}%></td>
+            </td>
+            <td valign="top" align="center">
+            <%
+            if (app.getIsdefaultprivate()){
+                %><a href='apps.jsp?action=toggleisdefaultprivate&appid=<%=app.getAppid()%>'><img src="/images/lock-16.png" alt="Private" width="16" height="16" border="0"/></a><%
+            } else {
+                %><a href='apps.jsp?action=toggleisdefaultprivate&appid=<%=app.getAppid()%>'><img src="/images/misc-16.png" alt="Public" width="16" height="16" border="0"/></a><%
+            }
+            %>
+            <td valign="top" align="center">
+            <%
+            if (app.getFacebookinfinitesessionkey()==null || app.getFacebookinfinitesessionkey().equals("")){
+                %><a href='appdetail.jsp?appid=<%=app.getAppid()%>'><img src="/images/alert-16.png" alt="No Key" width="16" height="16" border="0"/></a><%
+            } else {
+                %><a href='appdetail.jsp?appid=<%=app.getAppid()%>'><img src="/images/misc-16.png" alt="Key OK" width="16" height="16" border="0"/></a><%
+            }
+            %>
             </td>
         </tr>
         <%

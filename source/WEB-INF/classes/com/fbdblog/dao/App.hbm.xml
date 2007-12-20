@@ -57,6 +57,8 @@
         <property name="adunderchart" type="text">
             <column name="adunderchart" not-null="true"/>
         </property>
-
+        <property name="isdefaultprivate" type="boolean">
+            <column name="isdefaultprivate" />
+        </property>
     </class>
 </hibernate-mapping>

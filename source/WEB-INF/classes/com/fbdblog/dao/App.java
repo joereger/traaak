@@ -38,6 +38,7 @@ public class App extends BasePersistentClass implements java.io.Serializable, Re
      private String adhistoryright;
      private String adunderchart;
      private Date createdate;
+     private boolean isdefaultprivate;
 
 
      private Set<Question> questions = new HashSet<Question>();
@@ -225,5 +226,13 @@ public class App extends BasePersistentClass implements java.io.Serializable, Re
 
     public void setCreatedate(Date createdate) {
         this.createdate=createdate;
+    }
+
+    public boolean getIsdefaultprivate() {
+        return isdefaultprivate;
+    }
+
+    public void setIsdefaultprivate(boolean isdefaultprivate) {
+        this.isdefaultprivate=isdefaultprivate;
     }
 }

@@ -197,6 +197,11 @@ public class UserSessionSetup {
                 try {userappactivity.save();} catch (Exception ex) {logger.error("",ex);}
                 //Record the app status
                 UserappstatusUtil.userInstalledApp(userSession.getUser(), userSession.getApp());
+                //Default to private
+                if (userSession.getApp().getIsdefaultprivate()){
+                    userSession.getUserappsettings().setIsprivate(true);
+                    try{userSession.getUserappsettings().save();}catch(Exception ex){logger.error("", ex);}
+                }
                 //Send xmpp
                 SendXMPPMessage xmpp=new SendXMPPMessage(SendXMPPMessage.GROUP_CUSTOMERSUPPORT, userSession.getApp().getTitle()+" installed by " + userSession.getUser().getFirstname() + " " + userSession.getUser().getLastname());
                 xmpp.send();
