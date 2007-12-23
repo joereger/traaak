@@ -76,7 +76,7 @@ for (Iterator iterator=apps.iterator(); iterator.hasNext();) {
             <td valign="top"><%=post.getPostid()%></td>
             <td valign="top"><a href="appdetail.jsp?appid=<%=app.getAppid()%>"><%=app.getTitle()%></a></td>
             <td valign="top"><%=user.getFirstname()%> <%=user.getLastname()%></td>
-            <td valign="top"><%=Time.dateformatcompactwithtime(post.getPostdate())%></td>
+            <td valign="top"><%=Time.agoText(post.getPostdate())%></td>
             </tr>
             <%
     }

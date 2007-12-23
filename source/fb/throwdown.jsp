@@ -166,7 +166,7 @@ if (throwdown.getIscomplete() && !throwdown.getIsaccepted()){
 
 
         <tr>
-            <td height="50" valign="top" width="75"><center><font style="font-size: 10px; font-weight: bold;"><%=fromFacebookUser.getFirst_name()%><br/><%=fromFacebookUser.getLast_name()%></font><br/><img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><img src="<%=BaseUrl.get(false)%>images/throwdown-body.gif" alt="" width="85" height="189"/></center></td>
+            <td height="50" valign="top" width="75"><center><font style="font-size: 10px; font-weight: bold;"><%=fromFacebookUser.getFirst_name()%><br/><%=fromFacebookUser.getLast_name()%></font><br/><img src="<%=fromFacebookUser.getPic_square()%>" alt="" width="50" height="50"/><br/><img src="<%=BaseUrl.get(false)%>images/throwdown-body.gif" alt="" width="85" height="189"/></center></td>
             <td rowspan="3" valign="top"><img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="10" height="1"/></td>
             <td rowspan="3" valign="top">
                     <%

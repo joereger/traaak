@@ -368,13 +368,16 @@ public class Time {
 	* Get the pretty "2 Days Ago" text as compared to current time
 	* Must pass a GMT date
 	*/
-	public static String agoText(Calendar indate){
+	public static String agoText(Date indategmt){
+        return agoText(getCalFromDate(indategmt));    
+    }
+	public static String agoText(Calendar indategmt){
 	    Logger logger = Logger.getLogger("com.fbdblog.util.Time");
 	    Calendar indateClone;
 	    try{
-	        indateClone = (Calendar) indate.clone();
+	        indateClone = (Calendar) indategmt.clone();
         } catch (Exception e){
-            logger.debug("input to agoText(indate) was not a date.");
+            logger.debug("input to agoText(indategmt) was not a date.");
             indateClone = Calendar.getInstance();
         }
 
