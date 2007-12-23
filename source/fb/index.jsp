@@ -30,6 +30,7 @@
 <%
 //For holding top of page messages
 String topOfPageMsg = "";
+String adPostSave = "";
 %>
 
 <%
@@ -42,12 +43,16 @@ String topOfPageMsg = "";
             "     <fb:message>Good trackin'.  Now track s'more.</fb:message>\n" +
             "     We've updated your profile so that others can check out your stuff.  Now's a good time to check out <a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=friends'>your friends' stuff</a>.\n" +
             "</fb:success>");
-            if (!userSession.getApp().getAdpostsave().equals("")){
-                tmp.append("<br/>");
-                tmp.append(userSession.getApp().getAdpostsave());
-                tmp.append("<br/>");
-            }
             topOfPageMsg = tmp.toString();
+            StringBuffer tmpAps = new StringBuffer();
+            if (!userSession.getApp().getAdpostsave().equals("")){
+                tmpAps.append("<br/>");
+                tmpAps.append("<center>");
+                tmpAps.append(userSession.getApp().getAdpostsave());
+                tmpAps.append("</center>");
+                tmpAps.append("<br/>");
+            }
+            adPostSave = tmpAps.toString();
         } catch (ComponentException cex) {
             StringBuffer tmp = new StringBuffer();
             tmp.append(" <fb:error>\n" +
@@ -62,10 +67,17 @@ String topOfPageMsg = "";
 <%
 if (userSession.getIsnewappforthisuser()){
     StringBuffer tmp = new StringBuffer();
-    tmp.append("<fb:success>\n" +
-    "     <fb:message>Howdy!</fb:message>\n" +
-    "     Glad you've added "+userSession.getApp().getTitle()+".  Track some stuff and get some charts.  Just realize that everything you track is public unless you change your <a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=settings'>settings</a>.\n" +
-    "</fb:success>");
+    if (!userSession.getApp().getIsdefaultprivate()){
+        tmp.append("<fb:success>\n" +
+        "     <fb:message>Howdy!</fb:message>\n" +
+        "     Glad you've added "+userSession.getApp().getTitle()+".  Track some stuff and get some charts.  Just realize that everything you track is public unless you change your <a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=settings'>settings</a>.\n" +
+        "</fb:success>");
+    } else {
+        tmp.append("<fb:success>\n" +
+        "     <fb:message>Howdy!</fb:message>\n" +
+        "     Glad you've added "+userSession.getApp().getTitle()+".  Track some stuff and get some charts.  Everything you track is private unless you change your <a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=settings'>settings</a>.\n" +
+        "</fb:success>");
+    }
     topOfPageMsg = tmp.toString();
 }
 %>
@@ -116,6 +128,11 @@ if (!topOfPageMsg.equals("")){
 <table>
     <tr>
         <td valign="top" width="220">
+            <%
+            if (!adPostSave.equals("")){
+                %><%=adPostSave%><%
+            }
+            %>
             <%
             if (post!=null && post.getPostid()>0){
                 %>

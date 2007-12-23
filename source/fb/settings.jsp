@@ -76,66 +76,75 @@ if (!topOfPageMsg.equals("")){
 
 <div style="padding: 10px;">
 
-    <form action="settings.jsp" method="post">
-        <input type="hidden" name="action" value="save">
-        <input type="hidden" name="nav" value="settings">
-        <table cellpadding="5" cellspacing="0" border="0">
-            <tr>
-                <td valign="top" width="30%">
-                    <font style="font-size: 12px; font-weight: bold;">Keep Stuff Private?</font>
-                    <br/>
-                    <font style="font-size: 9px;">We won't publish to your news feeds or profile.  And we won't share your data with your friends.</font>
-                </td>
-                <td valign="top">
-                    <%
-                    String isprivateChecked = "";
-                    if (userSession.getUserappsettings()!=null && userSession.getUserappsettings().getIsprivate()){
-                        isprivateChecked = " checked";
-                    }
-                    %>
-                    <input type="checkbox" name="isprivate" value="1" <%=isprivateChecked%>> <font style="font-size: 10px;">Yes, Keep My Stuff Private</font>
-                </td>
-            </tr>
-            <tr>
-                <td valign="top" width="30%">
-                    <font style="font-size: 12px; font-weight: bold;">Timezone</font>
-                    <br/>
-                    <font style="font-size: 9px;">Note that this will affect every Track app you have installed on your Facebook account.</font>
-                </td>
-                <td valign="top">
-                    <select name="timezoneid">
-                    <%
-                    String[] timezone=TimeZone.getAvailableIDs();
-                    //Treeset for alphabetizing
-                    TreeSet timezoneids=new TreeSet();
-                    for (int i=0; i<timezone.length; i++) {
-                        timezoneids.add(timezone[i]);
-                    }
-                    for (Iterator iterator=timezoneids.iterator(); iterator.hasNext();) {
-                        String javatimezoneid=(String) iterator.next();
-                        String selected = "";
-                        if (userSession.getUser().getTimezoneid().equalsIgnoreCase(javatimezoneid)){
-                            selected = " selected";
-                        }
-                        %>
-                        <option value="<%=Str.cleanForHtml(javatimezoneid)%>" <%=selected%>><%=javatimezoneid%></option>
-                        <%
-                    }
-                    %>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td valign="top">
+<table cellpadding="0" cellspacing="0" border="0">
+    <tr>
+        <td valign="top" width="390">
 
-                </td>
-                <td valign="top">
-                    <input type="submit" value="Save Settings">
-                </td>
-            </tr>
-        </table>
-    </form>
+            <form action="settings.jsp" method="post">
+                <input type="hidden" name="action" value="save">
+                <input type="hidden" name="nav" value="settings">
+                <table cellpadding="5" cellspacing="0" border="0">
+                    <tr>
+                        <td valign="top" width="30%">
+                            <font style="font-size: 12px; font-weight: bold;">Keep Stuff Private?</font>
+                            <br/>
+                            <font style="font-size: 9px;">We won't publish to your news feeds or profile.  And we won't share your data with your friends.</font>
+                        </td>
+                        <td valign="top">
+                            <%
+                            String isprivateChecked = "";
+                            if (userSession.getUserappsettings()!=null && userSession.getUserappsettings().getIsprivate()){
+                                isprivateChecked = " checked";
+                            }
+                            %>
+                            <input type="checkbox" name="isprivate" value="1" <%=isprivateChecked%>> <font style="font-size: 10px;">Yes, Keep My Stuff Private</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" width="30%">
+                            <font style="font-size: 12px; font-weight: bold;">Timezone</font>
+                            <br/>
+                            <font style="font-size: 9px;">Note that this will affect every Track app you have installed on your Facebook account.</font>
+                        </td>
+                        <td valign="top">
+                            <select name="timezoneid">
+                            <%
+                            String[] timezone=TimeZone.getAvailableIDs();
+                            //Treeset for alphabetizing
+                            TreeSet timezoneids=new TreeSet();
+                            for (int i=0; i<timezone.length; i++) {
+                                timezoneids.add(timezone[i]);
+                            }
+                            for (Iterator iterator=timezoneids.iterator(); iterator.hasNext();) {
+                                String javatimezoneid=(String) iterator.next();
+                                String selected = "";
+                                if (userSession.getUser().getTimezoneid().equalsIgnoreCase(javatimezoneid)){
+                                    selected = " selected";
+                                }
+                                %>
+                                <option value="<%=Str.cleanForHtml(javatimezoneid)%>" <%=selected%>><%=javatimezoneid%></option>
+                                <%
+                            }
+                            %>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
 
+                        </td>
+                        <td valign="top">
+                            <input type="submit" value="Save Settings">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </td>
+        <td valign="top" width="250">
+            <%=userSession.getApp().getAdhistoryright()%>
+        </td>
+    </tr>
+</table>
 </div>
 
 

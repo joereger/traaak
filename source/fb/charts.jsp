@@ -75,7 +75,9 @@
     </tr>
 </table>
 <br/><br/>
+<center>
 <%=userSession.getApp().getAdunderchart()%>
+</center>
 <br/><br/> 
 
 <br/><br/>

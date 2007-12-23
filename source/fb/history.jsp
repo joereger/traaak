@@ -24,7 +24,7 @@ This is a list of all of the stuff you've tracked, organized by date.  You can e
 <div style="padding: 10px;">
 <table cellpadding="0" cellspacing="0" border="0">
     <tr>
-        <td valign="top" width="240">
+        <td valign="top" width="390">
             <table cellpadding="3" cellspacing="0" border="0">
             <%
                 List<Post> posts=HibernateUtil.getSession().createCriteria(Post.class)
@@ -51,7 +51,7 @@ This is a list of all of the stuff you've tracked, organized by date.  You can e
             %>
             </table>
         </td>
-        <td valign="top" width="400">
+        <td valign="top" width="250">
             <%=userSession.getApp().getAdhistoryright()%>
         </td>
     </tr>

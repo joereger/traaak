@@ -68,6 +68,7 @@
             <a href='instanceprops.jsp'>InstanceProps</a><br/>
             <a href='financialmodel.jsp'>Financial Model</a><br/>
             <a href='iaocache.jsp'>Iao Cache</a><br/>
+            <a href='posts.jsp'>Posts</a><br/>
             <a href='impressions.jsp'>Impressions</a><br/>
             <a href='support.jsp'>Support Issues <%if (newsupportissues>0){%>(<%=newsupportissues%>)<%}%></a><br/>
         </td>
