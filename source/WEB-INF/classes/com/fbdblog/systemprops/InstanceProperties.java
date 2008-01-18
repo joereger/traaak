@@ -36,10 +36,11 @@ public class InstanceProperties {
     private static boolean haveValidConfig = false;
     private static boolean haveNewConfigToTest = false;
     private static boolean haveAttemptedToLoadDefaultPropsFile = false;
-    private static String dbPropsInternalFilename = WebAppRootDir.getWebAppRootPath() + "db.props";
+    private static String dbPropsInternalFilename = WebAppRootDir.getWebAppRootPath() + "conf/instance.props";
     private static String dbPropsExternalFilename = "fbdblog-"+WebAppRootDir.getUniqueContextId()+"-dbconfig.txt";
 
     public static void load(){
+        Logger logger = Logger.getLogger(InstanceProperties.class);
         if (!haveValidConfig && !haveAttemptedToLoadDefaultPropsFile){
             try {
                 boolean gotFile = false;
@@ -51,6 +52,7 @@ public class InstanceProperties {
                         properties.load(new FileInputStream(internalFile));
                         loadPropsFile(properties);
                         gotFile = true;
+                        logger.debug("Got instance props from internal file ("+dbPropsInternalFilename+")");
                     }
                 } catch (IOException e) {
                     //e.printStackTrace();
@@ -66,6 +68,7 @@ public class InstanceProperties {
                             properties.load(new FileInputStream(externalFile));
                             loadPropsFile(properties);
                             gotFile = true;
+                            logger.debug("Got instance props from internal file (dbPropsExternalFilename)");
                         }
                     } catch (IOException e) {
                         //e.printStackTrace();
@@ -83,8 +86,9 @@ public class InstanceProperties {
         try{
             dbConnectionUrl = properties.getProperty("dbConnectionUrl", "jdbc:mysql://localhost:3306/fbdblog?autoReconnect=true");
             dbUsername = properties.getProperty("dbUsername", "username");
-            DesEncrypter encrypter2 = new DesEncrypter(passPhrase);
-            dbPassword = encrypter2.decrypt(properties.getProperty("dbPassword", "password"));
+            //DesEncrypter encrypter2 = new DesEncrypter(passPhrase);
+            //dbPassword = encrypter2.decrypt(properties.getProperty("dbPassword", "password"));
+            dbPassword = properties.getProperty("dbPassword", "password");
             dbMaxActive = properties.getProperty("dbMaxActive", "100");
             dbMaxIdle = properties.getProperty("dbMaxIdle", "15");
             dbMinIdle = properties.getProperty("dbMinIdle", "10");
@@ -120,9 +124,10 @@ public class InstanceProperties {
                     properties.setProperty("dbUsername", dbUsername);
                 }
                 if (dbPassword!=null){
-                    DesEncrypter encrypter2 = new DesEncrypter(passPhrase);
-                    String encDbPassword = encrypter2.encrypt(dbPassword);
-                    properties.setProperty("dbPassword", encDbPassword);
+                    //DesEncrypter encrypter2 = new DesEncrypter(passPhrase);
+                    //String encDbPassword = encrypter2.encrypt(dbPassword);
+                    //properties.setProperty("dbPassword", encDbPassword);
+                    properties.setProperty("dbPassword", dbPassword);
                 }
                 if (dbMaxActive!=null){
                     properties.setProperty("dbMaxActive", dbMaxActive);
