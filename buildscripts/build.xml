@@ -34,13 +34,19 @@
   <property name="sourcedir" value="${source.root.directory}"/>
 
 
+
+
+
   <path id="lib.classpath">
       <fileset dir="${sourcedir}/WEB-INF/lib">
         <include name="**/*.jar" />
       </fileset>
-      <fileset dir="${tomcat.install.directory}/common/lib">
+      <fileset dir="${tomcat.install.directory}/lib">
         <include name="**/*.jar" />
       </fileset>
+      <!--<fileset dir="${tomcat.install.directory}/common/lib">-->
+        <!--<include name="**/*.jar" />-->
+      <!--</fileset>-->
       <pathelement path="${javasrc}" />
   </path>
 
