@@ -23,7 +23,7 @@
 
     //If no chart requested, choose the primary for this app
     if (chart==null || chart.getChartid()<=0){
-        chart=Chart.get(userSession.getApp().getPrimarychartid());
+        chart=Chart.get(Pagez.getUserSession().getApp().getPrimarychartid());
     }
 %>
 
@@ -42,7 +42,7 @@
                 <select name="chartid">
                     <%
                     List<Chart> charts=HibernateUtil.getSession().createCriteria(Chart.class)
-                            .add(Restrictions.eq("appid", userSession.getApp().getAppid()))
+                            .add(Restrictions.eq("appid", Pagez.getUserSession().getApp().getAppid()))
                             .setCacheable(true)
                             .list();
                     for (Iterator<Chart> iterator=charts.iterator(); iterator.hasNext();) {
@@ -68,15 +68,15 @@
         </td>
         <td valign="top" width="600">
             <%
-            String key=ChartSecurityKey.getChartKey(userSession.getUser().getUserid(), chart.getChartid());
+            String key=ChartSecurityKey.getChartKey(Pagez.getUserSession().getUser().getUserid(), chart.getChartid());
             %>
-            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=userSession.getUser().getUserid()%>&size=medium&key=<%=key%>" alt="" width="600" height="300" style="border: 3px solid #e6e6e6;"/>
+            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=Pagez.getUserSession().getUser().getUserid()%>&size=medium&key=<%=key%>" alt="" width="600" height="300" style="border: 3px solid #e6e6e6;"/>
         </td>
     </tr>
 </table>
 <br/><br/>
 <center>
-<%=userSession.getApp().getAdunderchart()%>
+<%=Pagez.getUserSession().getApp().getAdunderchart()%>
 </center>
 <br/><br/> 
 

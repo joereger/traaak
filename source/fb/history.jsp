@@ -28,8 +28,8 @@ This is a list of all of the stuff you've tracked, organized by date.  You can e
             <table cellpadding="3" cellspacing="0" border="0">
             <%
                 List<Post> posts=HibernateUtil.getSession().createCriteria(Post.class)
-                        .add(Restrictions.eq("appid", userSession.getApp().getAppid()))
-                        .add(Restrictions.eq("userid", userSession.getUser().getUserid()))
+                        .add(Restrictions.eq("appid", Pagez.getUserSession().getApp().getAppid()))
+                        .add(Restrictions.eq("userid", Pagez.getUserSession().getUser().getUserid()))
                         .addOrder(Order.desc("postdate"))
                         .setCacheable(true)
                         .list();
@@ -39,7 +39,7 @@ This is a list of all of the stuff you've tracked, organized by date.  You can e
                     <tr>
                         <td valign="top">
                             <font size="-1">
-                            <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>'><%=Time.dateformatcompactwithtime(Time.gmttousertime(post.getPostdate(), userSession.getUser().getTimezoneid()))%></a>
+                            <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>'><%=Time.dateformatcompactwithtime(Time.gmttousertime(post.getPostdate(), Pagez.getUserSession().getUser().getTimezoneid()))%></a>
                             </font>
                         </td>
                         <td valign="top">
@@ -52,7 +52,7 @@ This is a list of all of the stuff you've tracked, organized by date.  You can e
             </table>
         </td>
         <td valign="top" width="250">
-            <%=userSession.getApp().getAdhistoryright()%>
+            <%=Pagez.getUserSession().getApp().getAdhistoryright()%>
         </td>
     </tr>
 </table>

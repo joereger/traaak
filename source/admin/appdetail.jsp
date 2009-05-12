@@ -442,7 +442,7 @@ if (request.getParameter("action")!=null && request.getParameter("action").equal
             <b>Sample Input Form:</b>
             <br/>
             <%
-                AppTemplateProcessor atp=new AppTemplateProcessor(app, userSession.getUser(), null);
+                AppTemplateProcessor atp=new AppTemplateProcessor(app, Pagez.getUserSession().getUser(), null);
                 out.print(atp.getHtmlForInput(false));
             %>
         </td>

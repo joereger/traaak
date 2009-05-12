@@ -23,13 +23,13 @@ String topOfPageMsg = "";
 
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("save")) {
-        if (userSession.getUserappsettings()!=null) {
+        if (Pagez.getUserSession().getUserappsettings()!=null) {
             if (request.getParameter("isprivate")!=null && request.getParameter("isprivate").equals("1")){
-                userSession.getUserappsettings().setIsprivate(true);
+                Pagez.getUserSession().getUserappsettings().setIsprivate(true);
             } else {
-                userSession.getUserappsettings().setIsprivate(false);
+                Pagez.getUserSession().getUserappsettings().setIsprivate(false);
             }
-            try{userSession.getUserappsettings().save();}catch(Exception ex){logger.error("", ex);}
+            try{Pagez.getUserSession().getUserappsettings().save();}catch(Exception ex){logger.error("", ex);}
 
             if (request.getParameter("timezoneid")!=null && !request.getParameter("timezoneid").equals("")){
                 boolean isvalidtimezone = false;
@@ -40,9 +40,9 @@ String topOfPageMsg = "";
                     }
                 }
                 if (isvalidtimezone){
-                    userSession.getUser().setTimezoneid(request.getParameter("timezoneid"));
-                    try{userSession.getUser().save();}catch(Exception ex){logger.error("", ex);}
-                    Pagez.setTz(userSession.getUser().getTimezoneid());
+                    Pagez.getUserSession().getUser().setTimezoneid(request.getParameter("timezoneid"));
+                    try{Pagez.getUserSession().getUser().save();}catch(Exception ex){logger.error("", ex);}
+                    Pagez.setTz(Pagez.getUserSession().getUser().getTimezoneid());
                 } else {
                     StringBuffer tmp = new StringBuffer();
                     tmp.append("<fb:error>\n" +
@@ -93,7 +93,7 @@ if (!topOfPageMsg.equals("")){
                         <td valign="top">
                             <%
                             String isprivateChecked = "";
-                            if (userSession.getUserappsettings()!=null && userSession.getUserappsettings().getIsprivate()){
+                            if (Pagez.getUserSession().getUserappsettings()!=null && Pagez.getUserSession().getUserappsettings().getIsprivate()){
                                 isprivateChecked = " checked";
                             }
                             %>
@@ -118,7 +118,7 @@ if (!topOfPageMsg.equals("")){
                             for (Iterator iterator=timezoneids.iterator(); iterator.hasNext();) {
                                 String javatimezoneid=(String) iterator.next();
                                 String selected = "";
-                                if (userSession.getUser().getTimezoneid().equalsIgnoreCase(javatimezoneid)){
+                                if (Pagez.getUserSession().getUser().getTimezoneid().equalsIgnoreCase(javatimezoneid)){
                                     selected = " selected";
                                 }
                                 %>
@@ -141,7 +141,7 @@ if (!topOfPageMsg.equals("")){
             </form>
         </td>
         <td valign="top" width="250">
-            <%=userSession.getApp().getAdhistoryright()%>
+            <%=Pagez.getUserSession().getApp().getAdhistoryright()%>
         </td>
     </tr>
 </table>

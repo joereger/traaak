@@ -6,19 +6,11 @@
 <%@ page import="com.fbdblog.dao.User" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
+<%@ page import="com.fbdblog.session.Pagez" %>
+<%@ page import="com.fbdblog.session.PersistentLogin" %>
 <%
     //Logger
     Logger logger = Logger.getLogger(this.getClass());
-
-    //Make sure we have a userSession to work with
-    UserSession userSession = null;
-    Object ustmp = request.getSession().getAttribute("userSession");
-    if (ustmp != null) {
-        userSession = (UserSession) ustmp;
-    } else {
-        userSession = new UserSession();
-        request.getSession().setAttribute("userSession", userSession);
-    }
 %>
 
 <style type="text/css">
@@ -36,9 +28,23 @@
         for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
             User user =  iterator.next();
             if (user.getPassword().equals(request.getParameter("password"))){
-                userSession.setUser(user);
-                userSession.setIsloggedin(true);
-                if (userSession.getIssysadmin()){
+                Pagez.getUserSession().setUser(user);
+                Pagez.getUserSession().setIsloggedin(true);
+                //Set persistent login cookie, if necessary
+                boolean keepmeloggedin = true;
+                if (keepmeloggedin){
+                    logger.debug("keepmeloggedin=true");
+                    //Get all possible cookies to set
+                    Cookie[] cookies = PersistentLogin.getPersistentCookies(user.getUserid(), Pagez.getRequest());
+                    logger.debug("cookies.length="+cookies.length);
+                    //Add a cookies to the response
+                    for (int j = 0; j < cookies.length; j++) {
+                        logger.debug("Setting persistent login cookie name="+cookies[j].getName()+" value="+cookies[j].getValue()+" cookies[j].getDomain()="+cookies[j].getDomain()+" cookies[j].getPath()="+cookies[j].getPath());
+                        Pagez.getResponse().addCookie(cookies[j]);
+                    }
+                }
+                //Redir sysadmins
+                if (Pagez.getUserSession().getIssysadmin()){
                     response.sendRedirect("apps.jsp");
                     return;
                 }

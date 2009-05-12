@@ -28,7 +28,7 @@
                 Supportissuecomm supportissuecomm=new Supportissuecomm();
                 supportissuecomm.setNotes(request.getParameter("notes"));
                 supportissuecomm.setSupportissueid(supportissue.getSupportissueid());
-                supportissuecomm.setUserid(userSession.getUser().getUserid());
+                supportissuecomm.setUserid(Pagez.getUserSession().getUser().getUserid());
                 supportissuecomm.setDatetime(Time.nowInGmtDate());
                 try {
                     supportissuecomm.save();
@@ -188,7 +188,7 @@
                     %>
                     <tr>
                         <td valign="top" width="20%" style="text-align: right;">
-                            <font style="font-size: 12px; font-weight: bold;"><%=userSession.getUser().getFirstname()%> <%=userSession.getUser().getLastname()%></font>
+                            <font style="font-size: 12px; font-weight: bold;"><%=Pagez.getUserSession().getUser().getFirstname()%> <%=Pagez.getUserSession().getUser().getLastname()%></font>
                             <br/>
                             <font style="font-size: 9px;">Anything you'd like to add?</font>
                         </td>

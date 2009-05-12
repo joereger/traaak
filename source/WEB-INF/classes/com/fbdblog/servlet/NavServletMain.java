@@ -14,7 +14,7 @@ import java.io.IOException;
  * Date: Sep 18, 2007
  * Time: 9:51:36 AM
  */
-public class FacebookMain extends HttpServlet {
+public class NavServletMain extends HttpServlet {
 
 
     public void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

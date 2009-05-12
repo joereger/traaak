@@ -34,13 +34,13 @@
     }
     if (throwdown==null || throwdown.getThrowdownid()==0){
         %>
-        <fb:redirect url="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdowns" />
+        <fb:redirect url="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=throwdowns" />
         <%
         return;
     }
     if (!ThrowdownPrivacy.isok(throwdown)) {
         %>
-        <fb:redirect url="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdowns" />
+        <fb:redirect url="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=throwdowns" />
         <%
         return;
     }
@@ -59,10 +59,10 @@
 
 <%
 //Capture a userid if I can
-if (userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid())){
-    if (throwdown.getTouserid()!=userSession.getUser().getUserid()){
+if (Pagez.getUserSession().getFacebookUser().getUid().equals(throwdown.getTofacebookuid())){
+    if (throwdown.getTouserid()!=Pagez.getUserSession().getUser().getUserid()){
         logger.debug("Updating throwdown.touserid to use the logged-in user's value");
-        throwdown.setTouserid(userSession.getUser().getUserid());
+        throwdown.setTouserid(Pagez.getUserSession().getUser().getUserid());
         try{throwdown.save();}catch(Exception ex){logger.error("", ex);}
     }
 }
@@ -70,10 +70,10 @@ if (userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid()))
 
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("accept")) {
-        if (userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid())) {
+        if (Pagez.getUserSession().getFacebookUser().getUid().equals(throwdown.getTofacebookuid())) {
             throwdown.setIsaccepted(true);
             throwdown.setIsdeclined(false);
-            throwdown.setTouserid(userSession.getUser().getUserid());
+            throwdown.setTouserid(Pagez.getUserSession().getUser().getUserid());
             try {
                 throwdown.save();
             } catch (Exception ex) {
@@ -83,7 +83,7 @@ if (userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid()))
             ArrayList<Long> recipientIds=new ArrayList<Long>();
             recipientIds.add(Long.parseLong(fromFacebookUser.getUid()));
             StringBuffer message=new StringBuffer();
-            message.append(" has accepted your throwdown challenge called <a href='http://apps.facebook.com/" + userSession.getApp().getFacebookappname() + "/?nav=throwdown&throwdownid=" + throwdown.getThrowdownid() + "'>" + throwdown.getName() + "</a>.  Now it is on!");
+            message.append(" has accepted your throwdown challenge called <a href='http://apps.facebook.com/" + Pagez.getUserSession().getApp().getFacebookappname() + "/?nav=throwdown&throwdownid=" + throwdown.getThrowdownid() + "'>" + throwdown.getName() + "</a>.  Now it is on!");
             String url=faw.sendNotification(recipientIds, message.toString(), message.toString());
             //@todo message may not work because not redirecting to url
         }
@@ -92,11 +92,11 @@ if (userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid()))
 
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("decline")) {
-        if (userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid())){
+        if (Pagez.getUserSession().getFacebookUser().getUid().equals(throwdown.getTofacebookuid())){
             throwdown.setIsaccepted(false);
             throwdown.setIsdeclined(true);
             throwdown.setIscomplete(true);
-            throwdown.setTouserid(userSession.getUser().getUserid());
+            throwdown.setTouserid(Pagez.getUserSession().getUser().getUserid());
             try{throwdown.save();}catch(Exception ex){logger.error("", ex);}
         }
     }
@@ -115,7 +115,7 @@ if (userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid()))
 
 <%
 if (!throwdown.getIsaccepted() && !throwdown.getIsdeclined()){
-    if (!userSession.getFacebookUser().getUid().equals(throwdown.getTofacebookuid())){
+    if (!Pagez.getUserSession().getFacebookUser().getUid().equals(throwdown.getTofacebookuid())){
         %>
         <fb:success>
         <fb:message><%=toFacebookUser.getFirst_name()%> <%=toFacebookUser.getLast_name()%> has not yet accepted this throwdown challenge</fb:message>
@@ -126,9 +126,9 @@ if (!throwdown.getIsaccepted() && !throwdown.getIsdeclined()){
         %>
         <fb:success>
         <fb:message><%=toFacebookUser.getFirst_name()%> <%=toFacebookUser.getLast_name()%>, do you accept this throwdown challenge?</fb:message>
-        <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>&action=accept'>Yes, I Accept</a>
+        <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>&action=accept'>Yes, I Accept</a>
         <br/>
-        <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>&action=decline'>No, I Decline</a>
+        <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>&action=decline'>No, I Decline</a>
         </fb:success>
         <%
     }
@@ -191,7 +191,7 @@ if (throwdown.getIscomplete() && !throwdown.getIsaccepted()){
                     <br/>
                     <font style="font-size: 10px; font-weight: bold;"><%=fromFacebookUser.getFirst_name()%> says that on</font>
                     <br/>
-                    <font style="font-size: 10px; font-weight: bold;"><%=Time.dateformatcompactwithtime(Time.gmttousertime(throwdown.getEnddate(), userSession.getUser().getTimezoneid()))%></font>
+                    <font style="font-size: 10px; font-weight: bold;"><%=Time.dateformatcompactwithtime(Time.gmttousertime(throwdown.getEnddate(), Pagez.getUserSession().getUser().getTimezoneid()))%></font>
                     <br/>
                     <font style="font-size: 10px; font-weight: bold;"><%=hisher%> value of</font>
                     <br/>

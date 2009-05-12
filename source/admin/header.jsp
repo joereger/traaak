@@ -6,22 +6,13 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.fbdblog.dao.Supportissue" %>
 <%@ page import="com.fbdblog.dao.hibernate.NumFromUniqueResult" %>
+<%@ page import="com.fbdblog.session.Pagez" %>
 <%
     //Logger
     Logger logger = Logger.getLogger(this.getClass());
-
-    //Make sure we have a userSession to work with
-    UserSession userSession = null;
-    Object ustmp = request.getSession().getAttribute("userSession");
-    if (ustmp != null) {
-        userSession = (UserSession) ustmp;
-    } else {
-        userSession = new UserSession();
-        request.getSession().setAttribute("userSession", userSession);
-    }
-
+    logger.error("/admin/header.jsp called");
     //Make sure user's logged in
-    if (!userSession.getIsloggedin() || !userSession.getIssysadmin()) {
+    if (!Pagez.getUserSession().getIsloggedin() || !Pagez.getUserSession().getIssysadmin()) {
         response.sendRedirect("login.jsp");
         return;
     }
@@ -52,7 +43,7 @@
             <font style="font-family: impact; font-size: 42px; color: #cccccc;">SysAdmin</font>       
         </td>
         <td valign="top" align="right">
-            <font style="font-family: impact; font-size: 18px; color: #cccccc;">Logged in as: <%=userSession.getUser().getFirstname()%> <%=userSession.getUser().getLastname()%></font>
+            <font style="font-family: impact; font-size: 18px; color: #cccccc;">Logged in as: <%=Pagez.getUserSession().getUser().getFirstname()%> <%=Pagez.getUserSession().getUser().getLastname()%></font>
         </td>
     </tr>
 </table>

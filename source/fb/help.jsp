@@ -28,10 +28,10 @@ String topOfPageMsg = "";
             if (request.getParameter("notes") != null && !request.getParameter("notes").equals("")) {
                 Supportissue supportissue=new Supportissue();
                 supportissue.setStatus(Supportissue.STATUS_NEW);
-                supportissue.setAppid(userSession.getApp().getAppid());
+                supportissue.setAppid(Pagez.getUserSession().getApp().getAppid());
                 supportissue.setSubject(request.getParameter("subject"));
                 supportissue.setType(Supportissue.TYPE_UNDEFINED);
-                supportissue.setUserid(userSession.getUser().getUserid());
+                supportissue.setUserid(Pagez.getUserSession().getUser().getUserid());
                 supportissue.setDatetime(Time.nowInGmtDate());
                 supportissue.setMostrecentupdateat(Time.nowInGmtDate());
                 try {
@@ -42,7 +42,7 @@ String topOfPageMsg = "";
                 Supportissuecomm supportissuecomm=new Supportissuecomm();
                 supportissuecomm.setNotes(request.getParameter("notes"));
                 supportissuecomm.setSupportissueid(supportissue.getSupportissueid());
-                supportissuecomm.setUserid(userSession.getUser().getUserid());
+                supportissuecomm.setUserid(Pagez.getUserSession().getUser().getUserid());
                 supportissuecomm.setDatetime(Time.nowInGmtDate());
                 try {
                     supportissuecomm.save();
@@ -139,8 +139,8 @@ if (!topOfPageMsg.equals("")){
             <br/>
             <%
                 List<Supportissue> supportissues=HibernateUtil.getSession().createCriteria(Supportissue.class)
-                        .add(Restrictions.eq("userid", userSession.getUser().getUserid()))
-                        .add(Restrictions.eq("appid", userSession.getApp().getAppid()))
+                        .add(Restrictions.eq("userid", Pagez.getUserSession().getUser().getUserid()))
+                        .add(Restrictions.eq("appid", Pagez.getUserSession().getApp().getAppid()))
                         .addOrder(Order.desc("mostrecentupdateat"))
                         .setCacheable(true)
                         .list();
@@ -160,7 +160,7 @@ if (!topOfPageMsg.equals("")){
                         %>
                         <font style="font-size: 8px; font-weight: bold;"><%=Time.agoText(Time.getCalFromDate(supportissue.getMostrecentupdateat()))%>: <%=statusStr%></font>
                         <br/>
-                        <a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=helpissuedetail&supportissueid=<%=supportissue.getSupportissueid()%>"><font style="font-size: 10px; font-weight: bold;"><%=supportissue.getSubject()%></font></a>
+                        <a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=helpissuedetail&supportissueid=<%=supportissue.getSupportissueid()%>"><font style="font-size: 10px; font-weight: bold;"><%=supportissue.getSubject()%></font></a>
                         <br/><br/>
                         <%
                     }

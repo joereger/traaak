@@ -26,7 +26,7 @@
         questioncalc=Questioncalc.get(Integer.parseInt(request.getParameter("questioncalcid")));
     }
     if (questioncalc==null || questioncalc.getQuestionid()<=0){
-        %><fb:redirect url="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=reports" /><%
+        %><fb:redirect url="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=reports" /><%
         return;
     }
 %>
@@ -49,7 +49,7 @@
                 //Get the user's most recent value for this
                 List<Calculation> calculations=HibernateUtil.getSession().createCriteria(Calculation.class)
                         .add(Restrictions.eq("questionid", question.getQuestionid()))
-                        .add(Restrictions.eq("userid", userSession.getUser().getUserid()))
+                        .add(Restrictions.eq("userid", Pagez.getUserSession().getUser().getUserid()))
                         .add(Restrictions.eq("calculationtype", questioncalc.getCalculationtype()))
                         .add(Restrictions.eq("calctimeperiodid", questioncalc.getCalctimeperiodid()))
                         .addOrder(Order.desc("recordeddate"))
@@ -74,7 +74,7 @@
                     %>
                     <tr>
                         <td bgcolor="#e6e6e6">
-                            <font style="font-size: 10px;"><%=Time.dateformatcompactwithtime(Time.gmttousertime(calculation.getRecordeddate(), userSession.getUser().getTimezoneid()))%></font>
+                            <font style="font-size: 10px;"><%=Time.dateformatcompactwithtime(Time.gmttousertime(calculation.getRecordeddate(), Pagez.getUserSession().getUser().getTimezoneid()))%></font>
                         </td>
                         <td bgcolor="#e6e6e6">
                             <font style="font-size: 10px;"><%=calculation.getCalctimeperiodkey()%></font>
@@ -93,7 +93,7 @@
             %>
         </td>
         <td valign="top" width="250">
-            <%=userSession.getApp().getAdhistoryright()%>
+            <%=Pagez.getUserSession().getApp().getAdhistoryright()%>
         </td>
     </tr>
 </table>

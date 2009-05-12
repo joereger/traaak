@@ -16,24 +16,14 @@
     //Logger
     Logger logger=Logger.getLogger(this.getClass());
 
-    //Make sure we have a userSession to work with
-    UserSession userSession=null;
-    Object ustmp=request.getSession().getAttribute("userSession");
-    if (ustmp != null) {
-        userSession=(UserSession) ustmp;
-    } else {
-        userSession=new UserSession();
-        request.getSession().setAttribute("userSession", userSession);
-    }
-
     //If user hasn't added app yet redir to the app add page
-    if (userSession.getFacebookUser() == null || !userSession.getFacebookUser().getHas_added_app()) {
+    if (Pagez.getUserSession().getFacebookUser() == null || !Pagez.getUserSession().getFacebookUser().getHas_added_app()) {
         logger.debug("Redirecting this user to facebook add app page");
         //If we have a known app
-        if (userSession.getApp() != null) {
-            if (userSession.getFacebookUser() != null && userSession.getFacebookUser().getUid().length()>0) {
+        if (Pagez.getUserSession().getApp() != null) {
+            if (Pagez.getUserSession().getFacebookUser() != null && Pagez.getUserSession().getFacebookUser().getUid().length()>0) {
                 //Notify via XMPP
-                SendXMPPMessage xmpp=new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "Redirecting " + userSession.getFacebookUser().getFirst_name() + " " + userSession.getFacebookUser().getLast_name() + " to add app page. " + "(facebook.uid=" + userSession.getFacebookUser().getUid() + ")");
+                SendXMPPMessage xmpp=new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "Redirecting " + Pagez.getUserSession().getFacebookUser().getFirst_name() + " " + Pagez.getUserSession().getFacebookUser().getLast_name() + " to add app page. " + "(facebook.uid=" + Pagez.getUserSession().getFacebookUser().getUid() + ")");
                 xmpp.send();
             } else {
                 SendXMPPMessage xmpp=new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "Redirecting an unknown facebook user to add app page.");
@@ -41,11 +31,11 @@
             }
             //Get the current url
             UrlSplitter urlSplitter=new UrlSplitter(request);
-            String next="http://apps.facebook.com/" + userSession.getApp().getFacebookappname() + "/?" + urlSplitter.getQuerystring();
+            String next="http://apps.facebook.com/" + Pagez.getUserSession().getApp().getFacebookappname() + "/?" + urlSplitter.getQuerystring();
             next=URLEncoder.encode(next, "UTF-8");
             //Redirect to app add page with fbml
-            logger.debug("<fb:redirect url=\"http://www.facebook.com/add.php?api_key=" + userSession.getApp().getFacebookapikey() + "&next=" + next + "\" />");
-            out.print("<fb:redirect url=\"http://www.facebook.com/add.php?api_key=" + userSession.getApp().getFacebookapikey() + "&next=" + next + "\" />");
+            logger.debug("<fb:redirect url=\"http://www.facebook.com/add.php?api_key=" + Pagez.getUserSession().getApp().getFacebookapikey() + "&next=" + next + "\" />");
+            out.print("<fb:redirect url=\"http://www.facebook.com/add.php?api_key=" + Pagez.getUserSession().getApp().getFacebookapikey() + "&next=" + next + "\" />");
             return;
         } else {
             //@todo what to do with unknown app?
@@ -55,11 +45,11 @@
     logger.debug("still executing so assuming we have an facebook user who's added the app");
 
     //Record Impression
-    if (userSession != null && userSession.getUser() != null && userSession.getApp() != null) {
-        if (userSession.getUser().getUserid()>0 && userSession.getApp().getAppid()>0) {
+    if (Pagez.getUserSession() != null && Pagez.getUserSession().getUser() != null && Pagez.getUserSession().getApp() != null) {
+        if (Pagez.getUserSession().getUser().getUserid()>0 && Pagez.getUserSession().getApp().getAppid()>0) {
             Calendar cal=Calendar.getInstance();
             ImpressionActivityObject iao=new ImpressionActivityObject();
-            iao.setAppid(userSession.getApp().getAppid());
+            iao.setAppid(Pagez.getUserSession().getApp().getAppid());
             iao.setYear(cal.get(Calendar.YEAR));
             iao.setMonth(cal.get(Calendar.MONTH) + 1);
             iao.setDay(cal.get(Calendar.DAY_OF_MONTH));
@@ -75,8 +65,8 @@
 </style>
 
 <%
-if (!userSession.getApp().getAdglobalheader().equals("")){
-    %><%=userSession.getApp().getAdglobalheader()%><%
+if (!Pagez.getUserSession().getApp().getAdglobalheader().equals("")){
+    %><%=Pagez.getUserSession().getApp().getAdglobalheader()%><%
     %><br/><%
 }
 %>
@@ -86,22 +76,22 @@ if (!userSession.getApp().getAdglobalheader().equals("")){
             <img src="<%=com.fbdblog.systemprops.BaseUrl.get(false)%>images/logo-64.png" alt="" width="64" height="64"/>
         </td>
         <td valign="top">
-            <font style="font-size: 24px; font-weight: bold;"><%=userSession.getApp().getTitle()%></font>
+            <font style="font-size: 24px; font-weight: bold;"><%=Pagez.getUserSession().getApp().getTitle()%></font>
         </td>
         <td valign="top">
             <div align="right">
-            <font style="font-size: 18px; font-weight: bold;"><%=userSession.getFacebookUser().getFirst_name()%> <%=userSession.getFacebookUser().getLast_name()%></font>
+            <font style="font-size: 18px; font-weight: bold;"><%=Pagez.getUserSession().getFacebookUser().getFirst_name()%> <%=Pagez.getUserSession().getFacebookUser().getLast_name()%></font>
             </div>
         </td>
         <td valign="top" width="50">
-            <img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="<%=userSession.getFacebookUser().getFirst_name()%>" align="right">
+            <img src="<%=Pagez.getUserSession().getFacebookUser().getPic_square()%>" alt="<%=Pagez.getUserSession().getFacebookUser().getFirst_name()%>" align="right">
         </td>
     </tr>
     <!--
     <tr>
         <td valign="top" colspan="3" align="right">
             <div align="right">
-            <form action="index.jsp"><input type="hidden" name="action" value="compare"><fb:friend-selector uid="<%=userSession.getFacebookUser().getUid()%>" name="uid" idname="friend_sel" /><input type="submit" value="Compare" style="font-size: 10px;"></form>
+            <form action="index.jsp"><input type="hidden" name="action" value="compare"><fb:friend-selector uid="<%=Pagez.getUserSession().getFacebookUser().getUid()%>" name="uid" idname="friend_sel" /><input type="submit" value="Compare" style="font-size: 10px;"></form>
             </div>
         </td>
     </tr>

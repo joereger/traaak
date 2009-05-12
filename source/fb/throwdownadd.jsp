@@ -34,7 +34,7 @@
             haveerror=true;
             errMsg.append("You must give your Throwdown a name.");
         }
-        if (userSession.getUserappsettings().getIsprivate()) {
+        if (Pagez.getUserSession().getUserappsettings().getIsprivate()) {
             haveerror=true;
             errMsg.append("Sorry, you can't create a Throwdown when you're in Private mode because it would display your data to others.");
         }
@@ -48,10 +48,10 @@
         //If it passes validation
         if (!haveerror){
             Throwdown throwdown=new Throwdown();
-            throwdown.setAppid(userSession.getApp().getAppid());
+            throwdown.setAppid(Pagez.getUserSession().getApp().getAppid());
             throwdown.setCreatedate(Time.nowInGmtDate());
-            throwdown.setEnddate(Time.convertFromOneTimeZoneToAnother(enddateCal, userSession.getUser().getTimezoneid(), "GMT").getTime());
-            throwdown.setFromuserid(userSession.getUser().getUserid());
+            throwdown.setEnddate(Time.convertFromOneTimeZoneToAnother(enddateCal, Pagez.getUserSession().getUser().getTimezoneid(), "GMT").getTime());
+            throwdown.setFromuserid(Pagez.getUserSession().getUser().getUserid());
             throwdown.setIsaccepted(false);
             throwdown.setIsdeclined(false);
             throwdown.setIscomplete(false);
@@ -103,15 +103,15 @@
             }
 
             //Notify challengee
-            FacebookApiWrapper faw = new FacebookApiWrapper(userSession);
+            FacebookApiWrapper faw = new FacebookApiWrapper(Pagez.getUserSession());
             faw.postThrowdownChallengeToFeed(throwdown);
             ArrayList<Long> recipientIds = new ArrayList<Long>();
             recipientIds.add(Long.parseLong(throwdown.getTofacebookuid()));
             StringBuffer message = new StringBuffer();
-            message.append(" has challenged you to a throwdown called <a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>.  You must now choose whether to accept or decline this challenge.  Be strong.");
+            message.append(" has challenged you to a throwdown called <a href='http://apps.facebook.com/"+Pagez.getUserSession().getApp().getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>.  You must now choose whether to accept or decline this challenge.  Be strong.");
             String url = faw.sendNotification(recipientIds, message.toString(), message.toString());
             if (url.equals("")){
-                url = "http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=throwdowns&action=addcomplete";
+                url = "http://apps.facebook.com/"+Pagez.getUserSession().getApp().getFacebookappname()+"/?nav=throwdowns&action=addcomplete";
             }
             //Redirect to either the facebook-defined page or to the complete page
             %>
@@ -135,11 +135,11 @@
 <%@ include file="tabs.jsp" %>
 
 <%
-if (userSession.getUserappsettings()!=null && userSession.getUserappsettings().getIsprivate()){
+if (Pagez.getUserSession().getUserappsettings()!=null && Pagez.getUserSession().getUserappsettings().getIsprivate()){
     %>
     <fb:error>
     <fb:message>You Can't Create Throwdowns Because You're in Private Mode</fb:message>
-    Your friends won't be able to see your stuff. You can make stuff public <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+    Your friends won't be able to see your stuff. You can make stuff public <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
     </fb:error>
     <br/>
     <%
@@ -158,7 +158,7 @@ if (!topOfPageMsg.equals("")){
 <center>
     <table cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <td height="50" valign="top"><center><img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><img src="<%=BaseUrl.get(false)%>images/throwdown-body.gif" alt="" width="85" height="189"/></center></td>
+            <td height="50" valign="top"><center><img src="<%=Pagez.getUserSession().getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><img src="<%=BaseUrl.get(false)%>images/throwdown-body.gif" alt="" width="85" height="189"/></center></td>
             <td rowspan="2" valign="top"><img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="10" height="1"/></td>
             <td rowspan="2" valign="top">
                 <form action="">
@@ -167,7 +167,7 @@ if (!topOfPageMsg.equals("")){
 
                     <%
                         String hisher = "his";
-                        if (!userSession.getFacebookUser().getSex().equals("male")){
+                        if (!Pagez.getUserSession().getFacebookUser().getSex().equals("male")){
                             hisher = "her";
                         }
                     %>
@@ -175,14 +175,14 @@ if (!topOfPageMsg.equals("")){
                     <center>
                     <img src="<%=BaseUrl.get(false)%>images/throwdown-vs-big.gif" alt="" width="128" height="149"/>
                     <br/>
-                    <font style="font-size: 14px; font-weight: bold;"><%=userSession.getFacebookUser().getFirst_name()%> <%=userSession.getFacebookUser().getLast_name()%></font>
+                    <font style="font-size: 14px; font-weight: bold;"><%=Pagez.getUserSession().getFacebookUser().getFirst_name()%> <%=Pagez.getUserSession().getFacebookUser().getLast_name()%></font>
                     <br/>
                     <font style="font-size: 10px; font-weight: bold;">hereby challenges</font>
                     <br/>
                     <select name="facebookuid">
                     <%
                         //Will need this throughout the page
-                        FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
+                        FacebookApiWrapper faw=new FacebookApiWrapper(Pagez.getUserSession());
                         TreeSet<FacebookUser> friends=faw.getFriends();
                         //Create comma-separated list of friends who have app installed
                         for (Iterator it=friends.iterator(); it.hasNext();) {
@@ -196,17 +196,17 @@ if (!topOfPageMsg.equals("")){
                     <br/>
                     <font style="font-size: 10px; font-weight: bold;">to a Throwdown called</font>
                     <br/>
-                    <input type="text" name="name" value="<%=userSession.getApp().getTitle()%> Throwdown Challenge">.
+                    <input type="text" name="name" value="<%=Pagez.getUserSession().getApp().getTitle()%> Throwdown Challenge">.
                     <br/>
                     <br/>
-                    <font style="font-size: 10px; font-weight: bold;"><%=userSession.getFacebookUser().getFirst_name()%> says that on</font>
+                    <font style="font-size: 10px; font-weight: bold;"><%=Pagez.getUserSession().getFacebookUser().getFirst_name()%> says that on</font>
                     <br/>
                     <%=DateTimeHtmlInput.getHtml("enddate", Time.xDaysAgoStart(Calendar.getInstance(), -7), "", "")%>
                     <br/>
                     <font style="font-size: 10px; font-weight: bold;"><%=hisher%> value of</font>
                     <div style="text-align: left;">
                     <%
-                    for (Iterator<Question> iterator=userSession.getApp().getQuestions().iterator(); iterator.hasNext();) {
+                    for (Iterator<Question> iterator=Pagez.getUserSession().getApp().getQuestions().iterator(); iterator.hasNext();) {
                         Question question=iterator.next();
                         if (question.getDatatypeid()==DataTypeDecimal.DATATYPEID || question.getDatatypeid()==DataTypeInteger.DATATYPEID) {
                             %>

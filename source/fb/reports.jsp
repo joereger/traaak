@@ -24,8 +24,8 @@
     //Just a test... remove before production
 //    Post post = null;
 //    List<Post> posts=HibernateUtil.getSession().createCriteria(Post.class)
-//            .add(Restrictions.eq("userid", userSession.getUser().getUserid()))
-//            .add(Restrictions.eq("appid", userSession.getApp().getAppid()))
+//            .add(Restrictions.eq("userid", Pagez.getUserSession().getUser().getUserid()))
+//            .add(Restrictions.eq("appid", Pagez.getUserSession().getApp().getAppid()))
 //            .addOrder(Order.desc("postid"))
 //            .setMaxResults(1)
 //            .setCacheable(true)
@@ -55,7 +55,7 @@
     <tr>
         <td valign="top" width="390">
             <%
-                for (Iterator<Question> iterator=userSession.getApp().getQuestions().iterator(); iterator.hasNext();) {
+                for (Iterator<Question> iterator=Pagez.getUserSession().getApp().getQuestions().iterator(); iterator.hasNext();) {
                     Question question=iterator.next();
                     //If it's a numeric question
                     if (question.getDatatypeid()==DataTypeDecimal.DATATYPEID || question.getDatatypeid()==DataTypeInteger.DATATYPEID) {
@@ -73,7 +73,7 @@
                             <%
                                 for (Iterator<Questioncalc> iterator1=questioncalcs.iterator(); iterator1.hasNext();) {
                                     Questioncalc questioncalc=iterator1.next();
-                                    CalctimeperiodFactory ctpFactory=new CalctimeperiodFactory(userSession.getUser(), userSession.getApp());
+                                    CalctimeperiodFactory ctpFactory=new CalctimeperiodFactory(Pagez.getUserSession().getUser(), Pagez.getUserSession().getApp());
                                     Calctimeperiod calctimeperiod=ctpFactory.getCalctimeperiodUnpopulated(questioncalc.getCalctimeperiodid());
                                     com.fbdblog.calc.Calculation calculation=CalculationFactory.getCalculationByType(questioncalc.getCalculationtype());
                                     if (calctimeperiod != null && calculation != null) {
@@ -85,7 +85,7 @@
                                                 .add(Restrictions.eq("calctimeperiodkey", calctimeperiod.getKey()))
                                                 .add(Restrictions.eq("calculationtype", calculation.getId()))
                                                 .add(Restrictions.eq("questionid", question.getQuestionid()))
-                                                .add(Restrictions.eq("userid", userSession.getUser().getUserid()))
+                                                .add(Restrictions.eq("userid", Pagez.getUserSession().getUser().getUserid()))
                                                 .setCacheable(true)
                                                 .list();
                                         for (Iterator<com.fbdblog.dao.Calculation> iterator2=calcs.iterator(); iterator2.hasNext();)
@@ -96,11 +96,11 @@
                                         }
                                         if (foundValue) {
                             %>
-                                        <img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 10px;"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=reportsdetail&questioncalcid=<%=questioncalc.getQuestioncalcid()%>"><%=questioncalc.getName()%></a>: <%=Str.formatWithXDecimalPlaces(value, 2)%></font><br/>
+                                        <img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 10px;"><a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=reportsdetail&questioncalcid=<%=questioncalc.getQuestioncalcid()%>"><%=questioncalc.getName()%></a>: <%=Str.formatWithXDecimalPlaces(value, 2)%></font><br/>
                                         <%
                                     } else {
                                         %>
-                                        <img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 10px;"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=reportsdetail&questioncalcid=<%=questioncalc.getQuestioncalcid()%>"><%=questioncalc.getName()%></a>: na</font><br/>
+                                        <img src="<%=BaseUrl.get(false)%>images/clear.gif" alt="" width="15" height="1"/><font style="font-size: 10px;"><a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=reportsdetail&questioncalcid=<%=questioncalc.getQuestioncalcid()%>"><%=questioncalc.getName()%></a>: na</font><br/>
                                         <%
                                     }
                                 }
@@ -112,7 +112,7 @@
             %>
         </td>
         <td valign="top" width="250">
-            <%=userSession.getApp().getAdhistoryright()%>
+            <%=Pagez.getUserSession().getApp().getAdhistoryright()%>
         </td>
     </tr>
 </table>

@@ -8,6 +8,8 @@ import javax.servlet.ServletOutputStream;
 import java.net.URLEncoder;
 import java.util.Date;
 
+import com.fbdblog.cache.providers.CacheFactory;
+
 /**
  * User: Joe Reger Jr
  * Date: Dec 10, 2007
@@ -17,6 +19,9 @@ public class Pagez {
 
     private static ThreadLocal<Long> startTime = new ThreadLocal<Long>();
     private static ThreadLocal<String> timezoneidTl = new ThreadLocal<String>();
+    private static ThreadLocal<UserSession> userSessionLocal = new ThreadLocal<UserSession>();
+    private static ThreadLocal<HttpServletRequest> requestLocal = new ThreadLocal<HttpServletRequest>();
+    private static ThreadLocal<HttpServletResponse> responseLocal = new ThreadLocal<HttpServletResponse>();
 
 
     public static void setStartTime(Long time){
@@ -45,6 +50,49 @@ public class Pagez {
             timezoneidTl.set("EST");
         }
         return timezoneidTl.get();
+    }
+
+    public static void setUserSessionAndUpdateCache(UserSession userSession){
+        CacheFactory.getCacheProvider().put(getRequest().getSession().getId(), "userSession", userSession);
+        userSessionLocal.set(userSession);
+    }
+
+    public static void setUserSession(UserSession userSession){
+        userSessionLocal.set(userSession);
+    }
+
+    public static void setRequest(HttpServletRequest request){
+        requestLocal.set(request);
+    }
+
+    public static void setResponse(HttpServletResponse response){
+        responseLocal.set(response);
+    }
+
+    public static void sendRedirect(String url){
+        sendRedirect(url, true);
+    }
+
+    public static void sendRedirect(String url, boolean doFancyDpageStuff){
+        Logger logger = Logger.getLogger(Pagez.class);
+        //Web ui
+        url = responseLocal.get().encodeRedirectURL(url);
+        if (!responseLocal.get().isCommitted()){
+            responseLocal.get().resetBuffer();
+            try{responseLocal.get().sendRedirect(url);}catch(Exception ex){logger.error("", ex);}
+        }
+    }
+
+    public static HttpServletRequest getRequest(){
+        return requestLocal.get();
+    }
+
+    public static HttpServletResponse getResponse(){
+        return responseLocal.get();
+    }
+
+    public static UserSession getUserSession(){
+        return userSessionLocal.get();
     }
 
 

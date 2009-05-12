@@ -17,7 +17,7 @@
 
 <%
 //Will need this throughout the page
-FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
+FacebookApiWrapper faw=new FacebookApiWrapper(Pagez.getUserSession());
 TreeSet<FacebookUser> friends = faw.getFriends();
 //Create comma-separated list of friends who have app installed
 StringBuffer commaSepFriendsAlreadyUsingApp = new StringBuffer();
@@ -43,7 +43,7 @@ for (Iterator it=friends.iterator(); it.hasNext();) {
         }
         //If no chart requested, choose the primary for this app
         if (chart==null || chart.getChartid()<=0) {
-            chart=Chart.get(userSession.getApp().getPrimarychartid());
+            chart=Chart.get(Pagez.getUserSession().getApp().getPrimarychartid());
         }
     }
 %>
@@ -57,7 +57,7 @@ if (request.getParameter("facebookuid")==null) {
     %>
     <fb:success>
     <fb:message>These Friends Track the Same Stuff You Do</fb:message>
-    Click a friend to see their <%=userSession.getApp().getTitle()%> charts or invite them.  Listed are those who have the app installed.
+    Click a friend to see their <%=Pagez.getUserSession().getApp().getTitle()%> charts or invite them.  Listed are those who have the app installed.
     </fb:success>
     <br/>
     <%
@@ -85,14 +85,14 @@ if (request.getParameter("facebookuid")==null) {
                         for (Iterator<User> iterator=users.iterator(); iterator.hasNext();) {
                             user=iterator.next();
                         }
-                        Userappsettings userappsettings=FindUserappsettings.get(user, userSession.getApp());
+                        Userappsettings userappsettings=FindUserappsettings.get(user, Pagez.getUserSession().getApp());
                         if (user!=null && !userappsettings.getIsprivate()) {
                             haveaddedafriend = true;
                             %>
                             <tr>
                                 <td valign="top">
                                     <font style="font-size: 14px; font-weight: bold;">
-                                        <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=friends&frienduserid=<%=user.getUserid()%>'><%=facebookUser.getFirst_name()%> <%=facebookUser.getLast_name()%></a>
+                                        <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=friends&frienduserid=<%=user.getUserid()%>'><%=facebookUser.getFirst_name()%> <%=facebookUser.getLast_name()%></a>
                                     </font>
                                 </td>
                                 <%//@todo calculations columns?%>
@@ -120,9 +120,9 @@ if (request.getParameter("facebookuid")==null) {
         if (request.getParameter("frienduserid")!=null && Num.isinteger(request.getParameter("frienduserid"))){
             User friend = User.get(Integer.parseInt(request.getParameter("frienduserid")));
             if (friend!=null){
-                Userappsettings friendUserappsettings=FindUserappsettings.get(friend, userSession.getApp());
+                Userappsettings friendUserappsettings=FindUserappsettings.get(friend, Pagez.getUserSession().getApp());
                 if (!friendUserappsettings.getIsprivate()){
-                    FacebookUser friendFacebookuser = new FacebookUser(Long.parseLong(String.valueOf(friend.getFacebookuid())), userSession.getFacebooksessionkey(), userSession.getApp().getFacebookapikey(), userSession.getApp().getFacebookapisecret());
+                    FacebookUser friendFacebookuser = new FacebookUser(Long.parseLong(String.valueOf(friend.getFacebookuid())), Pagez.getUserSession().getFacebooksessionkey(), Pagez.getUserSession().getApp().getFacebookapikey(), Pagez.getUserSession().getApp().getFacebookapisecret());
                     %>
                     <td valign="top" width="410">
                     <%
@@ -148,7 +148,7 @@ if (request.getParameter("facebookuid")==null) {
                                                     <select name="chartid">
                                                         <%
                                                         List<Chart> charts=HibernateUtil.getSession().createCriteria(Chart.class)
-                                                                .add(Restrictions.eq("appid", userSession.getApp().getAppid()))
+                                                                .add(Restrictions.eq("appid", Pagez.getUserSession().getApp().getAppid()))
                                                                 .setCacheable(true)
                                                                 .list();
                                                         for (Iterator<Chart> iterator=charts.iterator(); iterator.hasNext();) {
@@ -177,7 +177,7 @@ if (request.getParameter("facebookuid")==null) {
                                 </td>
                                 <td valign="top" width="400">
                                     <%
-                                    String key=ChartSecurityKey.getChartKey(userSession.getUser().getUserid(), chart.getChartid());
+                                    String key=ChartSecurityKey.getChartKey(Pagez.getUserSession().getUser().getUserid(), chart.getChartid());
                                     %>
                                     <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=friend.getUserid()%>&size=small&key=<%=key%>" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
                                 </td>
@@ -203,15 +203,15 @@ if (request.getParameter("facebookuid")==null) {
 </table>
 <br/><br/><br/>
 <fb:request-form
-    action="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=friends&invitecomplete=1"
+    action="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=friends&invitecomplete=1"
     method="POST"
     invite="true"
-    type="<%=userSession.getApp().getTitle()%>"
-    content="<%=userSession.getApp().getDescription()%> <fb:req-choice url='http://www.facebook.com/add.php?api_key=<%=userSession.getApp().getFacebookapikey()%>' label='Check out <%=userSession.getApp().getTitle()%>!' />
+    type="<%=Pagez.getUserSession().getApp().getTitle()%>"
+    content="<%=Pagez.getUserSession().getApp().getDescription()%> <fb:req-choice url='http://www.facebook.com/add.php?api_key=<%=Pagez.getUserSession().getApp().getFacebookapikey()%>' label='Check out <%=Pagez.getUserSession().getApp().getTitle()%>!' />
 ">
     <fb:multi-friend-selector
         showborder="true"
-        actiontext="Invite friends to <%=userSession.getApp().getTitle()%>."
+        actiontext="Invite friends to <%=Pagez.getUserSession().getApp().getTitle()%>."
         exclude_ids="<%=commaSepFriendsAlreadyUsingApp.toString()%>"
         rows="3"
         max="20"

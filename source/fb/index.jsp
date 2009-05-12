@@ -37,18 +37,18 @@ String adPostSave = "";
     if (request.getParameter("action") != null && request.getParameter("action").equals("trackit")) {
         AppPostParser appPostParser = new AppPostParser(request);
         try {
-            SavePost.save(userSession.getApp(), userSession.getUser(), post, appPostParser, userSession);
+            SavePost.save(Pagez.getUserSession().getApp(), Pagez.getUserSession().getUser(), post, appPostParser, Pagez.getUserSession());
             StringBuffer tmp = new StringBuffer();
             tmp.append("<fb:success>\n" +
             "     <fb:message>Good trackin'.  Now track s'more.</fb:message>\n" +
-            "     We've updated your profile so that others can check out your stuff.  Now's a good time to check out <a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=friends'>your friends' stuff</a>.\n" +
+            "     We've updated your profile so that others can check out your stuff.  Now's a good time to check out <a href='http://apps.facebook.com/"+Pagez.getUserSession().getApp().getFacebookappname()+"/?nav=friends'>your friends' stuff</a>.\n" +
             "</fb:success>");
             topOfPageMsg = tmp.toString();
             StringBuffer tmpAps = new StringBuffer();
-            if (!userSession.getApp().getAdpostsave().equals("")){
+            if (!Pagez.getUserSession().getApp().getAdpostsave().equals("")){
                 tmpAps.append("<br/>");
                 tmpAps.append("<center>");
-                tmpAps.append(userSession.getApp().getAdpostsave());
+                tmpAps.append(Pagez.getUserSession().getApp().getAdpostsave());
                 tmpAps.append("</center>");
                 tmpAps.append("<br/>");
             }
@@ -65,17 +65,17 @@ String adPostSave = "";
 %>
 
 <%
-if (userSession.getIsnewappforthisuser()){
+if (Pagez.getUserSession().getIsnewappforthisuser()){
     StringBuffer tmp = new StringBuffer();
-    if (!userSession.getApp().getIsdefaultprivate()){
+    if (!Pagez.getUserSession().getApp().getIsdefaultprivate()){
         tmp.append("<fb:success>\n" +
         "     <fb:message>Howdy!</fb:message>\n" +
-        "     Glad you've added "+userSession.getApp().getTitle()+".  Track some stuff and get some charts.  Just realize that everything you track is public unless you change your <a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=settings'>settings</a>.\n" +
+        "     Glad you've added "+Pagez.getUserSession().getApp().getTitle()+".  Track some stuff and get some charts.  Just realize that everything you track is public unless you change your <a href='http://apps.facebook.com/"+Pagez.getUserSession().getApp().getFacebookappname()+"/?nav=settings'>settings</a>.\n" +
         "</fb:success>");
     } else {
         tmp.append("<fb:success>\n" +
         "     <fb:message>Howdy!</fb:message>\n" +
-        "     Glad you've added "+userSession.getApp().getTitle()+".  Track some stuff and get some charts.  Everything you track is private unless you change your <a href='http://apps.facebook.com/"+userSession.getApp().getFacebookappname()+"/?nav=settings'>settings</a>.\n" +
+        "     Glad you've added "+Pagez.getUserSession().getApp().getTitle()+".  Track some stuff and get some charts.  Everything you track is private unless you change your <a href='http://apps.facebook.com/"+Pagez.getUserSession().getApp().getFacebookappname()+"/?nav=settings'>settings</a>.\n" +
         "</fb:success>");
     }
     topOfPageMsg = tmp.toString();
@@ -87,7 +87,7 @@ if (userSession.getIsnewappforthisuser()){
     if (request.getParameter("action") != null && request.getParameter("action").equals("deletepost")) {
         if (request.getParameter("postid") != null && Num.isinteger(request.getParameter("postid"))) {
             Post postToDel=Post.get(Integer.parseInt(request.getParameter("postid")));
-            if (postToDel.getUserid() == userSession.getUser().getUserid()) {
+            if (postToDel.getUserid() == Pagez.getUserSession().getUser().getUserid()) {
                 try {
                     postToDel.delete();
                 } catch (Exception ex) {
@@ -101,9 +101,9 @@ if (userSession.getIsnewappforthisuser()){
                         "</fb:success>");
                 topOfPageMsg=tmp.toString();
                 //Clear the chart image cache
-                ClearCache.clearCacheForUser(userSession.getUser().getUserid(), userSession.getApp().getAppid());
+                ClearCache.clearCacheForUser(Pagez.getUserSession().getUser().getUserid(), Pagez.getUserSession().getApp().getAppid());
                 //Do Calculations
-                DoCalculationsAfterPost.doCalculations(userSession.getUser(), userSession.getApp());
+                DoCalculationsAfterPost.doCalculations(Pagez.getUserSession().getUser(), Pagez.getUserSession().getApp());
             } else {
                 StringBuffer tmp=new StringBuffer();
                 tmp.append(" <fb:error>\n" +
@@ -137,9 +137,9 @@ if (!topOfPageMsg.equals("")){
             if (post!=null && post.getPostid()>0){
                 %>
                 <fb:success>
-                <fb:message>Editing data from <%=Time.dateformatcompactwithtime(Time.gmttousertime(post.getPostdate(), userSession.getUser().getTimezoneid()))%>.</fb:message>
-                <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>&action=deletepost'>Delete it?</a>
-                <br/><a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=main'>Start new?</a>
+                <fb:message>Editing data from <%=Time.dateformatcompactwithtime(Time.gmttousertime(post.getPostdate(), Pagez.getUserSession().getUser().getTimezoneid()))%>.</fb:message>
+                <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>&action=deletepost'>Delete it?</a>
+                <br/><a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main'>Start new?</a>
                 </fb:success>
                 <br/>
                 <%
@@ -147,8 +147,8 @@ if (!topOfPageMsg.equals("")){
             %>
 
             <%
-            if (userSession.getUser() != null) {
-                int totalposts = NumFromUniqueResult.getInt("select count(*) from Post where userid='"+userSession.getUser().getUserid()+"' and appid='"+userSession.getApp().getAppid()+"'");
+            if (Pagez.getUserSession().getUser() != null) {
+                int totalposts = NumFromUniqueResult.getInt("select count(*) from Post where userid='"+Pagez.getUserSession().getUser().getUserid()+"' and appid='"+Pagez.getUserSession().getApp().getAppid()+"'");
                 if (totalposts==0){
                     %>
                     <fb:success>
@@ -172,7 +172,7 @@ if (!topOfPageMsg.equals("")){
                 %>
 
                 <%
-                AppTemplateProcessor atp = new AppTemplateProcessor(userSession.getApp(), userSession.getUser(), post);
+                AppTemplateProcessor atp = new AppTemplateProcessor(Pagez.getUserSession().getApp(), Pagez.getUserSession().getUser(), post);
                 out.print(atp.getHtmlForInput(false));
                 %>
 
@@ -190,11 +190,11 @@ if (!topOfPageMsg.equals("")){
                     <input id="sendbutton" type="submit" value="Track this Stuff" />
                 </div>
                 <%
-                if (userSession.getUserappsettings()!=null && userSession.getUserappsettings().getIsprivate()){
+                if (Pagez.getUserSession().getUserappsettings()!=null && Pagez.getUserSession().getUserappsettings().getIsprivate()){
                     %>
                     <fb:success>
                     <fb:message>Private Mode</fb:message>
-                    Your friends won't be able to see your stuff. You can make stuff public <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+                    Your friends won't be able to see your stuff. You can make stuff public <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
                     </fb:success>
                     <br/>
                     <%
@@ -202,7 +202,7 @@ if (!topOfPageMsg.equals("")){
                     %>
                     <fb:success>
                     <fb:message>Public Mode</fb:message>
-                    Everything you post is visible to friends. Make stuff private <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+                    Everything you post is visible to friends. Make stuff private <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
                     </fb:success>
                     <br/>
                     <%
@@ -212,13 +212,13 @@ if (!topOfPageMsg.equals("")){
         </td>
         <td valign="top" width="400">
             <%
-            String key=ChartSecurityKey.getChartKey(userSession.getUser().getUserid(), userSession.getApp().getPrimarychartid());
+            String key=ChartSecurityKey.getChartKey(Pagez.getUserSession().getUser().getUserid(), Pagez.getUserSession().getApp().getPrimarychartid());
             %>
-            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=userSession.getApp().getPrimarychartid()%>&userid=<%=userSession.getUser().getUserid()%>&size=small&key=<%=key%>" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
+            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=Pagez.getUserSession().getApp().getPrimarychartid()%>&userid=<%=Pagez.getUserSession().getUser().getUserid()%>&size=small&key=<%=key%>" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
             <br/>
-            <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts&chartid=<%=userSession.getApp().getPrimarychartid()%>'>+Zoom</a>
+            <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=charts&chartid=<%=Pagez.getUserSession().getApp().getPrimarychartid()%>'>+Zoom</a>
             |
-            <a href='http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=charts'>All Charts</a>
+            <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=charts'>All Charts</a>
             <br/><br/><br/><br/>
 
             <div style="border: 3px solid #e6e6e6;">
@@ -235,7 +235,7 @@ if (!topOfPageMsg.equals("")){
                             .list();
                     for (Iterator<App> iterator=apps.iterator(); iterator.hasNext();) {
                         App app=iterator.next();
-                        if (app.getAppid() != userSession.getApp().getAppid()) {
+                        if (app.getAppid() != Pagez.getUserSession().getApp().getAppid()) {
                             col=col + 1;
                             if (col == 1) {
                                 %><tr><%
@@ -254,14 +254,14 @@ if (!topOfPageMsg.equals("")){
                 %>
                 </table>
             </div>
-            <div style="text-align: center;"><font style="font-size: 10px;">Don't see what you want?  <a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=help">Tell us what you'd like to track.</a></font></div>
+            <div style="text-align: center;"><font style="font-size: 10px;">Don't see what you want?  <a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=help">Tell us what you'd like to track.</a></font></div>
         </td>
     </tr>
 </table>
 
 <br/><br/>
 <%
-if (userSession.getIssysadmin()){
+if (Pagez.getUserSession().getIssysadmin()){
     if (request.getParameter("fb_sig_session_key")!=null){
         if (request.getParameter("fb_sig_expires")!=null && request.getParameter("fb_sig_expires").equals("0")){
             %>

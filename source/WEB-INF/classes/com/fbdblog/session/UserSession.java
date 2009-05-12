@@ -33,6 +33,8 @@ public class UserSession implements Serializable {
     private String facebooksessionkey = "";
     private FacebookUser facebookUser = null;
     private boolean isnewappforthisuser = false;
+    private boolean isweb = false;
+    private boolean isfacebook = false;
   
     public UserSession(){
         Logger logger = Logger.getLogger(this.getClass().getName());
@@ -140,5 +142,21 @@ public class UserSession implements Serializable {
 
     public void setIsnewappforthisuser(boolean isnewappforthisuser) {
         this.isnewappforthisuser=isnewappforthisuser;
+    }
+
+    public boolean getIsfacebook() {
+        return isfacebook;
+    }
+
+    public void setIsfacebook(boolean isfacebook) {
+        this.isfacebook=isfacebook;
+    }
+
+    public boolean getIsweb() {
+        return isweb;
+    }
+
+    public void setIsweb(boolean isweb) {
+        this.isweb=isweb;
     }
 }

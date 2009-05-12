@@ -28,12 +28,12 @@ String topOfPageMsg = "";
     if (request.getParameter("supportissueid") != null && Num.isinteger(request.getParameter("supportissueid"))) {
         supportissue=Supportissue.get(Integer.parseInt(request.getParameter("supportissueid")));
         //Make sure it's this user's
-        if (supportissue.getUserid()!=userSession.getUser().getUserid()){
+        if (supportissue.getUserid()!=Pagez.getUserSession().getUser().getUserid()){
             supportissue = null;
         }
     }
     if (supportissue==null || supportissue.getSupportissueid()<=0){
-        %><fb:redirect url="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=help" /><%
+        %><fb:redirect url="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=help" /><%
         return;
     }
 %>
@@ -44,7 +44,7 @@ String topOfPageMsg = "";
             Supportissuecomm supportissuecomm=new Supportissuecomm();
             supportissuecomm.setNotes(request.getParameter("notes"));
             supportissuecomm.setSupportissueid(supportissue.getSupportissueid());
-            supportissuecomm.setUserid(userSession.getUser().getUserid());
+            supportissuecomm.setUserid(Pagez.getUserSession().getUser().getUserid());
             supportissuecomm.setDatetime(Time.nowInGmtDate());
             try {
                 supportissuecomm.save();
@@ -117,7 +117,7 @@ if (!topOfPageMsg.equals("")){
             %>
             <tr>
                 <td valign="top" width="20%" style="text-align: right;">
-                    <font style="font-size: 12px; font-weight: bold;"><%=userSession.getUser().getFirstname()%> <%=userSession.getUser().getLastname()%></font>
+                    <font style="font-size: 12px; font-weight: bold;"><%=Pagez.getUserSession().getUser().getFirstname()%> <%=Pagez.getUserSession().getUser().getLastname()%></font>
                     <br/>
                     <font style="font-size: 9px;">Anything you'd like to add?</font>
                 </td>

@@ -51,7 +51,7 @@ if (!topOfPageMsg.equals("")){
 %>
 
 <%
-FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
+FacebookApiWrapper faw=new FacebookApiWrapper(Pagez.getUserSession());
 %>
 
 
@@ -65,7 +65,7 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
     <td valign="top">
         <fb:success>
             <fb:message>What're you waiting for?</fb:message>
-            <a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdownadd">It's always a good time for a Throwdown!!!</a>
+            <a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=throwdownadd">It's always a good time for a Throwdown!!!</a>
         </fb:success>
 
         <br/><br/>
@@ -78,7 +78,7 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
             <%
                 if (1==1){
                     List<Throwdown> throwdowns=HibernateUtil.getSession().createCriteria(Throwdown.class)
-                            .add(Restrictions.eq("fromuserid", userSession.getUser().getUserid()))
+                            .add(Restrictions.eq("fromuserid", Pagez.getUserSession().getUser().getUserid()))
                             .setCacheable(true)
                             .list();
                     if (throwdowns!=null && throwdowns.size()>0){
@@ -87,10 +87,10 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
                             FacebookUser toFbUser = faw.getFacebookUserByUid(throwdown.getTofacebookuid());
                             %>
                              <tr>
-                                 <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.gmttousertime(throwdown.getEnddate(), userSession.getUser().getTimezoneid()))%></font></td>
+                                 <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.gmttousertime(throwdown.getEnddate(), Pagez.getUserSession().getUser().getTimezoneid()))%></font></td>
                              </tr>
                              <tr>
-                                 <td valign="top" width="40%"><div style="text-align: right;"><img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><%=userSession.getFacebookUser().getFirst_name()%><br/><%=userSession.getFacebookUser().getLast_name()%></div></td>
+                                 <td valign="top" width="40%"><div style="text-align: right;"><img src="<%=Pagez.getUserSession().getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><%=Pagez.getUserSession().getFacebookUser().getFirst_name()%><br/><%=Pagez.getUserSession().getFacebookUser().getLast_name()%></div></td>
                                  <td valign="top" width="20%"><center><font style="font-size: 14px; font-weight: bold; color: #666666;">vs.</font></center></td>
                                  <td valign="top" width="40%"><img src="<%=toFbUser.getPic_square()%>" alt="" width="50" height="50"/><br/><%=toFbUser.getFirst_name()%><br/><%=toFbUser.getLast_name()%></td>
                              </tr>
@@ -99,7 +99,7 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
                     } else {
                         %>
                         <tr>
-                            <td valign="top" colspan="3">None... the competitive spirit is weak in you... <a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdownadd">why not take it up a notch?</a></td>
+                            <td valign="top" colspan="3">None... the competitive spirit is weak in you... <a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=throwdownadd">why not take it up a notch?</a></td>
                         </tr>
                         <%
                     }
@@ -115,7 +115,7 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
             <%
                 if (1==1){
                     List<Throwdown> throwdowns=HibernateUtil.getSession().createCriteria(Throwdown.class)
-                            .add(Restrictions.eq("tofacebookuid", userSession.getFacebookUser().getUid()))
+                            .add(Restrictions.eq("tofacebookuid", Pagez.getUserSession().getFacebookUser().getUid()))
                             .setCacheable(true)
                             .list();
                     if (throwdowns!=null && throwdowns.size()>0){
@@ -125,12 +125,12 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
                             FacebookUser fromFbUser = faw.getFacebookUserByUid(fromUser.getFacebookuid());
                             %>
                              <tr>
-                                 <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.gmttousertime(throwdown.getEnddate(), userSession.getUser().getTimezoneid()))%></font></td>
+                                 <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.gmttousertime(throwdown.getEnddate(), Pagez.getUserSession().getUser().getTimezoneid()))%></font></td>
                              </tr>
                              <tr>
                                  <td valign="top" width="40%"><div style="text-align: right;"><img src="<%=fromFbUser.getPic_square()%>" alt="" width="50" height="50"/><br/><%=fromFbUser.getFirst_name()%><br/><%=fromFbUser.getLast_name()%></div></td>
                                  <td valign="top" width="20%"><center><font style="font-size: 14px; font-weight: bold; color: #666666;">vs.</font></center></td>
-                                 <td valign="top" width="40%"><img src="<%=userSession.getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><%=userSession.getFacebookUser().getFirst_name()%><br/><%=userSession.getFacebookUser().getLast_name()%></td>
+                                 <td valign="top" width="40%"><img src="<%=Pagez.getUserSession().getFacebookUser().getPic_square()%>" alt="" width="50" height="50"/><br/><%=Pagez.getUserSession().getFacebookUser().getFirst_name()%><br/><%=Pagez.getUserSession().getFacebookUser().getLast_name()%></td>
                              </tr>
                              <%
                         }
@@ -189,7 +189,7 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
                             tduserFql.append(" (fromuserid='-1') "); //Something that won't trigger a match
                         }
                         //Query the throwdown table using all this convoluted fql... hope it works
-                        List<Throwdown> throwdowns=HibernateUtil.getSession().createQuery("from Throwdown where ( " + frienduidsFql + " OR " + tduserFql + " ) AND (fromuserid<>'" + userSession.getUser().getUserid() + "') AND (tofacebookuid<>'" + userSession.getUser().getFacebookuid() + "')").list();
+                        List<Throwdown> throwdowns=HibernateUtil.getSession().createQuery("from Throwdown where ( " + frienduidsFql + " OR " + tduserFql + " ) AND (fromuserid<>'" + Pagez.getUserSession().getUser().getUserid() + "') AND (tofacebookuid<>'" + Pagez.getUserSession().getUser().getFacebookuid() + "')").list();
                         if (throwdowns != null && throwdowns.size()>0) {
                             for (Iterator<Throwdown> iterator=throwdowns.iterator(); iterator.hasNext();) {
                                 Throwdown throwdown=iterator.next();
@@ -199,7 +199,7 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
                                     FacebookUser toFbUser=faw.getFacebookUserByUid(throwdown.getTofacebookuid());
                                      %>
                                      <tr>
-                                         <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.gmttousertime(throwdown.getEnddate(), userSession.getUser().getTimezoneid()))%></font></td>
+                                         <td valign="top" colspan="3"><a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=throwdown&throwdownid=<%=throwdown.getThrowdownid()%>"><font style="font-size: 15px; font-weight: bold;"><%=throwdown.getName()%></font></a><br/><font style="font-size: 8px; font-weight: bold;">Ends: <%=Time.dateformatcompactwithtime(Time.gmttousertime(throwdown.getEnddate(), Pagez.getUserSession().getUser().getTimezoneid()))%></font></td>
                                      </tr>
                                      <tr>
                                          <td valign="top" width="40%"><div style="text-align: right;"><img src="<%=fromFbUser.getPic_square()%>" alt="" width="50" height="50"/><br/><%=fromFbUser.getFirst_name()%><br/><%=fromFbUser.getLast_name()%></div></td>
@@ -212,14 +212,14 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
                         } else {
                             %>
                             <tr>
-                                <td valign="top" colspan="3">None... no offense, but your friends are less than exciting... why not <a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdownadd">spice things up a bit?</a></td>
+                                <td valign="top" colspan="3">None... no offense, but your friends are less than exciting... why not <a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=throwdownadd">spice things up a bit?</a></td>
                             </tr>
                             <%
                         }
                     } else {
                         %>
                         <tr>
-                            <td valign="top" colspan="3">None... no offense, your friends are less than exciting... why not <a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdownadd">spice things up a bit?</a></td>
+                            <td valign="top" colspan="3">None... no offense, your friends are less than exciting... why not <a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=throwdownadd">spice things up a bit?</a></td>
                         </tr>
                         <%
                     }
@@ -230,7 +230,7 @@ FacebookApiWrapper faw=new FacebookApiWrapper(userSession);
 
     </td>
     <td valign="top" width="300">
-        <a href="http://apps.facebook.com/<%=userSession.getApp().getFacebookappname()%>/?nav=throwdownadd"><img src="<%=BaseUrl.get(false)%>images/throwdown-title.gif" alt="" width="300" height="170" align="right" border="0"/></a>
+        <a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=throwdownadd"><img src="<%=BaseUrl.get(false)%>images/throwdown-title.gif" alt="" width="300" height="170" align="right" border="0"/></a>
     </td>
 </tr>
 </table>
