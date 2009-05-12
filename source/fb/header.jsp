@@ -16,8 +16,14 @@
     //Logger
     Logger logger=Logger.getLogger(this.getClass());
 
+    //If is web and user isn't logged in
+    if (Pagez.getUserSession().getIsweb() && !Pagez.getUserSession().getIsloggedin() || (Pagez.getUserSession().getUser()==null)){
+        Pagez.sendRedirect("/loginsignup.jsp");
+        return;
+    }
+
     //If user hasn't added app yet redir to the app add page
-    if (Pagez.getUserSession().getFacebookUser() == null || !Pagez.getUserSession().getFacebookUser().getHas_added_app()) {
+    if (Pagez.getUserSession().getIsfacebook() && (Pagez.getUserSession().getFacebookUser() == null || !Pagez.getUserSession().getFacebookUser().getHas_added_app())) {
         logger.debug("Redirecting this user to facebook add app page");
         //If we have a known app
         if (Pagez.getUserSession().getApp() != null) {
@@ -80,20 +86,18 @@ if (!Pagez.getUserSession().getApp().getAdglobalheader().equals("")){
         </td>
         <td valign="top">
             <div align="right">
-            <font style="font-size: 18px; font-weight: bold;"><%=Pagez.getUserSession().getFacebookUser().getFirst_name()%> <%=Pagez.getUserSession().getFacebookUser().getLast_name()%></font>
+            <%if (Pagez.getUserSession().getIsfacebook()){%>
+                <font style="font-size: 18px; font-weight: bold;"><%=Pagez.getUserSession().getFacebookUser().getFirst_name()%> <%=Pagez.getUserSession().getFacebookUser().getLast_name()%></font>
+            <%} else {%>
+                <font style="font-size: 18px; font-weight: bold;"><%=Pagez.getUserSession().getUser().getFirstname()%> <%=Pagez.getUserSession().getUser().getLastname()%></font>
+            <%}%>
             </div>
         </td>
         <td valign="top" width="50">
-            <img src="<%=Pagez.getUserSession().getFacebookUser().getPic_square()%>" alt="<%=Pagez.getUserSession().getFacebookUser().getFirst_name()%>" align="right">
+            <%if (Pagez.getUserSession().getIsfacebook()){%>
+                <img src="<%=Pagez.getUserSession().getFacebookUser().getPic_square()%>" alt="<%=Pagez.getUserSession().getFacebookUser().getFirst_name()%>" align="right">
+            <%}%>
+
         </td>
     </tr>
-    <!--
-    <tr>
-        <td valign="top" colspan="3" align="right">
-            <div align="right">
-            <form action="index.jsp"><input type="hidden" name="action" value="compare"><fb:friend-selector uid="<%=Pagez.getUserSession().getFacebookUser().getUid()%>" name="uid" idname="friend_sel" /><input type="submit" value="Compare" style="font-size: 10px;"></form>
-            </div>
-        </td>
-    </tr>
-    -->
 </table>

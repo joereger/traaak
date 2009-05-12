@@ -137,14 +137,20 @@ public class FilterMain implements Filter {
                         FacebookRestClient facebookRestClient = new FacebookRestClient(Pagez.getUserSession().getApp().getFacebookapikey(), Pagez.getUserSession().getApp().getFacebookapisecret());
                         String facebooksessionkey = facebookRestClient.auth_getSession(request.getParameter("auth_token").trim());
                         Pagez.getUserSession().setFacebooksessionkey(facebooksessionkey);
+                        Pagez.getUserSession().setIsfacebook(true);
+                        Pagez.getUserSession().setIsweb(false);
                     } else {
                         //No auth_token was sent (it's only sent for new apps and new logins, etc) so look to session_key
                         logger.debug("no auth_token found in request, looking for fb_sig_session_key");
                         if ((request.getParameter("fb_sig_session_key")!=null && !request.getParameter("fb_sig_session_key").trim().equals(""))){
                             logger.debug("found a fb_sig_session_key in request");
                             Pagez.getUserSession().setFacebooksessionkey(request.getParameter("fb_sig_session_key").trim());
+                            Pagez.getUserSession().setIsfacebook(true);
+                            Pagez.getUserSession().setIsweb(false);
                         } else {
                             logger.debug("no fb_sig_session_key found in request... aborting UserSessionSetup");
+                            Pagez.getUserSession().setIsfacebook(false);
+                            Pagez.getUserSession().setIsweb(true);
                             if (!response.isCommitted()){ chain.doFilter(request, response); }
                             return;
                         }
