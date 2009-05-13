@@ -29,6 +29,9 @@
         <property name="lastname" type="string">
             <column name="lastname" not-null="true" />
         </property>
+        <property name="nickname" type="string">
+            <column name="nickname" />
+        </property>
         <property name="email" type="string">
             <column name="email" />
         </property>
@@ -41,5 +44,15 @@
         <property name="timezoneid" type="text">
             <column name="timezoneid" not-null="true" />
         </property>
+        <property name="isactivatedbyemail" type="boolean">
+            <column name="isactivatedbyemail" />
+        </property>
+        <property name="emailactivationkey" type="string">
+            <column name="emailactivationkey" not-null="true" />
+        </property>
+        <property name="emailactivationlastsent" type="timestamp">
+            <column name="emailactivationlastsent" not-null="true" />
+        </property>
+
     </class>
 </hibernate-mapping>

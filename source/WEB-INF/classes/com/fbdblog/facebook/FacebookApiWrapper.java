@@ -2,9 +2,8 @@ package com.fbdblog.facebook;
 
 import com.facebook.api.FacebookRestClient;
 import com.facebook.api.TemplatizedAction;
-import com.fbdblog.session.UserSession;
+import com.fbdblog.htmlui.UserSession;
 import com.fbdblog.session.FindUserappsettings;
-import com.fbdblog.systemprops.SystemProperty;
 import com.fbdblog.systemprops.BaseUrl;
 import com.fbdblog.dao.*;
 import com.fbdblog.dao.hibernate.HibernateUtil;

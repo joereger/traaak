@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
 
-import com.fbdblog.session.Pagez;
+import com.fbdblog.htmlui.Pagez;
 
 /**
  * User: Joe Reger Jr

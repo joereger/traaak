@@ -4,7 +4,7 @@ import com.fbdblog.threadpool.ThreadPool;
 import com.fbdblog.calc.DoCalculationsAfterPost;
 import com.fbdblog.facebook.FacebookApiWrapper;
 import com.fbdblog.dao.Post;
-import com.fbdblog.session.UserSession;
+import com.fbdblog.htmlui.UserSession;
 
 import java.io.Serializable;
 

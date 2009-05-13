@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import com.fbdblog.util.Num;
 import com.fbdblog.util.Time;
 import com.fbdblog.util.Str;
-import com.fbdblog.util.Util;
 import com.fbdblog.dao.Post;
 import com.fbdblog.dao.Question;
 import com.fbdblog.dao.Chart;

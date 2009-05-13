@@ -1,4 +1,4 @@
-<%@ page import="com.fbdblog.session.UserSession" %>
+<%@ page import="com.fbdblog.htmlui.UserSession" %>
 <%@ page import="org.apache.log4j.Logger" %>
 <%@ page import="org.hibernate.criterion.Restrictions" %>
 <%@ page import="java.util.List" %>
@@ -6,7 +6,7 @@
 <%@ page import="com.fbdblog.dao.User" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
-<%@ page import="com.fbdblog.session.Pagez" %>
+<%@ page import="com.fbdblog.htmlui.Pagez" %>
 <%@ page import="com.fbdblog.session.PersistentLogin" %>
 <%
     //Logger

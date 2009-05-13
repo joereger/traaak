@@ -1,4 +1,4 @@
-package com.fbdblog.session;
+package com.fbdblog.htmlui;
 
 import org.apache.log4j.Logger;
 import org.hibernate.criterion.Restrictions;
@@ -20,7 +20,11 @@ import com.fbdblog.facebook.FindUserFromFacebookUid;
 import com.fbdblog.cache.providers.CacheFactory;
 import com.fbdblog.xmpp.SendXMPPMessage;
 import com.fbdblog.util.Time;
+import com.fbdblog.util.RandomString;
 import com.fbdblog.UserappstatusUtil;
+import com.fbdblog.session.*;
+import com.fbdblog.htmlui.Pagez;
+import com.fbdblog.htmlui.UserSession;
 import com.facebook.api.FacebookRestClient;
 import com.facebook.api.FacebookException;
 
@@ -53,6 +57,7 @@ public class FilterMain implements Filter {
                 //Set up Pagez
                 Pagez.setRequest(httpServletRequest);
                 Pagez.setResponse(httpServletResponse);
+                Pagez.setBeanMgr(new BeanMgr());
 
                 //Debug
                 UrlSplitter urlSplitter = new UrlSplitter(httpServletRequest);
@@ -121,10 +126,11 @@ public class FilterMain implements Filter {
                 Pagez.getUserSession().setApp(FindApp.findFromRequest(httpServletRequest));
                 //If there's no app
                 if (Pagez.getUserSession().getApp()==null || Pagez.getUserSession().getApp().getAppid()<=0) {
+                    //@todo how to handle unknown app?  list all apps with links to an add page?
                     logger.debug("no valid app found so aborting UserSessionSetup");
                     if (!response.isCommitted()){ chain.doFilter(request, response); }
+                    logger.debug("after chain.doFilter()");
                     return;
-                    //@todo how to handle unknown app?  list all apps with links to an add page?
                 }
 
                 //Facebook
@@ -204,9 +210,13 @@ public class FilterMain implements Filter {
                                 user.setFacebookuid(Pagez.getUserSession().getFacebookUser().getUid());
                                 user.setFirstname(Pagez.getUserSession().getFacebookUser().getFirst_name());
                                 user.setLastname(Pagez.getUserSession().getFacebookUser().getLast_name());
+                                user.setNickname(RandomString.randomAlphabetic(8));
                                 user.setIsenabled(true);
                                 user.setEmail("");
                                 user.setPassword("");
+                                user.setIsactivatedbyemail(true);
+                                user.setEmailactivationkey(RandomString.randomAlphanumeric(5));
+                                user.setEmailactivationlastsent(new java.util.Date());
                                 user.setTimezoneid(Time.getTimezoneidFromFacebookOffset(Pagez.getUserSession().getFacebookUser().getTimezoneoffset()));
                                 try {user.save();} catch (Exception ex) {logger.error("",ex);}
                                 //Store in session
@@ -270,6 +280,20 @@ public class FilterMain implements Filter {
 
                 //Save UserSession in Cache
                 CacheFactory.getCacheProvider().put(Pagez.getUserSession().getFacebooksessionkey(), "userSessionKeyedOnFb", Pagez.getUserSession());
+
+                //Account activation
+                if (Pagez.getUserSession().getUser()!=null && !Pagez.getUserSession().getUser().getIsactivatedbyemail()){
+                    //User isn't activated but they get a grace period
+                    int daysInGracePeriod = 30;
+                    Calendar startOfGracePeriod = Time.xDaysAgoStart(Calendar.getInstance(), daysInGracePeriod);
+                    if (Pagez.getUserSession().getUser().getCreatedate().before(startOfGracePeriod.getTime())){
+                        if (urlSplitter.getRequestUrl().indexOf("emailactivation")==-1 && urlSplitter.getRequestUrl().indexOf("lpc.jsp")==-1 && urlSplitter.getRequestUrl().indexOf("login")==-1 && urlSplitter.getRequestUrl().indexOf("jcaptcha")==-1 && urlSplitter.getRequestUrl().indexOf("eas")==-1){
+                            httpServletResponse.sendRedirect("/emailactivationwaiting.jsp");
+                            return;
+                        }
+                    }
+                }
+
 
             }
         } catch (Exception ex){

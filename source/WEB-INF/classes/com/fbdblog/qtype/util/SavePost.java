@@ -10,7 +10,7 @@ import com.fbdblog.qtype.def.Component;
 import com.fbdblog.facebook.FacebookApiWrapper;
 import com.fbdblog.xmpp.SendXMPPMessage;
 import com.fbdblog.chart.chartcache.ClearCache;
-import com.fbdblog.session.UserSession;
+import com.fbdblog.htmlui.UserSession;
 import com.fbdblog.calc.DoCalculationsAfterPost;
 import com.fbdblog.threads.PostSaveWork;
 import com.fbdblog.util.Time;

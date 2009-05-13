@@ -4,7 +4,7 @@ import com.fbdblog.dao.*;
 import com.fbdblog.calc.CalcUtil;
 import com.fbdblog.facebook.FacebookUser;
 import com.fbdblog.facebook.FacebookApiWrapper;
-import com.fbdblog.session.UserSession;
+import com.fbdblog.htmlui.UserSession;
 
 /**
  * User: Joe Reger Jr

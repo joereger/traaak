@@ -1,0 +1,171 @@
+
+
+
+.pageLayout {
+    width:760px;
+    height:100%;
+}
+
+.pageHeader {
+    background-color: #6392C6;
+    text-align: center;
+    vertical-align: middle;
+    height:1px;
+    overflow:visible;
+    color: #FFFFFF;
+    padding: 0px;
+    margin: 0px;
+}
+
+.pageHeader1 {
+}
+.pageHeader2 {
+    width:100%;
+}
+.pageHeader2col1 {
+    background-color: #FFFFFF;
+}
+
+.pageNavigation {
+    text-align: left;
+    vertical-align: top;
+    width: 200px;
+    background-color: #E7EFF7;
+    border: 1px solid #6392C6;
+    padding: 10px;
+}
+
+.pageBody {
+    text-align: left;
+    vertical-align: top;
+    width: 560px;
+    padding: 20px;
+    background-color: #FFFFFF;
+}
+
+.pageFooter {
+    text-align: right;
+    font-size: xx-small;
+    height:1px;
+    overflow:visible;
+    background-color: #6392C6;
+    color: #FFFFFF;
+}
+
+.navigation {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+    width: 100%;
+}
+
+
+
+
+
+
+/*Tabs*/
+
+#thicktabs{
+margin: 0;
+padding: 0;
+float: right;
+font: bold 13px Tahoma;
+}
+
+#thicktabs li{
+display: inline;
+}
+
+#thicktabs li a{
+float: left;
+color: black;
+padding: 8px 11px; /*padding of tabs*/
+text-decoration: none;
+background: transparent url(/images/thicktabs-blue-off.gif) top right no-repeat;
+border-top: 1px solid #d3bdbe; /*top border style*/
+border-bottom: 3px solid #00709e; /*thick bottom border below tabs*/
+}
+
+#thicktabs li a#leftmostitem{ /*Extra CSS for left most menu item*/
+border-left: 1px solid #d3bdbe; /*left border style*/
+}
+
+#thicktabs li a#rightmostitem{ /*Extra CSS for right most menu item*/
+border-right: 1px solid #d3bdbe; /*right border style*/
+background-position: top left; /*Position background image to the left instead of default right, to hide indented underline for this link*/
+}
+
+#thicktabs li a:visited{
+color: black;
+}
+
+#thicktabs li a:hover{
+color: black;
+background-image: url(/images/thicktabs-blue-on.gif); /*background image swap on hover*/
+}
+
+/*Tabs*/
+
+/* Start dhtml glossymenu */
+
+.glossymenu{
+	position: relative;
+	padding: 0 0 0 34px;
+	margin: 0 auto 0 auto;
+	background: url(/images/menug_bg.gif) repeat-x; /*tab background image path*/
+	height: 46px;
+	list-style: none;
+}
+
+.glossymenu li{
+	float:left;
+}
+
+.glossymenu li a{
+	float: left;
+	display: block;
+	color:#000;
+	text-decoration: none;
+	font-family: sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	padding:0 0 0 16px; /*Padding to accomodate left tab image. Do not change*/
+	height: 46px;
+	line-height: 46px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.glossymenu li a b{
+	float: left;
+	display: block;
+	padding: 0 24px 0 8px; /*Padding of menu items*/
+}
+
+.glossymenu li.current a, .glossymenu li a:hover{
+	color: #fff;
+	background: url(/images/menug_hover_left.gif) no-repeat; /*left tab image path*/
+	background-position: left;
+}
+
+.glossymenu li.current a b, .glossymenu li a:hover b{
+	color: #fff;
+	background: url(/images/menug_hover_right.gif) no-repeat right top; /*right tab image path*/
+}
+/* End dhtml glossymenu */
+
+/* Dynamic Countdown Script */
+
+.lcdstyle{ /*Example CSS to create LCD countdown look*/
+background-color:black;
+color:yellow;
+font: bold 18px MS Sans Serif;
+padding: 3px;
+}
+
+.lcdstyle sup{ /*Example CSS to create LCD countdown look*/
+font-size: 80%
+}
+
+/* Dynamic Countdown Script */
+

@@ -26,10 +26,15 @@ public class User extends BasePersistentClass implements java.io.Serializable, R
      private boolean isenabled;
      private String firstname;
      private String lastname;
+     private String nickname;
      private String email;
      private String password;
      private Date createdate;
      private String timezoneid;
+     private boolean isactivatedbyemail;
+     private String emailactivationkey;
+     private Date emailactivationlastsent;
+
 
 
      //Association
@@ -163,5 +168,37 @@ public class User extends BasePersistentClass implements java.io.Serializable, R
 
     public void setTimezoneid(String timezoneid) {
         this.timezoneid=timezoneid;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname=nickname;
+    }
+
+    public boolean getIsactivatedbyemail() {
+        return isactivatedbyemail;
+    }
+
+    public void setIsactivatedbyemail(boolean isactivatedbyemail) {
+        this.isactivatedbyemail=isactivatedbyemail;
+    }
+
+    public String getEmailactivationkey() {
+        return emailactivationkey;
+    }
+
+    public void setEmailactivationkey(String emailactivationkey) {
+        this.emailactivationkey=emailactivationkey;
+    }
+
+    public Date getEmailactivationlastsent() {
+        return emailactivationlastsent;
+    }
+
+    public void setEmailactivationlastsent(Date emailactivationlastsent) {
+        this.emailactivationlastsent=emailactivationlastsent;
     }
 }

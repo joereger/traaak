@@ -2,7 +2,7 @@
 <%@ page import="com.facebook.api.FacebookRestClient" %>
 <%@ page import="com.fbdblog.xmpp.SendXMPPMessage" %>
 <%@ page import="com.fbdblog.facebook.FacebookUser" %>
-<%@ page import="com.fbdblog.session.UserSession" %>
+<%@ page import="com.fbdblog.htmlui.UserSession" %>
 <%@ page import="com.facebook.api.FacebookException" %>
 <%@ page import="com.fbdblog.facebook.FindUserFromFacebookUid" %>
 <%@ page import="com.fbdblog.facebook.FindApp" %>
@@ -18,7 +18,7 @@
 
     //If is web and user isn't logged in
     if (Pagez.getUserSession().getIsweb() && !Pagez.getUserSession().getIsloggedin() || (Pagez.getUserSession().getUser()==null)){
-        Pagez.sendRedirect("/loginsignup.jsp");
+        Pagez.sendRedirect("/login.jsp");
         return;
     }
 

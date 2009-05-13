@@ -17,7 +17,8 @@ import org.apache.log4j.Logger;
 public class Userrole extends BasePersistentClass implements java.io.Serializable, RegerEntity, AuthControlled {
 
     public static final int ANONYMOUS = 0;
-    public static final int SYSADMIN = 1;
+    public static final int USER = 1;
+    public static final int SYSADMIN = 2;
 
     // Fields    
 

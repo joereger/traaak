@@ -1,4 +1,4 @@
-<%@ page import="com.fbdblog.session.UserSession" %>
+<%@ page import="com.fbdblog.htmlui.UserSession" %>
 <%@ page import="org.apache.log4j.Logger" %>
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
 <%@ page import="com.fbdblog.dao.hibernate.HibernateUtil" %>
@@ -6,7 +6,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.fbdblog.dao.Supportissue" %>
 <%@ page import="com.fbdblog.dao.hibernate.NumFromUniqueResult" %>
-<%@ page import="com.fbdblog.session.Pagez" %>
+<%@ page import="com.fbdblog.htmlui.Pagez" %>
 <%
     //Logger
     Logger logger = Logger.getLogger(this.getClass());
