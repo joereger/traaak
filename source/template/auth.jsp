@@ -1,4 +1,6 @@
 <%@ page import="com.fbdblog.htmlui.Authorization" %>
+<%@ page import="org.apache.log4j.Logger" %>
+
 <%
     boolean isauthorised=Authorization.check(acl);
     if (!isauthorised){

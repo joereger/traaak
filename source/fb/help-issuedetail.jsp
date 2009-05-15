@@ -16,6 +16,13 @@
 <%@ page import="com.fbdblog.dao.*" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.fbdblog.util.Time" %>
+
+<%
+Logger logger = Logger.getLogger(this.getClass().getName());
+String pagetitle = "Help";
+String navtab = "youraccount";
+String acl = "public";
+%>
 <%@ include file="header.jsp" %>
 
 <%

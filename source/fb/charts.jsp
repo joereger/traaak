@@ -11,6 +11,13 @@
 <%@ page import="com.fbdblog.util.Num" %>
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
 <%@ page import="com.fbdblog.chart.ChartSecurityKey" %>
+
+<%
+Logger logger = Logger.getLogger(this.getClass().getName());
+String pagetitle = "Charts";
+String navtab = "youraccount";
+String acl = "public";
+%>
 <%@ include file="header.jsp" %>
 
 

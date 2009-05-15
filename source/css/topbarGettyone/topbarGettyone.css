@@ -1,0 +1,74 @@
+div.navbarmain{
+	width:900px;
+	margin:0 auto;
+	margin-top:30px;
+    font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
+	font-size:12px;
+}
+div.navbartop{
+	width:200px;
+	margin:0 auto;
+	margin-top:30px;
+    font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
+	font-size:12px;
+}
+#navbar{
+	width:auto;
+	height:36px;
+	background:url(/css/topbarGettyone/img/navbar-bg.png) left top repeat-x;
+}
+#navbar .inbar{
+	display:block;
+	height:36px;
+	background:url(/css/topbarGettyone/img/right-round.png) right top no-repeat;
+}
+#navbar ul, #navbar ul li{
+	border:0px;
+	margin:0px;
+	padding:0px;
+	list-style:none;
+	height:36px;
+	line-height:36px;
+}
+#navbar ul{
+	background:url(/css/topbarGettyone/img/left-round.png) left top no-repeat;
+}
+#navbar ul li{
+	float:left;
+	display:block;
+	line-height:36px;
+}
+#navbar ul li a{
+	color:#403e32;
+	text-decoration:none;
+	font-weight:bold;
+	display:block;
+}
+#navbar ul li a span{
+	padding:0 20px 0 0;
+	height:36px;
+	line-height:36px;
+	display:block;
+	margin-left:20px;
+}
+#navbar .navhome a, #navbar .navhome a:hover{
+	background:url(/css/topbarGettyone/img/a-bg.png) left top no-repeat;
+	height:36px;
+	line-height:36px;
+}
+#navbar .navhome a span, #navbar .navhome a:hover span{
+	color:#FFFFFF;
+	background:url(/css/topbarGettyone/img/span-bg.png) right top no-repeat;
+	height:36px;
+	line-height:36px;
+}
+#navbar ul li a:hover{
+	background:url(/css/topbarGettyone/img/ahover-bg.png) left top no-repeat;
+	height:36px;
+	line-height:36px;
+}
+#navbar ul li a:hover span{
+	background:url(/css/topbarGettyone/img/spanhover-bg.png) right top no-repeat;
+	height:36px;
+	line-height:36px;
+}

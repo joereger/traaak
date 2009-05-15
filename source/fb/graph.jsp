@@ -27,17 +27,7 @@ page import="com.fbdblog.chart.ChartSecurityKey" %><%
     //Logger
     Logger logger=Logger.getLogger(this.getClass().getName());
 
-    //Make sure we have a userSession to work with
-    UserSession userSession=null;
-    Object ustmp=request.getSession().getAttribute("userSession");
-    if (ustmp != null) {
-        userSession=(UserSession) ustmp;
-        logger.debug("Found an existing userSession");
-    } else {
-        userSession=new UserSession();
-        request.getSession().setAttribute("userSession", userSession);
-        logger.debug("Had to create a new userSession");
-    }
+    
 
     //Determine whether or not this is a preview of a chart.
     boolean ispreview=false;
@@ -87,7 +77,7 @@ page import="com.fbdblog.chart.ChartSecurityKey" %><%
     Chart chart=Chart.get(chartid);
     App app=App.get(chart.getAppid());
     Userappsettings userappsettings=FindUserappsettings.get(user, app);
-    if (userappsettings.getIsprivate()) {
+    if (userappsettings!=null && userappsettings.getIsprivate()) {
         logger.debug("checking key="+request.getParameter("key"));
         //Now need to look for the key
         if (!ChartSecurityKey.isValidChartKey(request.getParameter("key"), userid, chartid)){

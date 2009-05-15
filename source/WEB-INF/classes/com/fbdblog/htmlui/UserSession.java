@@ -27,7 +27,6 @@ public class UserSession implements Serializable {
     private boolean isloggedin = false;
     private boolean isAllowedToResetPasswordBecauseHasValidatedByEmail = false;
     private int referredbyOnlyUsedForSignup = 0;
-    private boolean isSysadmin = false;
     private String message = "";
     private Calendar createdate = Calendar.getInstance();
     private int appid;
@@ -62,13 +61,14 @@ public class UserSession implements Serializable {
 
 
     public void setUser(User user) {
+        Logger logger = Logger.getLogger(this.getClass().getName());
         if (user!=null){
             userid = user.getUserid();
-            isSysadmin = false;
+            issysadmin = false;
             for (Iterator<Userrole> iterator = user.getUserroles().iterator(); iterator.hasNext();) {
                 Userrole userrole = iterator.next();
                 if (userrole.getRoleid()== Userrole.SYSADMIN){
-                    isSysadmin = true;
+                    issysadmin = true;
                 }
             }
         } else {
@@ -98,14 +98,6 @@ public class UserSession implements Serializable {
 
     public void setReferredbyOnlyUsedForSignup(int referredbyOnlyUsedForSignup) {
         this.referredbyOnlyUsedForSignup = referredbyOnlyUsedForSignup;
-    }
-
-    public boolean getIsSysadmin() {
-        return isSysadmin;
-    }
-
-    public void setSysadmin(boolean sysadmin) {
-        isSysadmin = sysadmin;
     }
 
 

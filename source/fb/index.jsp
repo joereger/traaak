@@ -17,6 +17,13 @@
 <%@ page import="com.fbdblog.calc.DoCalculationsAfterPost" %>
 <%@ page import="com.fbdblog.chart.ChartSecurityKey" %>
 <%@ page import="org.hibernate.criterion.Order" %>
+
+<%
+Logger logger = Logger.getLogger(this.getClass().getName());
+String pagetitle = "Traaak";
+String navtab = "youraccount";
+String acl = "public";
+%>
 <%@ include file="header.jsp" %>
 
 <%
@@ -225,9 +232,8 @@ if (!topOfPageMsg.equals("")){
                 <center><font style="font-size: 18px; color: #cccccc;">Track Other Stuff Too</font></center>
                 <table cellpadding="3" cellspacing="1" border="0" width="100%" bgcolor="#efefef">
                 <%
-
-
                     int col=0;
+                    int numOfCols = 3;
                     List<App> apps=HibernateUtil.getSession().createCriteria(App.class)
                             .add(Restrictions.eq("crosspromote", true))
                             .addOrder(Order.asc("title"))
@@ -245,7 +251,7 @@ if (!topOfPageMsg.equals("")){
                                 <a href="http://apps.facebook.com/<%=app.getFacebookappname()%>/"><%=app.getTitle()%></a>
                                 <%
                                 %></td><%
-                            if (col==3){
+                            if (col==numOfCols){
                                 col = 0;
                                 %></tr><%
                             }

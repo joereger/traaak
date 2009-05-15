@@ -17,6 +17,13 @@
 <%@ page import="com.fbdblog.chart.DataTypeDecimal" %>
 <%@ page import="com.fbdblog.chart.DataTypeInteger" %>
 <%@ page import="com.fbdblog.util.Time" %>
+
+<%
+Logger logger = Logger.getLogger(this.getClass().getName());
+String pagetitle = "Reports";
+String navtab = "youraccount";
+String acl = "public";
+%>
 <%@ include file="header.jsp" %>
 
 <%

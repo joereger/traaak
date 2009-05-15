@@ -20,6 +20,13 @@
 <%@ page import="com.fbdblog.util.Time" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.fbdblog.throwdown.ThrowdownPrivacy" %>
+
+<%
+Logger logger = Logger.getLogger(this.getClass().getName());
+String pagetitle = "Throwdowns";
+String navtab = "youraccount";
+String acl = "public";
+%>
 <%@ include file="header.jsp" %>
 
 

@@ -29,6 +29,7 @@
             User user =  iterator.next();
             if (user.getPassword().equals(request.getParameter("password"))){
                 Pagez.getUserSession().setUser(user);
+                logger.debug("Pagez.getUserSession().getIssysadmin()="+Pagez.getUserSession().getIssysadmin());
                 Pagez.getUserSession().setIsloggedin(true);
                 //Set persistent login cookie, if necessary
                 boolean keepmeloggedin = true;
@@ -44,13 +45,15 @@
                     }
                 }
                 //Redir sysadmins
+                logger.debug("Pagez.getUserSession().getIssysadmin()="+Pagez.getUserSession().getIssysadmin());
                 if (Pagez.getUserSession().getIssysadmin()){
-                    response.sendRedirect("apps.jsp");
+                    logger.debug("redirecting to /admin/apps.jsp");
+                    Pagez.sendRedirect("/admin/apps.jsp");
                     return;
                 }
             }
         }
-        out.print("Sorry.  Fail.");
+        out.print("Sorry.  Epic fail.");
     }
 %>
 

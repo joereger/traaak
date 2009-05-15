@@ -15,6 +15,13 @@
 <%@ page import="com.fbdblog.calc.CalctimeperiodFactory" %>
 <%@ page import="com.fbdblog.dao.*" %>
 <%@ page import="java.util.*" %>
+
+<%
+Logger logger = Logger.getLogger(this.getClass().getName());
+String pagetitle = "Settings";
+String navtab = "youraccount";
+String acl = "public";
+%>
 <%@ include file="header.jsp" %>
 
 <%

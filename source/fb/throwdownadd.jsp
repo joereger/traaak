@@ -19,6 +19,13 @@
 <%@ page import="com.fbdblog.dao.*" %>
 <%@ page import="com.fbdblog.util.ValidationException" %>
 <%@ page import="com.fbdblog.util.Time"%>
+
+<%
+Logger logger = Logger.getLogger(this.getClass().getName());
+String pagetitle = "Throwdown";
+String navtab = "youraccount";
+String acl = "public";
+%>
 <%@ include file="header.jsp" %>
 
 <%

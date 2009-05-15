@@ -1,4 +1,3 @@
-<%@ page import="org.apache.log4j.Logger" %>
 <%@ page import="com.fbdblog.htmluibeans.Login" %>
 <%@ page import="com.fbdblog.htmlui.*" %>
 <%@ page import="com.fbdblog.systemprops.SystemProperty" %>

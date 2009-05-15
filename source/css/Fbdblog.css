@@ -358,40 +358,8 @@ clear: left;
 
 
 
-/*Headers Start*/
 
-.header {
-border-bottom:2px solid #006600;
-width:100%;
-}
-html[xmlns] .clearfix { display:block; }
-.clearfix { display:inline-block; }
-* { margin:0; padding:0; }
-span {
-background-color:#006600;
-color:#FFFFFF;
-float:left;
-padding:4px 10px;
-width:70%;
-}
-small {
-color:#777777;
-float:right;
-font-size:12px;
-padding:5px 5px 0 0;
-}
 
-h1{
-	font-size:40px;
-}
+.questionfont{font-weight: bold; background: #ffffcc;}
 
-h2{
-	font-size:13px;
-}
-
-h3{
-	font-size:16px;
-}
-
-/*Headers End*/
 

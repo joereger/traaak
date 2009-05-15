@@ -31,7 +31,7 @@
                 <a href="/account/accountsettings.jsp"><font class="subnavfont" style="color: #000000;">Account Settings</font></a>
                 <img src="/images/clear.gif" alt="" width="10" height="1"/>
                 <a href="/account/changepassword.jsp"><font class="subnavfont" style="color: #000000;">Change Password</font></a>
-                <%if (Pagez.getUserSession().getIsloggedin() && Pagez.getUserSession().getIsSysadmin()){%>
+                <%if (Pagez.getUserSession().getIsloggedin() && Pagez.getUserSession().getIssysadmin()){%>
                     <img src="/images/clear.gif" alt="" width="10" height="1"/>
                     <a href="/sysadmin/index.jsp"><font class="subnavfont" style="color: #000000;">Sysadmin</font></a>
                 <%}%>
@@ -46,7 +46,7 @@
         <%--<%}%>--%>
 
         <%if (navtab.equals("sysadmin")){%>
-            <%if (Pagez.getUserSession().getIsloggedin() && Pagez.getUserSession().getIsSysadmin()){%>
+            <%if (Pagez.getUserSession().getIsloggedin() && Pagez.getUserSession().getIssysadmin()){%>
                 <a href="/sysadmin/errorlist.jsp"><font class="subnavfont" style=" color: #000000;">Log</font></a>
                 <a href="/sysadmin/userlist.jsp"><font class="subnavfont" style=" color: #000000;">Users</font></a>
                 <a href="/sysadmin/manuallyrunscheduledtask.jsp"><font class="subnavfont" style=" color: #000000;">Scheds</font></a>

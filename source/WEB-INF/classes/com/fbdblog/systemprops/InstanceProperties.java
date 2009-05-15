@@ -158,6 +158,7 @@ public class InstanceProperties {
                     logger.debug("passed testConfig()");
                     //Save to the file system in the conf directory
                     File fil = new File(dbPropsInternalFilename);
+                    fil.createNewFile();
                     FileOutputStream fos = new FileOutputStream(fil);
                     properties.store(fos, "InstanceProperties");
                     fos.close();
@@ -166,6 +167,7 @@ public class InstanceProperties {
 
                     //Store to default system location
                     File fil2 = new File("", dbPropsExternalFilename);
+                    fil2.createNewFile();
                     FileOutputStream fos2 = new FileOutputStream(fil2);
                     properties.store(fos2, "InstanceProperties for " + WebAppRootDir.getUniqueContextId());
                     fos2.close();

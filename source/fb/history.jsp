@@ -9,6 +9,13 @@
 <%@ page import="org.hibernate.criterion.Order" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page import="com.fbdblog.util.Time" %>
+
+<%
+Logger logger = Logger.getLogger(this.getClass().getName());
+String pagetitle = "History";
+String navtab = "youraccount";
+String acl = "public";
+%>
 <%@ include file="header.jsp" %>
 
 <%String selectedTab="history";%>
