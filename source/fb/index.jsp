@@ -46,10 +46,17 @@ String adPostSave = "";
         try {
             SavePost.save(Pagez.getUserSession().getApp(), Pagez.getUserSession().getUser(), post, appPostParser, Pagez.getUserSession());
             StringBuffer tmp = new StringBuffer();
-            tmp.append("<fb:success>\n" +
-            "     <fb:message>Good trackin'.  Now track s'more.</fb:message>\n" +
-            "     We've updated your profile so that others can check out your stuff.  Now's a good time to check out <a href='http://apps.facebook.com/"+Pagez.getUserSession().getApp().getFacebookappname()+"/?nav=friends'>your friends' stuff</a>.\n" +
-            "</fb:success>");
+            if (Pagez.getUserSession().getIsfacebook()){
+                tmp.append("<fb:success>\n" +
+                "     <fb:message>Good trackin'.  Now track s'more.</fb:message>\n" +
+                "     We've updated your profile so that others can check out your stuff.  Now's a good time to check out <a href='http://apps.facebook.com/"+Pagez.getUserSession().getApp().getFacebookappname()+"/?nav=friends'>your friends' stuff</a>.\n" +
+                "</fb:success>");
+            } else {
+                tmp.append("<div class=\"traaakbox\">\n" +
+                "   <div class=\"traaakboxtitle\">Good traaaking!</div>\n" +
+                " We've updated your charts.  Traaak some <a href=\"/\">other stuff</a>?"+
+                "</div>");
+            }
             topOfPageMsg = tmp.toString();
             StringBuffer tmpAps = new StringBuffer();
             if (!Pagez.getUserSession().getApp().getAdpostsave().equals("")){
@@ -62,17 +69,24 @@ String adPostSave = "";
             adPostSave = tmpAps.toString();
         } catch (ComponentException cex) {
             StringBuffer tmp = new StringBuffer();
-            tmp.append(" <fb:error>\n" +
-            "      <fb:message>Houston, we have a problem.</fb:message>\n" +
-            "      "+cex.getErrorsAsSingleString()+"\n" +
-            " </fb:error>");
+            if (Pagez.getUserSession().getIsfacebook()){
+                tmp.append(" <fb:error>\n" +
+                "      <fb:message>Houston, we have a problem.</fb:message>\n" +
+                "      "+cex.getErrorsAsSingleString()+"\n" +
+                " </fb:error>");
+            } else {
+                tmp.append("<div class=\"traaakbox\">\n" +
+                "   <div class=\"traaakboxtitle\">Houston, we have a problem.</div>\n" +
+                cex.getErrorsAsSingleString() +
+                "</div>");
+            }
             topOfPageMsg = tmp.toString();
         }
     }
 %>
 
 <%
-if (Pagez.getUserSession().getIsnewappforthisuser()){
+if (Pagez.getUserSession().getIsnewappforthisuser() && Pagez.getUserSession().getIsfacebook()){
     StringBuffer tmp = new StringBuffer();
     if (!Pagez.getUserSession().getApp().getIsdefaultprivate()){
         tmp.append("<fb:success>\n" +
@@ -102,10 +116,17 @@ if (Pagez.getUserSession().getIsnewappforthisuser()){
                 }
                 post=null;
                 StringBuffer tmp=new StringBuffer();
-                tmp.append("<fb:success>\n" +
-                        "     <fb:message>As ordered, thy data hath been deleted.</fb:message>\n" +
+                if (Pagez.getUserSession().getIsfacebook()){
+                    tmp.append("<fb:success>\n" +
+                        "     <fb:message>As ordered, your data has been deleted.</fb:message>\n" +
                         "     Now add some more so this app doesn't get an inferiority complex.  It's lonely.  It needs data.\n" +
                         "</fb:success>");
+                } else {
+                    tmp.append("<div class=\"traaakbox\">\n" +
+                    "   <div class=\"traaakboxtitle\">As ordered, your data has been deleted.</div>\n" +
+                    "Now add some more so this app doesn't get an inferiority complex.  It's lonely.  It needs data." +
+                    "</div>");
+                }
                 topOfPageMsg=tmp.toString();
                 //Clear the chart image cache
                 ClearCache.clearCacheForUser(Pagez.getUserSession().getUser().getUserid(), Pagez.getUserSession().getApp().getAppid());
@@ -113,10 +134,17 @@ if (Pagez.getUserSession().getIsnewappforthisuser()){
                 DoCalculationsAfterPost.doCalculations(Pagez.getUserSession().getUser(), Pagez.getUserSession().getApp());
             } else {
                 StringBuffer tmp=new StringBuffer();
-                tmp.append(" <fb:error>\n" +
+                if (Pagez.getUserSession().getIsfacebook()){
+                    tmp.append(" <fb:error>\n" +
                         "      <fb:message>Seriously? You don't even own that post.</fb:message>\n" +
                         "      " + "Am. Uh. Toor." + "\n" +
                         " </fb:error>");
+                } else {
+                    tmp.append("<div class=\"traaakbox\">\n" +
+                    "   <div class=\"traaakboxtitle\">Seriously? You don't even own that post.</div>\n" +
+                    "Am. Uh. Toor." +
+                    "</div>");
+                }
                 topOfPageMsg=tmp.toString();
             }
         }
@@ -142,28 +170,47 @@ if (!topOfPageMsg.equals("")){
             %>
             <%
             if (post!=null && post.getPostid()>0){
-                %>
-                <fb:success>
-                <fb:message>Editing data from <%=Time.dateformatcompactwithtime(Time.gmttousertime(post.getPostdate(), Pagez.getUserSession().getUser().getTimezoneid()))%>.</fb:message>
-                <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>&action=deletepost'>Delete it?</a>
-                <br/><a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main'>Start new?</a>
-                </fb:success>
-                <br/>
-                <%
+                if (Pagez.getUserSession().getIsfacebook()){
+                    %>
+                    <fb:success>
+                    <fb:message>Editing data from <%=Time.dateformatcompactwithtime(Time.gmttousertime(post.getPostdate(), Pagez.getUserSession().getUser().getTimezoneid()))%>.</fb:message>
+                    <br/><a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>&action=deletepost'>Delete it?</a>
+                    <br/><a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main'>Start new?</a>
+                    </fb:success>
+                    <br/>
+                    <%
+                } else {
+                    %>
+                    <div class="traaakbox">
+                        <div class="traaakboxtitle">Editing data from <%=Time.dateformatcompactwithtime(Time.gmttousertime(post.getPostdate(), Pagez.getUserSession().getUser().getTimezoneid()))%>.</div>
+                        <a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>&action=deletepost'>Delete it?</a>
+                        <br/><a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main'>Start new?</a>
+                    </div>
+                    <%
+                }
             }
             %>
 
             <%
-            if (Pagez.getUserSession().getUser() != null) {
+            if (Pagez.getUserSession().getUser()!=null) {
                 int totalposts = NumFromUniqueResult.getInt("select count(*) from Post where userid='"+Pagez.getUserSession().getUser().getUserid()+"' and appid='"+Pagez.getUserSession().getApp().getAppid()+"'");
                 if (totalposts==0){
-                    %>
-                    <fb:success>
-                    <fb:message>Get Started Tracking!</fb:message>
-                    Just fill out the form below and click Track It.  Fields with an asterisk* are required.
-                    </fb:success>
-                    <br/>
-                    <%
+                    if (Pagez.getUserSession().getIsfacebook()){
+                        %>
+                        <fb:success>
+                        <fb:message>Get Started Tracking!</fb:message>
+                        Just fill out the form below and click Track It.  Fields with an asterisk* are required.
+                        </fb:success>
+                        <br/>
+                        <%
+                    } else {
+                        %>
+                        <div class="traaakbox">
+                            <div class="traaakboxtitle">Get Started Tracking!</div>
+                            Just fill out the form below and click Track It.  Fields with an asterisk* are required.
+                        </div>
+                        <%
+                    }
                 }
             }
             %>
@@ -198,21 +245,39 @@ if (!topOfPageMsg.equals("")){
                 </div>
                 <%
                 if (Pagez.getUserSession().getUserappsettings()!=null && Pagez.getUserSession().getUserappsettings().getIsprivate()){
-                    %>
-                    <fb:success>
-                    <fb:message>Private Mode</fb:message>
-                    Your friends won't be able to see your stuff. You can make stuff public <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
-                    </fb:success>
-                    <br/>
-                    <%
+                    if (Pagez.getUserSession().getIsfacebook()){
+                        %>
+                        <fb:success>
+                        <fb:message>Private Mode</fb:message>
+                        Your friends won't be able to see your stuff. You can make stuff public <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+                        </fb:success>
+                        <br/>
+                        <%
+                    } else {
+                        %>
+                        <div class="traaakbox">
+                            <div class="traaakboxtitle">Private Mode</div>
+                            Nobody'll be able to see your stuff. You can make it public <a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+                        </div>
+                        <%
+                    }
                 } else {
-                    %>
-                    <fb:success>
-                    <fb:message>Public Mode</fb:message>
-                    Everything you post is visible to friends. Make stuff private <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
-                    </fb:success>
-                    <br/>
-                    <%
+                    if (Pagez.getUserSession().getIsfacebook()){
+                        %>
+                        <fb:success>
+                        <fb:message>Public Mode</fb:message>
+                        Everything you post is visible to friends. Make stuff private <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+                        </fb:success>
+                        <br/>
+                        <%
+                    } else {
+                        %>
+                        <div class="traaakbox">
+                            <div class="traaakboxtitle">Public Mode</div>
+                            Everything you track is publicly visible. You can make it private <a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+                        </div>
+                        <%
+                    }
                 }
                 %>
             </form>
@@ -248,7 +313,7 @@ if (!topOfPageMsg.equals("")){
                             }
                                 %><td valign="top"><%
                                 %>
-                                <a href="http://apps.facebook.com/<%=app.getFacebookappname()%>/"><%=app.getTitle()%></a>
+                                <a href="<%=linkToUrl%><%=app.getFacebookappname()%>/"><%=app.getTitle()%></a>
                                 <%
                                 %></td><%
                             if (col==numOfCols){
@@ -260,7 +325,7 @@ if (!topOfPageMsg.equals("")){
                 %>
                 </table>
             </div>
-            <div style="text-align: center;"><font style="font-size: 10px;">Don't see what you want?  <a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=help">Tell us what you'd like to track.</a></font></div>
+            <div style="text-align: center;"><font style="font-size: 10px;">Don't see what you want?  <a href="<%=linkToUrl%><%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=help">Tell us what you'd like to track.</a></font></div>
         </td>
     </tr>
 </table>

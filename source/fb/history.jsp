@@ -46,7 +46,7 @@ This is a list of all of the stuff you've tracked, organized by date.  You can e
                     <tr>
                         <td valign="top">
                             <font size="-1">
-                            <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>'><%=Time.dateformatcompactwithtime(Time.gmttousertime(post.getPostdate(), Pagez.getUserSession().getUser().getTimezoneid()))%></a>
+                            <a href='<%=linkToUrl%><%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main&postid=<%=post.getPostid()%>'><%=Time.dateformatcompactwithtime(Time.gmttousertime(post.getPostdate(), Pagez.getUserSession().getUser().getTimezoneid()))%></a>
                             </font>
                         </td>
                         <td valign="top">

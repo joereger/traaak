@@ -33,8 +33,13 @@ String acl = "public";
         questioncalc=Questioncalc.get(Integer.parseInt(request.getParameter("questioncalcid")));
     }
     if (questioncalc==null || questioncalc.getQuestionid()<=0){
-        %><fb:redirect url="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=reports" /><%
-        return;
+        if (Pagez.getUserSession().getIsfacebook()){
+            %><fb:redirect url="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=reports" /><%
+            return;
+        } else {
+            Pagez.sendRedirect("/app/"+Pagez.getUserSession().getApp().getFacebookappname()+"/?nav=reports");
+            return;
+        }
     }
 %>
 

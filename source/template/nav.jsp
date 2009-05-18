@@ -25,18 +25,18 @@
             <%--<%if (1==2 && !Pagez.getUserSession().getIsloggedin()){%><a href="/login.jsp"><font class="subnavfont" style="color: #000000;">Log In</font></a><%}%>--%>
         <%--<%}%>--%>
 
-        <%if (navtab.equals("account")){%>
-            <%if (Pagez.getUserSession().getIsloggedin()){%>
-                <img src="/images/clear.gif" alt="" width="10" height="1"/>
-                <a href="/account/accountsettings.jsp"><font class="subnavfont" style="color: #000000;">Account Settings</font></a>
-                <img src="/images/clear.gif" alt="" width="10" height="1"/>
-                <a href="/account/changepassword.jsp"><font class="subnavfont" style="color: #000000;">Change Password</font></a>
-                <%if (Pagez.getUserSession().getIsloggedin() && Pagez.getUserSession().getIssysadmin()){%>
-                    <img src="/images/clear.gif" alt="" width="10" height="1"/>
-                    <a href="/sysadmin/index.jsp"><font class="subnavfont" style="color: #000000;">Sysadmin</font></a>
-                <%}%>
-            <%}%>
-        <%}%>
+        <%--<%if (navtab.equals("account")){%>--%>
+            <%--<%if (Pagez.getUserSession().getIsloggedin()){%>--%>
+                <!--<img src="/images/clear.gif" alt="" width="10" height="1"/>-->
+                <!--<a href="/account/accountsettings.jsp"><font class="subnavfont" style="color: #000000;">Account Settings</font></a>-->
+                <!--<img src="/images/clear.gif" alt="" width="10" height="1"/>-->
+                <!--<a href="/account/changepassword.jsp"><font class="subnavfont" style="color: #000000;">Change Password</font></a>-->
+                <%--<%if (Pagez.getUserSession().getIsloggedin() && Pagez.getUserSession().getIssysadmin()){%>--%>
+                    <!--<img src="/images/clear.gif" alt="" width="10" height="1"/>-->
+                    <!--<a href="/sysadmin/index.jsp"><font class="subnavfont" style="color: #000000;">Sysadmin</font></a>-->
+                <%--<%}%>--%>
+            <%--<%}%>--%>
+        <%--<%}%>--%>
 
         <%--<%if (navtab.equals("celebtwit")){%>--%>
             <%--<%if (Pagez.getUserSession().getIsloggedin()){%>--%>

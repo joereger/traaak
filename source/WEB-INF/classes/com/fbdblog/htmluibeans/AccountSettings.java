@@ -28,6 +28,7 @@ public class AccountSettings implements Serializable {
     private String firstname;
     private String lastname;
     private String nickname;
+    private String timezoneid;
 
     
 
@@ -46,6 +47,7 @@ public class AccountSettings implements Serializable {
             firstname = user.getFirstname();
             lastname = user.getLastname();
             nickname = user.getNickname();
+            timezoneid = user.getTimezoneid();
         }
     }
 
@@ -75,6 +77,28 @@ public class AccountSettings implements Serializable {
                     user.setNickname(nickname);
                 }
             }
+
+
+
+
+            if (timezoneid!=null && !timezoneid.equals("")){
+                boolean isvalidtimezone = false;
+                String[] timezone=TimeZone.getAvailableIDs();
+                for (int i=0; i<timezone.length; i++) {
+                    if (timezoneid.equalsIgnoreCase(timezone[i])){
+                        isvalidtimezone = true;
+                    }
+                }
+                if (isvalidtimezone){
+                    user.setTimezoneid(timezoneid);
+                    Pagez.setTz(Pagez.getUserSession().getUser().getTimezoneid());
+                } else {
+                    vex.addValidationError("Your timezone is invalid... please choose another. Kthxbye.");
+                    timezoneid = "EST";
+                }
+            }
+
+
 
             user.setFirstname(firstname);
             user.setLastname(lastname);
@@ -145,5 +169,13 @@ public class AccountSettings implements Serializable {
 
     public void setNickname(String nickname) {
         this.nickname=nickname;
+    }
+
+    public String getTimezoneid() {
+        return timezoneid;
+    }
+
+    public void setTimezoneid(String timezoneid) {
+        this.timezoneid=timezoneid;
     }
 }

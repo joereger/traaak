@@ -362,4 +362,20 @@ clear: left;
 
 .questionfont{font-weight: bold; background: #ffffcc;}
 
+.traaakbox{
+    font-size: 11px;
+    font-weight: normal;
+    color: #000000;
+    background: #ffffcc;
+    border: 1px solid #666666;
+    padding: 10px;
+}
+
+.traaakboxtitle{
+    font-size: 15px;
+    font-weight: bold;
+    color: #000000;
+
+}
+
 

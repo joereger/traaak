@@ -167,7 +167,7 @@ if (!topOfPageMsg.equals("")){
                         %>
                         <font style="font-size: 8px; font-weight: bold;"><%=Time.agoText(Time.getCalFromDate(supportissue.getMostrecentupdateat()))%>: <%=statusStr%></font>
                         <br/>
-                        <a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=helpissuedetail&supportissueid=<%=supportissue.getSupportissueid()%>"><font style="font-size: 10px; font-weight: bold;"><%=supportissue.getSubject()%></font></a>
+                        <a href="<%=linkToUrl%><%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=helpissuedetail&supportissueid=<%=supportissue.getSupportissueid()%>"><font style="font-size: 10px; font-weight: bold;"><%=supportissue.getSubject()%></font></a>
                         <br/><br/>
                         <%
                     }

@@ -24,10 +24,6 @@
     <%@ include file="message.jsp" %>
     <%@ include file="nav.jsp" %>
 
-
-
-
-
 <table width="925" cellspacing="0" border="0" cellpadding="5">
 <tr>
     <td valign="top">
@@ -43,12 +39,6 @@
 </tr>
 <tr>
     <td colspan="2">
+
         <div style="text-align: left;">
 
-
-
-
-            <!-- Start Body -->
-            <table cellpadding="0" cellspacing="5" border="0">
-                <tr>
-                    <td valign="top" width="600">

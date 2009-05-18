@@ -14,6 +14,9 @@ String acl = "public";
 <%@ include file="/template/auth.jsp" %>
 <%@ include file="/template/header.jsp" %>
 
+
+
+
 <center>
 <table cellpadding="0" cellspacing="0" border="0" width="400">
 

@@ -64,7 +64,7 @@ String acl = "public";
                     }
                     %>
                 </select>
-                <input type="submit" value="Gimme">
+                <input type="submit" value="Show">
             </form>
             <br/>
         </td>

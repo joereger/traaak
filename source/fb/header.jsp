@@ -27,6 +27,12 @@
         }
     }
 
+    //Figure out where/how links go
+    String linkToUrl = "http://apps.facebook.com/";
+    if (Pagez.getUserSession().getIsweb()){
+        linkToUrl = "/app/";
+    }
+
     //Include proper header
     if (Pagez.getUserSession().getIsfacebook()){
         %>
