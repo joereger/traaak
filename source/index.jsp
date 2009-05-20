@@ -7,7 +7,7 @@
 <%@ page import="org.hibernate.criterion.Order" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
-String pagetitle = "Log In";
+String pagetitle = "Traaak: Social App to track things that're important to you.";
 String navtab = "youraccount";
 String acl = "public";
 %>
@@ -16,16 +16,11 @@ String acl = "public";
 
 
 
-
-<center>
-<table cellpadding="0" cellspacing="0" border="0" width="400">
-
-
+<br/>
+<table cellpadding="0" cellspacing="0" border="0" width="900">
     <tr>
-        <td valign="top">
-            <center>
+        <td valign="top" width="400">
             <font style="font-size: 22px; color: #cccccc; font-family: arial;"><b>what do you want to traaak?</b></font>
-            </center>
             <table cellpadding="0" cellspacing="10" border="0" width="100%">
             <%
                 List<App> apps=HibernateUtil.getSession().createCriteria(App.class)
@@ -50,9 +45,16 @@ String acl = "public";
             %>
             </table>
         </td>
+        <td valign="top">
+            <%if (!Pagez.getUserSession().getIsloggedin()){%>
+                <a href="/login.jsp">Log In</a> or <a href="/registration.jsp">Sign Up</a> 
+            <%} else { %>
+                <a href="/login.jsp?action=logout">Log Out</a>
+            <%}%>
+        </td>
     </tr>
 </table>
-</center>
+
 <br/><br/>
 
 <%@ include file="/template/footer.jsp" %>

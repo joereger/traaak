@@ -28,8 +28,7 @@
 <tr>
     <td valign="top">
         <a href="/">
-            <img src="/images/logo-64.png" alt="" width="64" height="64" border="0">
-            <font style="font-family: impact; font-size: 42px; color: #cccccc;">Traaak</font>
+            <img src="/images/logo-400x128.gif" alt="" width="400" height="128" border="0">
         </a>
     </td>
 

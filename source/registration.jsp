@@ -71,7 +71,7 @@ Registration registration = (Registration)Pagez.getBeanMgr().get("Registration")
 
                 <font class="mediumfont" style="color: #333333">Get started!</font>
                 <br/>
-                <font class="smallfont">Sign Up is free.  On this page we collect some basic information.  Your account is completely free to set up and explore.</font><br/><br/>
+                <font class="smallfont">Sign Up is free.  On this page we collect some basic information.  Your account is completely free to set up and use.</font><br/><br/>
 
                 <table cellpadding="0" cellspacing="0" border="0">
 
