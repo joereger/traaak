@@ -284,9 +284,11 @@ if (!topOfPageMsg.equals("")){
         </td>
         <td valign="top" width="400">
             <%
-            String key=ChartSecurityKey.getChartKey(Pagez.getUserSession().getUser().getUserid(), Pagez.getUserSession().getApp().getPrimarychartid());
+            int useridForChartKey = 0;
+            if (Pagez.getUserSession().getUser()!=null){useridForChartKey=Pagez.getUserSession().getUser().getUserid();}
+            String key=ChartSecurityKey.getChartKey(useridForChartKey, Pagez.getUserSession().getApp().getPrimarychartid());
             %>
-            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=Pagez.getUserSession().getApp().getPrimarychartid()%>&userid=<%=Pagez.getUserSession().getUser().getUserid()%>&size=small&key=<%=key%>" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
+            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=Pagez.getUserSession().getApp().getPrimarychartid()%>&userid=<%=useridForChartKey%>&size=small&key=<%=key%>" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
             <br/>
             <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=charts&chartid=<%=Pagez.getUserSession().getApp().getPrimarychartid()%>'>+Zoom</a>
             |

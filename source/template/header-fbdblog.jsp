@@ -24,20 +24,57 @@
     <%@ include file="message.jsp" %>
     <%@ include file="nav.jsp" %>
 
-<table width="925" cellspacing="0" border="0" cellpadding="5">
+<table width="900" cellspacing="0" border="0" cellpadding="5">
 <tr>
     <td valign="top">
         <a href="/">
-            <img src="/images/logo-400x128.gif" alt="" width="400" height="128" border="0">
+            <img src="/images/clear.gif" alt="" width="10" height="100" border="0">
         </a>
     </td>
-
-    <td valign="top">
-        
+    <td valign="top" width="195">
+        <img src="/images/clear.gif" alt="" width="1" height="30"><br/>
+        <a href="/">
+            <img src="/images/v2-logo.gif" alt="" width="195" height="67" border="0">
+        </a>
+    </td>
+    <td valign="top" nowrap>
+        <div style="float:right;">
+        <img src="/images/clear.gif" alt="" width="1" height="30"><br/>
+        <table cellspacing="0" border="0" cellpadding="0"><tr>
+        <td valign="top"><img src="/images/v2-nav-leftcap.gif" alt=""></td>
+        <%if (!Pagez.getUserSession().getIsloggedin()){%>
+            <td valign="top"><a href="/"><img src="/images/v2-nav-home.gif" alt="" border="0"></a></td>
+            <td valign="top"><img src="/images/v2-nav-divider.gif" alt="" border="0"></td>
+            <td valign="top"><a href="/registration.jsp"><img src="/images/v2-nav-signup.gif" alt="" border="0"></a></td>
+            <td valign="top"><img src="/images/v2-nav-divider.gif" alt="" border="0"></td>
+            <td valign="top"><a href="/login.jsp"><img src="/images/v2-nav-login.gif" alt="" border="0"></a></td>
+        <%} else {%>
+            <td valign="top"><a href="/"><img src="/images/v2-nav-home.gif" alt="" border="0"></a></td>
+            <td valign="top"><img src="/images/v2-nav-divider.gif" alt="" border="0"></td>
+            <td valign="top"><a href="/account/accountsettings.jsp"><img src="/images/v2-nav-accountsettings.gif" alt="" border="0"></a></td>
+            <td valign="top"><img src="/images/v2-nav-divider.gif" alt="" border="0"></td>
+            <td valign="top"><a href="/login.jsp?action=logout"><img src="/images/v2-nav-logout.gif" alt="" border="0"></a></td>
+        <%}%>
+        <td valign="top"><img src="/images/v2-nav-rightcap.gif" alt=""></td>
+        </tr></table>
+        </div>
     </td>
 </tr>
+<%--<tr>--%>
+    <%--<td valign="top">--%>
+        <%--<a href="/">--%>
+            <%--<img src="/images/clear.gif" alt="" width="10" height="30" border="0">--%>
+        <%--</a>--%>
+    <%--</td>--%>
+    <%--<td valign="top" colspan="2">--%>
+
+    <%--</td>--%>
+<%--</tr>--%>
+</table>
+
+<table width="900" cellspacing="0" border="0" cellpadding="5">
 <tr>
-    <td colspan="2">
+    <td valign="top">
 
         <div style="text-align: left;">
 

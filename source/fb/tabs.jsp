@@ -16,22 +16,10 @@
 <%} else {%>
 
     <%if (Pagez.getUserSession().getIsloggedin()){%>
-        <%--<br/>--%>
-          <%--<a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main'>Track Stuff</a>--%>
-          <%--<a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=charts'>Charts</a>--%>
-          <%--<a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=reports'>Reports</a>--%>
-          <%--<a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=history'>History</a>--%>
-          <%--<a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>Settings</a>--%>
-          <%--<a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=help'>Help</a>--%>
-        <%--<br/>--%>
         <%
             boolean displayTabs = true;
             if (selectedTab.equals("home")){displayTabs=false;}
         %>
-        <div style="width:900px;">
-        <div style="float:right; font-weight:bold;"><a href="/">Home</a> | <a href="/account/accountsettings.jsp">Account Settings</a> | <a href="/login.jsp?action=logout">Log Out</a></div>
-        </div>
-        <br clear="all"/>
         <%if (displayTabs){%>
             <div class="navbarmain">
             <div id="navbar">
@@ -49,9 +37,5 @@
             </div>
             <br/><br/>
         <%}%>
-    <%} else {%>
-        <div style="width:900px;">
-        <div style="float:right; font-weight:bold;"><a href="/login.jsp?action=logout">Log In</a> | <a href="/registration.jsp">Sign Up</a></div>
-        </div>
     <%}%>
 <%}%>
