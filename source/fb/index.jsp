@@ -103,6 +103,16 @@ if (Pagez.getUserSession().getIsnewappforthisuser() && Pagez.getUserSession().ge
 }
 %>
 
+<%
+    if (!Pagez.getUserSession().getIsloggedin() && !Pagez.getUserSession().getIsfacebook()){
+        StringBuffer tmp=new StringBuffer();
+        tmp.append("<div class=\"traaakbox\">\n" +
+                    "   <div class=\"traaakboxtitle\">"+Pagez.getUserSession().getApp().getTitle()+"</div>\n" +
+                    "" +  Pagez.getUserSession().getApp().getDescription() +
+                    "</div>");
+    }
+%>
+
 
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("deletepost")) {
@@ -199,7 +209,7 @@ if (!topOfPageMsg.equals("")){
                         %>
                         <fb:success>
                         <fb:message>Get Started Tracking!</fb:message>
-                        Just fill out the form below and click Track It.  Fields with an asterisk* are required.
+                        Just fill out the form below and click Traaak It!  Fields with an asterisk* are required.
                         </fb:success>
                         <br/>
                         <%
@@ -207,7 +217,7 @@ if (!topOfPageMsg.equals("")){
                         %>
                         <div class="traaakbox">
                             <div class="traaakboxtitle">Get Started Tracking!</div>
-                            Just fill out the form below and click Track It.  Fields with an asterisk* are required.
+                            Just fill out the form below and click Traaak It!  Fields with an asterisk* are required.
                         </div>
                         <%
                     }
@@ -240,41 +250,56 @@ if (!topOfPageMsg.equals("")){
                     }
                     %>
                     <textarea cols="30" rows="3" name="<%=AppPostParser.FBDBLOG_REQUEST_PARAM_IDENTIFIER%>notes"><%=notes%></textarea>
-                    <br/><br/>
-                    <input id="sendbutton" type="submit" value="Track this Stuff" />
+                    <%if (Pagez.getUserSession().getIsloggedin()){%>
+                        <br/><br/>
+                        <input id="sendbutton" type="submit" value="Traaak It!" />
+                    <%}%>
                 </div>
                 <%
-                if (Pagez.getUserSession().getUserappsettings()!=null && Pagez.getUserSession().getUserappsettings().getIsprivate()){
-                    if (Pagez.getUserSession().getIsfacebook()){
-                        %>
-                        <fb:success>
-                        <fb:message>Private Mode</fb:message>
-                        Your friends won't be able to see your stuff. You can make stuff public <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
-                        </fb:success>
-                        <br/>
-                        <%
+                if (Pagez.getUserSession().getIsloggedin()){
+                    if (Pagez.getUserSession().getUserappsettings()!=null && Pagez.getUserSession().getUserappsettings().getIsprivate()){
+                        if (Pagez.getUserSession().getIsfacebook()){
+                            %>
+                            <fb:success>
+                            <fb:message>Private Mode</fb:message>
+                            Your friends won't be able to see your stuff. You can make stuff public <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+                            </fb:success>
+                            <br/>
+                            <%
+                        } else {
+                            %>
+                            <div class="traaakbox">
+                                <div class="traaakboxtitle">Private Mode</div>
+                                Nobody'll be able to see your stuff. You can make it public <a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+                            </div>
+                            <%
+                        }
                     } else {
-                        %>
-                        <div class="traaakbox">
-                            <div class="traaakboxtitle">Private Mode</div>
-                            Nobody'll be able to see your stuff. You can make it public <a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
-                        </div>
-                        <%
+                        if (Pagez.getUserSession().getIsfacebook()){
+                            %>
+                            <fb:success>
+                            <fb:message>Public Mode</fb:message>
+                            Everything you post is visible to friends. Make stuff private <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+                            </fb:success>
+                            <br/>
+                            <%
+                        } else {
+                            %>
+                            <div class="traaakbox">
+                                <div class="traaakboxtitle">Public Mode</div>
+                                Everything you track is publicly visible. You can make it private <a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+                            </div>
+                            <%
+                        }
                     }
                 } else {
                     if (Pagez.getUserSession().getIsfacebook()){
-                        %>
-                        <fb:success>
-                        <fb:message>Public Mode</fb:message>
-                        Everything you post is visible to friends. Make stuff private <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
-                        </fb:success>
-                        <br/>
-                        <%
+
                     } else {
                         %>
                         <div class="traaakbox">
-                            <div class="traaakboxtitle">Public Mode</div>
-                            Everything you track is publicly visible. You can make it private <a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings'>over here</a>.
+                            <div class="traaakboxtitle">Login/Signup</div>
+                            Once you <a href="/login.jsp">Log In</a> or <a href="/registration.jsp">Sign Up</a> you'll be able to save this data and create your own charts/graphs.  You can keep your data private or share it with the world.
                         </div>
                         <%
                     }
@@ -290,9 +315,15 @@ if (!topOfPageMsg.equals("")){
             %>
             <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=Pagez.getUserSession().getApp().getPrimarychartid()%>&userid=<%=useridForChartKey%>&size=small&key=<%=key%>" alt="" width="400" height="250" style="border: 3px solid #e6e6e6;"/>
             <br/>
-            <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=charts&chartid=<%=Pagez.getUserSession().getApp().getPrimarychartid()%>'>+Zoom</a>
-            |
-            <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=charts'>All Charts</a>
+            <%if (Pagez.getUserSession().getIsfacebook()){%>
+                <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=charts&chartid=<%=Pagez.getUserSession().getApp().getPrimarychartid()%>'>+Zoom</a>
+                |
+                <a href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=charts'>All Charts</a>
+            <%} else {%>
+                <a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=charts&chartid=<%=Pagez.getUserSession().getApp().getPrimarychartid()%>'>+Zoom</a>
+                |
+                <a href='/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=charts'>All Charts</a>
+            <%}%>
             <br/><br/><br/><br/>
 
             <div style="border: 3px solid #e6e6e6;">

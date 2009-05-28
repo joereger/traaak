@@ -58,30 +58,32 @@ public class MegaChartConvertToJFreeDataType {
         XYSeries xydataset = new XYSeries("");
         XYSeriesCollection xyseries = new XYSeriesCollection();
         //Loop on the series of the megaChart
-        for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
-            MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
-            if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
-                xydataset = new XYSeries(megaChartSeries.yAxisTitle, false, false);
-                for(int i=0; i<megaChartSeries.cleanData.length; i++){
-                    //Y data must always be numeric
-                    if (Num.isdouble(megaChartSeries.cleanData[i][2])) {
-                        if (Double.parseDouble(megaChartSeries.cleanData[i][2])>0){
-                            try{
-                                //XY Data.  Both x,y must be numeric
-                                if (Num.isdouble(megaChartSeries.cleanData[i][1])){
-                                    xydataset.add(Double.parseDouble(megaChartSeries.cleanData[i][1]), Double.parseDouble(megaChartSeries.cleanData[i][2]));
+        if (megaChart!=null && megaChart.getMegaChartSeries()!=null){
+            for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+                MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
+                if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
+                    xydataset = new XYSeries(megaChartSeries.yAxisTitle, false, false);
+                    for(int i=0; i<megaChartSeries.cleanData.length; i++){
+                        //Y data must always be numeric
+                        if (Num.isdouble(megaChartSeries.cleanData[i][2])) {
+                            if (Double.parseDouble(megaChartSeries.cleanData[i][2])>0){
+                                try{
+                                    //XY Data.  Both x,y must be numeric
+                                    if (Num.isdouble(megaChartSeries.cleanData[i][1])){
+                                        xydataset.add(Double.parseDouble(megaChartSeries.cleanData[i][1]), Double.parseDouble(megaChartSeries.cleanData[i][2]));
+                                    }
+                                } catch (Exception e) {
+                                    //Do not rely on this catch to fix bugs... the reason it's here
+                                    //is to help the graphs be more robust.  Instead of crashing the whole
+                                    //graph, only this data point won't be added.  Solve errors caught here
+                                    //in the above block.  Don't be lazy Joe Reger, Jr.... yeah you!
+                                    logger.error("Error adding data to chart.", e);
                                 }
-                            } catch (Exception e) {
-                                //Do not rely on this catch to fix bugs... the reason it's here
-                                //is to help the graphs be more robust.  Instead of crashing the whole
-                                //graph, only this data point won't be added.  Solve errors caught here
-                                //in the above block.  Don't be lazy Joe Reger, Jr.... yeah you!
-                                logger.error("Error adding data to chart.", e);
                             }
                         }
                     }
+                    xyseries.addSeries(xydataset);
                 }
-                xyseries.addSeries(xydataset);
             }
         }
         return xyseries;
@@ -92,23 +94,25 @@ public class MegaChartConvertToJFreeDataType {
         //Dataset to hold data
         DefaultPieDataset piedata = new DefaultPieDataset();
         //Loop on the series of the megaChart
-        for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
-            MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
-            if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
-                piedata = new DefaultPieDataset();
-                for(int i=0; i<megaChartSeries.cleanData.length; i++){
-                    //Y data must always be numeric
-                    if (Num.isdouble(megaChartSeries.cleanData[i][2])) {
-                        if (Double.parseDouble(megaChartSeries.cleanData[i][2])>0){
-                            try{
-                                //Pie data. Will accept any x axis value
-                                piedata.setValue(megaChartSeries.cleanData[i][1], Double.parseDouble(megaChartSeries.cleanData[i][2]));
-                            } catch (Exception e) {
-                                //Do not rely on this catch to fix bugs... the reason it's here
-                                //is to help the graphs be more robust.  Instead of crashing the whole
-                                //graph, only this data point won't be added.  Solve errors caught here
-                                //in the above block.  Don't be lazy Joe Reger, Jr.... yeah you!
-                                logger.error("Error adding data to chart.", e);
+        if (megaChart!=null && megaChart.getMegaChartSeries()!=null){
+            for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+                MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
+                if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
+                    piedata = new DefaultPieDataset();
+                    for(int i=0; i<megaChartSeries.cleanData.length; i++){
+                        //Y data must always be numeric
+                        if (Num.isdouble(megaChartSeries.cleanData[i][2])) {
+                            if (Double.parseDouble(megaChartSeries.cleanData[i][2])>0){
+                                try{
+                                    //Pie data. Will accept any x axis value
+                                    piedata.setValue(megaChartSeries.cleanData[i][1], Double.parseDouble(megaChartSeries.cleanData[i][2]));
+                                } catch (Exception e) {
+                                    //Do not rely on this catch to fix bugs... the reason it's here
+                                    //is to help the graphs be more robust.  Instead of crashing the whole
+                                    //graph, only this data point won't be added.  Solve errors caught here
+                                    //in the above block.  Don't be lazy Joe Reger, Jr.... yeah you!
+                                    logger.error("Error adding data to chart.", e);
+                                }
                             }
                         }
                     }
@@ -172,30 +176,32 @@ public class MegaChartConvertToJFreeDataType {
         XYSeries xydataset = new XYSeries("");
         DefaultTableXYDataset stackedareadata = new DefaultTableXYDataset();
         //Loop on the series of the megaChart
-        for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
-            MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
-            if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
-                xydataset = new XYSeries(megaChartSeries.yAxisTitle, false, false);
-                for(int i=0; i<megaChartSeries.cleanData.length; i++){
-                    //Y data must always be numeric
-                    if (Num.isdouble(megaChartSeries.cleanData[i][2])) {
-                        if (Double.parseDouble(megaChartSeries.cleanData[i][2])>0){
-                            try{
-                                //XY Data.  Both x,y must be numeric
-                                if (Num.isdouble(megaChartSeries.cleanData[i][1])){
-                                    xydataset.add(Double.parseDouble(megaChartSeries.cleanData[i][1]), Double.parseDouble(megaChartSeries.cleanData[i][2]));
+        if (megaChart!=null && megaChart.getMegaChartSeries()!=null){
+            for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+                MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
+                if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
+                    xydataset = new XYSeries(megaChartSeries.yAxisTitle, false, false);
+                    for(int i=0; i<megaChartSeries.cleanData.length; i++){
+                        //Y data must always be numeric
+                        if (Num.isdouble(megaChartSeries.cleanData[i][2])) {
+                            if (Double.parseDouble(megaChartSeries.cleanData[i][2])>0){
+                                try{
+                                    //XY Data.  Both x,y must be numeric
+                                    if (Num.isdouble(megaChartSeries.cleanData[i][1])){
+                                        xydataset.add(Double.parseDouble(megaChartSeries.cleanData[i][1]), Double.parseDouble(megaChartSeries.cleanData[i][2]));
+                                    }
+                                } catch (Exception e) {
+                                    //Do not rely on this catch to fix bugs... the reason it's here
+                                    //is to help the graphs be more robust.  Instead of crashing the whole
+                                    //graph, only this data point won't be added.  Solve errors caught here
+                                    //in the above block.  Don't be lazy Joe Reger, Jr.... yeah you!
+                                    logger.error("Error adding data to chart.", e);
                                 }
-                            } catch (Exception e) {
-                                //Do not rely on this catch to fix bugs... the reason it's here
-                                //is to help the graphs be more robust.  Instead of crashing the whole
-                                //graph, only this data point won't be added.  Solve errors caught here
-                                //in the above block.  Don't be lazy Joe Reger, Jr.... yeah you!
-                                logger.error("Error adding data to chart.", e);
                             }
                         }
                     }
+                    stackedareadata.addSeries(xydataset);
                 }
-                stackedareadata.addSeries(xydataset);
             }
         }
         return stackedareadata;

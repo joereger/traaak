@@ -214,4 +214,18 @@ public class Str {
         return str.subSequence(0, str.length());
     }
 
+    public static String onlyKeepLettersAndDigits(String in){
+        Logger logger = Logger.getLogger(Str.class);
+        StringBuffer sbTemp = new StringBuffer ( in ) ;
+        logger.debug("Before onlyKeepLettersAndDigits:"+ Str.xmlclean(in));
+        for ( int i = sbTemp.length () - 1 ; i >= 0 ; i -- ){
+            if (!Character.isLetterOrDigit(sbTemp.charAt(i))){
+                sbTemp.deleteCharAt(i);
+            }
+        }
+        logger.debug("After onlyKeepLettersAndDigits:"+sbTemp.toString());
+        return sbTemp.toString () ;
+    }
+
+
 }

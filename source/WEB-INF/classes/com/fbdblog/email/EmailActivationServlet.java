@@ -58,7 +58,7 @@ public class EmailActivationServlet extends HttpServlet {
             //@todo send a welcome email message after successful email activation
             if(user.getFacebookuid().equals("")){
                 Pagez.getUserSession().setMessage("Email activation was successful!  Your account is ready to roll!");
-                response.sendRedirect("/account/index.jsp");
+                response.sendRedirect("/index.jsp");
                 return;
             } else {
                 //response.sendRedirect("http://apps.facebook.com/"+ SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_APP_NAME)+"/");

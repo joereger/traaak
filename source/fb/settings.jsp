@@ -93,9 +93,13 @@ if (!topOfPageMsg.equals("")){
                 <table cellpadding="5" cellspacing="0" border="0">
                     <tr>
                         <td valign="top" width="30%">
-                            <font style="font-size: 12px; font-weight: bold;">Keep Stuff Private?</font>
+                            <font style="font-size: 12px; font-weight: bold;">Keep <%=Pagez.getUserSession().getApp().getTitle()%> Data Private?</font>
                             <br/>
-                            <font style="font-size: 9px;">We won't publish to your news feeds or profile.  And we won't share your data with your friends.</font>
+                            <%if (Pagez.getUserSession().getIsfacebook()){%>
+                                <font style="font-size: 9px;">We won't publish to your news feeds or profile.  And we won't share your data with your friends.</font>
+                            <%} else {%>
+                                <font style="font-size: 9px;">Your .</font>
+                            <%}%>
                         </td>
                         <td valign="top">
                             <%
@@ -104,14 +108,18 @@ if (!topOfPageMsg.equals("")){
                                 isprivateChecked = " checked";
                             }
                             %>
-                            <input type="checkbox" name="isprivate" value="1" <%=isprivateChecked%>> <font style="font-size: 10px;">Yes, Keep My Stuff Private</font>
+                            <input type="checkbox" name="isprivate" value="1" <%=isprivateChecked%>> <font style="font-size: 10px;">Yes, Keep <%=Pagez.getUserSession().getApp().getTitle()%> Data Private</font>
                         </td>
                     </tr>
                     <tr>
                         <td valign="top" width="30%">
                             <font style="font-size: 12px; font-weight: bold;">Timezone</font>
                             <br/>
-                            <font style="font-size: 9px;">Note that this will affect every Track app you have installed on your Facebook account.</font>
+                            <%if (Pagez.getUserSession().getIsfacebook()){%>
+                                <font style="font-size: 9px;">Note that this will affect every Track app you have installed on your Facebook account.</font>
+                            <%} else {%>
+                                <font style="font-size: 9px;">Note that this will affect everything you Traaak.</font>
+                            <%}%>
                         </td>
                         <td valign="top">
                             <select name="timezoneid">

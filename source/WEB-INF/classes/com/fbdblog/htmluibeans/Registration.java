@@ -58,8 +58,27 @@ public class Registration implements Serializable {
         Logger logger = Logger.getLogger(this.getClass().getName());
         logger.debug("registerAction called:  email="+email+" password="+password+" firstname="+firstname+" lastname="+lastname);
 
+        //Use nickname for first and last name
+        firstname = nickname;
+        lastname = nickname;
+
+        //Auto-verify password
+        passwordverify = password;
+
         //Validation
         boolean haveErrors = false;
+
+        if (nickname!=null && !nickname.equals("")){
+            nickname = Str.onlyKeepLettersAndDigits(nickname);
+            nickname =  nickname.toLowerCase();
+        } else {
+            nickname = "";
+        }
+
+        if (nickname==null || nickname.equals("")){
+            vex.addValidationError("Nickname can't be blank and can only use letters and numbers.");
+            haveErrors = true;
+        }
 
         if (password==null || password.equals("") || password.length()<6){
             vex.addValidationError("Password must be at least six characters long.");
@@ -131,6 +150,8 @@ public class Registration implements Serializable {
         user.setEmailactivationlastsent(new Date());
         user.setCreatedate(new Date());
         user.setIsenabled(true);
+        user.setFacebookuid("");
+        user.setTimezoneid("EST");
 
         try{
             user.save();
