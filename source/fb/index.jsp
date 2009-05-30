@@ -48,13 +48,13 @@ String adPostSave = "";
             StringBuffer tmp = new StringBuffer();
             if (Pagez.getUserSession().getIsfacebook()){
                 tmp.append("<fb:success>\n" +
-                "     <fb:message>Good trackin'.  Now track s'more.</fb:message>\n" +
+                "     <fb:message>Nice trackin'.  Now track s'more.</fb:message>\n" +
                 "     We've updated your profile so that others can check out your stuff.  Now's a good time to check out <a href='http://apps.facebook.com/"+Pagez.getUserSession().getApp().getFacebookappname()+"/?nav=friends'>your friends' stuff</a>.\n" +
                 "</fb:success>");
             } else {
                 tmp.append("<div class=\"traaakbox\">\n" +
-                "   <div class=\"traaakboxtitle\">Good traaaking!</div>\n" +
-                " We've updated your charts.  Traaak some <a href=\"/\">other stuff</a>?"+
+                "   <div class=\"traaakboxtitle\">Nice traaaking!</div>\n" +
+                " We've updated your charts.  Have you <a href=\"/app/"+Pagez.getUserSession().getApp().getFacebookappname()+"/?nav=embed\">embedded them</a> into your blog yet?  Why not traaak some <a href=\"/\">other stuff</a>?"+
                 "</div>");
             }
             topOfPageMsg = tmp.toString();

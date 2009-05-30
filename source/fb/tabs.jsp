@@ -14,6 +14,12 @@
     </fb:tabs>
     <br/>
 <%} else {%>
+    <a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main"><font class="mediumfont"><%=Pagez.getUserSession().getApp().getTitle()%></font></a>
+    <br/>
+    <%if (!Pagez.getUserSession().getIsloggedin()){%>
+        <font class="smallfont"><%=Pagez.getUserSession().getApp().getDescription()%></font>
+        <br/><br/>  
+    <%}%>
 
     <%if (Pagez.getUserSession().getIsloggedin()){%>
         <%
@@ -29,7 +35,8 @@
                     <li><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=charts"><span>Charts</span></a></li>
                     <li><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=reports"><span>Reports</span></a></li>
                     <li><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=history"><span>History</span></a></li>
-                    <li><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings"><span>Preferences</span></a></li>
+                    <li><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=embed"><span>Embed</span></a></li>
+                    <li><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings"><span>Prefs</span></a></li>
                     <li><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=help"><span>Help</span></a></li>
                 </ul>
             </span>

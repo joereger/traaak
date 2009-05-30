@@ -25,6 +25,11 @@
         <to type="redirect">%{context-path}/rewrite-status</to>
     </rule>
 
+    <rule>
+        <from>/jsondata/([0-9]+)/([0-9]+)/(.*)</from>
+        <to>/fb/json.jsp?chartid=$1&amp;userid=$2&amp;key=$3</to>
+    </rule>
+
 
     <outbound-rule>
         <note>

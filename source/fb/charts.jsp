@@ -76,8 +76,17 @@ String acl = "public";
         <td valign="top" width="600">
             <%
             String key=ChartSecurityKey.getChartKey(Pagez.getUserSession().getUser().getUserid(), chart.getChartid());
+            StringBuffer embedHtml = new StringBuffer();
+            embedHtml.append("<a href=\""+BaseUrl.get(false)+"user/"+Pagez.getUserSession().getUser().getNickname()+"/\">");
+            embedHtml.append("<img src=\""+BaseUrl.get(false)+"fb/graph.jsp?chartid="+chart.getChartid()+"&userid="+Pagez.getUserSession().getUser().getUserid()+"&size=small&key="+key+"\"  alt=\"\" width=\"400\" height=\"250\" style=\"border: 3px solid #e6e6e6;\">");
+            embedHtml.append("</a>");
+
             %>
             <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=Pagez.getUserSession().getUser().getUserid()%>&size=medium&key=<%=key%>" alt="" width="600" height="300" style="border: 3px solid #e6e6e6;"/>
+            <br/><br/>
+            <font class="smallfont" style="font-weight:bold;">Embed this chart by copying the code below and pasting it into your blog or website:</font>
+            <br/>
+            <textarea rows="0" cols="45" readonly="readonly" onClick="javascript:this.select();"><%=embedHtml.toString()%></textarea>
         </td>
     </tr>
 </table>

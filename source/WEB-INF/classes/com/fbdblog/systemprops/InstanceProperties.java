@@ -1,6 +1,5 @@
 package com.fbdblog.systemprops;
 
-import com.fbdblog.util.DesEncrypter;
 import com.fbdblog.systemprops.WebAppRootDir;
 import com.fbdblog.util.Num;
 import com.fbdblog.util.GeneralException;

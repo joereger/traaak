@@ -1,8 +1,8 @@
 <%@
-page import="java.io.OutputStream" %><%@
-page import="com.fbdblog.chart.MegaChart" %><%@
-page import="org.jfree.chart.JFreeChart" %><%@
-page import="com.fbdblog.chart.MegaChartFactory" %><%@
+page import="java.io.OutputStream" %>
+<%@
+page import="org.jfree.chart.JFreeChart" %>
+<%@
 page import="java.awt.*" %><%@
 page import="org.jfree.chart.plot.Plot" %><%@
 page import="java.awt.image.BufferedImage" %><%@
@@ -19,8 +19,10 @@ page import="com.fbdblog.dao.App" %><%@
 page import="com.fbdblog.dao.Chart" %><%@
 page import="com.fbdblog.session.FindUserappsettings" %><%@
 page import="com.fbdblog.dao.Userappsettings" %><%@
-page import="org.jasypt.util.text.BasicTextEncryptor" %><%@
-page import="com.fbdblog.chart.ChartSecurityKey" %><%
+page import="org.jasypt.util.text.BasicTextEncryptor" %>
+<%@ page import="java.util.Iterator" %>
+<%@ page import="org.json.JSONObject" %>
+<%@ page import="com.fbdblog.chart.*" %><%
     //Expected URL format
     //graph.jsp?chartid=34&userid=12&size=small&comparetouserid=45&key=KJHGKU
 
@@ -52,24 +54,6 @@ page import="com.fbdblog.chart.ChartSecurityKey" %><%
         comparetouserid=Integer.parseInt(request.getParameter("comparetouserid"));
     }
 
-    //Size
-    String size="medium";
-    if (request.getParameter("size") != null && request.getParameter("size").equals("tiny")) {
-        size="tiny";
-    } else if (request.getParameter("size") != null && request.getParameter("size").equals("small")) {
-        size="small";
-    } else if (request.getParameter("size") != null && request.getParameter("size").equals("profilenarrow")) {
-        size="profilenarrow";
-    } else if (request.getParameter("size") != null && request.getParameter("size").equals("profilewide")) {
-        size="profilewide";
-    } else if (request.getParameter("size") != null && request.getParameter("size").equals("medium")) {
-        size="medium";
-    } else if (request.getParameter("size") != null && request.getParameter("size").equals("large")) {
-        size="large";
-    } else if (request.getParameter("size") != null && request.getParameter("size").equals("xlarge")) {
-        size="xlarge";
-    }
-
     boolean safetodisplay=true;
 
     User user=User.get(userid);
@@ -85,10 +69,35 @@ page import="com.fbdblog.chart.ChartSecurityKey" %><%
     }
 
     if (safetodisplay) {
-        //Create our output stream to the browser
-        OutputStream outStream=response.getOutputStream();
-        //Output the actual chart
-        GetChart.getChart(outStream, response, chartid, userid, comparetouserid, size);
+
+        MegaChart megaChart = new MegaChart(chart.getChartid());
+        megaChart.loadMegaChartSeriesData(app.getAppid(), user.getUserid(), comparetouserid);
+
+        String json = ChartDataAsJSON.convertToJSON(megaChart);
+        out.print(json);
+        out.flush();
+
+//        JSONObject jsonOut = new JSONObject();
+//        for (Iterator<MegaChartSeries> iterator=megaChart.getMegaChartSeries().iterator(); iterator.hasNext();) {
+//            MegaChartSeries megaChartSeries=iterator.next();
+//            JSONObject jsonSeries = new JSONObject();
+//            String[][] cleanData = megaChartSeries.cleanData;
+//            for (int i=0; i<cleanData.length; i++) {
+//                String[] row=cleanData[i];
+//                JSONObject jsonRow = new JSONObject();
+//                for (int j=0; j<row.length; j++) {
+//                    String col=row[j];
+//                    jsonRow.put("value", col);
+//                }
+//                jsonSeries.put("row", jsonRow);
+//            }
+//            jsonOut.put("series", jsonOut);
+//        }
+//        out.print(jsonOut);
+//        out.flush();
+
+
+
     } else {
         //@todo display an error image... for now it'll be a broken image
     }
