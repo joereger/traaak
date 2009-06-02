@@ -185,6 +185,17 @@ public class Util {
             return out;
         }
 
+        public static ArrayList<String> stringArrayToArrayList(String[] in){
+            ArrayList<String> out = new ArrayList<String>();
+            if (in!=null){
+                for (int i=0; i<in.length; i++) {
+                    String s=in[i];
+                    out.add(s);
+                }
+            }
+            return out;
+        }
+
 
 
 }

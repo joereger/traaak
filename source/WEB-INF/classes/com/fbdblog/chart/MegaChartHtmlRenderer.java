@@ -530,16 +530,16 @@ public class MegaChartHtmlRenderer {
                 mb.append(" checked");
             }
             mb.append("> Horizontal 3D Bar");
-            mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL);
-            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL){
-                mb.append(" checked");
-            }
-            mb.append("> Stacked Horiz Bar");
-            mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL);
-            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL){
-                mb.append(" checked");
-            }
-            mb.append("> Stacked Horiz 3D Bar");
+//            mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL);
+//            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL){
+//                mb.append(" checked");
+//            }
+//            mb.append("> Stacked Horiz Bar");
+//            mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL);
+//            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL){
+//                mb.append(" checked");
+//            }
+//            mb.append("> Stacked Horiz 3D Bar");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPEPIE);
             if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEPIE){
                 mb.append(" checked");
@@ -555,21 +555,21 @@ public class MegaChartHtmlRenderer {
                 mb.append(" checked");
             }
             mb.append("> Scatter Plot");
-            mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESTEPCHART);
-            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTEPCHART){
-                mb.append(" checked");
-            }
-            mb.append("> Step Chart");
+//            mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESTEPCHART);
+//            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTEPCHART){
+//                mb.append(" checked");
+//            }
+//            mb.append("> Step Chart");
             mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPEAREACHART);
             if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEAREACHART){
                 mb.append(" checked");
             }
             mb.append("> Area Chart");
-            mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESTACKEDAREA);
-            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDAREA){
-                mb.append(" checked");
-            }
-            mb.append("> Stacked Area Chart");
+//            mb.append("<br><input name=charttype type=radio value="+MegaConstants.CHARTTYPESTACKEDAREA);
+//            if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDAREA){
+//                mb.append(" checked");
+//            }
+//            mb.append("> Stacked Area Chart");
             mb.append("</font>");
             mb.append("</td>");
 
