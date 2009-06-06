@@ -11,4 +11,6 @@ public interface MegaChartType {
 
     public JFreeChart formatChart(JFreeChart chart);
 
+    public String chartDataAsJSON(MegaChart megaChart);
+
 }

@@ -15,14 +15,21 @@ public class MegaChartFactory {
 
     public static JFreeChart get(MegaChart megaChart){
         //Default Type
+        MegaChartType ct = getType(megaChart);
+        //Truncate the data for performance
+        megaChart.truncateDataToCertainNumberOfPoints(2000);
+        //Create the chart
+        JFreeChart chart = ct.getJFreeChart(megaChart);
+        //Format the chart
+        chart = ct.formatChart(chart);
+        //Format yAxis date
+        formatYAxisAsDate(chart, megaChart);
+        //Return
+        return chart;
+    }
+
+    public static MegaChartType getType(MegaChart megaChart){
         MegaChartType ct = new MegaChartTypeLine();
-
-        //Boolean if
-//        boolean isdisplayoverride
-//        if (megaChart.getChart().getXquestionid()>1000000){
-//
-//        }
-
         //Figure out which type the user wants
         if (megaChart.getxMegadatatype()==DataTypeString.DATATYPEID || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPE3DBAR || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEHORIZONTALBAR || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEHORIZONTAL3DBAR || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPEBAR  || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART  || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3D || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHARTHORIZONTAL || megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPESTACKEDBARCHART3DHORIZONTAL) {
             if (megaChart.getChart().getCharttype()==MegaConstants.CHARTTYPE3DBAR) {
@@ -67,17 +74,7 @@ public class MegaChartFactory {
         if (megaChart.getChart().getXquestionid()==ChartFieldEntrydatetime.ID) {
             ct = new MegaChartTypeTimeSeries();
         }
-
-        //Truncate the data for performance
-        megaChart.truncateDataToCertainNumberOfPoints(2000);
-        //Create the chart
-        JFreeChart chart = ct.getJFreeChart(megaChart);
-        //Format the chart
-        chart = ct.formatChart(chart);
-        //Format yAxis date
-        formatYAxisAsDate(chart, megaChart);
-        //Return
-        return chart;
+        return ct;
     }
 
     public static JFreeChart formatYAxisAsDate(JFreeChart chart, MegaChart megaChart){

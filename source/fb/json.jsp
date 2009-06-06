@@ -1,28 +1,14 @@
 <%@
-page import="java.io.OutputStream" %>
-<%@
-page import="org.jfree.chart.JFreeChart" %>
-<%@
-page import="java.awt.*" %><%@
-page import="org.jfree.chart.plot.Plot" %><%@
-page import="java.awt.image.BufferedImage" %><%@
-page import="org.jfree.chart.ChartUtilities" %><%@
 page import="org.apache.log4j.Logger" %><%@
-page import="com.fbdblog.htmlui.UserSession" %><%@
 page import="com.fbdblog.util.Num" %><%@
-page import="java.io.IOException" %><%@
-page import="java.io.FileInputStream" %><%@
-page import="org.apache.commons.io.FilenameUtils" %><%@
-page import="com.fbdblog.chart.chartcache.GetChart" %><%@
 page import="com.fbdblog.dao.User" %><%@
 page import="com.fbdblog.dao.App" %><%@
 page import="com.fbdblog.dao.Chart" %><%@
 page import="com.fbdblog.session.FindUserappsettings" %><%@
 page import="com.fbdblog.dao.Userappsettings" %><%@
-page import="org.jasypt.util.text.BasicTextEncryptor" %>
-<%@ page import="java.util.Iterator" %>
-<%@ page import="org.json.JSONObject" %>
-<%@ page import="com.fbdblog.chart.*" %><%
+page import="com.fbdblog.chart.*" %>
+<%@ page import="java.net.URLDecoder" %>
+<%@ page import="com.fbdblog.htmlui.Pagez" %><%
     //Expected URL format
     //graph.jsp?chartid=34&userid=12&size=small&comparetouserid=45&key=KJHGKU
 
@@ -63,17 +49,23 @@ page import="org.jasypt.util.text.BasicTextEncryptor" %>
     if (userappsettings!=null && userappsettings.getIsprivate()) {
         logger.debug("checking key="+request.getParameter("key"));
         //Now need to look for the key
+        //String urldecodedKey = URLDecoder.decode(request.getParameter("key"), "UTF-8");
         if (!ChartSecurityKey.isValidChartKey(request.getParameter("key"), userid, chartid)){
             safetodisplay = false;
         }
+    }
+
+    //override for sysadmin
+    if (Pagez.getUserSession().getIssysadmin()){
+        safetodisplay = true;   
     }
 
     if (safetodisplay) {
 
         MegaChart megaChart = new MegaChart(chart.getChartid());
         megaChart.loadMegaChartSeriesData(app.getAppid(), user.getUserid(), comparetouserid);
-
-        String json = ChartDataAsJSON.convertToJSON(megaChart);
+        logger.debug("megaChart.getChart().getCharttype()="+megaChart.getChart().getCharttype());
+        String json = MegaChartFactory.getType(megaChart).chartDataAsJSON(megaChart);
         out.print(json);
         out.flush();
 

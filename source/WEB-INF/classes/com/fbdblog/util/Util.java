@@ -6,6 +6,7 @@ import javax.servlet.http.Cookie;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.math.BigDecimal;
 
 /**
  * User: Joe Reger Jr
@@ -194,6 +195,30 @@ public class Util {
                 }
             }
             return out;
+        }
+
+
+        public static void logRow(String[] row){
+            Logger logger = Logger.getLogger(Util.class);
+            StringBuffer out = new StringBuffer();
+            for (int j=0; j<row.length; j++) {
+                String col=row[j];
+                out.append(col + "\t");
+            }
+            logger.debug(out.toString());
+        }
+
+        public static void logXY(String x, String y){
+            Logger logger = Logger.getLogger(Util.class);
+            StringBuffer out = new StringBuffer();
+            out.append("x="+x+" y="+y);
+            logger.debug(out.toString());
+        }
+
+        public static double doubleRound(double d, int decimalPlace){
+            BigDecimal bd = new BigDecimal(Double.toString(d));
+            bd = bd.setScale(decimalPlace,BigDecimal.ROUND_HALF_UP);
+            return bd.doubleValue();
         }
 
 

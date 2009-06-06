@@ -80,7 +80,6 @@ String acl = "public";
             embedHtml.append("<a href=\""+BaseUrl.get(false)+"user/"+Pagez.getUserSession().getUser().getNickname()+"/\">");
             embedHtml.append("<img src=\""+BaseUrl.get(false)+"fb/graph.jsp?chartid="+chart.getChartid()+"&userid="+Pagez.getUserSession().getUser().getUserid()+"&size=small&key="+key+"\"  alt=\"\" width=\"400\" height=\"250\" style=\"border: 3px solid #e6e6e6;\">");
             embedHtml.append("</a>");
-
             %>
             <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=Pagez.getUserSession().getUser().getUserid()%>&size=medium&key=<%=key%>" alt="" width="600" height="300" style="border: 3px solid #e6e6e6;"/>
             <br/><br/>
@@ -89,6 +88,45 @@ String acl = "public";
             <textarea rows="0" cols="45" readonly="readonly" onClick="javascript:this.select();"><%=embedHtml.toString()%></textarea>
         </td>
     </tr>
+
+
+    <tr>
+        <td valign="top" width="10">
+
+        </td>
+        <td valign="top" width="600">
+            <%
+            String key2=ChartSecurityKey.getChartKey(Pagez.getUserSession().getUser().getUserid(), chart.getChartid());
+            //key2 = URLEncoder.encode(key2, "UTF-8");
+            %>
+            <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+                    codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"
+                    width="500"
+                    height="250" id="graph-2" align="middle">
+
+                <param name="allowScriptAccess" value="sameDomain" />
+                <param name="movie" value="/ofc/traaak.swf" />
+                <param name="quality" value="high" />
+                <param name="FlashVars" value="data-file=<%=BaseUrl.get(false)%>jsondata/<%=chart.getChartid()%>/<%=Pagez.getUserSession().getUser().getUserid()%>/<%=key2%>" />
+                <embed src="/ofc/traaak.swf"
+                       quality="high"
+                       bgcolor="#FFFFFF"
+                       width="500"
+                       height="250"
+                       name="open-flash-chart"
+                       align="middle"
+                       allowScriptAccess="sameDomain"
+                       type="application/x-shockwave-flash"
+                       flashvars = "data-file=<%=BaseUrl.get(false)%>jsondata/<%=chart.getChartid()%>/<%=Pagez.getUserSession().getUser().getUserid()%>/<%=key2%>"
+                       pluginspage="http://www.macromedia.com/go/getflashplayer" />
+            </object>
+        </td>
+    </tr>
+
+
+
+
+
 </table>
 <br/><br/>
 <center>
