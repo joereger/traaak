@@ -6,9 +6,7 @@ import jofc2.model.Chart;
 import jofc2.model.Text;
 import jofc2.model.axis.XAxis;
 import jofc2.model.axis.YAxis;
-import jofc2.model.elements.BarChart;
-import jofc2.model.elements.LineChart;
-import jofc2.model.elements.ScatterChart;
+import jofc2.model.elements.*;
 import jofc2.model.elements.BarChart.Bar;
 import jofc2.model.elements.LineChart.Dot;
 
@@ -38,61 +36,64 @@ public class ChartDataAsJSON {
 
 
 
-    public static String convertToJSON(MegaChart megaChart){
+    public static String scatterLineChart(MegaChart megaChart){
+        Logger logger = Logger.getLogger(ChartDataAsJSON.class);
+        logger.debug("chartDataAsJSON() called");
         Chart chart = new Chart();
-        chart.setTitle(new Text("Boomps Chart of MegaStuffs Wow"));
+        chart.setTitle(new Text(megaChart.getChart().getName()));
         chart.setBackgroundColour("#FFFFFF");
-
         ArrayList<String> xAxisVals = new ArrayList<String>();
         double minXVal = 0;
         double maxXVal = 0;
         double minYVal = 0;
         double maxYVal = 0;
-
-        //Iterate series
-        for (Iterator<MegaChartSeries> iterator=megaChart.getMegaChartSeries().iterator(); iterator.hasNext();) {
-            MegaChartSeries megaChartSeries=iterator.next();
-
-            //Create the Series
-            ScatterChart lc = new ScatterChart(ScatterChart.Style.LINE);
-            lc.setText(megaChartSeries.getyAxisTitle());
-            lc.setWidth(2);
-            lc.setGradientFill(true);
-            lc.setDotSize(1);
-            //Dot Style
-            ScatterChart.DotStyle dotStyle = new ScatterChart.DotStyle();
-            dotStyle.setType("hollow-dot");
-            dotStyle.setDotSize("2");
-            dotStyle.setWidth("1");
-            lc.setDotStyle(dotStyle);
-
-            //Iterate the data and create an array for xaxis and an array for yaxis
-            ArrayList<String> yAxisVals =  new ArrayList<String>();
-            for (int i=0; i<megaChartSeries.cleanData.length; i++) {
-                String[] row=megaChartSeries.cleanData[i];
-                //Util.logRow(row);
-                String xVal = row[1];
-                String yVal = row[2];
-                if (Num.isdouble(xVal) && Num.isdouble(yVal)){
-                    double dblX = Double.parseDouble(xVal);
-                    double dblY = Double.parseDouble(yVal);
-                    if (dblY!=0){
-                        Util.logXY(String.valueOf(dblX), String.valueOf(dblY));
-                        lc.addPoints(new ScatterChart.Point(dblX, dblY));
-                        xAxisVals.add(row[1]);
-                        yAxisVals.add(row[2]);
-                        if (dblX==0 || dblX<minXVal){minXVal=dblX;}
-                        if (dblX==0 || dblX>maxXVal){maxXVal=dblX;}
-                        if (dblY==0 || dblY<minYVal){minYVal=dblY;}
-                        if (dblY==0 || dblY>maxYVal){maxYVal=dblY;}
+        //Loop on the series of the megaChart
+        if (megaChart!=null && megaChart.getMegaChartSeries()!=null){
+            for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+                MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
+                if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
+                    //Create the Series
+                    ScatterChart lc = new ScatterChart(ScatterChart.Style.LINE);
+                    lc.setText(megaChartSeries.getyAxisTitle());
+                    lc.setWidth(2);
+                    lc.setGradientFill(true);
+                    lc.setDotSize(1);
+                    //Dot Style
+                    ScatterChart.DotStyle dotStyle = new ScatterChart.DotStyle();
+                    dotStyle.setType("hollow-dot");
+                    dotStyle.setDotSize("2");
+                    dotStyle.setWidth("1");
+                    lc.setDotStyle(dotStyle);
+                    //Iterate the data and create an array for xaxis and an array for yaxis
+                    ArrayList<String> yAxisVals =  new ArrayList<String>();
+                    for (int i=0; i<megaChartSeries.cleanData.length; i++) {
+                        String[] row=megaChartSeries.cleanData[i];
+                        //logRow(row);
+                        String xVal = row[1];
+                        String yVal = row[2];
+                        if (Num.isdouble(xVal) && Num.isdouble(yVal)){
+                            double dblX = Double.parseDouble(xVal);
+                            dblX = Util.doubleRound(dblX, 3);
+                            double dblY = Double.parseDouble(yVal);
+                            dblY = Util.doubleRound(dblY, 3);
+                            logger.debug("++++++ dblX="+dblX);
+                            if (dblY!=0){
+                                Util.logXY(String.valueOf(dblX), String.valueOf(dblY));
+                                lc.addPoints(new ScatterChart.Point(dblX, dblY));
+                                xAxisVals.add(row[1]);
+                                yAxisVals.add(row[2]);
+                                if (dblX==0 || dblX<minXVal){minXVal=dblX;}
+                                if (dblX==0 || dblX>maxXVal){maxXVal=dblX;}
+                                if (dblY==0 || dblY<minYVal){minYVal=dblY;}
+                                if (dblY==0 || dblY>maxYVal){maxYVal=dblY;}
+                            }
+                        }
                     }
+                    //Add the series to the chart
+                    chart.addElements(lc);
                 }
             }
-
-            //Add the series to the chart
-            chart.addElements(lc);
         }
-
         //Set step
         int desiredSteps = 5;
         Number step = desiredSteps;
@@ -121,7 +122,396 @@ public class ChartDataAsJSON {
         return chart.toDebugString();
     }
 
+    public static String barChart(MegaChart megaChart){
+        Logger logger = Logger.getLogger(ChartDataAsJSON.class);
+        logger.debug("chartDataAsJSON() called");
+        Chart chart = new Chart();
+        chart.setTitle(new Text(megaChart.getChart().getName()));
+        chart.setBackgroundColour("#FFFFFF");
+        ArrayList<String> xAxisVals = new ArrayList<String>();
+        double minYVal = 0;
+        double maxYVal = 0;
+        //Loop on the series of the megaChart
+        if (megaChart!=null && megaChart.getMegaChartSeries()!=null){
+            for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+                MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
+                if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
+                    //Create the Series
+                    BarChart bc = new BarChart(BarChart.Style.GLASS);
+                    //bc.setAlpha(0.3f);
+                    //Iterate the data and create an array for xaxis and an array for yaxis
+                    ArrayList<String> yAxisVals =  new ArrayList<String>();
+                    for (int i=0; i<megaChartSeries.cleanData.length; i++) {
+                        String[] row=megaChartSeries.cleanData[i];
+                        Util.logRow(row);
+                        String xVal = row[1];
+                        String yVal = row[2];
+                        if (Num.isdouble(yVal)){
+                            double dblY = Double.parseDouble(yVal);
+                            dblY = Util.doubleRound(dblY, 3);
+                            if (dblY!=0){
+                                BarChart.Bar bar = new BarChart.Bar(dblY);
+                                bc.addBars(bar);
+                                xAxisVals.add(row[1]);
+                                yAxisVals.add(row[2]);
+                                if (dblY==0 || dblY<minYVal){minYVal=dblY;}
+                                if (dblY==0 || dblY>maxYVal){maxYVal=dblY;}
+                            }
+                        }
+                    }
+                    //Add the series to the chart
+                    chart.addElements(bc);
+                }
+            }
+        }
+        //Set the xAxis on the chart
+        XAxis xAxis = new XAxis();
+        xAxis.setLabels(xAxisVals);
+        xAxis.setGridColour("#DDDEE1");
+        xAxis.setColour("#96A9C5");
+        //chart.setXAxis(xAxis);
+        //YAxis
+        YAxis ya = new YAxis();
+        ya.setGridColour("#DDDEE1");
+        ya.setColour("#96A9C5");
+        ya.setMin(minYVal);
+        ya.setMax(maxYVal);
+        chart.setYAxis(ya);
+        //Final schtuff
+        chart.setFixedNumDecimalsForced(false);
+        chart.setDecimalSeparatorIsComma(false);
+        return chart.toDebugString();
+    }
 
+    public static String timeSeriesChart(MegaChart megaChart){
+        Logger logger = Logger.getLogger(ChartDataAsJSON.class);
+        logger.debug("chartDataAsJSON() called");
+        Chart chart = new Chart();
+        chart.setTitle(new Text(megaChart.getChart().getName()));
+        chart.setBackgroundColour("#FFFFFF");
+        ArrayList<String> xAxisVals = new ArrayList<String>();
+        double minXVal = 0;
+        double maxXVal = 0;
+        double minYVal = 0;
+        double maxYVal = 0;
+        //Loop on the series of the megaChart
+        if (megaChart!=null && megaChart.getMegaChartSeries()!=null){
+            for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+                MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
+                if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
+                    //Create the Series
+                    ScatterChart lc = new ScatterChart(ScatterChart.Style.LINE);
+                    lc.setText(megaChartSeries.getyAxisTitle());
+                    lc.setWidth(2);
+                    lc.setGradientFill(true);
+                    lc.setDotSize(1);
+                    //Dot Style
+                    ScatterChart.DotStyle dotStyle = new ScatterChart.DotStyle();
+                    dotStyle.setType("hollow-dot");
+                    dotStyle.setDotSize("2");
+                    dotStyle.setWidth("1");
+                    lc.setDotStyle(dotStyle);
+                    //Iterate the data and create an array for xaxis and an array for yaxis
+                    ArrayList<String> yAxisVals =  new ArrayList<String>();
+                    for (int i=0; i<megaChartSeries.cleanData.length; i++) {
+                        String[] row=megaChartSeries.cleanData[i];
+                        //logRow(row);
+                        String xVal = row[1];
+                        String yVal = row[2];
+                        if (Num.isdouble(xVal) && Num.isdouble(yVal)){
+                            double dblX = Double.parseDouble(xVal);
+                            dblX = Util.doubleRound(dblX, 3);
+                            double dblY = Double.parseDouble(yVal);
+                            dblY = Util.doubleRound(dblY, 3);
+                            logger.debug("++++++ dblX="+dblX);
+                            if (dblY!=0){
+                                Util.logXY(String.valueOf(dblX), String.valueOf(dblY));
+                                lc.addPoints(new ScatterChart.Point(dblX, dblY));
+                                xAxisVals.add(row[1]);
+                                yAxisVals.add(row[2]);
+                                if (dblX==0 || dblX<minXVal){minXVal=dblX;}
+                                if (dblX==0 || dblX>maxXVal){maxXVal=dblX;}
+                                if (dblY==0 || dblY<minYVal){minYVal=dblY;}
+                                if (dblY==0 || dblY>maxYVal){maxYVal=dblY;}
+                            }
+                        }
+                    }
+                    //Add the series to the chart
+                    chart.addElements(lc);
+                }
+            }
+        }
+        //Set step
+        int desiredSteps = 5;
+        Number step = desiredSteps;
+        if (maxXVal>10){
+            step = (maxXVal/desiredSteps);
+        }
+        //Set the xAxis on the chart
+        XAxis xAxis = new XAxis();
+        //xAxis.setLabels(xAxisVals);
+        xAxis.setSteps(step.intValue());
+        xAxis.setRange(minXVal, maxXVal, step.intValue());
+        //xAxis.setRange(0, 1000);
+        xAxis.setGridColour("#DDDEE1");
+        xAxis.setColour("#96A9C5");
+        chart.setXAxis(xAxis);
+        //YAxis
+        YAxis ya = new YAxis();
+        ya.setGridColour("#DDDEE1");
+        ya.setColour("#96A9C5");
+        ya.setMin(minYVal);
+        ya.setMax(maxYVal);
+        chart.setYAxis(ya);
+        //Final schtuff
+        chart.setFixedNumDecimalsForced(false);
+        chart.setDecimalSeparatorIsComma(false);
+        return chart.toDebugString();
+    }
+
+    public static String stackedBarChart(MegaChart megaChart){
+        Logger logger = Logger.getLogger(ChartDataAsJSON.class);
+        logger.debug("chartDataAsJSON() called");
+        Chart chart = new Chart();
+        chart.setTitle(new Text(megaChart.getChart().getName()));
+        chart.setBackgroundColour("#FFFFFF");
+        ArrayList<String> xAxisVals = new ArrayList<String>();
+        double minYVal = 0;
+        double maxYVal = 0;
+        //Loop on the series of the megaChart
+        if (megaChart!=null && megaChart.getMegaChartSeries()!=null){
+            for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+                MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
+                if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
+                    //Create the Series
+                    StackedBarChart bc = new StackedBarChart();
+                    //bc.setAlpha(0.3f);
+                    //Iterate the data and create an array for xaxis and an array for yaxis
+                    ArrayList<String> yAxisVals =  new ArrayList<String>();
+                    for (int i=0; i<megaChartSeries.cleanData.length; i++) {
+                        String[] row=megaChartSeries.cleanData[i];
+                        Util.logRow(row);
+                        String xVal = row[1];
+                        String yVal = row[2];
+                        if (Num.isdouble(yVal)){
+                            double dblY = Double.parseDouble(yVal);
+                            dblY = Util.doubleRound(dblY, 3);
+                            if (dblY!=0){
+                                StackedBarChart.Stack bar = new StackedBarChart.Stack();
+                                bar.addValues(dblY);
+                                bc.addStack(bar);
+                                xAxisVals.add(row[1]);
+                                yAxisVals.add(row[2]);
+                                if (dblY==0 || dblY<minYVal){minYVal=dblY;}
+                                if (dblY==0 || dblY>maxYVal){maxYVal=dblY;}
+                            }
+                        }
+                    }
+                    //Add the series to the chart
+                    chart.addElements(bc);
+                }
+            }
+        }
+        //Set the xAxis on the chart
+        XAxis xAxis = new XAxis();
+        xAxis.setLabels(xAxisVals);
+        xAxis.setGridColour("#DDDEE1");
+        xAxis.setColour("#96A9C5");
+        //chart.setXAxis(xAxis);
+        //YAxis
+        YAxis ya = new YAxis();
+        ya.setGridColour("#DDDEE1");
+        ya.setColour("#96A9C5");
+        ya.setMin(minYVal);
+        ya.setMax(maxYVal);
+        chart.setYAxis(ya);
+        //Final schtuff
+        chart.setFixedNumDecimalsForced(false);
+        chart.setDecimalSeparatorIsComma(false);
+        return chart.toDebugString();
+    }
+
+    public static String horizontalBar(MegaChart megaChart){
+        Logger logger = Logger.getLogger(ChartDataAsJSON.class);
+        logger.debug("chartDataAsJSON() called");
+        Chart chart = new Chart();
+        chart.setTitle(new Text(megaChart.getChart().getName()));
+        chart.setBackgroundColour("#FFFFFF");
+        ArrayList<String> xAxisVals = new ArrayList<String>();
+        double minYVal = 0;
+        double maxYVal = 0;
+        //Loop on the series of the megaChart
+        if (megaChart!=null && megaChart.getMegaChartSeries()!=null){
+            for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+                MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
+                if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
+                    //Create the Series
+                    HorizontalBarChart bc = new HorizontalBarChart();
+                    //bc.setAlpha(0.3f);
+                    //Iterate the data and create an array for xaxis and an array for yaxis
+                    ArrayList<String> yAxisVals =  new ArrayList<String>();
+                    for (int i=0; i<megaChartSeries.cleanData.length; i++) {
+                        String[] row=megaChartSeries.cleanData[i];
+                        Util.logRow(row);
+                        String xVal = row[1];
+                        String yVal = row[2];
+                        if (Num.isdouble(yVal)){
+                            double dblY = Double.parseDouble(yVal);
+                            dblY = Util.doubleRound(dblY, 3);
+                            if (dblY!=0){
+                                HorizontalBarChart.Bar bar = new HorizontalBarChart.Bar(dblY);
+                                bc.addBars(bar);
+                                xAxisVals.add(row[1]);
+                                yAxisVals.add(row[2]);
+                                if (dblY==0 || dblY<minYVal){minYVal=dblY;}
+                                if (dblY==0 || dblY>maxYVal){maxYVal=dblY;}
+                            }
+                        }
+                    }
+                    //Add the series to the chart
+                    chart.addElements(bc);
+                }
+            }
+        }
+        //Set the xAxis on the chart
+        XAxis xAxis = new XAxis();
+        xAxis.setLabels(xAxisVals);
+        xAxis.setGridColour("#DDDEE1");
+        xAxis.setColour("#96A9C5");
+        //chart.setXAxis(xAxis);
+        //YAxis
+        YAxis ya = new YAxis();
+        ya.setGridColour("#DDDEE1");
+        ya.setColour("#96A9C5");
+        ya.setMin(minYVal);
+        ya.setMax(maxYVal);
+        chart.setYAxis(ya);
+        //Final schtuff
+        chart.setFixedNumDecimalsForced(false);
+        chart.setDecimalSeparatorIsComma(false);
+        return chart.toDebugString();
+    }
+
+    public static String pieChart(MegaChart megaChart){
+        Logger logger = Logger.getLogger(ChartDataAsJSON.class);
+        logger.debug("chartDataAsJSON() called");
+        Chart chart = new Chart();
+        chart.setTitle(new Text(megaChart.getChart().getName()));
+        chart.setBackgroundColour("#FFFFFF");
+        ArrayList<String> xAxisVals = new ArrayList<String>();
+        double minYVal = 0;
+        double maxYVal = 0;
+        //Loop on the series of the megaChart
+        if (megaChart!=null && megaChart.getMegaChartSeries()!=null){
+            for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+                MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
+                if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
+                    //Create the Series
+                    PieChart bc = new PieChart();
+                    //bc.setAlpha(0.3f);
+                    //Iterate the data and create an array for xaxis and an array for yaxis
+                    ArrayList<String> yAxisVals =  new ArrayList<String>();
+                    for (int i=0; i<megaChartSeries.cleanData.length; i++) {
+                        String[] row=megaChartSeries.cleanData[i];
+                        Util.logRow(row);
+                        String xVal = row[1];
+                        String yVal = row[2];
+                        if (Num.isdouble(yVal)){
+                            double dblY = Double.parseDouble(yVal);
+                            dblY = Util.doubleRound(dblY, 3);
+                            if (dblY!=0){
+                                bc.addSlice(dblY, xVal);
+                                xAxisVals.add(row[1]);
+                                yAxisVals.add(row[2]);
+                                if (dblY==0 || dblY<minYVal){minYVal=dblY;}
+                                if (dblY==0 || dblY>maxYVal){maxYVal=dblY;}
+                            }
+                        }
+                    }
+                    //Add the series to the chart
+                    chart.addElements(bc);
+                }
+            }
+        }
+        //Set the xAxis on the chart
+        XAxis xAxis = new XAxis();
+        xAxis.setLabels(xAxisVals);
+        xAxis.setGridColour("#DDDEE1");
+        xAxis.setColour("#96A9C5");
+        //chart.setXAxis(xAxis);
+        //YAxis
+        YAxis ya = new YAxis();
+        ya.setGridColour("#DDDEE1");
+        ya.setColour("#96A9C5");
+        ya.setMin(minYVal);
+        ya.setMax(maxYVal);
+        chart.setYAxis(ya);
+        //Final schtuff
+        chart.setFixedNumDecimalsForced(false);
+        chart.setDecimalSeparatorIsComma(false);
+        return chart.toDebugString();
+    }
+
+    public static String areaChart(MegaChart megaChart){
+        Logger logger = Logger.getLogger(ChartDataAsJSON.class);
+        logger.debug("chartDataAsJSON() called");
+        Chart chart = new Chart();
+        chart.setTitle(new Text(megaChart.getChart().getName()));
+        chart.setBackgroundColour("#FFFFFF");
+        ArrayList<String> xAxisVals = new ArrayList<String>();
+        double minYVal = 0;
+        double maxYVal = 0;
+        //Loop on the series of the megaChart
+        if (megaChart!=null && megaChart.getMegaChartSeries()!=null){
+            for (Iterator it = megaChart.getMegaChartSeries().iterator(); it.hasNext(); ) {
+                MegaChartSeries megaChartSeries = (MegaChartSeries)it.next();
+                if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
+                    //Create the Series
+                    AreaHollowChart bc = new AreaHollowChart();
+                    //bc.setAlpha(0.3f);
+                    //Iterate the data and create an array for xaxis and an array for yaxis
+                    ArrayList<String> yAxisVals =  new ArrayList<String>();
+                    for (int i=0; i<megaChartSeries.cleanData.length; i++) {
+                        String[] row=megaChartSeries.cleanData[i];
+                        Util.logRow(row);
+                        String xVal = row[1];
+                        String yVal = row[2];
+                        if (Num.isdouble(yVal)){
+                            double dblY = Double.parseDouble(yVal);
+                            dblY = Util.doubleRound(dblY, 3);
+                            if (dblY!=0){
+                                BarChart.Bar bar = new BarChart.Bar(dblY);
+                                bc.addValues(dblY);
+                                xAxisVals.add(row[1]);
+                                yAxisVals.add(row[2]);
+                                if (dblY==0 || dblY<minYVal){minYVal=dblY;}
+                                if (dblY==0 || dblY>maxYVal){maxYVal=dblY;}
+                            }
+                        }
+                    }
+                    //Add the series to the chart
+                    chart.addElements(bc);
+                }
+            }
+        }
+        //Set the xAxis on the chart
+        XAxis xAxis = new XAxis();
+        xAxis.setLabels(xAxisVals);
+        xAxis.setGridColour("#DDDEE1");
+        xAxis.setColour("#96A9C5");
+        //chart.setXAxis(xAxis);
+        //YAxis
+        YAxis ya = new YAxis();
+        ya.setGridColour("#DDDEE1");
+        ya.setColour("#96A9C5");
+        ya.setMin(minYVal);
+        ya.setMax(maxYVal);
+        chart.setYAxis(ya);
+        //Final schtuff
+        chart.setFixedNumDecimalsForced(false);
+        chart.setDecimalSeparatorIsComma(false);
+        return chart.toDebugString();
+    }
 
 
 }

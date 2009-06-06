@@ -31,28 +31,32 @@ public class ScatterChartPointConverter extends ConverterBase<Point> {
 	@SuppressWarnings("unchecked")
 	public boolean canConvert(Class c) {
 	    Logger logger = Logger.getLogger(this.getClass().getName());
-	    logger.debug("+++===+++===+++===+++=== canConvert() called");
+	    //logger.debug("+++===+++===+++===+++=== canConvert() called");
 		return ScatterChart.Point.class.isAssignableFrom(c);
 	}
 
 	@Override
 	public void convert(Point o, PathTrackingWriter writer, MarshallingContext mc) {
 	    Logger logger = Logger.getLogger(this.getClass().getName());
-	    logger.debug("+++===+++===+++===+++=== o.getX()="+o.getX());
+	    //logger.debug("+++===+++===+++===+++=== o.getX()="+o.getX()+" o.getY()="+o.getY());
 
 	    Object xOut = o.getX();
 	    if (o.getX() instanceof Number){
-
-
 	        String myFormat = ".000";
             DecimalFormat df = new DecimalFormat(myFormat);
             xOut = df.format(o.getX());
-            logger.debug("+++===+++===+++===+++=== String.valueOf(o.getX())="+xOut);
+            //logger.debug("+++===+++===+++===+++=== String.valueOf(o.getX())="+xOut);
         }
 
-
+        Object yOut = o.getY();
+	    if (o.getY() instanceof Number){
+	        String myFormat = ".000";
+            DecimalFormat df = new DecimalFormat(myFormat);
+            yOut = df.format(o.getY());
+            //logger.debug("+++===+++===+++===+++=== String.valueOf(o.getY())="+yOut);
+        }
 
 		writeNode(writer, "x", xOut, false);
-		writeNode(writer, "y", o.getY(), false);
+		writeNode(writer, "y", yOut, false);
 	}
 }
