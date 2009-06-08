@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 /**
  * User: Joe Reger Jr
@@ -221,6 +222,15 @@ public class Util {
             return bd.doubleValue();
         }
 
-
+        public static Object removeScientificNotation(Object o){
+            Object xOut = o;
+            if (o instanceof Number){
+                String myFormat = ".000";
+                DecimalFormat df = new DecimalFormat(myFormat);
+                xOut = df.format(o);
+                //logger.debug("+++===+++===+++===+++=== String.valueOf(o.getX())="+xOut);
+            }
+            return xOut;
+        }
 
 }

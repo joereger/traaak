@@ -42,7 +42,8 @@ public class ScatterChartPointConverter extends ConverterBase<Point> {
 
 	    Object xOut = o.getX();
 	    if (o.getX() instanceof Number){
-	        String myFormat = ".000";
+	        //String myFormat = ".000";
+	        String myFormat = "##";
             DecimalFormat df = new DecimalFormat(myFormat);
             xOut = df.format(o.getX());
             //logger.debug("+++===+++===+++===+++=== String.valueOf(o.getX())="+xOut);
@@ -50,7 +51,8 @@ public class ScatterChartPointConverter extends ConverterBase<Point> {
 
         Object yOut = o.getY();
 	    if (o.getY() instanceof Number){
-	        String myFormat = ".000";
+	        //String myFormat = ".000";
+	        String myFormat = "##";
             DecimalFormat df = new DecimalFormat(myFormat);
             yOut = df.format(o.getY());
             //logger.debug("+++===+++===+++===+++=== String.valueOf(o.getY())="+yOut);

@@ -6,6 +6,8 @@ import jofc2.model.Chart;
 import jofc2.model.Text;
 import jofc2.model.axis.XAxis;
 import jofc2.model.axis.YAxis;
+import jofc2.model.axis.Label;
+import jofc2.model.axis.XAxisLabels;
 import jofc2.model.elements.*;
 import jofc2.model.elements.BarChart.Bar;
 import jofc2.model.elements.LineChart.Dot;
@@ -38,7 +40,7 @@ public class ChartDataAsJSON {
 
     public static String scatterLineChart(MegaChart megaChart){
         Logger logger = Logger.getLogger(ChartDataAsJSON.class);
-        logger.debug("chartDataAsJSON() called");
+        logger.debug("scatterLineChart() called");
         Chart chart = new Chart();
         chart.setTitle(new Text(megaChart.getChart().getName()));
         chart.setBackgroundColour("#FFFFFF");
@@ -60,9 +62,9 @@ public class ChartDataAsJSON {
                     lc.setDotSize(1);
                     //Dot Style
                     ScatterChart.DotStyle dotStyle = new ScatterChart.DotStyle();
-                    dotStyle.setType("hollow-dot");
-                    dotStyle.setDotSize("2");
-                    dotStyle.setWidth("1");
+                    //dotStyle.setType("hollow-dot");
+                    //dotStyle.setDotSize("2");
+                    //dotStyle.setWidth("1");
                     lc.setDotStyle(dotStyle);
                     //Iterate the data and create an array for xaxis and an array for yaxis
                     ArrayList<String> yAxisVals =  new ArrayList<String>();
@@ -124,7 +126,7 @@ public class ChartDataAsJSON {
 
     public static String barChart(MegaChart megaChart){
         Logger logger = Logger.getLogger(ChartDataAsJSON.class);
-        logger.debug("chartDataAsJSON() called");
+        logger.debug("barChart() called");
         Chart chart = new Chart();
         chart.setTitle(new Text(megaChart.getChart().getName()));
         chart.setBackgroundColour("#FFFFFF");
@@ -185,7 +187,7 @@ public class ChartDataAsJSON {
 
     public static String timeSeriesChart(MegaChart megaChart){
         Logger logger = Logger.getLogger(ChartDataAsJSON.class);
-        logger.debug("chartDataAsJSON() called");
+        logger.debug("timeSeriesChart() called");
         Chart chart = new Chart();
         chart.setTitle(new Text(megaChart.getChart().getName()));
         chart.setBackgroundColour("#FFFFFF");
@@ -207,9 +209,10 @@ public class ChartDataAsJSON {
                     lc.setDotSize(1);
                     //Dot Style
                     ScatterChart.DotStyle dotStyle = new ScatterChart.DotStyle();
-                    dotStyle.setType("hollow-dot");
-                    dotStyle.setDotSize("2");
-                    dotStyle.setWidth("1");
+                    //dotStyle.setType("hollow-dot");
+                    //dotStyle.setDotSize("2");
+                    //dotStyle.setWidth("1");
+                    dotStyle.setTip("#date#<br>#y#");
                     lc.setDotStyle(dotStyle);
                     //Iterate the data and create an array for xaxis and an array for yaxis
                     ArrayList<String> yAxisVals =  new ArrayList<String>();
@@ -220,13 +223,13 @@ public class ChartDataAsJSON {
                         String yVal = row[2];
                         if (Num.isdouble(xVal) && Num.isdouble(yVal)){
                             double dblX = Double.parseDouble(xVal);
-                            dblX = Util.doubleRound(dblX, 3);
+                            //dblX = Util.doubleRound(dblX, 3);
                             double dblY = Double.parseDouble(yVal);
                             dblY = Util.doubleRound(dblY, 3);
                             logger.debug("++++++ dblX="+dblX);
                             if (dblY!=0){
-                                Util.logXY(String.valueOf(dblX), String.valueOf(dblY));
-                                lc.addPoints(new ScatterChart.Point(dblX, dblY));
+                                Util.logXY(String.valueOf(dblX/1000), String.valueOf(dblY));
+                                lc.addPoints(new ScatterChart.Point(dblX/1000, dblY)); //Unix timestamp used in patched OFC is 1000th of java time in millis
                                 xAxisVals.add(row[1]);
                                 yAxisVals.add(row[2]);
                                 if (dblX==0 || dblX<minXVal){minXVal=dblX;}
@@ -248,14 +251,21 @@ public class ChartDataAsJSON {
             step = (maxXVal/desiredSteps);
         }
         //Set the xAxis on the chart
-        XAxis xAxis = new XAxis();
-        //xAxis.setLabels(xAxisVals);
-        xAxis.setSteps(step.intValue());
-        xAxis.setRange(minXVal, maxXVal, step.intValue());
-        //xAxis.setRange(0, 1000);
-        xAxis.setGridColour("#DDDEE1");
-        xAxis.setColour("#96A9C5");
-        chart.setXAxis(xAxis);
+//        XAxis xAxis = new XAxis();
+//        xAxis.setMin(new Double(minXVal).intValue());
+//        xAxis.setMax(new Double(maxXVal).intValue());
+//        xAxis.setGridColour("#DDDEE1");
+//        xAxis.setColour("#96A9C5");
+//        //Xaxis labels
+//        xAxis.setSteps(86400); //seconds in a day
+//        //ArrayList<Label> xaxislabels = new ArrayList<Label>();
+//        XAxisLabels xLabel = new XAxisLabels();
+//        xLabel.setText("#date#");
+//        xLabel.setRotation(Label.Rotation.VERTICAL);
+//        //xaxislabels.add(xLabel);
+//        xAxis.addLabels(xLabel);
+//        //Add xaxis to chart
+//        chart.setXAxis(xAxis);
         //YAxis
         YAxis ya = new YAxis();
         ya.setGridColour("#DDDEE1");
@@ -271,7 +281,7 @@ public class ChartDataAsJSON {
 
     public static String stackedBarChart(MegaChart megaChart){
         Logger logger = Logger.getLogger(ChartDataAsJSON.class);
-        logger.debug("chartDataAsJSON() called");
+        logger.debug("stackedBarChart() called");
         Chart chart = new Chart();
         chart.setTitle(new Text(megaChart.getChart().getName()));
         chart.setBackgroundColour("#FFFFFF");
@@ -333,7 +343,7 @@ public class ChartDataAsJSON {
 
     public static String horizontalBar(MegaChart megaChart){
         Logger logger = Logger.getLogger(ChartDataAsJSON.class);
-        logger.debug("chartDataAsJSON() called");
+        logger.debug("horizontalBar() called");
         Chart chart = new Chart();
         chart.setTitle(new Text(megaChart.getChart().getName()));
         chart.setBackgroundColour("#FFFFFF");
@@ -394,7 +404,7 @@ public class ChartDataAsJSON {
 
     public static String pieChart(MegaChart megaChart){
         Logger logger = Logger.getLogger(ChartDataAsJSON.class);
-        logger.debug("chartDataAsJSON() called");
+        logger.debug("pieChart() called");
         Chart chart = new Chart();
         chart.setTitle(new Text(megaChart.getChart().getName()));
         chart.setBackgroundColour("#FFFFFF");
@@ -454,7 +464,7 @@ public class ChartDataAsJSON {
 
     public static String areaChart(MegaChart megaChart){
         Logger logger = Logger.getLogger(ChartDataAsJSON.class);
-        logger.debug("chartDataAsJSON() called");
+        logger.debug("areaChart() called");
         Chart chart = new Chart();
         chart.setTitle(new Text(megaChart.getChart().getName()));
         chart.setBackgroundColour("#FFFFFF");
