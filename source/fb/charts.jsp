@@ -11,6 +11,7 @@
 <%@ page import="com.fbdblog.util.Num" %>
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
 <%@ page import="com.fbdblog.chart.ChartSecurityKey" %>
+<%@ page import="com.fbdblog.chart.FlashChartWidget" %>
 
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
@@ -74,60 +75,128 @@ String acl = "public";
 
         </td>
         <td valign="top" width="600">
-            <%
-            String key=ChartSecurityKey.getChartKey(Pagez.getUserSession().getUser().getUserid(), chart.getChartid());
-            StringBuffer embedHtml = new StringBuffer();
-            embedHtml.append("<a href=\""+BaseUrl.get(false)+"user/"+Pagez.getUserSession().getUser().getNickname()+"/\">");
-            embedHtml.append("<img src=\""+BaseUrl.get(false)+"fb/graph.jsp?chartid="+chart.getChartid()+"&userid="+Pagez.getUserSession().getUser().getUserid()+"&size=small&key="+key+"\"  alt=\"\" width=\"400\" height=\"250\" style=\"border: 3px solid #e6e6e6;\">");
-            embedHtml.append("</a>");
-            %>
-            <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=Pagez.getUserSession().getUser().getUserid()%>&size=medium&key=<%=key%>" alt="" width="600" height="300" style="border: 3px solid #e6e6e6;"/>
-            <br/><br/>
-            <font class="smallfont" style="font-weight:bold;">Embed this chart by copying the code below and pasting it into your blog or website:</font>
-            <br/>
-            <textarea rows="0" cols="45" readonly="readonly" onClick="javascript:this.select();"><%=embedHtml.toString()%></textarea>
+            <%if (Pagez.getUserSession().getIsfacebook()){%>
+                <%
+                String key=ChartSecurityKey.getChartKey(Pagez.getUserSession().getUser().getUserid(), chart.getChartid());
+                StringBuffer embedHtml = new StringBuffer();
+                embedHtml.append("<a href=\""+BaseUrl.get(false)+"user/"+Pagez.getUserSession().getUser().getNickname()+"/\">");
+                embedHtml.append("<img src=\""+BaseUrl.get(false)+"fb/graph.jsp?chartid="+chart.getChartid()+"&userid="+Pagez.getUserSession().getUser().getUserid()+"&size=small&key="+key+"\"  alt=\"\" width=\"400\" height=\"250\" style=\"border: 3px solid #e6e6e6;\">");
+                embedHtml.append("</a>");
+                %>
+                <img src="<%=BaseUrl.get(false)%>fb/graph.jsp?chartid=<%=chart.getChartid()%>&userid=<%=Pagez.getUserSession().getUser().getUserid()%>&size=medium&key=<%=key%>" alt="" width="600" height="300" style="border: 3px solid #e6e6e6;"/>
+            <%}%>
+            <%if (!Pagez.getUserSession().getIsfacebook()) { %>
+                    <%=FlashChartWidget.getEmbedCode(chart, Pagez.getUserSession().getUser(), 640, 300)%>
+            <%}%>
         </td>
     </tr>
-
-
-    <tr>
-        <td valign="top" width="10">
-
-        </td>
-        <td valign="top" width="600">
-            <%
-            String key2=ChartSecurityKey.getChartKey(Pagez.getUserSession().getUser().getUserid(), chart.getChartid());
-            //key2 = URLEncoder.encode(key2, "UTF-8");
-            %>
-            <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
-                    codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"
-                    width="500"
-                    height="250" id="graph-2" align="middle">
-
-                <param name="allowScriptAccess" value="sameDomain" />
-                <param name="movie" value="/ofc/traaak.swf" />
-                <param name="quality" value="high" />
-                <param name="FlashVars" value="data-file=<%=BaseUrl.get(false)%>jsondata/<%=chart.getChartid()%>/<%=Pagez.getUserSession().getUser().getUserid()%>/<%=key2%>" />
-                <embed src="/ofc/traaak.swf"
-                       quality="high"
-                       bgcolor="#FFFFFF"
-                       width="500"
-                       height="250"
-                       name="open-flash-chart"
-                       align="middle"
-                       allowScriptAccess="sameDomain"
-                       type="application/x-shockwave-flash"
-                       flashvars = "data-file=<%=BaseUrl.get(false)%>jsondata/<%=chart.getChartid()%>/<%=Pagez.getUserSession().getUser().getUserid()%>/<%=key2%>"
-                       pluginspage="http://www.macromedia.com/go/getflashplayer" />
-            </object>
-        </td>
-    </tr>
-
-
-
-
-
 </table>
+
+<%if (!Pagez.getUserSession().getIsfacebook()){%>
+
+    <script language="javascript">
+        function toggleSmall() {
+            var ele = document.getElementById("toggleTextSmall");
+            if(ele.style.display == "block") {
+                ele.style.display = "none";
+            } else {
+                ele.style.display = "block";
+            }
+        }
+        function toggleMedium() {
+            var ele = document.getElementById("toggleTextMedium");
+            if(ele.style.display == "block") {
+                ele.style.display = "none";
+            } else {
+                ele.style.display = "block";
+            }
+        }
+        function toggleLarge() {
+            var ele = document.getElementById("toggleTextLarge");
+            if(ele.style.display == "block") {
+                ele.style.display = "none";
+            } else {
+                ele.style.display = "block";
+            }
+        }
+    </script>
+
+    <table>
+        <tr>
+            <td valign="top">
+                <div style="border: 2px #cccccc solid;">
+                    <a href="javascript:toggleSmall();">
+                        <font class="smallfont">Small<br/>200x175</font>
+                    </a>
+                </div>
+            </td>
+            <td valign="top">
+                <div style="border: 2px #cccccc solid;">
+                    <a href="javascript:toggleMedium();">
+                        <font class="smallfont">Medium<br/>350x250</font>
+                    </a>
+                </div>
+            </td>
+            <td valign="top">
+                <div style="border: 2px #cccccc solid;">
+                    <a href="javascript:toggleLarge();">
+                        <font class="smallfont">Large<br/>640x300</font>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+    <script src="http://cdn.gigya.com/wildfire/js/wfapiv2.js"></script>
+
+    <div id="toggleTextSmall" style="display: none">
+                <textarea rows="1" cols="1" id="TEXTAREA_ID_SMALL" style="display: none">
+                <%=FlashChartWidget.getEmbedCode(chart, Pagez.getUserSession().getUser(), 225, 225)%>
+                </textarea>
+                <div id="divWildfirePostSmall"></div>
+                <script>
+                var pconf={
+                  widgetTitle: 'Traaak Chart',
+                  defaultContent: 'TEXTAREA_ID_SMALL',
+                  UIConfig: '<config><display showDesktop="false" showEmail="false" useTransitions="true" showBookmark="false" codeBoxHeight="auto"></display><body><background frame-color="#BFBFBF" background-color="#FFFFFF" gradient-color-begin="#ffffff" gradient-color-end="#F4F4F4" corner-roundness="4;4;4;4"></background><controls color="#202020" corner-roundness="4;4;4;4" gradient-color-begin="#EAEAEA" gradient-color-end="#F4F4F4" bold="false"><snbuttons type="textUnder" frame-color="#D5D5D5" background-color="#fafafa" over-frame-color="#60BFFF" over-background-color="#ebebeb" color="#808080" gradient-color-begin="#FFFFFF" gradient-color-end="d4d6d7" size="10" bold="false" down-frame-color="#60BFFF" down-gradient-color-begin="#6DDADA" over-gradient-color-end="#6DDADA" down-gradient-color-end="#F4F4F4" over-color="#52A4DA" down-color="#52A4DA" over-bold="false"><more frame-color="#A4DBFF" over-frame-color="#A4DBFF" gradient-color-begin="#F4F4F4" gradient-color-end="#BBE4FF" over-gradient-color-begin="#A4DBFF" over-gradient-color-end="#F4F4F4"></more><previous frame-color="#BBE4FF" over-frame-color="#A4DBFF" gradient-color-begin="#FFFFFF" gradient-color-end="#A4DBFF" over-gradient-color-begin="#A4DBFF" over-gradient-color-end="#F4F4F4"></previous></snbuttons><textboxes frame-color="#CACACA" color="#757575" gradient-color-begin="#ffffff" bold="false"><codeboxes color="#757575" frame-color="#DFDFDF" background-color="#FFFFFF" gradient-color-begin="#ffffff" gradient-color-end="#FFFFFF" size="10"></codeboxes><inputs frame-color="#CACACA" color="#757575" gradient-color-begin="#F4F4F4" gradient-color-end="#ffffff"></inputs><dropdowns list-item-over-color="#52A4DA" frame-color="#CACACA"></dropdowns></textboxes><buttons frame-color="#CACACA" gradient-color-begin="#F4F4F4" gradient-color-end="#CACACA" color="#000000" bold="false" over-frame-color="#60BFFF" over-gradient-color-begin="#BBE4FF" down-gradient-color-begin="#BBE4FF" over-gradient-color-end="#FFFFFF" down-gradient-color-end="#ffffff"><post-buttons frame-color="#CACACA" gradient-color-end="#CACACA"></post-buttons></buttons><listboxes frame-color="#CACACA" corner-roundness="4;4;4;4" gradient-color-begin="#F4F4F4" gradient-color-end="#FFFFFF"></listboxes><checkboxes checkmark-color="#00B600" frame-color="#D5D5D5" corner-roundness="3;3;3;3" gradient-color-begin="#F4F4F4" gradient-color-end="#FFFFFF"></checkboxes><servicemarker gradient-color-begin="#ffffff" gradient-color-end="#D5D5D5"></servicemarker><tooltips color="#6D5128" gradient-color-begin="#FFFFFF" gradient-color-end="#FFE4BB" size="10" frame-color="#FFDBA4"></tooltips></controls><texts color="#202020"><headers color="#202020"></headers><messages color="#202020"></messages><links color="#52A4DA" underline="false" over-color="#353535" down-color="#353535" down-bold="false"></links></texts></body></config>'
+                };
+                Wildfire.initPost('551572', 'divWildfirePostSmall', 400, 300, pconf);
+                </script>
+    </div>
+
+    <div id="toggleTextMedium" style="display: none">
+                <textarea rows="1" cols="1" id="TEXTAREA_ID_MEDIUM" style="display: none">
+                <%=FlashChartWidget.getEmbedCode(chart, Pagez.getUserSession().getUser(), 350, 250)%>
+                </textarea>
+                <div id="divWildfirePostMedium"></div>
+                <script>
+                var pconf={
+                  widgetTitle: 'Traaak Chart',
+                  defaultContent: 'TEXTAREA_ID_MEDIUM',
+                  UIConfig: '<config><display showDesktop="false" showEmail="false" useTransitions="true" showBookmark="false" codeBoxHeight="auto"></display><body><background frame-color="#BFBFBF" background-color="#FFFFFF" gradient-color-begin="#ffffff" gradient-color-end="#F4F4F4" corner-roundness="4;4;4;4"></background><controls color="#202020" corner-roundness="4;4;4;4" gradient-color-begin="#EAEAEA" gradient-color-end="#F4F4F4" bold="false"><snbuttons type="textUnder" frame-color="#D5D5D5" background-color="#fafafa" over-frame-color="#60BFFF" over-background-color="#ebebeb" color="#808080" gradient-color-begin="#FFFFFF" gradient-color-end="d4d6d7" size="10" bold="false" down-frame-color="#60BFFF" down-gradient-color-begin="#6DDADA" over-gradient-color-end="#6DDADA" down-gradient-color-end="#F4F4F4" over-color="#52A4DA" down-color="#52A4DA" over-bold="false"><more frame-color="#A4DBFF" over-frame-color="#A4DBFF" gradient-color-begin="#F4F4F4" gradient-color-end="#BBE4FF" over-gradient-color-begin="#A4DBFF" over-gradient-color-end="#F4F4F4"></more><previous frame-color="#BBE4FF" over-frame-color="#A4DBFF" gradient-color-begin="#FFFFFF" gradient-color-end="#A4DBFF" over-gradient-color-begin="#A4DBFF" over-gradient-color-end="#F4F4F4"></previous></snbuttons><textboxes frame-color="#CACACA" color="#757575" gradient-color-begin="#ffffff" bold="false"><codeboxes color="#757575" frame-color="#DFDFDF" background-color="#FFFFFF" gradient-color-begin="#ffffff" gradient-color-end="#FFFFFF" size="10"></codeboxes><inputs frame-color="#CACACA" color="#757575" gradient-color-begin="#F4F4F4" gradient-color-end="#ffffff"></inputs><dropdowns list-item-over-color="#52A4DA" frame-color="#CACACA"></dropdowns></textboxes><buttons frame-color="#CACACA" gradient-color-begin="#F4F4F4" gradient-color-end="#CACACA" color="#000000" bold="false" over-frame-color="#60BFFF" over-gradient-color-begin="#BBE4FF" down-gradient-color-begin="#BBE4FF" over-gradient-color-end="#FFFFFF" down-gradient-color-end="#ffffff"><post-buttons frame-color="#CACACA" gradient-color-end="#CACACA"></post-buttons></buttons><listboxes frame-color="#CACACA" corner-roundness="4;4;4;4" gradient-color-begin="#F4F4F4" gradient-color-end="#FFFFFF"></listboxes><checkboxes checkmark-color="#00B600" frame-color="#D5D5D5" corner-roundness="3;3;3;3" gradient-color-begin="#F4F4F4" gradient-color-end="#FFFFFF"></checkboxes><servicemarker gradient-color-begin="#ffffff" gradient-color-end="#D5D5D5"></servicemarker><tooltips color="#6D5128" gradient-color-begin="#FFFFFF" gradient-color-end="#FFE4BB" size="10" frame-color="#FFDBA4"></tooltips></controls><texts color="#202020"><headers color="#202020"></headers><messages color="#202020"></messages><links color="#52A4DA" underline="false" over-color="#353535" down-color="#353535" down-bold="false"></links></texts></body></config>'
+                };
+                Wildfire.initPost('551572', 'divWildfirePostMedium', 400, 300, pconf);
+                </script>
+    </div>
+
+    <div id="toggleTextLarge" style="display: none">
+                <textarea rows="1" cols="1" id="TEXTAREA_ID_LARGE" style="display: none">
+                <%=FlashChartWidget.getEmbedCode(chart, Pagez.getUserSession().getUser(), 640, 300)%>
+                </textarea>
+                <div id="divWildfirePostLarge"></div>
+                <script>
+                var pconf={
+                  widgetTitle: 'Traaak Chart',
+                  defaultContent: 'TEXTAREA_ID_lARGE',
+                  UIConfig: '<config><display showDesktop="false" showEmail="false" useTransitions="true" showBookmark="false" codeBoxHeight="auto"></display><body><background frame-color="#BFBFBF" background-color="#FFFFFF" gradient-color-begin="#ffffff" gradient-color-end="#F4F4F4" corner-roundness="4;4;4;4"></background><controls color="#202020" corner-roundness="4;4;4;4" gradient-color-begin="#EAEAEA" gradient-color-end="#F4F4F4" bold="false"><snbuttons type="textUnder" frame-color="#D5D5D5" background-color="#fafafa" over-frame-color="#60BFFF" over-background-color="#ebebeb" color="#808080" gradient-color-begin="#FFFFFF" gradient-color-end="d4d6d7" size="10" bold="false" down-frame-color="#60BFFF" down-gradient-color-begin="#6DDADA" over-gradient-color-end="#6DDADA" down-gradient-color-end="#F4F4F4" over-color="#52A4DA" down-color="#52A4DA" over-bold="false"><more frame-color="#A4DBFF" over-frame-color="#A4DBFF" gradient-color-begin="#F4F4F4" gradient-color-end="#BBE4FF" over-gradient-color-begin="#A4DBFF" over-gradient-color-end="#F4F4F4"></more><previous frame-color="#BBE4FF" over-frame-color="#A4DBFF" gradient-color-begin="#FFFFFF" gradient-color-end="#A4DBFF" over-gradient-color-begin="#A4DBFF" over-gradient-color-end="#F4F4F4"></previous></snbuttons><textboxes frame-color="#CACACA" color="#757575" gradient-color-begin="#ffffff" bold="false"><codeboxes color="#757575" frame-color="#DFDFDF" background-color="#FFFFFF" gradient-color-begin="#ffffff" gradient-color-end="#FFFFFF" size="10"></codeboxes><inputs frame-color="#CACACA" color="#757575" gradient-color-begin="#F4F4F4" gradient-color-end="#ffffff"></inputs><dropdowns list-item-over-color="#52A4DA" frame-color="#CACACA"></dropdowns></textboxes><buttons frame-color="#CACACA" gradient-color-begin="#F4F4F4" gradient-color-end="#CACACA" color="#000000" bold="false" over-frame-color="#60BFFF" over-gradient-color-begin="#BBE4FF" down-gradient-color-begin="#BBE4FF" over-gradient-color-end="#FFFFFF" down-gradient-color-end="#ffffff"><post-buttons frame-color="#CACACA" gradient-color-end="#CACACA"></post-buttons></buttons><listboxes frame-color="#CACACA" corner-roundness="4;4;4;4" gradient-color-begin="#F4F4F4" gradient-color-end="#FFFFFF"></listboxes><checkboxes checkmark-color="#00B600" frame-color="#D5D5D5" corner-roundness="3;3;3;3" gradient-color-begin="#F4F4F4" gradient-color-end="#FFFFFF"></checkboxes><servicemarker gradient-color-begin="#ffffff" gradient-color-end="#D5D5D5"></servicemarker><tooltips color="#6D5128" gradient-color-begin="#FFFFFF" gradient-color-end="#FFE4BB" size="10" frame-color="#FFDBA4"></tooltips></controls><texts color="#202020"><headers color="#202020"></headers><messages color="#202020"></messages><links color="#52A4DA" underline="false" over-color="#353535" down-color="#353535" down-bold="false"></links></texts></body></config>'
+                };
+                Wildfire.initPost('551572', 'divWildfirePostLarge', 400, 300, pconf);
+                </script>
+    </div>
+
+<%}%>
+
 <br/><br/>
 <center>
 <%=Pagez.getUserSession().getApp().getAdunderchart()%>
@@ -135,5 +204,6 @@ String acl = "public";
 <br/><br/> 
 
 <br/><br/>
+
 
 <%@ include file="footer.jsp" %>

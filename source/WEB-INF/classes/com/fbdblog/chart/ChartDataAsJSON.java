@@ -65,6 +65,7 @@ public class ChartDataAsJSON {
                     //dotStyle.setType("hollow-dot");
                     //dotStyle.setDotSize("2");
                     //dotStyle.setWidth("1");
+                    dotStyle.setTip(megaChart.getXAxisTitle()+" #x#<br>#y#");
                     lc.setDotStyle(dotStyle);
                     //Iterate the data and create an array for xaxis and an array for yaxis
                     ArrayList<String> yAxisVals =  new ArrayList<String>();
@@ -140,6 +141,7 @@ public class ChartDataAsJSON {
                 if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
                     //Create the Series
                     BarChart bc = new BarChart(BarChart.Style.GLASS);
+                    //bc.setTooltip(megaChartSeries.getyAxisTitle()+" #x#<br>#y#");
                     //bc.setAlpha(0.3f);
                     //Iterate the data and create an array for xaxis and an array for yaxis
                     ArrayList<String> yAxisVals =  new ArrayList<String>();
@@ -151,14 +153,15 @@ public class ChartDataAsJSON {
                         if (Num.isdouble(yVal)){
                             double dblY = Double.parseDouble(yVal);
                             dblY = Util.doubleRound(dblY, 3);
-                            if (dblY!=0){
+                            //if (dblY!=0){
                                 BarChart.Bar bar = new BarChart.Bar(dblY);
+                                bar.setTooltip(megaChart.getXAxisTitle()+"="+xVal+"<br>#val#");
                                 bc.addBars(bar);
                                 xAxisVals.add(row[1]);
                                 yAxisVals.add(row[2]);
                                 if (dblY==0 || dblY<minYVal){minYVal=dblY;}
                                 if (dblY==0 || dblY>maxYVal){maxYVal=dblY;}
-                            }
+                            //}
                         }
                     }
                     //Add the series to the chart
@@ -167,10 +170,10 @@ public class ChartDataAsJSON {
             }
         }
         //Set the xAxis on the chart
-        XAxis xAxis = new XAxis();
-        xAxis.setLabels(xAxisVals);
-        xAxis.setGridColour("#DDDEE1");
-        xAxis.setColour("#96A9C5");
+        //XAxis xAxis = new XAxis();
+        //xAxis.setLabels(xAxisVals);
+        //xAxis.setGridColour("#DDDEE1");
+        //xAxis.setColour("#96A9C5");
         //chart.setXAxis(xAxis);
         //YAxis
         YAxis ya = new YAxis();
@@ -241,7 +244,7 @@ public class ChartDataAsJSON {
                     }
                     //Add the series to the chart
                     chart.addElements(lc);
-                }
+                }                                         
             }
         }
         //Set step
@@ -251,7 +254,14 @@ public class ChartDataAsJSON {
             step = (maxXVal/desiredSteps);
         }
         //Set the xAxis on the chart
-//        XAxis xAxis = new XAxis();
+        XAxis xAxis = new XAxis();
+        xAxis.setGridColour("#DDDEE1");
+        xAxis.setColour("#96A9C5");
+        XAxisLabels xLabel = new XAxisLabels();
+        xLabel.setText(".");
+        xLabel.setVisible(false);
+        xAxis.addLabels(xLabel);
+        chart.setXAxis(xAxis);
 //        xAxis.setMin(new Double(minXVal).intValue());
 //        xAxis.setMax(new Double(maxXVal).intValue());
 //        xAxis.setGridColour("#DDDEE1");
@@ -295,6 +305,7 @@ public class ChartDataAsJSON {
                 if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
                     //Create the Series
                     StackedBarChart bc = new StackedBarChart();
+                    bc.setTooltip(megaChart.getXAxisTitle()+"=#x#<br>#val#");
                     //bc.setAlpha(0.3f);
                     //Iterate the data and create an array for xaxis and an array for yaxis
                     ArrayList<String> yAxisVals =  new ArrayList<String>();
@@ -306,7 +317,7 @@ public class ChartDataAsJSON {
                         if (Num.isdouble(yVal)){
                             double dblY = Double.parseDouble(yVal);
                             dblY = Util.doubleRound(dblY, 3);
-                            if (dblY!=0){
+                            //if (dblY!=0){
                                 StackedBarChart.Stack bar = new StackedBarChart.Stack();
                                 bar.addValues(dblY);
                                 bc.addStack(bar);
@@ -314,7 +325,7 @@ public class ChartDataAsJSON {
                                 yAxisVals.add(row[2]);
                                 if (dblY==0 || dblY<minYVal){minYVal=dblY;}
                                 if (dblY==0 || dblY>maxYVal){maxYVal=dblY;}
-                            }
+                            //}
                         }
                     }
                     //Add the series to the chart
@@ -357,6 +368,7 @@ public class ChartDataAsJSON {
                 if (megaChartSeries.cleanData!=null && megaChartSeries.cleanData.length>0){
                     //Create the Series
                     HorizontalBarChart bc = new HorizontalBarChart();
+                    bc.setTooltip(megaChart.getXAxisTitle()+"=#x#<br>#val#");
                     //bc.setAlpha(0.3f);
                     //Iterate the data and create an array for xaxis and an array for yaxis
                     ArrayList<String> yAxisVals =  new ArrayList<String>();
@@ -368,14 +380,14 @@ public class ChartDataAsJSON {
                         if (Num.isdouble(yVal)){
                             double dblY = Double.parseDouble(yVal);
                             dblY = Util.doubleRound(dblY, 3);
-                            if (dblY!=0){
+                            //if (dblY!=0){
                                 HorizontalBarChart.Bar bar = new HorizontalBarChart.Bar(dblY);
                                 bc.addBars(bar);
                                 xAxisVals.add(row[1]);
                                 yAxisVals.add(row[2]);
                                 if (dblY==0 || dblY<minYVal){minYVal=dblY;}
                                 if (dblY==0 || dblY>maxYVal){maxYVal=dblY;}
-                            }
+                            //}
                         }
                     }
                     //Add the series to the chart
@@ -431,6 +443,7 @@ public class ChartDataAsJSON {
                             dblY = Util.doubleRound(dblY, 3);
                             if (dblY!=0){
                                 bc.addSlice(dblY, xVal);
+                                //bc.setTooltip(megaChart.getXAxisTitle()+"="+xVal+"<br>"+yVal);
                                 xAxisVals.add(row[1]);
                                 yAxisVals.add(row[2]);
                                 if (dblY==0 || dblY<minYVal){minYVal=dblY;}
@@ -491,6 +504,7 @@ public class ChartDataAsJSON {
                             dblY = Util.doubleRound(dblY, 3);
                             if (dblY!=0){
                                 BarChart.Bar bar = new BarChart.Bar(dblY);
+                                bar.setTooltip(megaChart.getXAxisTitle()+"="+xVal+"<br>#val#");
                                 bc.addValues(dblY);
                                 xAxisVals.add(row[1]);
                                 yAxisVals.add(row[2]);
@@ -505,10 +519,10 @@ public class ChartDataAsJSON {
             }
         }
         //Set the xAxis on the chart
-        XAxis xAxis = new XAxis();
-        xAxis.setLabels(xAxisVals);
-        xAxis.setGridColour("#DDDEE1");
-        xAxis.setColour("#96A9C5");
+        //XAxis xAxis = new XAxis();
+        //xAxis.setLabels(xAxisVals);
+        //xAxis.setGridColour("#DDDEE1");
+        //xAxis.setColour("#96A9C5");
         //chart.setXAxis(xAxis);
         //YAxis
         YAxis ya = new YAxis();
