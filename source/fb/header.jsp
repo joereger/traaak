@@ -1,9 +1,9 @@
 <%@ page import="org.apache.log4j.Logger" %>
-<%@ page import="com.facebook.api.FacebookRestClient" %>
+<%@ page import="com.google.code.facebookapi.FacebookXmlRestClient" %>
+<%@ page import="com.google.code.facebookapi.FacebookException" %>
 <%@ page import="com.fbdblog.xmpp.SendXMPPMessage" %>
 <%@ page import="com.fbdblog.facebook.FacebookUser" %>
 <%@ page import="com.fbdblog.htmlui.UserSession" %>
-<%@ page import="com.facebook.api.FacebookException" %>
 <%@ page import="com.fbdblog.facebook.FindUserFromFacebookUid" %>
 <%@ page import="com.fbdblog.facebook.FindApp" %>
 <%@ page import="com.fbdblog.session.UrlSplitter" %>
@@ -13,6 +13,8 @@
 <%@ page import="java.util.Calendar" %>
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
 <%
+
+
     //Record Impression
     if (Pagez.getUserSession() != null && Pagez.getUserSession().getUser() != null && Pagez.getUserSession().getApp() != null) {
         if (Pagez.getUserSession().getUser().getUserid()>0 && Pagez.getUserSession().getApp().getAppid()>0) {
@@ -35,10 +37,12 @@
 
     //Include proper header
     if (Pagez.getUserSession().getIsfacebook()){
+        logger.debug("using /fb/header-fb.jsp");
         %>
         <%@ include file="header-fb.jsp" %>
         <%
     } else {
+        logger.debug("using /fb/header-web.jsp");
         %>
         <%@ include file="header-web.jsp" %>
         <%

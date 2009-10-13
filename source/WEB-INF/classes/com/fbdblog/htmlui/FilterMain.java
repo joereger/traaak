@@ -1,6 +1,7 @@
 package com.fbdblog.htmlui;
 
 import org.apache.log4j.Logger;
+import org.apache.xmlrpc.util.HttpUtil;
 import org.hibernate.criterion.Restrictions;
 
 import javax.servlet.*;
@@ -22,11 +23,13 @@ import com.fbdblog.xmpp.SendXMPPMessage;
 import com.fbdblog.util.Time;
 import com.fbdblog.util.RandomString;
 import com.fbdblog.UserappstatusUtil;
+import com.fbdblog.systemprops.SystemProperty;
 import com.fbdblog.session.*;
 import com.fbdblog.htmlui.Pagez;
 import com.fbdblog.htmlui.UserSession;
-import com.facebook.api.FacebookRestClient;
-import com.facebook.api.FacebookException;
+import com.google.code.facebookapi.FacebookXmlRestClient;
+import com.google.code.facebookapi.FacebookException;
+
 
 /**
  * User: Joe Reger Jr
@@ -128,38 +131,69 @@ public class FilterMain implements Filter {
                 if (Pagez.getUserSession().getApp()==null || Pagez.getUserSession().getApp().getAppid()<=0) {
                     //@todo how to handle unknown app?  list all apps with links to an add page?
                     logger.debug("no valid app found so aborting UserSessionSetup");
-                    if (!response.isCommitted()){ chain.doFilter(request, response); }
-                    logger.debug("after chain.doFilter()");
-                    return;
+                    //if (!response.isCommitted()){ chain.doFilter(request, response); }
+                    //logger.debug("after chain.doFilter()");
+                    //return;
                 }
+
+
 
                 //Facebook
                 try {
                     //Need a session key
-                    //auth_token should immediately be traded in for a valid fb_sig_session_key
-                    //Can only convert auth_token to session key when I know which app this is
+                    boolean foundSessionKey = false;
+
+                    //Look for session key in auth_token or fb_sig_session_key
                     if (request.getParameter("auth_token")!=null && !request.getParameter("auth_token").trim().equals("") && Pagez.getUserSession().getApp()!=null && Pagez.getUserSession().getApp().getAppid()>0){
+                        //auth_token should immediately be traded in for a valid fb_sig_session_key
+                        //Can only convert auth_token to session key when I know which app this is
                         logger.debug("auth_token found in request... will try to convert to session_key");
-                        FacebookRestClient facebookRestClient = new FacebookRestClient(Pagez.getUserSession().getApp().getFacebookapikey(), Pagez.getUserSession().getApp().getFacebookapisecret());
+                        FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(Pagez.getUserSession().getApp().getFacebookapikey(), Pagez.getUserSession().getApp().getFacebookapisecret());
                         String facebooksessionkey = facebookRestClient.auth_getSession(request.getParameter("auth_token").trim());
                         Pagez.getUserSession().setFacebooksessionkey(facebooksessionkey);
+                        Pagez.getUserSession().setFacebookapikey(Pagez.getUserSession().getApp().getFacebookapikey());
+                        Pagez.getUserSession().setFacebookapisecret(Pagez.getUserSession().getApp().getFacebookapisecret());
                         Pagez.getUserSession().setIsfacebook(true);
                         Pagez.getUserSession().setIsweb(false);
-                    } else {
+                        foundSessionKey = true;
+                    } else if ((request.getParameter("fb_sig_session_key")!=null && !request.getParameter("fb_sig_session_key").trim().equals(""))){
                         //No auth_token was sent (it's only sent for new apps and new logins, etc) so look to session_key
-                        logger.debug("no auth_token found in request, looking for fb_sig_session_key");
-                        if ((request.getParameter("fb_sig_session_key")!=null && !request.getParameter("fb_sig_session_key").trim().equals(""))){
-                            logger.debug("found a fb_sig_session_key in request");
-                            Pagez.getUserSession().setFacebooksessionkey(request.getParameter("fb_sig_session_key").trim());
-                            Pagez.getUserSession().setIsfacebook(true);
-                            Pagez.getUserSession().setIsweb(false);
-                        } else {
-                            logger.debug("no fb_sig_session_key found in request... aborting UserSessionSetup");
-                            Pagez.getUserSession().setIsfacebook(false);
-                            Pagez.getUserSession().setIsweb(true);
-                            if (!response.isCommitted()){ chain.doFilter(request, response); }
-                            return;
+                        logger.debug("found a fb_sig_session_key in request");
+                        Pagez.getUserSession().setFacebooksessionkey(request.getParameter("fb_sig_session_key").trim());
+                        Pagez.getUserSession().setFacebookapikey(Pagez.getUserSession().getApp().getFacebookapikey());
+                        Pagez.getUserSession().setFacebookapisecret(Pagez.getUserSession().getApp().getFacebookapisecret());
+                        Pagez.getUserSession().setIsfacebook(true);
+                        Pagez.getUserSession().setIsweb(false);
+                        foundSessionKey = true;
+                    }
+
+                    //Look for session key in Facebook Connect cookie
+                    if (httpServletRequest.getCookies()!=null){
+                        for (int i=0; i<httpServletRequest.getCookies().length; i++) {
+                            Cookie cookie=httpServletRequest.getCookies()[i];
+                            if (cookie.getName().indexOf("_session_key")>-1){
+                                logger.debug("found _session_key in Facebook Connect cookie: "+cookie.getValue().trim());
+                                //String facebookconnectapikey = cookie.getName().substring(0, cookie.getName().indexOf("_session_key"));
+                                //FacebookJsonRestClient fbc= new FacebookJsonRestClient(SystemProperty.getProp(SystemProperty.PROP_DEFAULTAPIKEY), SystemProperty.getProp(SystemProperty.PROP_DEFAULTAPISECRET), cookie.getValue().trim());
+                                //long userId=fbc.users_getLoggedInUser();
+                                //logger.debug("facebook userId:"+userId);
+                                Pagez.getUserSession().setFacebooksessionkey(cookie.getValue().trim());
+                                Pagez.getUserSession().setFacebookapikey(SystemProperty.getProp(SystemProperty.PROP_DEFAULTAPIKEY));
+                                Pagez.getUserSession().setFacebookapisecret(SystemProperty.getProp(SystemProperty.PROP_DEFAULTAPISECRET));
+                                Pagez.getUserSession().setIsfacebook(false);
+                                Pagez.getUserSession().setIsweb(true);
+                                foundSessionKey = true;
+                            }
                         }
+                    }
+
+                    //If no session key was found
+                    if (!foundSessionKey){
+                        logger.debug("no fb_sig_session_key found in request... aborting UserSessionSetup");
+                        Pagez.getUserSession().setIsfacebook(false);
+                        Pagez.getUserSession().setIsweb(true);
+                        if (!response.isCommitted()){ chain.doFilter(request, response); }
+                        return;
                     }
 
                     //Pull userSession from cache
@@ -181,11 +215,12 @@ public class FilterMain implements Filter {
                     //I only want to run this stuff when I see a new Facebook session key...
                     if (!foundSessionInCache) {
                         logger.debug("running heavy Facebook user setup with api calls due to new facebooksessionkey");
+
                         //Go get some details on this facebookuser
-                        FacebookRestClient facebookRestClient = null;
+                        FacebookXmlRestClient facebookRestClient = null;
                         try {
-                            facebookRestClient = new FacebookRestClient(Pagez.getUserSession().getApp().getFacebookapikey(), Pagez.getUserSession().getApp().getFacebookapisecret(), Pagez.getUserSession().getFacebooksessionkey());
-                            Pagez.getUserSession().setFacebookUser(new FacebookUser(facebookRestClient.users_getLoggedInUser(), Pagez.getUserSession().getFacebooksessionkey(), Pagez.getUserSession().getApp().getFacebookapikey(), Pagez.getUserSession().getApp().getFacebookapisecret()));
+                            facebookRestClient = new FacebookXmlRestClient(Pagez.getUserSession().getFacebookapikey(), Pagez.getUserSession().getFacebookapisecret(), Pagez.getUserSession().getFacebooksessionkey());
+                            Pagez.getUserSession().setFacebookUser(new FacebookUser(facebookRestClient.users_getLoggedInUser(), Pagez.getUserSession().getFacebooksessionkey(), Pagez.getUserSession().getFacebookapikey(), Pagez.getUserSession().getFacebookapisecret()));
                         } catch (FacebookException fex) {
                             logger.error("Facebook Error fex", fex);
                         }
@@ -227,6 +262,8 @@ public class FilterMain implements Filter {
                             }
                             //Set the timezoneid
                             Pagez.setTz(user.getTimezoneid());
+                            //Make sure user is logged in
+                            Pagez.getUserSession().setIsloggedin(true);
                         } else {
                             logger.debug("userSession.getFacebookUser() is empty after calling facebook api");
                             //@todo how to handle facebook call to populate user is empty?
@@ -236,7 +273,7 @@ public class FilterMain implements Filter {
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    logger.error("",ex);
+                    logger.error("", ex);
                 }
 
                 //Track app adds
@@ -278,6 +315,7 @@ public class FilterMain implements Filter {
                     }
                 }
 
+
                 //Save UserSession in Cache
                 CacheFactory.getCacheProvider().put(Pagez.getUserSession().getFacebooksessionkey(), "userSessionKeyedOnFb", Pagez.getUserSession());
 
@@ -300,6 +338,8 @@ public class FilterMain implements Filter {
             logger.debug("Error setting up UserSession");
             logger.error("",ex);
         }
+
+        logger.debug("end of FilterMain.java");
 
         //Continue processing stuff
         if (!response.isCommitted()){ chain.doFilter(request, response); }

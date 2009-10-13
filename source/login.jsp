@@ -4,6 +4,7 @@
 <%@ page import="com.fbdblog.session.PersistentLogin" %>
 <%@ page import="com.fbdblog.session.UrlSplitter" %>
 <%@ page import="com.fbdblog.systemprops.BaseUrl" %>
+<%@ page import="com.fbdblog.facebook.FindApp" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "Log In";
@@ -89,7 +90,7 @@ Login login = (Login) Pagez.getBeanMgr().get("Login");
                         <font class="formfieldnamefont">Email</font>
                     </td>
                     <td valign="top">
-                        <%=Textbox.getHtml("email", login.getEmail(), 255, 20, "", "")%>
+                        <%=Textbox.getHtml("email", login.getEmail(), 255, 20, "", "font-size:30px;")%>
                     </td>
                 </tr>
 
@@ -98,7 +99,7 @@ Login login = (Login) Pagez.getBeanMgr().get("Login");
                         <font class="formfieldnamefont">Password</font>
                     </td>
                     <td valign="top">
-                        <%=TextboxSecret.getHtml("password", login.getPassword(), 255, 20, "", "")%>
+                        <%=TextboxSecret.getHtml("password", login.getPassword(), 255, 20, "", "font-size:30px;")%>
                         <br/>
                         <a href="/lostpassword.jsp"><font class="tinyfont" style="color: #000000;">Lost your password?</font></a>
                     </td>
@@ -117,11 +118,20 @@ Login login = (Login) Pagez.getBeanMgr().get("Login");
                     <td valign="top">
                     </td>
                     <td valign="top">
-                        <input type="submit" class="formsubmitbutton" value="Log In">
+                        <input type="submit" class="formsubmitbutton" value="Log In" style="font-size:30px;">
                     </td>
                 </tr>
 
             </table>
+
+            <fb:login-button length="long" size="large" onlogin="facebook_onlogin();"></fb:login-button>
+            <script type="text/javascript">
+               function facebook_onlogin(){
+                  FB.Connect.ifUserConnected("index.jsp",null);
+                }
+            </script>
+            
+
 
     </form>
 

@@ -20,6 +20,7 @@
 
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
+logger.error("top of index.jsp");
 String pagetitle = "Traaak";
 String navtab = "youraccount";
 String acl = "public";
@@ -54,7 +55,7 @@ String adPostSave = "";
             } else {
                 tmp.append("<div class=\"traaakbox\">\n" +
                 "   <div class=\"traaakboxtitle\">Nice traaaking!</div>\n" +
-                " We've updated your charts.  Have you <a href=\"/app/"+Pagez.getUserSession().getApp().getFacebookappname()+"/?nav=embed\">embedded them</a> into your blog yet?  Why not traaak some <a href=\"/\">other stuff</a>?"+
+                " We've updated your charts.  Have you <a href=\"/app/"+Pagez.getUserSession().getApp().getFacebookappname()+"/?nav=charts\">embedded charts</a> into your blog/website yet?  Why not traaak some <a href=\"/\">other stuff</a>?"+
                 "</div>");
             }
             topOfPageMsg = tmp.toString();
@@ -172,7 +173,7 @@ if (!topOfPageMsg.equals("")){
 
 <table>
     <tr>
-        <td valign="top" width="220">
+        <td valign="top" width="320">
             <%
             if (!adPostSave.equals("")){
                 %><%=adPostSave%><%
@@ -298,8 +299,17 @@ if (!topOfPageMsg.equals("")){
                     } else {
                         %>
                         <div class="traaakbox">
-                            <div class="traaakboxtitle">Login/Signup</div>
-                            Once you <a href="/login.jsp">Log In</a> or <a href="/registration.jsp">Sign Up</a> you'll be able to save this data and create your own charts/graphs.  You can keep your data private or share it with the world.
+                            <div class="traaakboxtitle">Free Login/Signup</div>
+                            Traaak requires a Facebook account.  Once you "Connect with Facebook" you'll be able to save this data and create your own charts/graphs.  You can keep your data private or share it with the world.
+
+
+                        <fb:login-button length="long" size="large" onlogin="facebook_onlogin();"></fb:login-button>
+                        <script type="text/javascript">
+                           function facebook_onlogin(){
+                              FB.Connect.ifUserConnected("/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/",null);
+                            }
+                        </script>
+                        <br/><br/>
                         </div>
                         <%
                     }

@@ -1,7 +1,7 @@
 package com.fbdblog.facebook;
 
-import com.facebook.api.FacebookRestClient;
-import com.facebook.api.TemplatizedAction;
+import com.google.code.facebookapi.FacebookXmlRestClient;
+import com.google.code.facebookapi.TemplatizedAction;
 import com.fbdblog.htmlui.UserSession;
 import com.fbdblog.session.FindUserappsettings;
 import com.fbdblog.systemprops.BaseUrl;
@@ -103,7 +103,7 @@ public class FacebookApiWrapper {
         Logger logger = Logger.getLogger(this.getClass().getName());
         try{
             if (app!=null && !app.getMinifeedtemplate().equals("")){
-                FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+                FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
                 URL url = facebookRestClient.notifications_send(recipientIds, Str.getCharSequence(notification), Str.getCharSequence(email));
                 if (url!=null){
                     return url.toString();
@@ -126,7 +126,7 @@ public class FacebookApiWrapper {
 
                     TemplatizedAction action = new TemplatizedAction(titleTemplate.toString());
 
-                    FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+                    FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
                     facebookRestClient.feed_PublishTemplatizedAction(action);
                 }
             }
@@ -154,7 +154,7 @@ public class FacebookApiWrapper {
                         action.addBodyParam("toname", toname);
                         action.addBodyParam("throwdownname", "<a href='http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>");
 
-                        FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+                        FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
                         facebookRestClient.feed_PublishTemplatizedAction(action);
                     }
                 }
@@ -185,7 +185,7 @@ public class FacebookApiWrapper {
                         action.addTitleParam("fromname", fromname);
                         action.addBodyParam("throwdownname", "<a href='http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>");
 
-                        FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+                        FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
                         facebookRestClient.feed_PublishTemplatizedAction(action);
                     }
                 }
@@ -213,7 +213,7 @@ public class FacebookApiWrapper {
                         action.addTargetIds(throwdown.getTofacebookuid()+","+fromUser.getFacebookuid());
                         action.addBodyParam("throwdownname", "<a href='http://apps.facebook.com/"+app.getFacebookappname()+"/?nav=throwdown&throwdownid="+throwdown.getThrowdownid()+"'>"+throwdown.getName()+"</a>");
 
-                        FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+                        FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
                         facebookRestClient.feed_PublishTemplatizedAction(action);
                     }
                 }
@@ -283,8 +283,8 @@ public class FacebookApiWrapper {
             }
 
             CharSequence cs = fbml.subSequence(0, fbml.length());
-            FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
-            boolean success = facebookRestClient.profile_setFBML(cs, Long.parseLong(user.getFacebookuid()));
+            FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+            boolean success = facebookRestClient.profile_setFBML(cs, Str.getCharSequence(user.getFacebookuid()));
             if (success){
                 logger.debug("Apparently the setFBML was successful.");
             } else {
@@ -305,7 +305,7 @@ public class FacebookApiWrapper {
         ArrayList<Integer> friends = new ArrayList<Integer>();
         try{
             //Set up the facebook rest client
-            FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+            FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
             //Get a list of uids
             Document w3cDoc = facebookRestClient.friends_get();
             DOMBuilder builder = new DOMBuilder();
@@ -365,7 +365,7 @@ public class FacebookApiWrapper {
         Logger logger = Logger.getLogger(this.getClass().getName());
         try{
             //Set up the facebook rest client
-            FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+            FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
                 //Go back and get all the important info
                 String fql = "SELECT "+FacebookUser.sqlListOfCols+" FROM user WHERE uid='"+facebookuid+"'";
                 Document w3cDoc2 = facebookRestClient.fql_query(fql.subSequence(0,fql.length()));
@@ -409,7 +409,7 @@ public class FacebookApiWrapper {
         });
         try{
             //Set up the facebook rest client
-            FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+            FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
             //Get the list of uids
             //@todo can I prevent this call by using the fb_sig_friends that seems to be sent all the time?
             ArrayList<Integer> uids = getFriendUids();
@@ -471,7 +471,7 @@ public class FacebookApiWrapper {
 
     public void inviteFriendsToApp(ArrayList<Long> uids, App app){
         Logger logger = Logger.getLogger(this.getClass().getName());
-        FacebookRestClient facebookRestClient = new FacebookRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
+        FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(app.getFacebookapikey(), app.getFacebookapisecret(), sessionkey);
 
         String type = "social survey";
         CharSequence typeChars = type.subSequence(0, type.length());

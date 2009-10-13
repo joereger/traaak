@@ -30,6 +30,11 @@
         <to>/fb/json.jsp?chartid=$1&amp;userid=$2&amp;key=$3</to>
     </rule>
 
+    <rule>
+        <from>/user/(.*)$</from>
+        <to>/profile/profile.jsp?nickname=$1</to>
+    </rule>
+
 
     <outbound-rule>
         <note>

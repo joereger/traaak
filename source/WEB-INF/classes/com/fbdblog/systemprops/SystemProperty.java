@@ -27,6 +27,8 @@ public class SystemProperty {
     public static String PROP_SENDXMPP = "PROP_SENDXMPP";
     public static String PROP_SMTPOUTBOUNDSERVER = "PROP_SMTPOUTBOUNDSERVER";
     public static String PROP_ISSSLON = "PROP_ISSSLON";
+    public static String PROP_DEFAULTAPIKEY = "PROP_DEFAULTAPIKEY";
+    public static String PROP_DEFAULTAPISECRET = "PROP_DEFAULTAPISECRET";
 
     private static void loadAllPropsAndDefaultValues(){
         if (props==null){
@@ -36,6 +38,8 @@ public class SystemProperty {
         props.put(PROP_SENDXMPP, "0");
         props.put(PROP_SMTPOUTBOUNDSERVER, "localhost");
         props.put(PROP_ISSSLON, "0");
+        props.put(PROP_DEFAULTAPIKEY, "052ac562fd06f633f558dafd6beae2f5");
+        props.put(PROP_DEFAULTAPISECRET, "f4d316250420688ba44f9426d872acaa");
 
     }
 

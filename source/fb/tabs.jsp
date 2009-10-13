@@ -14,10 +14,10 @@
     </fb:tabs>
     <br/>
 <%} else {%>
-    <a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main"><font class="mediumfont"><%=Pagez.getUserSession().getApp().getTitle()%></font></a>
+    <font class="largefont" style="color: #c6c6c6;"><%=Pagez.getUserSession().getApp().getTitle()%></font>
     <br/>
     <%if (!Pagez.getUserSession().getIsloggedin()){%>
-        <font class="smallfont"><%=Pagez.getUserSession().getApp().getDescription()%></font>
+        <font class="smallfont" style="color:#cccccc;"><%=Pagez.getUserSession().getApp().getDescription()%></font>
         <br/><br/>  
     <%}%>
 
@@ -31,13 +31,19 @@
             <div id="navbar">
             <span class="inbar">
                 <ul>
-                    <li class="navhome"><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main"><span><%=Pagez.getUserSession().getApp().getTitle()%></span></a></li>
-                    <li><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=charts"><span>Charts</span></a></li>
-                    <li><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=reports"><span>Reports</span></a></li>
-                    <li><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=history"><span>History</span></a></li>
-                    <li><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=embed"><span>Embed</span></a></li>
-                    <li><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings"><span>Prefs</span></a></li>
-                    <li><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=help"><span>Help</span></a></li>
+                    <%String navbarclass="";%>
+                    <%if (selectedTab.equals("index")){navbarclass=" class=\"navhome\"";}else{navbarclass="";}%>
+                    <li <%=navbarclass%>><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=main"><span><%=Pagez.getUserSession().getApp().getTitle()%> Main</span></a></li>
+                    <%if (selectedTab.equals("charts")){navbarclass=" class=\"navhome\"";}else{navbarclass="";}%>
+                    <li <%=navbarclass%>><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=charts"><span>Charts</span></a></li>
+                    <%if (selectedTab.equals("reports")){navbarclass=" class=\"navhome\"";}else{navbarclass="";}%>
+                    <li <%=navbarclass%>><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=reports"><span>Reports</span></a></li>
+                    <%if (selectedTab.equals("history")){navbarclass=" class=\"navhome\"";}else{navbarclass="";}%>
+                    <li <%=navbarclass%>><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=history"><span>History</span></a></li>
+                    <%if (selectedTab.equals("settings")){navbarclass=" class=\"navhome\"";}else{navbarclass="";}%>
+                    <li <%=navbarclass%>><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings"><span>Prefs</span></a></li>
+                    <%if (selectedTab.equals("help")){navbarclass=" class=\"navhome\"";}else{navbarclass="";}%>
+                    <li <%=navbarclass%>><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=help"><span>Help</span></a></li>
                 </ul>
             </span>
             </div>

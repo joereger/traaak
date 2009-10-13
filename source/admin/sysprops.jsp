@@ -13,6 +13,8 @@
         SystemProperty.setProp(SystemProperty.PROP_ISSSLON, request.getParameter("issslon"));
         SystemProperty.setProp(SystemProperty.PROP_SENDXMPP, request.getParameter("sendxmpp"));
         SystemProperty.setProp(SystemProperty.PROP_SMTPOUTBOUNDSERVER, request.getParameter("smtpoutboundserver"));
+        SystemProperty.setProp(SystemProperty.PROP_DEFAULTAPIKEY, request.getParameter("defaultapikey"));
+        SystemProperty.setProp(SystemProperty.PROP_DEFAULTAPISECRET, request.getParameter("defaultapisecret"));
     }
 
 %>
@@ -57,6 +59,24 @@
                 </td>
                 <td valign="top">
                     <input type="textbox" name="smtpoutboundserver" value="<%=Str.cleanForHtml(SystemProperty.getProp(SystemProperty.PROP_SMTPOUTBOUNDSERVER))%>">
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    Default API Key
+                    <br/><font style="font-size: 8px;">ex: 052ac562fd06f633f558dafd6beae2f5  get from facebook.com, developers, traaak.com test</font>
+                </td>
+                <td valign="top">
+                    <input type="textbox" name="defaultapikey" value="<%=Str.cleanForHtml(SystemProperty.getProp(SystemProperty.PROP_DEFAULTAPIKEY))%>">
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    Default API Secret
+                    <br/><font style="font-size: 8px;">ex: f4d316250420688ba44f9426d872acaa</font>
+                </td>
+                <td valign="top">
+                    <input type="textbox" name="defaultapisecret" value="<%=Str.cleanForHtml(SystemProperty.getProp(SystemProperty.PROP_DEFAULTAPISECRET))%>">
                 </td>
             </tr>
             <tr>

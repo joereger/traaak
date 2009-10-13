@@ -32,6 +32,8 @@ public class UserSession implements Serializable {
     private int appid;
     private int userappsettingsid;
     private boolean issysadmin = false;
+    private String facebookapikey = "";
+    private String facebookapisecret = "";
     private String facebooksessionkey = "";
     private FacebookUser facebookUser = null;
     private boolean isnewappforthisuser = false;
@@ -242,5 +244,21 @@ public class UserSession implements Serializable {
 
     public void setIsfacebook(boolean isfacebook) {
         this.isfacebook=isfacebook;
+    }
+
+    public String getFacebookapikey() {
+        return facebookapikey;
+    }
+
+    public void setFacebookapikey(String facebookapikey) {
+        this.facebookapikey=facebookapikey;
+    }
+
+    public String getFacebookapisecret() {
+        return facebookapisecret;
+    }
+
+    public void setFacebookapisecret(String facebookapisecret) {
+        this.facebookapisecret=facebookapisecret;
     }
 }

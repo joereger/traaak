@@ -101,7 +101,7 @@ Registration registration = (Registration)Pagez.getBeanMgr().get("Registration")
                                 <br/><font class="tinyfont">No spaces. Only letters and numbers.  Others will see.</font><br/>
                             </td>
                             <td valign="top">
-                                <%=Textbox.getHtml("nickname", registration.getNickname(), 15, 35, "", "")%>
+                                <%=Textbox.getHtml("nickname", registration.getNickname(), 15, 35, "", "font-size:30px;")%>
                             </td>
                         </tr>
 
@@ -110,7 +110,7 @@ Registration registration = (Registration)Pagez.getBeanMgr().get("Registration")
                                 <font class="formfieldnamefont">Email</font>
                             </td>
                             <td valign="top">
-                                <%=Textbox.getHtml("email", registration.getEmail(), 255, 35, "", "")%>
+                                <%=Textbox.getHtml("email", registration.getEmail(), 255, 35, "", "font-size:30px;")%>
                             </td>
                         </tr>
 
@@ -119,7 +119,7 @@ Registration registration = (Registration)Pagez.getBeanMgr().get("Registration")
                                 <font class="formfieldnamefont">Password</font>
                             </td>
                             <td valign="top">
-                                <%=TextboxSecret.getHtml("password", registration.getPassword(), 255, 35, "", "")%>
+                                <%=TextboxSecret.getHtml("password", registration.getPassword(), 255, 35, "", "font-size:30px;")%>
                             </td>
                         </tr>
 
@@ -139,7 +139,7 @@ Registration registration = (Registration)Pagez.getBeanMgr().get("Registration")
                             </td>
                             <td valign="top">
                                 <div style="border: 0px solid #ccc; background: #e6e6e6; padding: 0px;">
-                                <%=Textbox.getHtml("j_captcha_response", registration.getJ_captcha_response(), 255, 35, "", "")%>
+                                <%=Textbox.getHtml("j_captcha_response", registration.getJ_captcha_response(), 255, 35, "", "font-size:15px;")%>
                                 <br/>
                                 <font class="tinyfont">(type the squiggly letters that appear below)</font>
                                 <br/>
@@ -163,7 +163,7 @@ Registration registration = (Registration)Pagez.getBeanMgr().get("Registration")
                             </td>
                             <td valign="top">
                                 <br/><br/>
-                                <input type="submit" class="formsubmitbutton" value="Sign Up">
+                                <input type="submit" class="formsubmitbutton" value="Sign Up" style="font-size:30px;">
                             </td>
                         </tr>
 

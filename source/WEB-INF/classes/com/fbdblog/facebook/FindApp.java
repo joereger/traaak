@@ -52,9 +52,9 @@ public class FindApp {
                 return app;
             }
         }
-        //If all fails, return null
-        logger.debug("app not found, returning null");
-        return null;
+        //If all fails, return default app
+        logger.debug("app not found, returning default");
+        return defaultApp();
     }
 
     public static App findFromAppName(String facebookappname){
@@ -95,6 +95,18 @@ public class FindApp {
         }
         logger.debug("returning null app for facebookapikey="+api_key);
         return null;
+    }
+
+    public static App defaultApp(){
+        Logger logger = Logger.getLogger(FindApp.class);
+        List<App> apps = HibernateUtil.getSession().createCriteria(App.class)
+                                           .setCacheable(true)
+                                           .list();
+        for (Iterator<App> iterator = apps.iterator(); iterator.hasNext();) {
+            App app = iterator.next();
+            return app;
+        }
+        return new App();
     }
 
 

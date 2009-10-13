@@ -1,5 +1,9 @@
 <%@ page import="com.fbdblog.htmlui.Pagez" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@ page import="com.fbdblog.facebook.FindApp" %>
+<%@ page import="com.fbdblog.systemprops.SystemProperty" %>
+<%@ page import="com.google.code.facebookapi.FacebookXmlRestClient" %>
+<%@ page import="com.google.code.facebookapi.FacebookException" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" xmlns:fb="http://www.facebook.com/2008/fbml">
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html;CHARSET=iso-8859-1"/>
@@ -19,7 +23,10 @@
     <script type="text/JavaScript" src="/js/curvycorners/curvycorners.js"></script>
 
 </head>
-<body LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0"><center>
+<body LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">
+<script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/en_US" type="text/javascript"></script>
+<script type="text/javascript">FB.init("<%=SystemProperty.getProp(SystemProperty.PROP_DEFAULTAPIKEY)%>");</script>
+<center>
 
     <%@ include file="message.jsp" %>
     <%@ include file="nav.jsp" %>

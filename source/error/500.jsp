@@ -4,7 +4,8 @@
 <%
 try {
     Logger logger = Logger.getLogger(this.getClass().getName());
-    logger.error("",exception);
+    exception.printStackTrace();
+    logger.error("logged from 500.jsp",exception);
 } catch (Throwable e) {
     e.printStackTrace();
 }
