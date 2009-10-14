@@ -9,10 +9,14 @@
       <fb:tab-item href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=history' title='History' <%if (selectedTab.equals("history")){out.print("selected='true'");}%>/>
       <fb:tab-item href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings' title='Settings' <%if (selectedTab.equals("settings")){out.print("selected='true'");}%>/>
       <fb:tab-item href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=help' title='Help' <%if (selectedTab.equals("help")){out.print("selected='true'");}%>/>
+      <fb:tab-item href='<%=BaseUrl.get(false)%>app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/' title='On the Web' align='right'/>
       <fb:tab-item href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=friends' title='Friends' align='right' <%if (selectedTab.equals("friends")){out.print("selected='true'");}%>/>
       <fb:tab-item href='http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=throwdowns' title='Throwdown!!!' align='right' <%if (selectedTab.equals("throwdown")){out.print("selected='true'");}%>/>
     </fb:tabs>
     <br/>
+    <div class="traaakbox">
+        New! Access your traaaked stuff <a href="<%=BaseUrl.get(false)%>app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/">on the web</a>.
+    </div>
 <%} else {%>
     <font class="largefont" style="color: #c6c6c6;"><%=Pagez.getUserSession().getApp().getTitle()%></font>
     <br/>
@@ -44,6 +48,7 @@
                     <li <%=navbarclass%>><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=settings"><span>Prefs</span></a></li>
                     <%if (selectedTab.equals("help")){navbarclass=" class=\"navhome\"";}else{navbarclass="";}%>
                     <li <%=navbarclass%>><a href="/app/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/?nav=help"><span>Help</span></a></li>
+                    <li <%=navbarclass%>><a href="http://apps.facebook.com/<%=Pagez.getUserSession().getApp().getFacebookappname()%>/"><span>On Facebook</span></a></li>
                 </ul>
             </span>
             </div>

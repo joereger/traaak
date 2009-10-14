@@ -3,6 +3,7 @@ package com.fbdblog.cache.providers;
 import com.fbdblog.cache.providers.jboss.JbossTreeCacheAOPProvider;
 import com.fbdblog.cache.providers.oscache.OsCacheProvider;
 import com.fbdblog.cache.providers.oscache.OsCacheClusteredProvider;
+import com.fbdblog.cache.providers.dbcache.DbcacheProvider;
 
 /**
  * Factory class to get a cache provider
@@ -21,6 +22,8 @@ public class CacheFactory {
             return new OsCacheProvider();
         } else if (providername.equals("OsCacheClusteredProvider")){
             return new OsCacheClusteredProvider();
+        } else if (providername.equals("DbcacheProvider")){
+            return new DbcacheProvider();
         } else {
             return getCacheProvider();
         }

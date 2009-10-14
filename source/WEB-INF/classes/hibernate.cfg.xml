@@ -10,6 +10,8 @@
         <mapping resource="com/fbdblog/dao/Calculation.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Chart.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Chartyaxis.hbm.xml" />
+        <mapping resource="com/fbdblog/dao/Dbcache.hbm.xml" />
+        <mapping resource="com/fbdblog/dao/Dbcacheexpirable.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Impression.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Post.hbm.xml" />
         <mapping resource="com/fbdblog/dao/Postanswer.hbm.xml" />

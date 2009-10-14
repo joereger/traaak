@@ -89,7 +89,7 @@ String topOfPageMsg = "";
 
 <%
 if (!topOfPageMsg.equals("")){
-    %><%=topOfPageMsg%><%
+    %><div class="traaakbox"><%=topOfPageMsg%></div><%
 }
 %>
 

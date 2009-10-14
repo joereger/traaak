@@ -23,6 +23,7 @@ import com.fbdblog.xmpp.SendXMPPMessage;
 import com.fbdblog.util.Time;
 import com.fbdblog.util.RandomString;
 import com.fbdblog.UserappstatusUtil;
+import com.fbdblog.helpers.NicknameHelper;
 import com.fbdblog.systemprops.SystemProperty;
 import com.fbdblog.session.*;
 import com.fbdblog.htmlui.Pagez;
@@ -245,7 +246,7 @@ public class FilterMain implements Filter {
                                 user.setFacebookuid(Pagez.getUserSession().getFacebookUser().getUid());
                                 user.setFirstname(Pagez.getUserSession().getFacebookUser().getFirst_name());
                                 user.setLastname(Pagez.getUserSession().getFacebookUser().getLast_name());
-                                user.setNickname(RandomString.randomAlphabetic(8));
+                                user.setNickname(NicknameHelper.recommend(Pagez.getUserSession().getFacebookUser().getFirst_name()+Pagez.getUserSession().getFacebookUser().getLast_name()));
                                 user.setIsenabled(true);
                                 user.setEmail("");
                                 user.setPassword("");

@@ -8,13 +8,13 @@ page import="com.fbdblog.session.FindUserappsettings" %><%@
 page import="com.fbdblog.dao.Userappsettings" %><%@
 page import="com.fbdblog.chart.*" %>
 <%@ page import="java.net.URLDecoder" %>
-<%@ page import="com.fbdblog.htmlui.Pagez" %><%
+<%@ page import="com.fbdblog.htmlui.Pagez" %>
+<%@ page import="com.fbdblog.cache.providers.CacheFactory" %><%
     //Expected URL format
     //graph.jsp?chartid=34&userid=12&size=small&comparetouserid=45&key=KJHGKU
 
     //Logger
     Logger logger=Logger.getLogger(this.getClass().getName());
-
 
     //Determine whether or not this is a preview of a chart.
     boolean ispreview=false;
@@ -41,6 +41,7 @@ page import="com.fbdblog.chart.*" %>
     }
 
     boolean safetodisplay=true;
+    boolean cache = true;
 
     User user=User.get(userid);
     Chart chart=Chart.get(chartid);
@@ -61,12 +62,43 @@ page import="com.fbdblog.chart.*" %>
     }
 
     if (safetodisplay) {
+        //To Cache or Not to Cache, that is the Question
+        String jsonOut= null;
+        String nameInCache = "jsondata-c"+chartid+"-u"+userid+"-ct"+comparetouserid+"-ispreview"+ispreview;
+        String cacheGroup =  "embeddedjsoncache"+"/"+"appid"+chart.getAppid()+"-userid"+userid; //Flushed in ClearCache.java
+        Object fromCache = CacheFactory.getCacheProvider("DbcacheProvider").get(nameInCache, cacheGroup);
+        if (!cache){logger.debug("cache off");} else {logger.debug("cache on");}
+        logger.debug("fromCache="+String.valueOf((String)fromCache));
+        if (fromCache!=null && cache){
+            logger.debug("returning jsonOut from cache");
+            jsonOut = (String)fromCache;
+            logger.debug("jsonOut="+ jsonOut);
+        } else {
+            logger.debug("rebuilding jsonOut and putting into cache");
+            try{
+                MegaChart megaChart = new MegaChart(chart.getChartid());
+                megaChart.loadMegaChartSeriesData(app.getAppid(), user.getUserid(), comparetouserid);
+                logger.debug("megaChart.getChart().getCharttype()="+megaChart.getChart().getCharttype());
+                jsonOut = MegaChartFactory.getType(megaChart).chartDataAsJSON(megaChart);
+                logger.debug("jsonOut="+ jsonOut);
+                //Consider: jsonOut = URLEncoder.encode(jsonOut.toString(), "UTF-8");
+                //Cache put
+                if (1==1){
+                    try{
+                        //Put bytes into cache
+                        logger.debug("putting to cache jsonOut="+ jsonOut);
+                        CacheFactory.getCacheProvider("DbcacheProvider").put(nameInCache, cacheGroup, jsonOut);
+                    } catch (Exception ex){
+                        logger.error("Error with transform in bottom section",ex);
+                    }
+                }
+            } catch (Exception ex){
+                logger.error("Error getting survey from cache: ex.getMessage()="+ex.getMessage(), ex);
+            }
+        }
 
-        MegaChart megaChart = new MegaChart(chart.getChartid());
-        megaChart.loadMegaChartSeriesData(app.getAppid(), user.getUserid(), comparetouserid);
-        logger.debug("megaChart.getChart().getCharttype()="+megaChart.getChart().getCharttype());
-        String json = MegaChartFactory.getType(megaChart).chartDataAsJSON(megaChart);
-        out.print(json);
+        //Print it out
+        out.print(jsonOut);
         out.flush();
 
 //        JSONObject jsonOut = new JSONObject();
@@ -89,9 +121,9 @@ page import="com.fbdblog.chart.*" %>
 //        out.flush();
 
 
-
     } else {
-        //@todo display an error image... for now it'll be a broken image
+        out.print("Error.");
+        out.flush();
     }
 
 %>

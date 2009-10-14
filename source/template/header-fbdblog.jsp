@@ -33,10 +33,8 @@
 
 <table width="900" cellspacing="0" border="0" cellpadding="5">
 <tr>
-    <td valign="top">
-        <a href="/">
-            <img src="/images/clear.gif" alt="" width="10" height="100" border="0">
-        </a>
+    <td valign="top" width="10">
+        <img src="/images/clear.gif" alt="" width="10" height="100" border="0">
     </td>
     <td valign="top" width="195">
         <img src="/images/clear.gif" alt="" width="1" height="30"><br/>
@@ -44,26 +42,28 @@
             <img src="/images/v2-logo.gif" alt="" width="195" height="67" border="0">
         </a>
     </td>
-    <td valign="top" nowrap>
+    <td valign="top" nowrap width="650">
         <div style="float:right;">
         <img src="/images/clear.gif" alt="" width="1" height="30"><br/>
-        <table cellspacing="0" border="0" cellpadding="0"><tr>
-        <td valign="top"><img src="/images/v2-nav-leftcap.gif" alt=""></td>
-        <%if (!Pagez.getUserSession().getIsloggedin()){%>
-            <td valign="top"><a href="/"><img src="/images/v2-nav-home.gif" alt="" border="0"></a></td>
-            <td valign="top"><img src="/images/v2-nav-divider.gif" alt="" border="0"></td>
-            <td valign="top"><a href="/registration.jsp"><img src="/images/v2-nav-signup.gif" alt="" border="0"></a></td>
-            <td valign="top"><img src="/images/v2-nav-divider.gif" alt="" border="0"></td>
-            <td valign="top"><a href="/login.jsp"><img src="/images/v2-nav-login.gif" alt="" border="0"></a></td>
-        <%} else {%>
-            <td valign="top"><a href="/"><img src="/images/v2-nav-home.gif" alt="" border="0"></a></td>
-            <td valign="top"><img src="/images/v2-nav-divider.gif" alt="" border="0"></td>
-            <td valign="top"><a href="/account/accountsettings.jsp"><img src="/images/v2-nav-accountsettings.gif" alt="" border="0"></a></td>
-            <td valign="top"><img src="/images/v2-nav-divider.gif" alt="" border="0"></td>
-            <td valign="top"><a href="/login.jsp?action=logout"><img src="/images/v2-nav-logout.gif" alt="" border="0"></a></td>
+        <%if (1==2){%>
+            <table cellspacing="0" border="0" cellpadding="0"><tr>
+            <td valign="top"><img src="/images/v2-nav-leftcap.gif" alt=""></td>
+            <%if (!Pagez.getUserSession().getIsloggedin()){%>
+                <td valign="top"><a href="/"><img src="/images/v2-nav-home.gif" alt="" border="0"></a></td>
+                <td valign="top"><img src="/images/v2-nav-divider.gif" alt="" border="0"></td>
+                <td valign="top"><a href="/registration.jsp"><img src="/images/v2-nav-signup.gif" alt="" border="0"></a></td>
+                <td valign="top"><img src="/images/v2-nav-divider.gif" alt="" border="0"></td>
+                <td valign="top"><a href="/login.jsp"><img src="/images/v2-nav-login.gif" alt="" border="0"></a></td>
+            <%} else {%>
+                <td valign="top"><a href="/"><img src="/images/v2-nav-home.gif" alt="" border="0"></a></td>
+                <td valign="top"><img src="/images/v2-nav-divider.gif" alt="" border="0"></td>
+                <td valign="top"><a href="/account/accountsettings.jsp"><img src="/images/v2-nav-accountsettings.gif" alt="" border="0"></a></td>
+                <td valign="top"><img src="/images/v2-nav-divider.gif" alt="" border="0"></td>
+                <td valign="top"><a href="/login.jsp?action=logout"><img src="/images/v2-nav-logout.gif" alt="" border="0"></a></td>
+            <%}%>
+            <td valign="top"><img src="/images/v2-nav-rightcap.gif" alt=""></td>
+            </tr></table>
         <%}%>
-        <td valign="top"><img src="/images/v2-nav-rightcap.gif" alt=""></td>
-        </tr></table>
         </div>
     </td>
 </tr>

@@ -167,7 +167,7 @@ if (Pagez.getUserSession().getIsnewappforthisuser() && Pagez.getUserSession().ge
 
 <%
 if (!topOfPageMsg.equals("")){
-    %><%=topOfPageMsg%><%
+    %><div class="traaakbox"><%=topOfPageMsg%></div><%
 }
 %>
 

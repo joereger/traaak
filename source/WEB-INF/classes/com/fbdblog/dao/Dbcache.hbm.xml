@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.fbdblog.dao.Dbcache" table="dbcache">
+        <cache usage="transactional"/>
+        <id name="dbcacheid" type="int">
+            <column name="dbcacheid" />
+            <generator class="native" />
+        </id>
+        <property name="date" type="timestamp">
+            <column name="date" not-null="true" />
+        </property>
+        <property name="datelastaccessed" type="timestamp">
+            <column name="datelastaccessed" not-null="true" />
+        </property>
+        <property name="accesscount" type="int">
+            <column name="accesscount" not-null="true" />
+        </property>
+        <property name="grp" type="string">
+            <column name="grp" not-null="true" />
+        </property>
+        <property name="keyname" type="string">
+            <column name="keyname" not-null="true" />
+        </property>
+        <property name="val" type="serializable">
+            <column name="val" not-null="true" length="10000000"/>
+        </property>
+    </class>
+</hibernate-mapping>

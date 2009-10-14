@@ -15,6 +15,8 @@
 <%@ page import="com.fbdblog.calc.CalctimeperiodFactory" %>
 <%@ page import="com.fbdblog.dao.*" %>
 <%@ page import="java.util.*" %>
+<%@ page import="com.fbdblog.htmlui.*" %>
+<%@ page import="com.fbdblog.dao.hibernate.NumFromUniqueResult" %>
 
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
@@ -60,6 +62,16 @@ String topOfPageMsg = "";
                 }
             }
 
+            if (request.getParameter("nickname")!=null && !request.getParameter("nickname").equals("") && !request.getParameter("nickname").trim().equals(Pagez.getUserSession().getUser().getNickname().trim())){
+                int cnt = NumFromUniqueResult.getInt("select count(*) from User where nickname='"+Str.cleanForSQL(request.getParameter("nickname").trim())+"' and userid<>'"+Pagez.getUserSession().getUser().getUserid()+"'");
+                if (cnt>0){
+                    topOfPageMsg = topOfPageMsg + "The nickname ("+request.getParameter("nickname")+") is already in use and was not added to your account.";
+                } else {
+                    Pagez.getUserSession().getUser().setNickname(request.getParameter("nickname"));
+                    try{Pagez.getUserSession().getUser().save();}catch(Exception ex){logger.error("", ex);}
+                }
+            }
+
             StringBuffer tmp = new StringBuffer();
             tmp.append("<fb:success>\n" +
             "     <fb:message>Your Wish is My Command</fb:message>\n" +
@@ -95,11 +107,7 @@ if (!topOfPageMsg.equals("")){
                         <td valign="top" width="30%">
                             <font style="font-size: 12px; font-weight: bold;">Keep <%=Pagez.getUserSession().getApp().getTitle()%> Data Private?</font>
                             <br/>
-                            <%if (Pagez.getUserSession().getIsfacebook()){%>
-                                <font style="font-size: 9px;">We won't publish to your news feeds or profile.  And we won't share your data with your friends.</font>
-                            <%} else {%>
-                                <font style="font-size: 9px;">Your .</font>
-                            <%}%>
+                            <font style="font-size: 9px;">Applies only to <%=Pagez.getUserSession().getApp().getTitle()%> data.</font>
                         </td>
                         <td valign="top">
                             <%
@@ -112,14 +120,20 @@ if (!topOfPageMsg.equals("")){
                         </td>
                     </tr>
                     <tr>
+                        <td valign="top">
+                            <font class="formfieldnamefont">Nickname</font>
+                            <br/>
+                            <font style="font-size: 9px;">Others will see this.  Determines where your profile is... i.e. traaak.com/user/nickname/.  Also applies to everything you traaak.</font>
+                        </td>
+                        <td valign="top">
+                            <%=com.fbdblog.htmlui.Textbox.getHtml("nickname", Pagez.getUserSession().getUser().getNickname(), 255, 20, "", "")%>
+                        </td>
+                    </tr>
+                    <tr>
                         <td valign="top" width="30%">
                             <font style="font-size: 12px; font-weight: bold;">Timezone</font>
                             <br/>
-                            <%if (Pagez.getUserSession().getIsfacebook()){%>
-                                <font style="font-size: 9px;">Note that this will affect every Track app you have installed on your Facebook account.</font>
-                            <%} else {%>
-                                <font style="font-size: 9px;">Note that this will affect everything you Traaak.</font>
-                            <%}%>
+                            <font style="font-size: 9px;">Note that this will affect everything you Traaak.</font>
                         </td>
                         <td valign="top">
                             <select name="timezoneid">

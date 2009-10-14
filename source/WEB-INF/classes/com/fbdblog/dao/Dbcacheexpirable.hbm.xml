@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.fbdblog.dao.Dbcacheexpirable" table="dbcacheexpirable">
+        <cache usage="transactional"/>
+        <id name="dbcacheexpirableid" type="int">
+            <column name="dbcacheexpirableid" />
+            <generator class="native" />
+        </id>
+        <property name="date" type="timestamp">
+            <column name="date" not-null="true" />
+        </property>
+        <property name="expirationdate" type="timestamp">
+            <column name="expirationdate" not-null="true" />
+        </property>
+        <property name="grp" type="string">
+            <column name="grp" not-null="true" />
+        </property>
+        <property name="keyname" type="string">
+            <column name="keyname" not-null="true" />
+        </property>
+        <property name="val" type="serializable">
+            <column name="val" not-null="true" length="10000000"/>
+        </property>
+
+    </class>
+</hibernate-mapping>

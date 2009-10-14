@@ -3,7 +3,6 @@
 <%@ page import="com.google.code.facebookapi.FacebookException" %>
 <%@ page import="com.fbdblog.xmpp.SendXMPPMessage" %>
 <%@ page import="com.fbdblog.facebook.FacebookUser" %>
-<%@ page import="com.fbdblog.htmlui.UserSession" %>
 <%@ page import="com.fbdblog.facebook.FindUserFromFacebookUid" %>
 <%@ page import="com.fbdblog.facebook.FindApp" %>
 <%@ page import="com.fbdblog.session.UrlSplitter" %>

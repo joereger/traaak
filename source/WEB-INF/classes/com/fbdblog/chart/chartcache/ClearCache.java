@@ -2,6 +2,7 @@ package com.fbdblog.chart.chartcache;
 
 import com.fbdblog.systemprops.InstanceProperties;
 import com.fbdblog.util.Util;
+import com.fbdblog.cache.providers.CacheFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -29,6 +30,9 @@ public class ClearCache {
         deleteDirAndSubs(new File(filename));
         //Now delete comparetouserid- directories
         lookForDirectoryWithThisNameAndDeleteIt(new File(filename), "comparetouserid-"+userid);
+        //Flush json caches
+        String cacheGroup =  "embeddedjsoncache"+"/"+"appid"+appid+"-userid"+userid;
+        CacheFactory.getCacheProvider("DbcacheProvider").flush(cacheGroup);
     }
 
     public static void clearCacheForApp(int appid){

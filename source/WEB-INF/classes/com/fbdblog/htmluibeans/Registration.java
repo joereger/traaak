@@ -13,6 +13,7 @@ import com.fbdblog.htmlui.ValidationException;
 import com.fbdblog.session.PersistentLogin;
 import com.fbdblog.email.EmailActivationSend;
 import com.fbdblog.xmpp.SendXMPPMessage;
+import com.fbdblog.helpers.NicknameHelper;
 
 import javax.servlet.http.Cookie;
 import java.util.*;
@@ -127,11 +128,11 @@ public class Registration implements Serializable {
             haveErrors = true;
         }
 
-        List<User> users2 = HibernateUtil.getSession().createQuery("from User where nickname='"+ Str.cleanForSQL(nickname)+"'").list();
-        if (users2.size()>0){
+        if (NicknameHelper.isNicknameInUse(nickname)){
             vex.addValidationError("That nickname is already in use.");
             haveErrors = true;
         }
+
 
         if (haveErrors){
             throw vex;
