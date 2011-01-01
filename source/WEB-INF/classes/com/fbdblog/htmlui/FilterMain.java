@@ -1,7 +1,6 @@
 package com.fbdblog.htmlui;
 
 import org.apache.log4j.Logger;
-import org.apache.xmlrpc.util.HttpUtil;
 import org.hibernate.criterion.Restrictions;
 
 import javax.servlet.*;

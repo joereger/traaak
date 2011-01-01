@@ -64,5 +64,16 @@ public class Io {
             return sb;
         }
 
+        public static void writeTextToFile(File file, String text){
+            //file = new File("c:/temp/testwritetofile.txt");
+            try {
+                BufferedWriter out = new BufferedWriter(new FileWriter(file));
+                out.write(text);
+                out.close();
+            } catch (IOException e) {
+            }
+        }
+
+
 
 }

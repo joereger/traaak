@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
 <hibernate-mapping>
     <class name="com.fbdblog.dao.Throwdown" table="throwdown">
-        <cache usage="transactional"/>
+        <cache usage="read-write"/>
         <id name="throwdownid" type="int">
             <column name="throwdownid" />
             <generator class="native" />

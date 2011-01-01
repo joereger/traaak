@@ -25,7 +25,11 @@ public class DbcacheexpirableCache {
 
 
     public static Object get(String key, String group) {
-        Logger logger = Logger.getLogger(Dbcacheexpirable.class);
+        return get(key, group, true);
+    }
+
+    public static Object get(String key, String group, boolean returnNullIfExpired) {
+        Logger logger = Logger.getLogger(DbcacheexpirableCache.class);
         try{
             List<Dbcacheexpirable> dbcaches = HibernateUtil.getSession().createCriteria(Dbcacheexpirable.class)
                                                .add(Restrictions.eq("grp", group))
@@ -34,13 +38,18 @@ public class DbcacheexpirableCache {
                                                .list();
             if (dbcaches!=null && dbcaches.size()>0){
                 Dbcacheexpirable dbcache = dbcaches.get(0);
+                Object obj = dbcache.getVal();
                 //If it's expired delete and return null
                 if (dbcache.getExpirationdate().before(Calendar.getInstance().getTime())){
                     logger.debug("deleting Dbcacheexpirable because it's expired, returning null to force refresh");
                     dbcache.delete();
-                    return null;
+                    if (returnNullIfExpired){
+                        return null;
+                    } else {
+                        return obj;
+                    }
                 }
-                return dbcache.getVal();
+                return obj;
             }
         } catch (Exception ex){
             logger.error("", ex);
