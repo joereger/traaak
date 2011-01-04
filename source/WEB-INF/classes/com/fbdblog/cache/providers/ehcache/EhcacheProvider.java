@@ -102,7 +102,7 @@ public class EhcacheProvider implements CacheProvider {
 
     public Object get(String key, String group) {
         try {
-            return getCache().get("/"+group+"/"+key);
+            return getCache().get("/"+group+"/"+key).getValue();
         }  catch (Exception e){
             logger.error("Error getting from cacheManager", e);
         }
