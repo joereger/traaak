@@ -1,5 +1,6 @@
 package com.fbdblog.startup;
 
+import com.fbdblog.cache.providers.CacheFactory;
 import com.fbdblog.systemprops.WebAppRootDir;
 import com.fbdblog.systemprops.InstanceProperties;
 import com.fbdblog.systemprops.SystemProperty;
@@ -19,6 +20,8 @@ import org.quartz.Scheduler;
 import org.quartz.impl.StdSchedulerFactory;
 
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -50,6 +53,33 @@ public class ApplicationStartup implements ServletContextListener {
             //Run pre-hibernate db upgrades
             DbVersionCheck dbvcPre = new DbVersionCheck();
             dbvcPre.doCheck(DbVersionCheck.EXECUTE_PREHIBERNATE);
+            //Set infinispan jgroups vars
+            String jgroupstcpaddress="127.0.0.1";
+            try {
+                InetAddress addr = InetAddress.getLocalHost();
+                byte[] ipAddr = addr.getAddress();
+                String hostname = addr.getHostName();
+                String ipAddrStr = "";
+                for (int i=0; i<ipAddr.length; i++) {
+                    if (i > 0) {
+                        ipAddrStr += ".";
+                    }
+                    ipAddrStr += ipAddr[i]&0xFF;
+                }
+                jgroupstcpaddress=ipAddrStr;
+            } catch (UnknownHostException e) {
+                logger.error("", e);
+            } catch (Exception ex){
+                logger.error("", ex);
+            }
+            System.setProperty("jgroups.tcp.address", jgroupstcpaddress);
+            System.out.println("jgroups.tcp.address="+jgroupstcpaddress);
+            System.setProperty("jgroups.tcpping.initial_hosts", InstanceProperties.getJgroupstcppinginitialhosts());
+            System.out.println("jgroups.tcpping.initial_hosts="+InstanceProperties.getJgroupstcppinginitialhosts());
+            System.setProperty("jgroups.tcp.port", InstanceProperties.getJgroupstcpport());
+            System.out.println("jgroups.tcp.port="+InstanceProperties.getJgroupstcpport());
+            //Initialize object cache so it only creates one instance of itself
+            CacheFactory.getCacheProvider().get("applicationstartup", "applicationstartup");
             //Set up hibernate
             HibernateUtil.getSession();
             ishibernateinitialized = true;

@@ -4,13 +4,13 @@
 <!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
 <hibernate-mapping>
     <class name="com.fbdblog.dao.Chart" table="chart">
-        <cache usage="read-write"/>
+        <cache usage="transactional"/>
         <id name="chartid" type="int">
             <column name="chartid" />
             <generator class="native" />
         </id>
         <set name="chartyaxes" inverse="true" cascade="all-delete-orphan">
-            <cache usage="read-write"/>
+            <cache usage="transactional"/>
             <key column="chartid"></key>
             <one-to-many class="com.fbdblog.dao.Chartyaxis" not-found="ignore"></one-to-many>
         </set>

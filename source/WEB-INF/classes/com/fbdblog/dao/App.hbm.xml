@@ -4,13 +4,13 @@
 <!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
 <hibernate-mapping>
     <class name="com.fbdblog.dao.App" table="app">
-        <cache usage="read-write"/>
+        <cache usage="transactional"/>
         <id name="appid" type="int">
             <column name="appid" />
             <generator class="native" />
         </id>
         <set name="questions" inverse="true" order-by="questionid asc" cascade="all-delete-orphan">
-            <cache usage="read-write"/>
+            <cache usage="transactional"/>
             <key column="appid"></key>
             <one-to-many class="com.fbdblog.dao.Question" not-found="ignore"></one-to-many>
         </set>

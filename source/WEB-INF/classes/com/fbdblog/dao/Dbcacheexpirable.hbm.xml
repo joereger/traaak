@@ -3,7 +3,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
     <class name="com.fbdblog.dao.Dbcacheexpirable" table="dbcacheexpirable">
-        <cache usage="read-write"/>
+        <cache usage="transactional"/>
         <id name="dbcacheexpirableid" type="int">
             <column name="dbcacheexpirableid" />
             <generator class="native" />

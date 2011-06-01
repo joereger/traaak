@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<infinispan
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="urn:infinispan:config:4.2 http://www.infinispan.org/schemas/infinispan-config-4.2.xsd"
+      xmlns="urn:infinispan:config:4.2">
+
+   <!--
+      ******************************************************************************************************************
+
+         http://docs.jboss.org/infinispan/4.2/apidocs/config.html
+
+      ******************************************************************************************************************
+   -->
+
+   <!--
+      ******************************************************************************************************************
+
+      System-wide global settings, which are shared across all caches managed by the same EmbeddedCacheManager
+
+      ******************************************************************************************************************
+   -->
+
+   <global>
+
+
+
+      <!--
+         If the transport is omitted, there is no way to create distributed or clustered caches.
+         There is no added cost to defining a transport and not creating a cache that uses one, since the transport
+         is created and initialized lazily.  By default, the JGroupsTransport is used.
+
+         Note that the JGroups transport uses sensible defaults if no configuration property is defined.
+
+         See:
+
+            http://community.jboss.org/wiki/ClusteredConfigurationQuickStart
+            http://docs.jboss.org/infinispan/4.2/apidocs/org/infinispan/remoting/transport/jgroups/JGroupsTransport.html
+
+      -->
+      <transport clusterName="infinispantraaakhibernate">
+         <!-- Use the property below to point to a specific JGroups configuration file on your classpath -->
+         <properties>
+            <property name="configurationFile" value="infinispan-jgroups-config-amazon-s3.xml" />
+         </properties>
+
+      </transport>
+
+   </global>
+
+   <!--
+      ******************************************************************************************************************
+      Default "template" settings, used to create the default cache as well as inherited by all other named caches
+      ******************************************************************************************************************
+   -->
+
+   <default>
+      <!--
+         Tunes the locking and concurrency characteristics of the cache.
+
+         See:
+
+            http://community.jboss.org/wiki/LockingandConcurrency
+      -->
+      <locking
+         isolationLevel="READ_COMMITTED"
+         lockAcquisitionTimeout="20000"
+         writeSkewCheck="false"
+         concurrencyLevel="5000"
+         useLockStriping="false"
+      />
+
+      <!--
+         Used to register a transaction manager and participate in JTA and XA transactions.
+
+         See:
+
+            http://community.jboss.org/wiki/Infinispantransactions
+      -->
+      <!--
+      <transaction
+            transactionManagerLookupClass="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"
+            syncRollbackPhase="false"
+            syncCommitPhase="false"
+            useEagerLocking="false"
+            eagerLockSingleNode="false"
+            cacheStopTimeout="30000" />
+      -->
+      <!--
+         Enables deadlock detection.  See:
+
+         http://community.jboss.org/wiki/Infinispantransactions#deadlock
+
+      -->
+      <!--<deadlockDetection enabled="true" spinDuration="1000"/>-->
+
+
+      <!--
+         Used to register JMX statistics in any available MBean server
+      -->
+      <jmxStatistics enabled="false"/>
+
+      <!--
+         Used to control whether objects stored in Infinispan nodes are primarily stored as rehydrated Objects or as
+         raw byte arrays.  See:
+
+         http://community.jboss.org/wiki/Marshalling#Lazy_Deserialization
+      -->
+      <!--<lazyDeserialization enabled="true"/>-->
+
+      <!--
+         Used to enable invocation batching and allow the use of Cache.startBatch()/endBatch() methods.
+
+         http://community.jboss.org/wiki/Batching
+      -->
+      <!--<invocationBatching enabled="true"/>-->
+
+      <!--
+         This element specifies that the cache is clustered.
+         modes supported: distribution (d), replication (r) or invalidation (i).
+
+         http://community.jboss.org/wiki/Clusteringmodes
+      -->
+      <clustering mode="replication">
+
+         <!--
+            Defines whether to retrieve state on startup.  This is only valud for 'replication' mode.
+         -->
+         <stateRetrieval
+            timeout="20000"
+            fetchInMemoryState="false"
+            alwaysProvideInMemoryState="false"
+         />
+
+         <!--
+            Network calls are synchronous.
+         -->
+         <!--
+         <sync replTimeout="20000"/>
+         -->
+
+         <!--
+            Uncomment this for async replication.
+         -->
+
+         <async
+            useReplQueue="true"
+            replQueueInterval="2500"
+            replQueueMaxElements="100"
+         />
+
+      </clustering>
+
+
+
+   </default>
+
+
+   <!--
+      ******************************************************************************************************************
+
+      Individually configured "named" caches. Note that any of the elements appearing in a namedCache section can also
+      appear in the default section as a template.
+
+      ******************************************************************************************************************
+   -->
+
+   <!-- A typical, asynchronously replicated, clustered cache -->
+   <!--
+   <namedCache name="asyncCache">
+      <clustering mode="replication">
+         <async asyncMarshalling="true"/>
+      </clustering>
+   </namedCache>
+   -->
+
+
+</infinispan>

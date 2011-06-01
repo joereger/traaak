@@ -3,7 +3,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
     <class name="com.fbdblog.dao.Dbcache" table="dbcache">
-        <cache usage="read-write"/>
+        <cache usage="transactional"/>
         <id name="dbcacheid" type="int">
             <column name="dbcacheid" />
             <generator class="native" />

@@ -4,7 +4,7 @@
 <!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
 <hibernate-mapping>
     <class name="com.fbdblog.dao.Supportissue" table="supportissue">
-        <cache usage="read-write"/>
+        <cache usage="transactional"/>
         <id name="supportissueid" type="int">
             <column name="supportissueid" />
             <generator class="native" />
@@ -12,7 +12,7 @@
 
 
         <set name="supportissuecomms" inverse="true" order-by="supportissuecommid asc" cascade="all-delete-orphan">
-            <cache usage="read-write"/>
+            <cache usage="transactional"/>
             <key column="supportissueid"></key>
             <one-to-many class="com.fbdblog.dao.Supportissuecomm" not-found="ignore"></one-to-many>
         </set>

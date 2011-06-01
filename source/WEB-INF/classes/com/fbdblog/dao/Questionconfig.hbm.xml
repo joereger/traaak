@@ -4,7 +4,7 @@
 <!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
 <hibernate-mapping>
     <class name="com.fbdblog.dao.Questionconfig" table="questionconfig">
-        <cache usage="read-write"/>
+        <cache usage="transactional"/>
         <id name="questionconfigid" type="int">
             <column name="questionconfigid" />
             <generator class="native" />

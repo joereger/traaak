@@ -1,6 +1,7 @@
 package com.fbdblog.cache.providers;
 
 import com.fbdblog.cache.providers.ehcache.EhcacheProvider;
+import com.fbdblog.cache.providers.infinispan.InfinispanProvider;
 import com.fbdblog.cache.providers.jboss.JbossTreeCacheAOPProvider;
 import com.fbdblog.cache.providers.oscache.OsCacheProvider;
 import com.fbdblog.cache.providers.oscache.OsCacheClusteredProvider;
@@ -12,11 +13,13 @@ import com.fbdblog.cache.providers.dbcache.DbcacheProvider;
 public class CacheFactory {
 
     public static CacheProvider getCacheProvider(){
-        return getCacheProvider("EhcacheProvider");
+        return getCacheProvider("InfinispanProvider");
     }
 
     public static CacheProvider getCacheProvider(String providername){
-        if (providername.equals("EhcacheProvider")){
+        if (providername.equals("InfinispanProvider")){
+            return new InfinispanProvider();
+        } else if (providername.equals("EhcacheProvider")){
             return new EhcacheProvider();
         } else if (providername.equals("JbossTreeCacheAOPProvider")){
             return new JbossTreeCacheAOPProvider();
